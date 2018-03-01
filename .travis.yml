@@ -1,16 +1,18 @@
 env:
   global:
-
+  - secure: Wj1J/MgpuIaJ3DUBCYB3UDntpWiYqEfZowqS/vNFJE9M8VaDHddS64oWf2TI3xtehkTxwaE0wkcuYVPI6WuK8TzHDXpY9Bj8cxsP//Gh+i9HUu5TwxwJGJ6OqFLkf9M8nl8JRSgk7bSjFnhrSNXuEkk4FBQMxxwkhkxggim0pLNXHtDlQIq9hg1p0zf5/gTrSJY0hrnB6c60vkfMwHFpr6eVZ4INQ4LJ0BTc4T4nlDtx2u/XCK2jwUUysUwgDz8rZ27ahHBlLd/RSAXB9Jc+d7kUZcx3Z34SzRUssdPgaEGAMQsu/1owOsYgYGDHiA1xkiXj1danx4BVQLeRpJS2UMk5u5+SnNIOvEJui/JfiW01jNsi2fYVyKcrNc3IK84GJXGwZ4n//4plGmMQs+PSd6AicBW+HD1LmhcNG8jBEiVAV5ZLLWAmTRHxqShos2qr8ShfKFScc/Ebu95mTADXRFqnSts/kOc1NfYmW8K9DNzj3CuWCOT5erojHcMKe9KzbFiUihxoVgBJDS+fhO8hu/O/CEkJ+17lk6lL2+r6+MU01nIjo68wEHsWFM36A9isM+aent47kd3i7Z/LiD1GliAR9TEUno/C0D8UQqTwxQEZxx5oH6MDpZvXIBTecK5zrFquUFSQLFv90x3xIAtFGeIsJvbpCyeTZZ6h5Z8v9h0=
+  - secure: lGnEtZzt9mMl/IHInCHjMIjF+f5xN4h2TbXjbMm4T1ch7AbIopfu6+uzYabHhquyQqnq+0Zh0byOI1mIFur3DlITZUK5g+OXZb6SeLBG6vpPOPz2YaKt91XQ2HWNGXkLD2yPx6Ejb+xLJRTvgaBuclz3EC1OgfWr5EzNcPx2qvpY34xlixn+9UlMA9NenxKgfsAAdSa7HaEh7WwmymOOLA86fL0R9t0mtwfwnz9qG7UL6xOfWEoPHES38UuALDX0YcYoEF7LTJiJtue1YuWISbNbIC3tWkfrej5Y1dra6k/7B1QbF2fcYagFdhNXLVjBnTxmtxUKVv7lyS1vBAbv2oSNpgjE/T0gimfPZiXNM7H1GtvsefqpUjKocCa9oeIqGTq67lrjRdGvwnvPJZk+ykDG3q+KB+Ju1fU25pS+YYE6advbAB0owrJPssCAtU8GYw4NZHUhVkHtXYT3gtaMJni+d8GMXWnW5mWQOOuwtdbM0HkFQyjLT93e5fsev/xr2A+VROX1vBsuE7etF+o4WA6H5tglP2NtqGVEqYgbiMyLxojCW1ROFcZ/C49lp3G7YURJvrqIcDbJDHmEacSoMfTIcL/K1bPyslNpEAYBbW5++OTzP0F2lpmw3vkJQr+N8Xi7vIVMS4qS8q6FWjpm+qMpr6pSs89cjIq/UOzTyvw=
+script: true  # Fake build step
 deploy:
-  - provider: script
-    script: bash ./scripts/docker_push.sh
-    on:
-      branch: master
-  - provider: script
-    script: bash ./scripts/docker_push.sh
-    on:
-      branch: develop
-  - provider: script
-    script: bash ./scripts/docker_push.sh
-    all_branches: true
-    condition: ${TRAVIS_BRANCH} =~ ^release.*$  # Only release branches
+- provider: script
+  script: bash ./scripts/docker_push.sh
+  on:
+    branch: master
+- provider: script
+  script: bash ./scripts/docker_push.sh
+  on:
+    branch: develop
+- provider: script
+  script: bash ./scripts/docker_push.sh
+  all_branches: true
+  condition: "${TRAVIS_BRANCH} =~ ^release.*$"
