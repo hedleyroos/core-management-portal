@@ -4,6 +4,7 @@ import { jsonServerRestClient, Admin, Resource, fetchUtils } from 'admin-on-rest
 import { DomainList } from './domains';
 import authClient from './authClient';
 
+
 const App = () => (
     <Admin title='Girl Effect Management Portal'
             authClient={authClient}
@@ -11,5 +12,6 @@ const App = () => (
         <Resource name="domains" list={DomainList} />
     </Admin>
 );
+
 
 export default App;
