@@ -6,6 +6,6 @@ WORKDIR /app/
 
 RUN yarn add admin-on-rest
 
-WORKDIR /app/demo-admin/
+WORKDIR /app/admin/
 
 EXPOSE 3000
