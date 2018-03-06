@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardActions } from 'material-ui/Card';
 import {
-    Create, CreateButton, Datagrid, DateField, DisabledInput, Edit, EditButton, Filter, List, RefreshButton, required, Show, ShowButton, SimpleForm,
+    Create, CreateButton, Datagrid, DateField, DeleteButton, DisabledInput, Edit, EditButton, Filter, List, ListButton, RefreshButton, required, Show, ShowButton, SimpleForm,
     SimpleShowLayout, TextField, TextInput, RichTextField
 } from 'admin-on-rest';
 
@@ -12,10 +12,19 @@ const cardActionStyle = {
     float: 'right'
 };
 
-const DomainActions = ({ resource, filters, displayedFilters, filterValues, basePath, showFilter }) => (
+const DomainListActions = ({ resource, filters, displayedFilters, filterValues, basePath, showFilter }) => (
     <CardActions style={cardActionStyle}>
         {filters && React.cloneElement(filters, { resource, showFilter, displayedFilters, filterValues, context: 'button' }) }
         <CreateButton basePath={basePath} />
+        <RefreshButton />
+    </CardActions>
+);
+
+const DomainShowActions = ({ basePath, data }) => (
+    <CardActions style={cardActionStyle}>
+        <EditButton basePath={basePath} record={data} />
+        <ListButton basePath={basePath} />
+        <DeleteButton basePath={basePath} record={data} />
         <RefreshButton />
     </CardActions>
 );
@@ -25,19 +34,20 @@ const DomainTitle = ({ record }) => {
 };
 
 export const DomainList = (props) => (
-    <List actions={<DomainActions />} title='Domains' {...props}>
+    <List actions={<DomainListActions />} title='Domains' {...props}>
         <Datagrid>
             <TextField source='id' />
             <TextField source='name' />
             <TextField source='description' />
             <EditButton />
             <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
 
 export const DomainShow = (props) => (
-    <Show title={<DomainTitle />} {...props}>
+    <Show actions={<DomainShowActions />} title={<DomainTitle />} {...props}>
         <SimpleShowLayout>
             <DateField label='Created' source='created_at' />
             <DateField label='Updated' source='updated_at' />
