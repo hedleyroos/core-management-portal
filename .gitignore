@@ -107,7 +107,7 @@ ENV/
 .idea
 
 # dependencies
-demo-admin/node_modules
+admin/node_modules
 
 # production
 /build
@@ -122,4 +122,3 @@ demo-admin/node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
