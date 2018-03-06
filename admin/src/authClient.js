@@ -1,13 +1,22 @@
 import { AUTH_LOGIN } from 'admin-on-rest';
+import queryString from 'query-string';
 
 
 export default (type, params) => {
     if (type === AUTH_LOGIN) {
+        console.log(queryString);
         const { username, password } = params;
-        const request = new Request('localhost:8000/login', {
+
+        const request = new Request('http://core-authentication-service:8000/openid/token/', {
             method: 'POST',
-            body: JSON.stringify({ username, password }),
-            headers: new Headers({ 'Content-Type': 'application/json' }),
+            body: queryString.stringify({
+                username: username,
+                password: password,
+                grant_type: 'password',
+                client_id: 'management_layer_workaround',
+                client_secret: 'management_layer_workaround',
+                scope: 'openid profile email address phone site roles'
+            })
         })
         return fetch(request)
             .then(response => {
@@ -16,8 +25,8 @@ export default (type, params) => {
                 }
                 return response.json();
             })
-            .then(({ token }) => {
-                localStorage.setItem('token', token);
+            .then(({ access_token }) => {
+                localStorage.setItem('access_token', access_token);
             });
     }
     return Promise.resolve();
