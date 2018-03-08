@@ -9,7 +9,7 @@ import { ShowActions, ListActions } from './defaults.js'
 
 
 const RoleTitle = ({ record }) => {
-    return <span>Role {record ? `'${record.name}'` : ''}</span>;
+    return <span>Role {record ? `'${record.label}'` : ''}</span>;
 };
 
 export const RoleList = (props) => (
@@ -53,7 +53,7 @@ export const RoleEdit = (props) => (
     <Edit title={<RoleTitle />} {...props}>
         <SimpleForm>
             <DisabledInput label="Id" source="id" />
-            <TextInput source="name" validate={required} />
+            <TextInput source="label" validate={required} />
             <TextInput source='description' validate={required} options={{ multiLine: true }} />
             <BooleanInput label='2FA' source='requires_2fa' />
         </SimpleForm>
