@@ -6,6 +6,14 @@ const limitUpdateFields = requestHandler => (type, resource, params) => {
             delete params.data.created_at
             delete params.data.updated_at
         }
+        if (resource === 'roles') {
+            delete params.data.id
+            delete params.data.created_at
+            delete params.data.updated_at
+        }
+        if (resource === 'sites') {
+            delete params.data.id
+        }
     }
 
     return requestHandler(type, resource, params);
