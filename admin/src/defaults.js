@@ -9,7 +9,7 @@ const cardActionStyle = {
     float: 'right'
 };
 
-const listActions = ({ resource, filters, displayedFilters, filterValues, basePath, showFilter }) => (
+export const ListActions = ({ resource, filters, displayedFilters, filterValues, basePath, showFilter }) => (
     <CardActions style={cardActionStyle}>
         {filters && React.cloneElement(filters, { resource, showFilter, displayedFilters, filterValues, context: 'button' }) }
         <CreateButton basePath={basePath} />
@@ -17,7 +17,7 @@ const listActions = ({ resource, filters, displayedFilters, filterValues, basePa
     </CardActions>
 );
 
-const showActions = ({ basePath, data }) => (
+export const ShowActions = ({ basePath, data }) => (
     <CardActions style={cardActionStyle}>
         <EditButton basePath={basePath} record={data} />
         <ListButton basePath={basePath} />
