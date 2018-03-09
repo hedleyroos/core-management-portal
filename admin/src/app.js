@@ -11,6 +11,7 @@ import { jsonServerRestClient, Admin, Delete, Resource } from 'admin-on-rest';
 import { DomainCreate, DomainEdit, DomainList, DomainShow } from './domains';
 import { RoleCreate, RoleEdit, RoleList, RoleShow } from './roles';
 import { SiteCreate, SiteEdit, SiteList, SiteShow } from './sites';
+import { SiteRoleList, SiteRoleShow } from './siteroles';
 import limitUpdateFields from './utils'
 
 
@@ -23,6 +24,7 @@ const App = () => (
         <Resource name='domains' icon={DomainIcon} list={DomainList} show={DomainShow} create={DomainCreate} edit={DomainEdit} remove={Delete} options={{label: 'Domains'}} />
         <Resource name='roles' icon={RoleIcon} list={RoleList} show={RoleShow} create={RoleCreate} edit={RoleEdit} remove={Delete} options={{label: 'Roles'}} />
         <Resource name='sites' icon={SiteIcon} list={SiteList} show={SiteShow} create={SiteCreate} edit={SiteEdit} remove={Delete} options={{label: 'Sites'}} />
+        <Resource name='siteroles' icon={SiteIcon} list={SiteRoleList} show={SiteRoleShow} remove={Delete} options={{label: 'Site roles'}} />
     </Admin>
 );
 
