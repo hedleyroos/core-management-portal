@@ -6,25 +6,21 @@ import DomainIcon from 'material-ui/svg-icons/action/language';
 import RoleIcon from 'material-ui/svg-icons/social/public';
 import SiteIcon from 'material-ui/svg-icons/action/explore';
 
-import { jsonServerRestClient, Admin, Delete, Resource } from 'admin-on-rest';
+import { Admin, Delete, Resource } from 'admin-on-rest';
 
 import { DomainCreate, DomainEdit, DomainList, DomainShow } from './domains';
 import { RoleCreate, RoleEdit, RoleList, RoleShow } from './roles';
 import { SiteCreate, SiteEdit, SiteList, SiteShow } from './sites';
-import { SiteRoleList, SiteRoleShow } from './siteroles';
-import limitUpdateFields from './utils'
+import { SiteRolesCreate, SiteRolesEdit, SiteRolesList, SiteRolesShow } from './siteroles';
+import swaggerRestServer from './swaggerRestServer';
 
-
-const GEJsonServerRestClient = limitUpdateFields(
-    jsonServerRestClient('http://core-management-layer:8000')
-)
 
 const App = () => (
-    <Admin title='Girl Effect Management Portal' theme={getMuiTheme(muiTheme)} restClient={GEJsonServerRestClient}>
+    <Admin title='Girl Effect Management Portal' theme={getMuiTheme(muiTheme)} restClient={swaggerRestServer('//core-management-layer:8000')}>
         <Resource name='domains' icon={DomainIcon} list={DomainList} show={DomainShow} create={DomainCreate} edit={DomainEdit} remove={Delete} options={{label: 'Domains'}} />
         <Resource name='roles' icon={RoleIcon} list={RoleList} show={RoleShow} create={RoleCreate} edit={RoleEdit} remove={Delete} options={{label: 'Roles'}} />
         <Resource name='sites' icon={SiteIcon} list={SiteList} show={SiteShow} create={SiteCreate} edit={SiteEdit} remove={Delete} options={{label: 'Sites'}} />
-        <Resource name='siteroles' icon={SiteIcon} list={SiteRoleList} show={SiteRoleShow} remove={Delete} options={{label: 'Site roles'}} />
+        <Resource name='siteroles' icon={SiteIcon} list={SiteRolesList} show={SiteRolesShow} create={SiteRolesCreate} edit={SiteRolesEdit} remove={Delete} options={{label: 'Site roles'}} />
     </Admin>
 );
 

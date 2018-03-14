@@ -1,18 +1,18 @@
 import React from 'react';
 import {
     BooleanField, BooleanInput, Create, Datagrid, DateField, DeleteButton, DisabledInput, Edit,
-    EditButton, List, required, ReferenceField, ReferenceInput, Show, ShowButton, SimpleForm, SimpleShowLayout, SelectInput,
-    TextField, TextInput
+    EditButton, List, required, ReferenceField, ReferenceInput, Show, ShowButton, SimpleForm,
+    SimpleShowLayout, SelectInput, TextField
 } from 'admin-on-rest';
 
 import { ShowActions, ListActions } from './defaults.js'
 
 
-const SiteRoleTitle = ({ record }) => {
-    return <span>Site role {record ? `'${record.site_id}/${record.role_id}'` : ''}</span>;
+const SiteRolesTitle = ({ record }) => {
+    return <span>Site role</span>;
 };
 
-export const SiteRoleList = (props) => (
+export const SiteRolesList = (props) => (
     <List actions={<ListActions />} title='Site roles' {...props}>
         <Datagrid>
             <ReferenceField label='Role' source='role_id' reference='roles' linkType='show'>
@@ -29,8 +29,8 @@ export const SiteRoleList = (props) => (
     </List>
 );
 
-export const SiteRoleShow = (props) => (
-    <Show actions={<ShowActions />} title={<SiteRoleTitle />} {...props}>
+export const SiteRolesShow = (props) => (
+    <Show actions={<ShowActions />} title={<SiteRolesTitle />} {...props}>
         <SimpleShowLayout>
             <DateField label='Created' source='created_at' />
             <DateField label='Updated' source='updated_at' />
@@ -48,28 +48,27 @@ export const SiteRoleShow = (props) => (
 export const SiteRolesCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-            <TextInput source='name' validate={required} />
-            <TextInput source='description' validate={required} options={{ multiLine: true }} />
-            <TextInput source='client_id' validate={required} />
-            <ReferenceInput label='Domain' source='domain_id' reference='domains' allowEmpty>
+            <ReferenceInput label='Role' source='role_id' reference='roles' allowEmpty>
+                <SelectInput optionText='label' validate={required} />
+            </ReferenceInput>
+            <ReferenceInput label='Site' source='site_id' reference='sites' allowEmpty>
                 <SelectInput optionText='name' validate={required} />
             </ReferenceInput>
-            <BooleanInput label='Active' source='is_active' />
+            <BooleanInput source='grant_implicitly' />
         </SimpleForm>
     </Create>
 );
 
 export const SiteRolesEdit = (props) => (
-    <Edit title={<SiteRoleTitle />} {...props}>
+    <Edit title={<SiteRolesTitle />} {...props}>
         <SimpleForm>
-            <DisabledInput label='Id' source='id' />
-            <TextInput source='name' validate={required} />
-            <TextInput source='description' validate={required} options={{ multiLine: true }} />
-            <TextInput source='client_id' validate={required} />
-            <ReferenceInput label='Domain' source='domain_id' reference='domains'>
-                <SelectInput optionText='name' />
+            <ReferenceInput label='Role' source='role_id' reference='roles' allowEmpty>
+                <DisabledInput optionText='label' validate={required} />
             </ReferenceInput>
-            <BooleanInput label='Active' source='is_active' />
+            <ReferenceInput label='Site' source='site_id' reference='sites' allowEmpty>
+                <DisabledInput optionText='name' validate={required} />
+            </ReferenceInput>
+            <BooleanInput source='grant_implicitly' />
         </SimpleForm>
     </Edit>
 );
