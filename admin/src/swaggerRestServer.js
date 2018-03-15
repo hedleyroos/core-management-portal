@@ -58,7 +58,6 @@ export const convertRESTRequestToHTTP = ({
             break;
         }
         case GET_ONE:
-            console.log(params);
             url = `${apiUrl}/${resource}/${params.id}`;
             break;
         case GET_MANY: {
@@ -102,7 +101,6 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
         case GET_LIST:
             if (resource in COMPOSITE_KEY_RESOURSES) {
                 let keys = COMPOSITE_KEY_RESOURSES[resource];
-                console.log(keys)
                 return {
                     data: json ? json.map(res => ({ ...res, id: `${res[keys[0]]}/${res[keys[1]]}` })) : json,
                     total: 10
