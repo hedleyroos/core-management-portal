@@ -9,6 +9,11 @@ export const CREATE = 'CREATE';
 export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 
+const COMPOSITE_KEY_RESOURSES = {
+    siteroles: ['site_id', 'role_id'],
+    domainroles: ['domain_id', 'role_id']
+}
+
 /**
  * @param {String} apiUrl The base API url
  * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
@@ -53,6 +58,7 @@ export const convertRESTRequestToHTTP = ({
             break;
         }
         case GET_ONE:
+            console.log(params);
             url = `${apiUrl}/${resource}/${params.id}`;
             break;
         case GET_MANY: {
@@ -94,6 +100,14 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
 
     switch (type) {
         case GET_LIST:
+            if (resource in COMPOSITE_KEY_RESOURSES) {
+                let keys = COMPOSITE_KEY_RESOURSES[resource];
+                console.log(keys)
+                return {
+                    data: json ? json.map(res => ({ ...res, id: `${res[keys[0]]}/${res[keys[1]]}` })) : json,
+                    total: 10
+                }
+            }
         case GET_MANY_REFERENCE:
             if (!headers.has('x-total-count')) {
                 throw new Error(
@@ -115,15 +129,6 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
         default:
             return { data: json };
     }
-};
-
-/**
- * Returns the last param of a given url
- * @param {string} url
- */
-const extractPrimaryKey = url => {
-    let substrs = url.split('/');
-    return substrs[substrs.length - 2];
 };
 
 /**
