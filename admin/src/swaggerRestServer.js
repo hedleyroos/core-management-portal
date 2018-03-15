@@ -98,6 +98,8 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
     const { headers, json } = response;
 
     switch (type) {
+
+        // Total required by AOR for all list operations
         case GET_LIST:
             if (resource in COMPOSITE_KEY_RESOURSES) {
                 let keys = COMPOSITE_KEY_RESOURSES[resource];
@@ -154,25 +156,6 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
             resource,
             params
         });
-
-        // If there are multiple urls then process them in parallel
-        if (Array.isArray(url)) {
-            const responses = await Promise.all(
-                url.map(singleUrl =>
-                    httpClient(singleUrl, options).then(response =>
-                        convertHTTPResponseToREST({
-                            response,
-                            type,
-                            resource,
-                            params
-                        })
-                    )
-                )
-            );
-            return {
-                data: responses.map(res => res.data)
-            };
-        }
 
         return httpClient(url, options).then(response =>
             convertHTTPResponseToREST({
