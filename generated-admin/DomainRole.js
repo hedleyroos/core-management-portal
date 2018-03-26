@@ -1,3 +1,7 @@
+/** 
+ * Generated DomainRole.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import React from 'react';
 import {
     List,
@@ -7,11 +11,11 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
-    BooleanField,
     NumberField,
+    BooleanField,
     DateField,
-    BooleanInput,
     NumberInput,
+    BooleanInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -20,11 +24,11 @@ import {
 
 const validationCreateDomainRole = values => {
     const errors = {};
-    if (!values.role_id) {
-        errors.role_id = ["role_id is required"];
-    }
     if (!values.domain_id) {
         errors.domain_id = ["domain_id is required"];
+    }
+    if (!values.role_id) {
+        errors.role_id = ["role_id is required"];
     }
     return errors;
 }
@@ -34,53 +38,53 @@ const validationEditDomainRole = values => {
     return errors;
 }
 
-export const DomainRoleShow = props => (
-    <Show {...props} title="DomainRole Show">
-        <SimpleShowLayout>
-            <BooleanField source="grant_implicitly" />
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
-            </ReferenceField>
-            <DateField source="created_at" />
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
-            </ReferenceField>
-            <DateField source="updated_at" />
-        </SimpleShowLayout>
-    </Show>
-)
-
-export const DomainRoleCreate = props => (
-    <Create {...props} title="DomainRole Create">
-        <SimpleForm validate={validationCreateDomainRole}>
-            <BooleanInput source="grant_implicitly" />
-            <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
-                <SelectInput source="id" />
-            </ReferenceInput>
-            <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
-                <SelectInput source="id" />
-            </ReferenceInput>
-        </SimpleForm>
-    </Create>
-)
-
 export const DomainRoleList = props => (
     <List {...props} title="DomainRole List">
         <Datagrid>
-            <BooleanField source="grant_implicitly" />
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
-            </ReferenceField>
-            <DateField source="created_at" />
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                 <NumberField source="id" />
             </ReferenceField>
+            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                <NumberField source="id" />
+            </ReferenceField>
+            <BooleanField source="grant_implicitly" />
+            <DateField source="created_at" />
             <DateField source="updated_at" />
             <EditButton />
             <ShowButton />
             <DeleteButton />
         </Datagrid>
     </List>
+)
+
+export const DomainRoleCreate = props => (
+    <Create {...props} title="DomainRole Create">
+        <SimpleForm validate={validationCreateDomainRole}>
+            <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
+                <SelectInput source="id" />
+            </ReferenceInput>
+            <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
+                <SelectInput source="id" />
+            </ReferenceInput>
+            <BooleanInput source="grant_implicitly" />
+        </SimpleForm>
+    </Create>
+)
+
+export const DomainRoleShow = props => (
+    <Show {...props} title="DomainRole Show">
+        <SimpleShowLayout>
+            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                <NumberField source="id" />
+            </ReferenceField>
+            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                <NumberField source="id" />
+            </ReferenceField>
+            <BooleanField source="grant_implicitly" />
+            <DateField source="created_at" />
+            <DateField source="updated_at" />
+        </SimpleShowLayout>
+    </Show>
 )
 
 export const DomainRoleEdit = props => (
@@ -91,3 +95,4 @@ export const DomainRoleEdit = props => (
     </Edit>
 )
 
+/** End of Generated Code **/

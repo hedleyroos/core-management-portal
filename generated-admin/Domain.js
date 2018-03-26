@@ -1,3 +1,7 @@
+/** 
+ * Generated Domain.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import React from 'react';
 import {
     List,
@@ -7,11 +11,11 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
-    TextInput,
-    NumberInput,
-    TextField,
     NumberField,
+    TextField,
     DateField,
+    NumberInput,
+    TextInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -31,35 +35,12 @@ const validationEditDomain = values => {
     return errors;
 }
 
-export const DomainShow = props => (
-    <Show {...props} title="Domain Show">
-        <SimpleShowLayout>
-            <TextField source="name" />
-            <NumberField source="parent_id" />
-            <NumberField source="id" />
-            <TextField source="description" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
-        </SimpleShowLayout>
-    </Show>
-)
-
-export const DomainCreate = props => (
-    <Create {...props} title="Domain Create">
-        <SimpleForm validate={validationCreateDomain}>
-            <TextInput source="name" />
-            <TextInput source="description" />
-            <NumberInput source="parent_id" />
-        </SimpleForm>
-    </Create>
-)
-
 export const DomainList = props => (
     <List {...props} title="Domain List">
         <Datagrid>
-            <TextField source="name" />
-            <NumberField source="parent_id" />
             <NumberField source="id" />
+            <NumberField source="parent_id" />
+            <TextField source="name" />
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -70,13 +51,37 @@ export const DomainList = props => (
     </List>
 )
 
+export const DomainCreate = props => (
+    <Create {...props} title="Domain Create">
+        <SimpleForm validate={validationCreateDomain}>
+            <NumberInput source="parent_id" />
+            <TextInput source="name" />
+            <TextInput source="description" />
+        </SimpleForm>
+    </Create>
+)
+
+export const DomainShow = props => (
+    <Show {...props} title="Domain Show">
+        <SimpleShowLayout>
+            <NumberField source="id" />
+            <NumberField source="parent_id" />
+            <TextField source="name" />
+            <TextField source="description" />
+            <DateField source="created_at" />
+            <DateField source="updated_at" />
+        </SimpleShowLayout>
+    </Show>
+)
+
 export const DomainEdit = props => (
     <Edit {...props} title="Domain Edit">
         <SimpleForm validate={validationCreateDomain}>
+            <NumberInput source="parent_id" />
             <TextInput source="name" />
             <TextInput source="description" />
-            <NumberInput source="parent_id" />
         </SimpleForm>
     </Edit>
 )
 
+/** End of Generated Code **/

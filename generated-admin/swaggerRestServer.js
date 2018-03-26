@@ -1,3 +1,7 @@
+/** 
+ * Generated swaggerRestServer.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import { stringify } from 'query-string';
 import { fetchUtils } from 'admin-on-rest';
 
@@ -11,45 +15,46 @@ export const DELETE = 'DELETE';
 
 const COMPOSITE_KEY_RESOURSES = {
     get: [
+        'user_id',
         'site_id',
-        'user_id',
-    ],
-    userdomainrole: [
-        'role_id',
         'domain_id',
-        'user_id',
     ],
     domainrole: [
-        'role_id',
         'domain_id',
-    ],
-    usersitedata: [
-        'site_id',
-        'user_id',
-    ],
-    usersiterole: [
         'role_id',
-        'site_id',
-        'user_id',
-    ],
-    siterole: [
-        'role_id',
-        'site_id',
-    ],
-    invitationsiterole: [
-        'invitation_id',
-        'role_id',
-        'site_id',
-    ],
-    roleresourcepermission: [
-        'permission_id',
-        'role_id',
-        'resource_id',
     ],
     invitationdomainrole: [
         'invitation_id',
-        'role_id',
         'domain_id',
+        'role_id',
+    ],
+    invitationsiterole: [
+        'invitation_id',
+        'site_id',
+        'role_id',
+    ],
+    roleresourcepermission: [
+        'role_id',
+        'resource_id',
+        'permission_id',
+    ],
+    siterole: [
+        'site_id',
+        'role_id',
+    ],
+    userdomainrole: [
+        'user_id',
+        'domain_id',
+        'role_id',
+    ],
+    usersiterole: [
+        'user_id',
+        'site_id',
+        'role_id',
+    ],
+    usersitedata: [
+        'user_id',
+        'site_id',
     ],
 }
 
@@ -206,3 +211,4 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
         );
     };
 };
+/** End of Generated Code **/

@@ -1,3 +1,7 @@
+/** 
+ * Generated SiteDataSchema.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import React from 'react';
 import {
     List,
@@ -7,9 +11,9 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
-    NumberInput,
-    DateField,
     NumberField,
+    DateField,
+    NumberInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -24,14 +28,17 @@ const validationCreateSiteDataSchema = values => {
     return errors;
 }
 
-export const SiteDataSchemaShow = props => (
-    <Show {...props} title="SiteDataSchema Show">
-        <SimpleShowLayout>
-            <DateField source="updated_at" />
-            <DateField source="created_at" />
+export const SiteDataSchemaList = props => (
+    <List {...props} title="SiteDataSchema List">
+        <Datagrid>
             <NumberField source="site_id" />
-        </SimpleShowLayout>
-    </Show>
+            <DateField source="created_at" />
+            <DateField source="updated_at" />
+            <EditButton />
+            <ShowButton />
+            <DeleteButton />
+        </Datagrid>
+    </List>
 )
 
 export const SiteDataSchemaCreate = props => (
@@ -42,16 +49,14 @@ export const SiteDataSchemaCreate = props => (
     </Create>
 )
 
-export const SiteDataSchemaList = props => (
-    <List {...props} title="SiteDataSchema List">
-        <Datagrid>
-            <DateField source="updated_at" />
-            <DateField source="created_at" />
+export const SiteDataSchemaShow = props => (
+    <Show {...props} title="SiteDataSchema Show">
+        <SimpleShowLayout>
             <NumberField source="site_id" />
-            <EditButton />
-            <ShowButton />
-            <DeleteButton />
-        </Datagrid>
-    </List>
+            <DateField source="created_at" />
+            <DateField source="updated_at" />
+        </SimpleShowLayout>
+    </Show>
 )
 
+/** End of Generated Code **/

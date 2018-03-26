@@ -1,264 +1,278 @@
+/** 
+ * Generated App.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import React from 'react';
+import { cyan500, cyan300 } from 'material-ui/styles/colors';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Admin, Delete, Resource } from 'admin-on-rest';
 import swaggerRestServer from './swaggerRestServer';
 
 import {
-    InvitationShow,
-    InvitationCreate,
-    InvitationList,
-    InvitationEdit,
-} from './Invitation';
-
-import {
-    AdminNoteShow,
-    AdminNoteCreate,
-    AdminNoteList,
-    AdminNoteEdit,
-} from './AdminNote';
-
-import {
-    ClientShow,
-    ClientList,
-} from './Client';
-
-import {
-    DomainShow,
-    DomainCreate,
     DomainList,
+    DomainCreate,
+    DomainShow,
     DomainEdit,
 } from './Domain';
 
 import {
-    UserDomainRoleShow,
-    UserDomainRoleCreate,
-    UserDomainRoleList,
-} from './UserDomainRole';
-
-import {
-    ResourceShow,
-    ResourceCreate,
-    ResourceList,
-    ResourceEdit,
-} from './Resource';
-
-import {
-    DomainRoleShow,
-    DomainRoleCreate,
     DomainRoleList,
+    DomainRoleCreate,
+    DomainRoleShow,
     DomainRoleEdit,
 } from './DomainRole';
 
 import {
-    UserSiteDataShow,
-    UserSiteDataCreate,
-    UserSiteDataList,
-    UserSiteDataEdit,
-} from './UserSiteData';
+    InvitationList,
+    InvitationCreate,
+    InvitationShow,
+    InvitationEdit,
+} from './Invitation';
 
 import {
-    UserSiteRoleShow,
-    UserSiteRoleCreate,
-    UserSiteRoleList,
-} from './UserSiteRole';
+    InvitationDomainRoleList,
+    InvitationDomainRoleCreate,
+    InvitationDomainRoleShow,
+} from './InvitationDomainRole';
 
 import {
-    SiteShow,
-    SiteCreate,
-    SiteList,
-    SiteEdit,
-} from './Site';
+    InvitationSiteRoleList,
+    InvitationSiteRoleCreate,
+    InvitationSiteRoleShow,
+} from './InvitationSiteRole';
 
 import {
-    RoleShow,
-    RoleCreate,
-    RoleList,
-    RoleEdit,
-} from './Role';
-
-import {
-    SiteRoleShow,
-    SiteRoleCreate,
-    SiteRoleList,
-    SiteRoleEdit,
-} from './SiteRole';
-
-import {
-    PermissionShow,
-    PermissionCreate,
     PermissionList,
+    PermissionCreate,
+    PermissionShow,
     PermissionEdit,
 } from './Permission';
 
 import {
-    UserShow,
-    UserList,
-    UserEdit,
-} from './User';
+    ResourceList,
+    ResourceCreate,
+    ResourceShow,
+    ResourceEdit,
+} from './Resource';
 
 import {
-    SiteDataSchemaShow,
-    SiteDataSchemaCreate,
-    SiteDataSchemaList,
-} from './SiteDataSchema';
+    RoleList,
+    RoleCreate,
+    RoleShow,
+    RoleEdit,
+} from './Role';
 
 import {
-    InvitationSiteRoleShow,
-    InvitationSiteRoleCreate,
-    InvitationSiteRoleList,
-} from './InvitationSiteRole';
-
-import {
-    RoleResourcePermissionShow,
-    RoleResourcePermissionCreate,
     RoleResourcePermissionList,
+    RoleResourcePermissionCreate,
+    RoleResourcePermissionShow,
 } from './RoleResourcePermission';
 
 import {
-    InvitationDomainRoleShow,
-    InvitationDomainRoleCreate,
-    InvitationDomainRoleList,
-} from './InvitationDomainRole';
+    SiteList,
+    SiteCreate,
+    SiteShow,
+    SiteEdit,
+} from './Site';
+
+import {
+    SiteRoleList,
+    SiteRoleCreate,
+    SiteRoleShow,
+    SiteRoleEdit,
+} from './SiteRole';
+
+import {
+    UserDomainRoleList,
+    UserDomainRoleCreate,
+    UserDomainRoleShow,
+} from './UserDomainRole';
+
+import {
+    UserSiteRoleList,
+    UserSiteRoleCreate,
+    UserSiteRoleShow,
+} from './UserSiteRole';
+
+import {
+    UserSiteDataList,
+    UserSiteDataCreate,
+    UserSiteDataShow,
+    UserSiteDataEdit,
+} from './UserSiteData';
+
+import {
+    AdminNoteList,
+    AdminNoteCreate,
+    AdminNoteShow,
+    AdminNoteEdit,
+} from './AdminNote';
+
+import {
+    SiteDataSchemaList,
+    SiteDataSchemaCreate,
+    SiteDataSchemaShow,
+} from './SiteDataSchema';
+
+import {
+    ClientList,
+    ClientShow,
+} from './Client';
+
+import {
+    UserList,
+    UserShow,
+    UserEdit,
+} from './User';
 
 
 
 const App = () => (
-    <Admin title={"Girl Effect Management Layer"} restClient={swaggerRestServer('rest-url:port')}>
-        <Resource
-            name="invitations"
-            show={ InvitationShow }
-            create={ InvitationCreate }
-            list={ InvitationList }
-            edit={ InvitationEdit }
-            remove={Delete}
-        />
-        <Resource
-            name="adminnotes"
-            show={ AdminNoteShow }
-            create={ AdminNoteCreate }
-            list={ AdminNoteList }
-            edit={ AdminNoteEdit }
-            remove={Delete}
-        />
-        <Resource
-            name="clients"
-            show={ ClientShow }
-            list={ ClientList }
-            remove={Delete}
-        />
+    <Admin title="Girl Effect Management Portal" theme={getMuiTheme(muiTheme)} restClient={swaggerRestServer('rest-url:port')}>
         <Resource
             name="domains"
-            show={ DomainShow }
-            create={ DomainCreate }
             list={ DomainList }
+            create={ DomainCreate }
+            show={ DomainShow }
             edit={ DomainEdit }
             remove={Delete}
         />
         <Resource
-            name="userdomainroles"
-            show={ UserDomainRoleShow }
-            create={ UserDomainRoleCreate }
-            list={ UserDomainRoleList }
-            remove={Delete}
-        />
-        <Resource
-            name="resources"
-            show={ ResourceShow }
-            create={ ResourceCreate }
-            list={ ResourceList }
-            edit={ ResourceEdit }
-            remove={Delete}
-        />
-        <Resource
             name="domainroles"
-            show={ DomainRoleShow }
-            create={ DomainRoleCreate }
             list={ DomainRoleList }
+            create={ DomainRoleCreate }
+            show={ DomainRoleShow }
             edit={ DomainRoleEdit }
             remove={Delete}
         />
         <Resource
-            name="usersitedata"
-            show={ UserSiteDataShow }
-            create={ UserSiteDataCreate }
-            list={ UserSiteDataList }
-            edit={ UserSiteDataEdit }
-            remove={Delete}
-        />
-        <Resource
-            name="usersiteroles"
-            show={ UserSiteRoleShow }
-            create={ UserSiteRoleCreate }
-            list={ UserSiteRoleList }
-            remove={Delete}
-        />
-        <Resource
-            name="sites"
-            show={ SiteShow }
-            create={ SiteCreate }
-            list={ SiteList }
-            edit={ SiteEdit }
-            remove={Delete}
-        />
-        <Resource
-            name="roles"
-            show={ RoleShow }
-            create={ RoleCreate }
-            list={ RoleList }
-            edit={ RoleEdit }
-            remove={Delete}
-        />
-        <Resource
-            name="siteroles"
-            show={ SiteRoleShow }
-            create={ SiteRoleCreate }
-            list={ SiteRoleList }
-            edit={ SiteRoleEdit }
-            remove={Delete}
-        />
-        <Resource
-            name="permissions"
-            show={ PermissionShow }
-            create={ PermissionCreate }
-            list={ PermissionList }
-            edit={ PermissionEdit }
-            remove={Delete}
-        />
-        <Resource
-            name="users"
-            show={ UserShow }
-            list={ UserList }
-            edit={ UserEdit }
-            remove={Delete}
-        />
-        <Resource
-            name="sitedataschemas"
-            show={ SiteDataSchemaShow }
-            create={ SiteDataSchemaCreate }
-            list={ SiteDataSchemaList }
-            remove={Delete}
-        />
-        <Resource
-            name="invitationsiteroles"
-            show={ InvitationSiteRoleShow }
-            create={ InvitationSiteRoleCreate }
-            list={ InvitationSiteRoleList }
-            remove={Delete}
-        />
-        <Resource
-            name="roleresourcepermissions"
-            show={ RoleResourcePermissionShow }
-            create={ RoleResourcePermissionCreate }
-            list={ RoleResourcePermissionList }
+            name="invitations"
+            list={ InvitationList }
+            create={ InvitationCreate }
+            show={ InvitationShow }
+            edit={ InvitationEdit }
             remove={Delete}
         />
         <Resource
             name="invitationdomainroles"
-            show={ InvitationDomainRoleShow }
-            create={ InvitationDomainRoleCreate }
             list={ InvitationDomainRoleList }
+            create={ InvitationDomainRoleCreate }
+            show={ InvitationDomainRoleShow }
+            remove={Delete}
+        />
+        <Resource
+            name="invitationsiteroles"
+            list={ InvitationSiteRoleList }
+            create={ InvitationSiteRoleCreate }
+            show={ InvitationSiteRoleShow }
+            remove={Delete}
+        />
+        <Resource
+            name="permissions"
+            list={ PermissionList }
+            create={ PermissionCreate }
+            show={ PermissionShow }
+            edit={ PermissionEdit }
+            remove={Delete}
+        />
+        <Resource
+            name="resources"
+            list={ ResourceList }
+            create={ ResourceCreate }
+            show={ ResourceShow }
+            edit={ ResourceEdit }
+            remove={Delete}
+        />
+        <Resource
+            name="roles"
+            list={ RoleList }
+            create={ RoleCreate }
+            show={ RoleShow }
+            edit={ RoleEdit }
+            remove={Delete}
+        />
+        <Resource
+            name="roleresourcepermissions"
+            list={ RoleResourcePermissionList }
+            create={ RoleResourcePermissionCreate }
+            show={ RoleResourcePermissionShow }
+            remove={Delete}
+        />
+        <Resource
+            name="sites"
+            list={ SiteList }
+            create={ SiteCreate }
+            show={ SiteShow }
+            edit={ SiteEdit }
+            remove={Delete}
+        />
+        <Resource
+            name="siteroles"
+            list={ SiteRoleList }
+            create={ SiteRoleCreate }
+            show={ SiteRoleShow }
+            edit={ SiteRoleEdit }
+            remove={Delete}
+        />
+        <Resource
+            name="userdomainroles"
+            list={ UserDomainRoleList }
+            create={ UserDomainRoleCreate }
+            show={ UserDomainRoleShow }
+            remove={Delete}
+        />
+        <Resource
+            name="usersiteroles"
+            list={ UserSiteRoleList }
+            create={ UserSiteRoleCreate }
+            show={ UserSiteRoleShow }
+            remove={Delete}
+        />
+        <Resource
+            name="usersitedata"
+            list={ UserSiteDataList }
+            create={ UserSiteDataCreate }
+            show={ UserSiteDataShow }
+            edit={ UserSiteDataEdit }
+            remove={Delete}
+        />
+        <Resource
+            name="adminnotes"
+            list={ AdminNoteList }
+            create={ AdminNoteCreate }
+            show={ AdminNoteShow }
+            edit={ AdminNoteEdit }
+            remove={Delete}
+        />
+        <Resource
+            name="sitedataschemas"
+            list={ SiteDataSchemaList }
+            create={ SiteDataSchemaCreate }
+            show={ SiteDataSchemaShow }
+            remove={Delete}
+        />
+        <Resource
+            name="clients"
+            list={ ClientList }
+            show={ ClientShow }
+            remove={Delete}
+        />
+        <Resource
+            name="users"
+            list={ UserList }
+            show={ UserShow }
+            edit={ UserEdit }
             remove={Delete}
         />
     </Admin>
 )
 
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: cyan500,
+        accent1Color: cyan300
+    }
+});
+
 export default App;
+/** End of Generated Code **/

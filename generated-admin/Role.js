@@ -1,3 +1,7 @@
+/** 
+ * Generated Role.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import React from 'react';
 import {
     List,
@@ -7,12 +11,12 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
-    BooleanField,
     NumberField,
+    BooleanField,
     TextField,
     DateField,
-    TextInput,
     BooleanInput,
+    TextInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -32,32 +36,11 @@ const validationEditRole = values => {
     return errors;
 }
 
-export const RoleShow = props => (
-    <Show {...props} title="Role Show">
-        <SimpleShowLayout>
-            <BooleanField source="requires_2fa" />
-            <NumberField source="id" />
-            <TextField source="description" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
-        </SimpleShowLayout>
-    </Show>
-)
-
-export const RoleCreate = props => (
-    <Create {...props} title="Role Create">
-        <SimpleForm validate={validationCreateRole}>
-            <TextInput source="description" />
-            <BooleanInput source="requires_2fa" />
-        </SimpleForm>
-    </Create>
-)
-
 export const RoleList = props => (
     <List {...props} title="Role List">
         <Datagrid>
-            <BooleanField source="requires_2fa" />
             <NumberField source="id" />
+            <BooleanField source="requires_2fa" />
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -68,13 +51,35 @@ export const RoleList = props => (
     </List>
 )
 
+export const RoleCreate = props => (
+    <Create {...props} title="Role Create">
+        <SimpleForm validate={validationCreateRole}>
+            <BooleanInput source="requires_2fa" />
+            <TextInput source="description" />
+        </SimpleForm>
+    </Create>
+)
+
+export const RoleShow = props => (
+    <Show {...props} title="Role Show">
+        <SimpleShowLayout>
+            <NumberField source="id" />
+            <BooleanField source="requires_2fa" />
+            <TextField source="description" />
+            <DateField source="created_at" />
+            <DateField source="updated_at" />
+        </SimpleShowLayout>
+    </Show>
+)
+
 export const RoleEdit = props => (
     <Edit {...props} title="Role Edit">
         <SimpleForm validate={validationCreateRole}>
-            <TextInput source="description" />
-            <BooleanInput source="requires_2fa" />
             <TextInput source="label" />
+            <BooleanInput source="requires_2fa" />
+            <TextInput source="description" />
         </SimpleForm>
     </Edit>
 )
 
+/** End of Generated Code **/

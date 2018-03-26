@@ -1,3 +1,7 @@
+/** 
+ * Generated Invitation.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import React from 'react';
 import {
     List,
@@ -7,10 +11,10 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
-    DateInput,
-    TextInput,
-    DateField,
     TextField,
+    DateField,
+    TextInput,
+    DateInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -19,17 +23,17 @@ import {
 
 const validationCreateInvitation = values => {
     const errors = {};
+    if (!values.invitor_id) {
+        errors.invitor_id = ["invitor_id is required"];
+    }
+    if (!values.first_name) {
+        errors.first_name = ["first_name is required"];
+    }
     if (!values.last_name) {
         errors.last_name = ["last_name is required"];
     }
     if (!values.email) {
         errors.email = ["email is required"];
-    }
-    if (!values.first_name) {
-        errors.first_name = ["first_name is required"];
-    }
-    if (!values.invitor_id) {
-        errors.invitor_id = ["invitor_id is required"];
     }
     return errors;
 }
@@ -39,44 +43,17 @@ const validationEditInvitation = values => {
     return errors;
 }
 
-export const InvitationShow = props => (
-    <Show {...props} title="Invitation Show">
-        <SimpleShowLayout>
-            <DateField source="expires_at" />
-            <TextField source="last_name" />
-            <TextField source="first_name" />
-            <TextField source="id" />
-            <TextField source="email" />
-            <DateField source="updated_at" />
-            <DateField source="created_at" />
-            <TextField source="invitor_id" />
-        </SimpleShowLayout>
-    </Show>
-)
-
-export const InvitationCreate = props => (
-    <Create {...props} title="Invitation Create">
-        <SimpleForm validate={validationCreateInvitation}>
-            <DateInput source="expires_at" />
-            <TextInput source="last_name" />
-            <TextInput source="email" />
-            <TextInput source="first_name" />
-            <TextInput source="invitor_id" />
-        </SimpleForm>
-    </Create>
-)
-
 export const InvitationList = props => (
     <List {...props} title="Invitation List">
         <Datagrid>
-            <DateField source="expires_at" />
-            <TextField source="last_name" />
-            <TextField source="first_name" />
             <TextField source="id" />
-            <TextField source="email" />
-            <DateField source="updated_at" />
-            <DateField source="created_at" />
             <TextField source="invitor_id" />
+            <TextField source="first_name" />
+            <TextField source="last_name" />
+            <TextField source="email" />
+            <DateField source="expires_at" />
+            <DateField source="created_at" />
+            <DateField source="updated_at" />
             <EditButton />
             <ShowButton />
             <DeleteButton />
@@ -84,14 +61,42 @@ export const InvitationList = props => (
     </List>
 )
 
+export const InvitationCreate = props => (
+    <Create {...props} title="Invitation Create">
+        <SimpleForm validate={validationCreateInvitation}>
+            <TextInput source="invitor_id" />
+            <TextInput source="first_name" />
+            <TextInput source="last_name" />
+            <TextInput source="email" />
+            <DateInput source="expires_at" />
+        </SimpleForm>
+    </Create>
+)
+
+export const InvitationShow = props => (
+    <Show {...props} title="Invitation Show">
+        <SimpleShowLayout>
+            <TextField source="id" />
+            <TextField source="invitor_id" />
+            <TextField source="first_name" />
+            <TextField source="last_name" />
+            <TextField source="email" />
+            <DateField source="expires_at" />
+            <DateField source="created_at" />
+            <DateField source="updated_at" />
+        </SimpleShowLayout>
+    </Show>
+)
+
 export const InvitationEdit = props => (
     <Edit {...props} title="Invitation Edit">
         <SimpleForm validate={validationCreateInvitation}>
-            <DateInput source="expires_at" />
+            <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
-            <TextInput source="first_name" />
+            <DateInput source="expires_at" />
         </SimpleForm>
     </Edit>
 )
 
+/** End of Generated Code **/

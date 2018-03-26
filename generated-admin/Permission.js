@@ -1,3 +1,7 @@
+/** 
+ * Generated Permission.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import React from 'react';
 import {
     List,
@@ -7,8 +11,8 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
-    TextField,
     NumberField,
+    TextField,
     DateField,
     TextInput,
     DisabledInput,
@@ -30,16 +34,19 @@ const validationEditPermission = values => {
     return errors;
 }
 
-export const PermissionShow = props => (
-    <Show {...props} title="Permission Show">
-        <SimpleShowLayout>
-            <TextField source="name" />
+export const PermissionList = props => (
+    <List {...props} title="Permission List">
+        <Datagrid>
             <NumberField source="id" />
+            <TextField source="name" />
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-        </SimpleShowLayout>
-    </Show>
+            <EditButton />
+            <ShowButton />
+            <DeleteButton />
+        </Datagrid>
+    </List>
 )
 
 export const PermissionCreate = props => (
@@ -51,19 +58,16 @@ export const PermissionCreate = props => (
     </Create>
 )
 
-export const PermissionList = props => (
-    <List {...props} title="Permission List">
-        <Datagrid>
-            <TextField source="name" />
+export const PermissionShow = props => (
+    <Show {...props} title="Permission Show">
+        <SimpleShowLayout>
             <NumberField source="id" />
+            <TextField source="name" />
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
-            <ShowButton />
-            <DeleteButton />
-        </Datagrid>
-    </List>
+        </SimpleShowLayout>
+    </Show>
 )
 
 export const PermissionEdit = props => (
@@ -75,3 +79,4 @@ export const PermissionEdit = props => (
     </Edit>
 )
 
+/** End of Generated Code **/
