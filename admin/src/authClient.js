@@ -26,8 +26,8 @@ export default (type, params) => {
                 }
                 return response.json();
             })
-            .then(({ access_token }) => {
-                localStorage.setItem('access_token', access_token);
+            .then(({ id_token }) => {
+                localStorage.setItem('id_token', id_token);
             });
     }
     return Promise.resolve();
