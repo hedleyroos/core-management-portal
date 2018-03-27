@@ -21,6 +21,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    UserDomainRoleFilter
+} from './Filter';
 
 const validationCreateUserDomainRole = values => {
     const errors = {};
@@ -37,7 +40,7 @@ const validationCreateUserDomainRole = values => {
 }
 
 export const UserDomainRoleList = props => (
-    <List {...props} title="UserDomainRole List">
+    <List {...props} title="UserDomainRole List" filters={<UserDomainRoleFilter />}>
         <Datagrid>
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                 <TextField source="id" />

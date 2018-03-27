@@ -20,6 +20,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    InvitationFilter
+} from './Filter';
 
 const validationCreateInvitation = values => {
     const errors = {};
@@ -44,7 +47,7 @@ const validationEditInvitation = values => {
 }
 
 export const InvitationList = props => (
-    <List {...props} title="Invitation List">
+    <List {...props} title="Invitation List" filters={<InvitationFilter />}>
         <Datagrid>
             <TextField source="id" />
             <TextField source="invitor_id" />

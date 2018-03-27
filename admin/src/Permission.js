@@ -20,6 +20,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    PermissionFilter
+} from './Filter';
 
 const validationCreatePermission = values => {
     const errors = {};
@@ -35,7 +38,7 @@ const validationEditPermission = values => {
 }
 
 export const PermissionList = props => (
-    <List {...props} title="Permission List">
+    <List {...props} title="Permission List" filters={<PermissionFilter />}>
         <Datagrid>
             <NumberField source="id" />
             <TextField source="name" />

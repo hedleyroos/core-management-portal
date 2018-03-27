@@ -20,6 +20,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    ResourceFilter
+} from './Filter';
 
 const validationCreateResource = values => {
     const errors = {};
@@ -35,7 +38,7 @@ const validationEditResource = values => {
 }
 
 export const ResourceList = props => (
-    <List {...props} title="Resource List">
+    <List {...props} title="Resource List" filters={<ResourceFilter />}>
         <Datagrid>
             <NumberField source="id" />
             <TextField source="urn" />

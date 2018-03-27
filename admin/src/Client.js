@@ -19,9 +19,12 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    ClientFilter
+} from './Filter';
 
 export const ClientList = props => (
-    <List {...props} title="Client List">
+    <List {...props} title="Client List" filters={<ClientFilter />}>
         <Datagrid>
             <NumberField source="id" />
             <TextField source="_post_logout_redirect_uris" />

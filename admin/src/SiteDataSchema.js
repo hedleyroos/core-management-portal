@@ -19,6 +19,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    SiteDataSchemaFilter
+} from './Filter';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};
@@ -29,7 +32,7 @@ const validationCreateSiteDataSchema = values => {
 }
 
 export const SiteDataSchemaList = props => (
-    <List {...props} title="SiteDataSchema List">
+    <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
         <Datagrid>
             <NumberField source="site_id" />
             <DateField source="created_at" />

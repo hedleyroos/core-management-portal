@@ -21,6 +21,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    UserFilter
+} from './Filter';
 
 const validationEditUser = values => {
     const errors = {};
@@ -28,7 +31,7 @@ const validationEditUser = values => {
 }
 
 export const UserList = props => (
-    <List {...props} title="User List">
+    <List {...props} title="User List" filters={<UserFilter />}>
         <Datagrid>
             <TextField source="id" />
             <TextField source="username" />

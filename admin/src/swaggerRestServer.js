@@ -14,11 +14,6 @@ export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 
 const COMPOSITE_KEY_RESOURSES = {
-    get: [
-        'user_id',
-        'site_id',
-        'domain_id',
-    ],
     domainrole: [
         'domain_id',
         'role_id',

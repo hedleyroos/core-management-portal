@@ -21,6 +21,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    InvitationSiteRoleFilter
+} from './Filter';
 
 const validationCreateInvitationSiteRole = values => {
     const errors = {};
@@ -37,7 +40,7 @@ const validationCreateInvitationSiteRole = values => {
 }
 
 export const InvitationSiteRoleList = props => (
-    <List {...props} title="InvitationSiteRole List">
+    <List {...props} title="InvitationSiteRole List" filters={<InvitationSiteRoleFilter />}>
         <Datagrid>
             <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
                 <TextField source="id" />

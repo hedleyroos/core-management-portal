@@ -22,6 +22,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    RoleFilter
+} from './Filter';
 
 const validationCreateRole = values => {
     const errors = {};
@@ -37,7 +40,7 @@ const validationEditRole = values => {
 }
 
 export const RoleList = props => (
-    <List {...props} title="Role List">
+    <List {...props} title="Role List" filters={<RoleFilter />}>
         <Datagrid>
             <NumberField source="id" />
             <BooleanField source="requires_2fa" />

@@ -19,6 +19,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    RoleResourcePermissionFilter
+} from './Filter';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};
@@ -35,7 +38,7 @@ const validationCreateRoleResourcePermission = values => {
 }
 
 export const RoleResourcePermissionList = props => (
-    <List {...props} title="RoleResourcePermission List">
+    <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
         <Datagrid>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                 <NumberField source="id" />

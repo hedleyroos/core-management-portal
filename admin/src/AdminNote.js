@@ -20,6 +20,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    AdminNoteFilter
+} from './Filter';
 
 const validationCreateAdminNote = values => {
     const errors = {};
@@ -41,7 +44,7 @@ const validationEditAdminNote = values => {
 }
 
 export const AdminNoteList = props => (
-    <List {...props} title="AdminNote List">
+    <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
         <Datagrid>
             <NumberField source="id" />
             <TextField source="user_id" />

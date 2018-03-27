@@ -23,6 +23,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    SiteFilter
+} from './Filter';
 
 const validationCreateSite = values => {
     const errors = {};
@@ -41,7 +44,7 @@ const validationEditSite = values => {
 }
 
 export const SiteList = props => (
-    <List {...props} title="Site List">
+    <List {...props} title="Site List" filters={<SiteFilter />}>
         <Datagrid>
             <NumberField source="id" />
             <TextField source="client_id" />
