@@ -14,11 +14,10 @@ import { SiteCreate, SiteEdit, SiteList, SiteShow } from './sites';
 import { SiteRolesCreate, SiteRolesEdit, SiteRolesList, SiteRolesShow } from './siteroles';
 import swaggerRestServer from './swaggerRestServer';
 import authClient from './authClient';
-import authLogin from './authLogin';
 
 
 const App = () => (
-    <Admin title='Girl Effect Management Portal' theme={getMuiTheme(muiTheme)} restClient={swaggerRestServer('//core-management-layer:8000')} loginPage={authLogin} authClient={authClient}>
+    <Admin title='Girl Effect Management Portal' theme={getMuiTheme(muiTheme)} restClient={swaggerRestServer('//core-management-layer:8000')} authClient={authClient}>
         <Resource name='domains' icon={DomainIcon} list={DomainList} show={DomainShow} create={DomainCreate} edit={DomainEdit} remove={Delete} options={{label: 'Domains'}} />
         <Resource name='roles' icon={RoleIcon} list={RoleList} show={RoleShow} create={RoleCreate} edit={RoleEdit} remove={Delete} options={{label: 'Roles'}} />
         <Resource name='sites' icon={SiteIcon} list={SiteList} show={SiteShow} create={SiteCreate} edit={SiteEdit} remove={Delete} options={{label: 'Sites'}} />
