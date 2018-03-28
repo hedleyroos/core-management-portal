@@ -27,7 +27,7 @@ const httpClient = (url, options = {}) => {
 const restClient = swaggerRestServer('//core-management-layer:8000', httpClient)
 
 const App = () => (
-    <Admin title='Girl Effect Management Portal' theme={getMuiTheme(muiTheme)} restClient={restClient} authClient={authClient}>
+    <Admin title='Girl Effect Management Portal' theme={getMuiTheme(muiTheme)} restClient={restClient} authClient={authClient} >
         <Resource name='domains' icon={DomainIcon} list={DomainList} show={DomainShow} create={DomainCreate} edit={DomainEdit} remove={Delete} options={{label: 'Domains'}} />
         <Resource name='roles' icon={RoleIcon} list={RoleList} show={RoleShow} create={RoleCreate} edit={RoleEdit} remove={Delete} options={{label: 'Roles'}} />
         <Resource name='sites' icon={SiteIcon} list={SiteList} show={SiteShow} create={SiteCreate} edit={SiteEdit} remove={Delete} options={{label: 'Sites'}} />
