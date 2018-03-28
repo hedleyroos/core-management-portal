@@ -1,7 +1,7 @@
 import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_ERROR, AUTH_CHECK } from 'admin-on-rest';
 import queryString from 'query-string';
 
-const OPENID_PROVIDER_URL = 'http://core-authentication-service:8000/openid/token/';
+const OPENID_PROVIDER_URL = '//core-authentication-service:8000/openid/token/';
 const GRANT_TYPE = 'password';
 const CLIENT_ID = 'management_layer_workaround';
 const CLIENT_SECRET = 'management_layer_workaround';
