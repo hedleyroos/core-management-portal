@@ -22,7 +22,7 @@ import {
 } from 'admin-on-rest';
 import {
     PermissionFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreatePermission = values => {
     const errors = {};
@@ -75,7 +75,7 @@ export const PermissionShow = props => (
 
 export const PermissionEdit = props => (
     <Edit {...props} title="Permission Edit">
-        <SimpleForm validate={validationCreatePermission}>
+        <SimpleForm validate={validationEditPermission}>
             <TextInput source="name" />
             <TextInput source="description" />
         </SimpleForm>

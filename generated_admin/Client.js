@@ -21,7 +21,7 @@ import {
 } from 'admin-on-rest';
 import {
     ClientFilter
-} from './Filter';
+} from './Filters';
 
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />}>

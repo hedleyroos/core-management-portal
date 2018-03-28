@@ -16,6 +16,9 @@ import {
     DateField,
     NumberInput,
     BooleanInput,
+    ReferenceField,
+    ReferenceInput,
+    SelectInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -23,7 +26,7 @@ import {
 } from 'admin-on-rest';
 import {
     SiteRoleFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateSiteRole = values => {
     const errors = {};
@@ -92,7 +95,7 @@ export const SiteRoleShow = props => (
 
 export const SiteRoleEdit = props => (
     <Edit {...props} title="SiteRole Edit">
-        <SimpleForm validate={validationCreateSiteRole}>
+        <SimpleForm validate={validationEditSiteRole}>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Edit>

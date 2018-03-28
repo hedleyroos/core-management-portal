@@ -16,6 +16,9 @@ import {
     DateField,
     NumberInput,
     BooleanInput,
+    ReferenceField,
+    ReferenceInput,
+    SelectInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -23,7 +26,7 @@ import {
 } from 'admin-on-rest';
 import {
     DomainRoleFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateDomainRole = values => {
     const errors = {};
@@ -92,7 +95,7 @@ export const DomainRoleShow = props => (
 
 export const DomainRoleEdit = props => (
     <Edit {...props} title="DomainRole Edit">
-        <SimpleForm validate={validationCreateDomainRole}>
+        <SimpleForm validate={validationEditDomainRole}>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Edit>

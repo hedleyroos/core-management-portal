@@ -22,7 +22,7 @@ import {
 } from 'admin-on-rest';
 import {
     ResourceFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateResource = values => {
     const errors = {};
@@ -75,7 +75,7 @@ export const ResourceShow = props => (
 
 export const ResourceEdit = props => (
     <Edit {...props} title="Resource Edit">
-        <SimpleForm validate={validationCreateResource}>
+        <SimpleForm validate={validationEditResource}>
             <TextInput source="urn" />
             <TextInput source="description" />
         </SimpleForm>

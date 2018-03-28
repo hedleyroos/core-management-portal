@@ -25,7 +25,7 @@ import {
 } from 'admin-on-rest';
 import {
     SiteFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateSite = values => {
     const errors = {};
@@ -90,7 +90,7 @@ export const SiteShow = props => (
 
 export const SiteEdit = props => (
     <Edit {...props} title="Site Edit">
-        <SimpleForm validate={validationCreateSite}>
+        <SimpleForm validate={validationEditSite}>
             <TextInput source="client_id" />
             <NumberInput source="domain_id" />
             <TextInput source="name" />

@@ -22,7 +22,7 @@ import {
 } from 'admin-on-rest';
 import {
     InvitationFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateInvitation = values => {
     const errors = {};
@@ -93,7 +93,7 @@ export const InvitationShow = props => (
 
 export const InvitationEdit = props => (
     <Edit {...props} title="Invitation Edit">
-        <SimpleForm validate={validationCreateInvitation}>
+        <SimpleForm validate={validationEditInvitation}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />

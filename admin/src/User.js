@@ -23,7 +23,7 @@ import {
 } from 'admin-on-rest';
 import {
     UserFilter
-} from './Filter';
+} from './Filters';
 
 const validationEditUser = values => {
     const errors = {};
@@ -83,7 +83,7 @@ export const UserShow = props => (
 
 export const UserEdit = props => (
     <Edit {...props} title="User Edit">
-        <SimpleForm validate={validationCreateUser}>
+        <SimpleForm validate={validationEditUser}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />

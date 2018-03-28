@@ -12,155 +12,155 @@ import {
 
 export const DomainFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
     </Filter>
 );
 
 export const DomainRoleFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Number label="Domain Id" source="domain_id" />
-        <Number label="Role Id" source="role_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <NumberInput label="Domain Id" source="domain_id" />
+        <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
 
 export const InvitationFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="Invitor Id" source="invitor_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="Invitor Id" source="invitor_id" />
     </Filter>
 );
 
 export const InvitationDomainRoleFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="Invitation Id" source="invitation_id" />
-        <Number label="Domain Id" source="domain_id" />
-        <Number label="Role Id" source="role_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="Invitation Id" source="invitation_id" />
+        <NumberInput label="Domain Id" source="domain_id" />
+        <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
 
 export const InvitationSiteRoleFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="Invitation Id" source="invitation_id" />
-        <Number label="Site Id" source="site_id" />
-        <Number label="Role Id" source="role_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="Invitation Id" source="invitation_id" />
+        <NumberInput label="Site Id" source="site_id" />
+        <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
 
 export const PermissionFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
     </Filter>
 );
 
 export const ResourceFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="Prefix" source="prefix" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="Prefix" source="prefix" />
     </Filter>
 );
 
 export const RoleFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
     </Filter>
 );
 
 export const RoleResourcePermissionFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Number label="Role Id" source="role_id" />
-        <Number label="Resource Id" source="resource_id" />
-        <Number label="Permission Id" source="permission_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <NumberInput label="Role Id" source="role_id" />
+        <NumberInput label="Resource Id" source="resource_id" />
+        <NumberInput label="Permission Id" source="permission_id" />
     </Filter>
 );
 
 export const SiteFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
     </Filter>
 );
 
 export const SiteRoleFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Number label="Site Id" source="site_id" />
-        <Number label="Role Id" source="role_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <NumberInput label="Site Id" source="site_id" />
+        <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
 
 export const UserDomainRoleFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="User Id" source="user_id" />
-        <Number label="Domain Id" source="domain_id" />
-        <Number label="Role Id" source="role_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="User Id" source="user_id" />
+        <NumberInput label="Domain Id" source="domain_id" />
+        <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
 
 export const UserSiteRoleFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="User Id" source="user_id" />
-        <Number label="Site Id" source="site_id" />
-        <Number label="Role Id" source="role_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="User Id" source="user_id" />
+        <NumberInput label="Site Id" source="site_id" />
+        <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
 
 export const UserSiteDataFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="User Id" source="user_id" />
-        <Number label="Site Id" source="site_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="User Id" source="user_id" />
+        <NumberInput label="Site Id" source="site_id" />
     </Filter>
 );
 
 export const AdminNoteFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="User Id" source="user_id" />
-        <Text label="Creator Id" source="creator_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="User Id" source="user_id" />
+        <TextInput label="Creator Id" source="creator_id" />
     </Filter>
 );
 
 export const SiteDataSchemaFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
     </Filter>
 );
 
 export const ClientFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="Client Token Id" source="client_token_id" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="Client Token Id" source="client_token_id" />
     </Filter>
 );
 
 export const UserFilter = props => (
     <Filter {...props}>
-        <Number label="Offset" source="offset" />
-        <Number label="Limit" source="limit" />
-        <Text label="Email" source="email" />
-        <Text label="Username Prefix" source="username_prefix" />
+        <NumberInput label="Offset" source="offset" />
+        <NumberInput label="Limit" source="limit" />
+        <TextInput label="Email" source="email" />
+        <TextInput label="Username Prefix" source="username_prefix" />
     </Filter>
 );
 

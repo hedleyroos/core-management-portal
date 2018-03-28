@@ -18,6 +18,9 @@ import {
     TextInput,
     NumberInput,
     BooleanInput,
+    ReferenceField,
+    ReferenceInput,
+    SelectInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -25,7 +28,7 @@ import {
 } from 'admin-on-rest';
 import {
     UserSiteDataFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateUserSiteData = values => {
     const errors = {};
@@ -97,7 +100,7 @@ export const UserSiteDataShow = props => (
 
 export const UserSiteDataEdit = props => (
     <Edit {...props} title="UserSiteData Edit">
-        <SimpleForm validate={validationCreateUserSiteData}>
+        <SimpleForm validate={validationEditUserSiteData}>
             <TextInput source="consented_at" />
             <BooleanInput source="blocked" />
         </SimpleForm>

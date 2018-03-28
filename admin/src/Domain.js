@@ -23,7 +23,7 @@ import {
 } from 'admin-on-rest';
 import {
     DomainFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateDomain = values => {
     const errors = {};
@@ -79,7 +79,7 @@ export const DomainShow = props => (
 
 export const DomainEdit = props => (
     <Edit {...props} title="Domain Edit">
-        <SimpleForm validate={validationCreateDomain}>
+        <SimpleForm validate={validationEditDomain}>
             <NumberInput source="parent_id" />
             <TextInput source="name" />
             <TextInput source="description" />

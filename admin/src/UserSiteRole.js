@@ -16,6 +16,9 @@ import {
     DateField,
     TextInput,
     NumberInput,
+    ReferenceField,
+    ReferenceInput,
+    SelectInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -23,7 +26,7 @@ import {
 } from 'admin-on-rest';
 import {
     UserSiteRoleFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateUserSiteRole = values => {
     const errors = {};

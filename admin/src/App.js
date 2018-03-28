@@ -5,7 +5,7 @@
 import React from 'react';
 import { pink500, pink300 } from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { Admin, Delete, Resource } from 'admin-on-rest';
+import { Admin, Delete, fetchUtils, Resource } from 'admin-on-rest';
 import swaggerRestServer from './swaggerRestServer';
 import authClient from './authClient';
 

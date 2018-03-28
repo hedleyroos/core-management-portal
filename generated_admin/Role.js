@@ -24,7 +24,7 @@ import {
 } from 'admin-on-rest';
 import {
     RoleFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateRole = values => {
     const errors = {};
@@ -77,7 +77,7 @@ export const RoleShow = props => (
 
 export const RoleEdit = props => (
     <Edit {...props} title="Role Edit">
-        <SimpleForm validate={validationCreateRole}>
+        <SimpleForm validate={validationEditRole}>
             <TextInput source="label" />
             <BooleanInput source="requires_2fa" />
             <TextInput source="description" />

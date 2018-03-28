@@ -21,7 +21,7 @@ import {
 } from 'admin-on-rest';
 import {
     SiteDataSchemaFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};

@@ -14,6 +14,9 @@ import {
     NumberField,
     DateField,
     NumberInput,
+    ReferenceField,
+    ReferenceInput,
+    SelectInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -21,7 +24,7 @@ import {
 } from 'admin-on-rest';
 import {
     RoleResourcePermissionFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};

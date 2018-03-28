@@ -22,7 +22,7 @@ import {
 } from 'admin-on-rest';
 import {
     AdminNoteFilter
-} from './Filter';
+} from './Filters';
 
 const validationCreateAdminNote = values => {
     const errors = {};
@@ -84,7 +84,7 @@ export const AdminNoteShow = props => (
 
 export const AdminNoteEdit = props => (
     <Edit {...props} title="AdminNote Edit">
-        <SimpleForm validate={validationCreateAdminNote}>
+        <SimpleForm validate={validationEditAdminNote}>
             <TextInput source="note" />
         </SimpleForm>
     </Edit>
