@@ -1,21 +1,26 @@
 import { AUTH_LOGIN } from 'admin-on-rest';
 import queryString from 'query-string';
 
+const OPENID_PROVIDER_URL = 'http://core-authentication-service:8000/openid/token/';
+const GRANT_TYPE = 'password';
+const CLIENT_ID = 'management_layer_workaround';
+const CLIENT_SECRET = 'management_layer_workaround';
+const SCOPE = 'openid roles';
 
 export default (type, params) => {
     if (type === AUTH_LOGIN) {
         console.log(queryString);
         const { username, password } = params;
 
-        const request = new Request('http://core-authentication-service:8000/openid/token/', {
+        const request = new Request(OPENID_PROVIDER_URL, {
             method: 'POST',
             body: queryString.stringify({
                 username: username,
                 password: password,
-                grant_type: 'password',
-                client_id: 'management_layer_workaround',
-                client_secret: 'management_layer_workaround',
-                scope: 'openid profile email address phone site roles'
+                grant_type: GRANT_TYPE,
+                client_id: CLIENT_ID,
+                client_secret: CLIENT_SECRET,
+                scope: SCOPE
             }),
             headers: {'Content-type': 'application/x-www-form-urlencoded'}
         })
