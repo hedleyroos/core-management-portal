@@ -11,14 +11,13 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
+    ReferenceField,
     NumberField,
     BooleanField,
     DateField,
-    NumberInput,
-    BooleanInput,
-    ReferenceField,
     ReferenceInput,
     SelectInput,
+    BooleanInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -48,10 +47,10 @@ export const DomainRoleList = props => (
     <List {...props} title="DomainRole List" filters={<DomainRoleFilter />}>
         <Datagrid>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="label" />
             </ReferenceField>
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
@@ -67,10 +66,10 @@ export const DomainRoleCreate = props => (
     <Create {...props} title="DomainRole Create">
         <SimpleForm validate={validationCreateDomainRole}>
             <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="label" />
             </ReferenceInput>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
@@ -81,10 +80,10 @@ export const DomainRoleShow = props => (
     <Show {...props} title="DomainRole Show">
         <SimpleShowLayout>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="label" />
             </ReferenceField>
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />

@@ -12,7 +12,10 @@ import {
     SimpleShowLayout,
     SimpleForm,
     TextField,
+    ReferenceField,
     DateField,
+    ReferenceInput,
+    SelectInput,
     TextInput,
     DateInput,
     DisabledInput,
@@ -50,7 +53,9 @@ export const InvitationList = props => (
     <List {...props} title="Invitation List" filters={<InvitationFilter />}>
         <Datagrid>
             <TextField source="id" />
-            <TextField source="invitor_id" />
+            <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
+                <TextField source="id" optionText="username" />
+            </ReferenceField>
             <TextField source="first_name" />
             <TextField source="last_name" />
             <TextField source="email" />
@@ -67,7 +72,9 @@ export const InvitationList = props => (
 export const InvitationCreate = props => (
     <Create {...props} title="Invitation Create">
         <SimpleForm validate={validationCreateInvitation}>
-            <TextInput source="invitor_id" />
+            <ReferenceInput label="User" source="invitor_id" reference="users" allowEmpty>
+                <SelectInput source="id" optionText="username" />
+            </ReferenceInput>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
@@ -80,7 +87,9 @@ export const InvitationShow = props => (
     <Show {...props} title="Invitation Show">
         <SimpleShowLayout>
             <TextField source="id" />
-            <TextField source="invitor_id" />
+            <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
+                <TextField source="id" optionText="username" />
+            </ReferenceField>
             <TextField source="first_name" />
             <TextField source="last_name" />
             <TextField source="email" />

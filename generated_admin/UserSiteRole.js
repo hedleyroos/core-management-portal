@@ -11,12 +11,10 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
+    ReferenceField,
     TextField,
     NumberField,
     DateField,
-    TextInput,
-    NumberInput,
-    ReferenceField,
     ReferenceInput,
     SelectInput,
     DisabledInput,
@@ -46,13 +44,13 @@ export const UserSiteRoleList = props => (
     <List {...props} title="UserSiteRole List" filters={<UserSiteRoleFilter />}>
         <Datagrid>
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" />
+                <TextField source="id" optionText="username" />
             </ReferenceField>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="label" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -67,13 +65,13 @@ export const UserSiteRoleCreate = props => (
     <Create {...props} title="UserSiteRole Create">
         <SimpleForm validate={validationCreateUserSiteRole}>
             <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="username" />
             </ReferenceInput>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="label" />
             </ReferenceInput>
         </SimpleForm>
     </Create>
@@ -83,13 +81,13 @@ export const UserSiteRoleShow = props => (
     <Show {...props} title="UserSiteRole Show">
         <SimpleShowLayout>
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" />
+                <TextField source="id" optionText="username" />
             </ReferenceField>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="label" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />

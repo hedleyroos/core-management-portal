@@ -11,12 +11,10 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
+    ReferenceField,
     TextField,
     NumberField,
     DateField,
-    TextInput,
-    NumberInput,
-    ReferenceField,
     ReferenceInput,
     SelectInput,
     DisabledInput,
@@ -46,13 +44,13 @@ export const InvitationDomainRoleList = props => (
     <List {...props} title="InvitationDomainRole List" filters={<InvitationDomainRoleFilter />}>
         <Datagrid>
             <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
-                <TextField source="id" />
+                <TextField source="id" optionText="email" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="label" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -67,13 +65,13 @@ export const InvitationDomainRoleCreate = props => (
     <Create {...props} title="InvitationDomainRole Create">
         <SimpleForm validate={validationCreateInvitationDomainRole}>
             <ReferenceInput label="Invitation" source="invitation_id" reference="invitations" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="email" />
             </ReferenceInput>
             <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="label" />
             </ReferenceInput>
         </SimpleForm>
     </Create>
@@ -83,13 +81,13 @@ export const InvitationDomainRoleShow = props => (
     <Show {...props} title="InvitationDomainRole Show">
         <SimpleShowLayout>
             <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
-                <TextField source="id" />
+                <TextField source="id" optionText="email" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="label" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />

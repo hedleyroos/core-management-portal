@@ -11,9 +11,11 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
+    ReferenceField,
     NumberField,
     DateField,
-    NumberInput,
+    ReferenceInput,
+    SelectInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -34,7 +36,9 @@ const validationCreateSiteDataSchema = values => {
 export const SiteDataSchemaList = props => (
     <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
         <Datagrid>
-            <NumberField source="site_id" />
+            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                <NumberField source="id" optionText="name" />
+            </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <EditButton />
@@ -47,7 +51,9 @@ export const SiteDataSchemaList = props => (
 export const SiteDataSchemaCreate = props => (
     <Create {...props} title="SiteDataSchema Create">
         <SimpleForm validate={validationCreateSiteDataSchema}>
-            <NumberInput source="site_id" />
+            <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
+                <SelectInput source="id" optionText="name" />
+            </ReferenceInput>
         </SimpleForm>
     </Create>
 )
@@ -55,7 +61,9 @@ export const SiteDataSchemaCreate = props => (
 export const SiteDataSchemaShow = props => (
     <Show {...props} title="SiteDataSchema Show">
         <SimpleShowLayout>
-            <NumberField source="site_id" />
+            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                <NumberField source="id" optionText="name" />
+            </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
         </SimpleShowLayout>

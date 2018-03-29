@@ -12,8 +12,11 @@ import {
     SimpleShowLayout,
     SimpleForm,
     NumberField,
+    ReferenceField,
     TextField,
     DateField,
+    ReferenceInput,
+    SelectInput,
     TextInput,
     DisabledInput,
     DeleteButton,
@@ -47,8 +50,12 @@ export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
         <Datagrid>
             <NumberField source="id" />
-            <TextField source="user_id" />
-            <TextField source="creator_id" />
+            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                <TextField source="id" optionText="username" />
+            </ReferenceField>
+            <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
+                <TextField source="id" optionText="username" />
+            </ReferenceField>
             <TextField source="note" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -62,8 +69,12 @@ export const AdminNoteList = props => (
 export const AdminNoteCreate = props => (
     <Create {...props} title="AdminNote Create">
         <SimpleForm validate={validationCreateAdminNote}>
-            <TextInput source="user_id" />
-            <TextInput source="creator_id" />
+            <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
+                <SelectInput source="id" optionText="username" />
+            </ReferenceInput>
+            <ReferenceInput label="User" source="creator_id" reference="users" allowEmpty>
+                <DisabledInput source="id" optionText="username" />
+            </ReferenceInput>
             <TextInput source="note" />
         </SimpleForm>
     </Create>
@@ -73,8 +84,12 @@ export const AdminNoteShow = props => (
     <Show {...props} title="AdminNote Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            <TextField source="user_id" />
-            <TextField source="creator_id" />
+            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                <TextField source="id" optionText="username" />
+            </ReferenceField>
+            <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
+                <TextField source="id" optionText="username" />
+            </ReferenceField>
             <TextField source="note" />
             <DateField source="created_at" />
             <DateField source="updated_at" />

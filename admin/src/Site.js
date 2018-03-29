@@ -12,11 +12,13 @@ import {
     SimpleShowLayout,
     SimpleForm,
     NumberField,
+    ReferenceField,
     TextField,
     BooleanField,
     DateField,
+    ReferenceInput,
+    SelectInput,
     TextInput,
-    NumberInput,
     BooleanInput,
     DisabledInput,
     DeleteButton,
@@ -47,8 +49,12 @@ export const SiteList = props => (
     <List {...props} title="Site List" filters={<SiteFilter />}>
         <Datagrid>
             <NumberField source="id" />
-            <TextField source="client_id" />
-            <NumberField source="domain_id" />
+            <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
+                <TextField source="client_id" optionText="client_id" />
+            </ReferenceField>
+            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                <NumberField source="id" optionText="name" />
+            </ReferenceField>
             <TextField source="name" />
             <TextField source="description" />
             <BooleanField source="is_active" />
@@ -64,8 +70,12 @@ export const SiteList = props => (
 export const SiteCreate = props => (
     <Create {...props} title="Site Create">
         <SimpleForm validate={validationCreateSite}>
-            <TextInput source="client_id" />
-            <NumberInput source="domain_id" />
+            <ReferenceInput label="Client" source="client_id" reference="clients" allowEmpty>
+                <SelectInput source="client_id" optionText="client_id" />
+            </ReferenceInput>
+            <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
+                <SelectInput source="id" optionText="name" />
+            </ReferenceInput>
             <TextInput source="name" />
             <BooleanInput source="is_active" />
             <TextInput source="description" />
@@ -77,8 +87,12 @@ export const SiteShow = props => (
     <Show {...props} title="Site Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            <TextField source="client_id" />
-            <NumberField source="domain_id" />
+            <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
+                <TextField source="client_id" optionText="client_id" />
+            </ReferenceField>
+            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                <NumberField source="id" optionText="name" />
+            </ReferenceField>
             <TextField source="name" />
             <TextField source="description" />
             <BooleanField source="is_active" />
@@ -91,8 +105,12 @@ export const SiteShow = props => (
 export const SiteEdit = props => (
     <Edit {...props} title="Site Edit">
         <SimpleForm validate={validationEditSite}>
-            <TextInput source="client_id" />
-            <NumberInput source="domain_id" />
+            <ReferenceInput label="Client" source="client_id" reference="clients" allowEmpty>
+                <SelectInput source="client_id" optionText="client_id" />
+            </ReferenceInput>
+            <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
+                <SelectInput source="id" optionText="name" />
+            </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
             <BooleanInput source="is_active" />

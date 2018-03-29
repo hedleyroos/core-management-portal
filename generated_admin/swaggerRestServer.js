@@ -13,45 +13,6 @@ export const CREATE = 'CREATE';
 export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 
-const COMPOSITE_KEY_RESOURSES = {
-    domainrole: [
-        'domain_id',
-        'role_id',
-    ],
-    invitationdomainrole: [
-        'invitation_id',
-        'domain_id',
-        'role_id',
-    ],
-    invitationsiterole: [
-        'invitation_id',
-        'site_id',
-        'role_id',
-    ],
-    roleresourcepermission: [
-        'role_id',
-        'resource_id',
-        'permission_id',
-    ],
-    siterole: [
-        'site_id',
-        'role_id',
-    ],
-    userdomainrole: [
-        'user_id',
-        'domain_id',
-        'role_id',
-    ],
-    usersiterole: [
-        'user_id',
-        'site_id',
-        'role_id',
-    ],
-    usersitedata: [
-        'user_id',
-        'site_id',
-    ],
-}
 
 /**
  * @param {String} apiUrl The base API url
@@ -112,7 +73,7 @@ export const convertRESTRequestToHTTP = ({
             options.body = JSON.stringify(params.data);
             break;
         case CREATE:
-            url = `${apiUrl}/${resource}/`;
+            url = `${apiUrl}/${resource}`;
             options.method = 'POST';
             options.body = JSON.stringify(params.data);
             break;

@@ -11,16 +11,15 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
+    ReferenceField,
     TextField,
     NumberField,
     DateField,
     BooleanField,
-    TextInput,
-    NumberInput,
-    BooleanInput,
-    ReferenceField,
     ReferenceInput,
     SelectInput,
+    TextInput,
+    BooleanInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -50,10 +49,10 @@ export const UserSiteDataList = props => (
     <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
         <Datagrid>
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" />
+                <TextField source="id" optionText="username" />
             </ReferenceField>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <DateField source="consented_at" />
             <BooleanField source="blocked" />
@@ -70,10 +69,10 @@ export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
         <SimpleForm validate={validationCreateUserSiteData}>
             <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="username" />
             </ReferenceInput>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
             <TextInput source="consented_at" />
             <BooleanInput source="blocked" />
@@ -85,10 +84,10 @@ export const UserSiteDataShow = props => (
     <Show {...props} title="UserSiteData Show">
         <SimpleShowLayout>
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" />
+                <TextField source="id" optionText="username" />
             </ReferenceField>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <DateField source="consented_at" />
             <BooleanField source="blocked" />

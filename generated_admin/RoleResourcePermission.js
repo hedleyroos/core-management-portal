@@ -11,10 +11,9 @@ import {
     Datagrid,
     SimpleShowLayout,
     SimpleForm,
+    ReferenceField,
     NumberField,
     DateField,
-    NumberInput,
-    ReferenceField,
     ReferenceInput,
     SelectInput,
     DisabledInput,
@@ -44,13 +43,13 @@ export const RoleResourcePermissionList = props => (
     <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
         <Datagrid>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="label" />
             </ReferenceField>
             <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="urn" />
             </ReferenceField>
             <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -65,13 +64,13 @@ export const RoleResourcePermissionCreate = props => (
     <Create {...props} title="RoleResourcePermission Create">
         <SimpleForm validate={validationCreateRoleResourcePermission}>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="label" />
             </ReferenceInput>
             <ReferenceInput label="Resource" source="resource_id" reference="resources" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="urn" />
             </ReferenceInput>
             <ReferenceInput label="Permission" source="permission_id" reference="permissions" allowEmpty>
-                <SelectInput source="id" />
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
         </SimpleForm>
     </Create>
@@ -81,13 +80,13 @@ export const RoleResourcePermissionShow = props => (
     <Show {...props} title="RoleResourcePermission Show">
         <SimpleShowLayout>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="label" />
             </ReferenceField>
             <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="urn" />
             </ReferenceField>
             <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="id" optionText="name" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
