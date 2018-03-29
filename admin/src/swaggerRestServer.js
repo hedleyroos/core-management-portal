@@ -1,3 +1,7 @@
+/**
+ * Generated swaggerRestServer.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import { stringify } from 'query-string';
 import { fetchUtils } from 'admin-on-rest';
 
@@ -10,8 +14,43 @@ export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 
 const COMPOSITE_KEY_RESOURSES = {
-    siteroles: ['site_id', 'role_id'],
-    domainroles: ['domain_id', 'role_id']
+    domainrole: [
+        'domain_id',
+        'role_id',
+    ],
+    invitationdomainrole: [
+        'invitation_id',
+        'domain_id',
+        'role_id',
+    ],
+    invitationsiterole: [
+        'invitation_id',
+        'site_id',
+        'role_id',
+    ],
+    roleresourcepermission: [
+        'role_id',
+        'resource_id',
+        'permission_id',
+    ],
+    siterole: [
+        'site_id',
+        'role_id',
+    ],
+    userdomainrole: [
+        'user_id',
+        'domain_id',
+        'role_id',
+    ],
+    usersiterole: [
+        'user_id',
+        'site_id',
+        'role_id',
+    ],
+    usersitedata: [
+        'user_id',
+        'site_id',
+    ],
 }
 
 /**
@@ -73,7 +112,7 @@ export const convertRESTRequestToHTTP = ({
             options.body = JSON.stringify(params.data);
             break;
         case CREATE:
-            url = `${apiUrl}/${resource}/`;
+            url = `${apiUrl}/${resource}`;
             options.method = 'POST';
             options.body = JSON.stringify(params.data);
             break;
@@ -104,7 +143,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
             if (resource in COMPOSITE_KEY_RESOURSES) {
                 let keys = COMPOSITE_KEY_RESOURSES[resource];
                 return {
-                    data: json ? json.map(res => ({ ...res, id: `${res[keys[0]]}/${res[keys[1]]}` })) : json,
+                    data: json ? json.map(res => ({ ...res, id: `${keys.map(key => res[key]).join('/')}` })) : json,
                     total: 10
                 }
             }
@@ -167,3 +206,4 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
         );
     };
 };
+/** End of Generated Code **/
