@@ -54,7 +54,7 @@ export const InvitationList = props => (
         <Datagrid>
             <TextField source="id" />
             <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" optionText="username" />
+                <TextField source="username" />
             </ReferenceField>
             <TextField source="first_name" />
             <TextField source="last_name" />
@@ -88,7 +88,7 @@ export const InvitationShow = props => (
         <SimpleShowLayout>
             <TextField source="id" />
             <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" optionText="username" />
+                <TextField source="username" />
             </ReferenceField>
             <TextField source="first_name" />
             <TextField source="last_name" />

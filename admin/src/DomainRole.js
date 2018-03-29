@@ -47,10 +47,10 @@ export const DomainRoleList = props => (
     <List {...props} title="DomainRole List" filters={<DomainRoleFilter />}>
         <Datagrid>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="label" />
+                <NumberField source="label" />
             </ReferenceField>
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
@@ -80,10 +80,10 @@ export const DomainRoleShow = props => (
     <Show {...props} title="DomainRole Show">
         <SimpleShowLayout>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="label" />
+                <NumberField source="label" />
             </ReferenceField>
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />

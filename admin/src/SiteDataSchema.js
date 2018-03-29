@@ -37,7 +37,7 @@ export const SiteDataSchemaList = props => (
     <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
         <Datagrid>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -62,7 +62,7 @@ export const SiteDataSchemaShow = props => (
     <Show {...props} title="SiteDataSchema Show">
         <SimpleShowLayout>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />

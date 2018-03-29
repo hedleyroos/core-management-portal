@@ -51,10 +51,10 @@ export const AdminNoteList = props => (
         <Datagrid>
             <NumberField source="id" />
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" optionText="username" />
+                <TextField source="username" />
             </ReferenceField>
             <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" optionText="username" />
+                <TextField source="username" />
             </ReferenceField>
             <TextField source="note" />
             <DateField source="created_at" />
@@ -85,10 +85,10 @@ export const AdminNoteShow = props => (
         <SimpleShowLayout>
             <NumberField source="id" />
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" optionText="username" />
+                <TextField source="username" />
             </ReferenceField>
             <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" optionText="username" />
+                <TextField source="username" />
             </ReferenceField>
             <TextField source="note" />
             <DateField source="created_at" />

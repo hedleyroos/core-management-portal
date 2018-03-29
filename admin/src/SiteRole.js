@@ -47,10 +47,10 @@ export const SiteRoleList = props => (
     <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
         <Datagrid>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="label" />
+                <NumberField source="label" />
             </ReferenceField>
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
@@ -80,10 +80,10 @@ export const SiteRoleShow = props => (
     <Show {...props} title="SiteRole Show">
         <SimpleShowLayout>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="label" />
+                <NumberField source="label" />
             </ReferenceField>
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />

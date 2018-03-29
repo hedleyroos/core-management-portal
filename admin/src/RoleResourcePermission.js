@@ -43,13 +43,13 @@ export const RoleResourcePermissionList = props => (
     <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
         <Datagrid>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="label" />
+                <NumberField source="label" />
             </ReferenceField>
             <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="urn" />
+                <NumberField source="urn" />
             </ReferenceField>
             <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -80,13 +80,13 @@ export const RoleResourcePermissionShow = props => (
     <Show {...props} title="RoleResourcePermission Show">
         <SimpleShowLayout>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="label" />
+                <NumberField source="label" />
             </ReferenceField>
             <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="urn" />
+                <NumberField source="urn" />
             </ReferenceField>
             <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />

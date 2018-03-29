@@ -44,13 +44,13 @@ export const InvitationDomainRoleList = props => (
     <List {...props} title="InvitationDomainRole List" filters={<InvitationDomainRoleFilter />}>
         <Datagrid>
             <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
-                <TextField source="id" optionText="email" />
+                <TextField source="email" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="label" />
+                <NumberField source="label" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -81,13 +81,13 @@ export const InvitationDomainRoleShow = props => (
     <Show {...props} title="InvitationDomainRole Show">
         <SimpleShowLayout>
             <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
-                <TextField source="id" optionText="email" />
+                <TextField source="email" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="label" />
+                <NumberField source="label" />
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />

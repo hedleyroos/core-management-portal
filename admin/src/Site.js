@@ -50,10 +50,10 @@ export const SiteList = props => (
         <Datagrid>
             <NumberField source="id" />
             <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
-                <TextField source="client_id" optionText="client_id" />
+                <TextField source="client_id" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <TextField source="name" />
             <TextField source="description" />
@@ -88,10 +88,10 @@ export const SiteShow = props => (
         <SimpleShowLayout>
             <NumberField source="id" />
             <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
-                <TextField source="client_id" optionText="client_id" />
+                <TextField source="client_id" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <TextField source="name" />
             <TextField source="description" />

@@ -49,10 +49,10 @@ export const UserSiteDataList = props => (
     <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
         <Datagrid>
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" optionText="username" />
+                <TextField source="username" />
             </ReferenceField>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <DateField source="consented_at" />
             <BooleanField source="blocked" />
@@ -84,10 +84,10 @@ export const UserSiteDataShow = props => (
     <Show {...props} title="UserSiteData Show">
         <SimpleShowLayout>
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="id" optionText="username" />
+                <TextField source="username" />
             </ReferenceField>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="id" optionText="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <DateField source="consented_at" />
             <BooleanField source="blocked" />
