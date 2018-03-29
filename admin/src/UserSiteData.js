@@ -18,8 +18,9 @@ import {
     BooleanField,
     ReferenceInput,
     SelectInput,
-    TextInput,
+    DateInput,
     BooleanInput,
+    TextInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -74,7 +75,7 @@ export const UserSiteDataCreate = props => (
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput source="id" optionText="name" />
             </ReferenceInput>
-            <TextInput source="consented_at" />
+            <DateInput source="consented_at" />
             <BooleanInput source="blocked" />
         </SimpleForm>
     </Create>
