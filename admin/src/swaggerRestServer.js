@@ -189,6 +189,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
      */
 
     return async (type, resource, params) => {
+        console.log(params.data);
         const { url, options } = convertRESTRequestToHTTP({
             apiUrl,
             type,

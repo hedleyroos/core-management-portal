@@ -50,7 +50,7 @@ export const SiteList = props => (
         <Datagrid>
             <NumberField source="id" />
             <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
-                <TextField source="client_id" />
+                <TextField source="name" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                 <NumberField source="name" />
@@ -71,7 +71,7 @@ export const SiteCreate = props => (
     <Create {...props} title="Site Create">
         <SimpleForm validate={validationCreateSite}>
             <ReferenceInput label="Client" source="client_id" reference="clients" allowEmpty>
-                <SelectInput source="client_id" optionText="client_id" />
+                <SelectInput source="client_id" optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
                 <SelectInput source="id" optionText="name" />
@@ -88,7 +88,7 @@ export const SiteShow = props => (
         <SimpleShowLayout>
             <NumberField source="id" />
             <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
-                <TextField source="client_id" />
+                <TextField source="name" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                 <NumberField source="name" />
@@ -106,7 +106,7 @@ export const SiteEdit = props => (
     <Edit {...props} title="Site Edit">
         <SimpleForm validate={validationEditSite}>
             <ReferenceInput label="Client" source="client_id" reference="clients" allowEmpty>
-                <SelectInput source="client_id" optionText="client_id" />
+                <SelectInput source="client_id" optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
                 <SelectInput source="id" optionText="name" />
