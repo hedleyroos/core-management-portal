@@ -17,12 +17,12 @@ import {
     ReferenceInput,
     SelectInput,
     TextInput,
-    DateInput,
     DisabledInput,
     DeleteButton,
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import DateTimeInput from 'aor-datetime-input';
 import {
     InvitationFilter
 } from './Filters';
@@ -78,7 +78,7 @@ export const InvitationCreate = props => (
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
-            <DateInput source="expires_at" />
+            <DateTimeInput source="expires_at" />
         </SimpleForm>
     </Create>
 )
@@ -106,7 +106,7 @@ export const InvitationEdit = props => (
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
-            <DateInput source="expires_at" />
+            <DateTimeInput source="expires_at" />
         </SimpleForm>
     </Edit>
 )

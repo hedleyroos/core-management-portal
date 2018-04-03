@@ -16,6 +16,7 @@ import {
     DateField,
     TextInput,
     BooleanInput,
+    DateInput,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -39,13 +40,13 @@ export const UserList = props => (
             <TextField source="last_name" />
             <TextField source="email" />
             <BooleanField source="is_active" />
-            <TextField source="date_joined" />
+            <DateField source="date_joined" />
             <DateField source="last_login" />
             <BooleanField source="email_verified" />
             <BooleanField source="msisdn_verified" />
             <TextField source="msisdn" />
             <TextField source="gender" />
-            <TextField source="birth_date" />
+            <DateField source="birth_date" />
             <TextField source="avatar" />
             <TextField source="country_code" />
             <DateField source="created_at" />
@@ -66,13 +67,13 @@ export const UserShow = props => (
             <TextField source="last_name" />
             <TextField source="email" />
             <BooleanField source="is_active" />
-            <TextField source="date_joined" />
+            <DateField source="date_joined" />
             <DateField source="last_login" />
             <BooleanField source="email_verified" />
             <BooleanField source="msisdn_verified" />
             <TextField source="msisdn" />
             <TextField source="gender" />
-            <TextField source="birth_date" />
+            <DateField source="birth_date" />
             <TextField source="avatar" />
             <TextField source="country_code" />
             <DateField source="created_at" />
@@ -92,7 +93,7 @@ export const UserEdit = props => (
             <BooleanInput source="msisdn_verified" />
             <TextInput source="msisdn" />
             <TextInput source="gender" />
-            <TextInput source="birth_date" />
+            <DateInput source="birth_date" />
             <TextInput source="avatar" />
             <TextInput source="country_code" />
         </SimpleForm>

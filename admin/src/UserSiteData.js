@@ -18,14 +18,13 @@ import {
     BooleanField,
     ReferenceInput,
     SelectInput,
-    DateInput,
     BooleanInput,
-    TextInput,
     DisabledInput,
     DeleteButton,
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import DateTimeInput from 'aor-datetime-input';
 import {
     UserSiteDataFilter
 } from './Filters';
@@ -75,7 +74,7 @@ export const UserSiteDataCreate = props => (
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput source="id" optionText="name" />
             </ReferenceInput>
-            <DateInput source="consented_at" />
+            <DateTimeInput source="consented_at" />
             <BooleanInput source="blocked" />
         </SimpleForm>
     </Create>
@@ -101,7 +100,7 @@ export const UserSiteDataShow = props => (
 export const UserSiteDataEdit = props => (
     <Edit {...props} title="UserSiteData Edit">
         <SimpleForm validate={validationEditUserSiteData}>
-            <TextInput source="consented_at" />
+            <DateTimeInput source="consented_at" />
             <BooleanInput source="blocked" />
         </SimpleForm>
     </Edit>
