@@ -5,19 +5,19 @@
 import React from 'react';
 import {
     List,
-    Show,
-    Edit,
-    Create,
     Datagrid,
-    SimpleShowLayout,
-    SimpleForm,
     NumberField,
     ReferenceField,
     TextField,
     DateField,
+    SimpleForm,
+    Create,
     ReferenceInput,
     SelectInput,
     TextInput,
+    Show,
+    SimpleShowLayout,
+    Edit,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -44,7 +44,7 @@ export const DomainList = props => (
     <List {...props} title="Domain List" filters={<DomainFilter />}>
         <Datagrid>
             <NumberField source="id" />
-            <ReferenceField label="Domain" source="parent_id" reference="domains" linkType="show" allowEmpty>
+            <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
                 <NumberField source="id" />
             </ReferenceField>
             <TextField source="name" />
@@ -61,7 +61,7 @@ export const DomainList = props => (
 export const DomainCreate = props => (
     <Create {...props} title="Domain Create">
         <SimpleForm validate={validationCreateDomain}>
-            <ReferenceInput label="Domain" source="parent_id" reference="domains" allowEmpty>
+            <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
                 <SelectInput source="id" optionText="" />
             </ReferenceInput>
             <TextInput source="name" />

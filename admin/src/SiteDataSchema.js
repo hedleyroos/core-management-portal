@@ -5,17 +5,19 @@
 import React from 'react';
 import {
     List,
-    Show,
-    Edit,
-    Create,
     Datagrid,
-    SimpleShowLayout,
-    SimpleForm,
     ReferenceField,
     NumberField,
+    LongTextField,
     DateField,
+    SimpleForm,
+    Create,
     ReferenceInput,
     SelectInput,
+    LongTextInput,
+    Show,
+    SimpleShowLayout,
+    Edit,
     DisabledInput,
     DeleteButton,
     EditButton,
@@ -30,6 +32,14 @@ const validationCreateSiteDataSchema = values => {
     if (!values.site_id) {
         errors.site_id = ["site_id is required"];
     }
+    if (!values.schema) {
+        errors.schema = ["schema is required"];
+    }
+    return errors;
+}
+
+const validationEditSiteDataSchema = values => {
+    const errors = {};
     return errors;
 }
 
@@ -39,6 +49,7 @@ export const SiteDataSchemaList = props => (
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>
+            <LongTextField source="schema" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <EditButton />
@@ -54,6 +65,7 @@ export const SiteDataSchemaCreate = props => (
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput source="id" optionText="name" />
             </ReferenceInput>
+            <LongTextInput source="schema" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={v => { try { return JSON.parse(v); } catch (e) { return v; } }} />
         </SimpleForm>
     </Create>
 )
@@ -64,10 +76,19 @@ export const SiteDataSchemaShow = props => (
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>
+            <LongTextField source="schema" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
+)
+
+export const SiteDataSchemaEdit = props => (
+    <Edit {...props} title="SiteDataSchema Edit">
+        <SimpleForm validate={validationEditSiteDataSchema}>
+            <LongTextInput source="schema" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={v => { try { return JSON.parse(v); } catch (e) { return v; } }} />
+        </SimpleForm>
+    </Edit>
 )
 
 /** End of Generated Code **/

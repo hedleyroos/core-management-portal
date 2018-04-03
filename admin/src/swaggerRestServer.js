@@ -147,6 +147,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                     total: 10
                 }
             }
+            break;
         case GET_MANY_REFERENCE:
             if (!headers.has('x-total-count')) {
                 throw new Error(
@@ -189,7 +190,6 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
      */
 
     return async (type, resource, params) => {
-        console.log(params.data);
         const { url, options } = convertRESTRequestToHTTP({
             apiUrl,
             type,
