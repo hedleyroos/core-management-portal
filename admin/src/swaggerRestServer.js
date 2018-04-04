@@ -73,6 +73,7 @@ export const convertRESTRequestToHTTP = ({
     switch (type) {
         case GET_MANY_REFERENCE: {
             query[params.target] = params.id;
+            url = `${apiUrl}/${resource}?${stringify(query)}`;
             break;
         }
         case GET_LIST: {
@@ -147,7 +148,6 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                     total: 10
                 }
             }
-            break;
         case GET_MANY_REFERENCE:
             if (!headers.has('x-total-count')) {
                 throw new Error(
