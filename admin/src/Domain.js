@@ -5,20 +5,19 @@
 import React from 'react';
 import {
     List,
-    Show,
-    Edit,
-    Create,
     Datagrid,
-    SimpleShowLayout,
-    SimpleForm,
     NumberField,
     ReferenceField,
     TextField,
     DateField,
+    SimpleForm,
+    Create,
     ReferenceInput,
     SelectInput,
     TextInput,
-    DisabledInput,
+    Show,
+    SimpleShowLayout,
+    Edit,
     DeleteButton,
     EditButton,
     ShowButton
@@ -44,8 +43,8 @@ export const DomainList = props => (
     <List {...props} title="Domain List" filters={<DomainFilter />}>
         <Datagrid>
             <NumberField source="id" />
-            <ReferenceField label="Domain" source="parent_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
+            <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
+                <NumberField source="name" />
             </ReferenceField>
             <TextField source="name" />
             <TextField source="description" />
@@ -61,8 +60,8 @@ export const DomainList = props => (
 export const DomainCreate = props => (
     <Create {...props} title="Domain Create">
         <SimpleForm validate={validationCreateDomain}>
-            <ReferenceInput label="Domain" source="parent_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="" />
+            <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
@@ -74,8 +73,8 @@ export const DomainShow = props => (
     <Show {...props} title="Domain Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            <ReferenceField label="Domain" source="parent_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
+            <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
+                <NumberField source="name" />
             </ReferenceField>
             <TextField source="name" />
             <TextField source="description" />
@@ -88,8 +87,8 @@ export const DomainShow = props => (
 export const DomainEdit = props => (
     <Edit {...props} title="Domain Edit">
         <SimpleForm validate={validationEditDomain}>
-            <ReferenceInput label="Domain" source="parent_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="" />
+            <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />

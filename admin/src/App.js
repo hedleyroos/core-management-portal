@@ -113,6 +113,7 @@ import {
     SiteDataSchemaList,
     SiteDataSchemaCreate,
     SiteDataSchemaShow,
+    SiteDataSchemaEdit,
 } from './SiteDataSchema';
 
 import {
@@ -260,6 +261,7 @@ const App = () => (
             list={ SiteDataSchemaList }
             create={ SiteDataSchemaCreate }
             show={ SiteDataSchemaShow }
+            edit={ SiteDataSchemaEdit }
             remove={Delete}
         />
         <Resource

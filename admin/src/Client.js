@@ -5,16 +5,12 @@
 import React from 'react';
 import {
     List,
-    Show,
-    Edit,
-    Create,
     Datagrid,
-    SimpleShowLayout,
-    SimpleForm,
     NumberField,
     TextField,
     BooleanField,
-    DisabledInput,
+    Show,
+    SimpleShowLayout,
     DeleteButton,
     EditButton,
     ShowButton

@@ -5,26 +5,29 @@
 import React from 'react';
 import {
     List,
-    Show,
-    Edit,
-    Create,
     Datagrid,
-    SimpleShowLayout,
-    SimpleForm,
     ReferenceField,
     TextField,
     NumberField,
     DateField,
     BooleanField,
+    SimpleForm,
+    Create,
     ReferenceInput,
     SelectInput,
     BooleanInput,
-    DisabledInput,
+    LongTextInput,
+    Show,
+    SimpleShowLayout,
+    Edit,
     DeleteButton,
     EditButton,
     ShowButton
 } from 'admin-on-rest';
 import DateTimeInput from 'aor-datetime-input';
+import {
+    ObjectField
+} from './CustomFields';
 import {
     UserSiteDataFilter
 } from './Filters';
@@ -36,6 +39,9 @@ const validationCreateUserSiteData = values => {
     }
     if (!values.site_id) {
         errors.site_id = ["site_id is required"];
+    }
+    if (!values.data) {
+        errors.data = ["data is required"];
     }
     return errors;
 }
@@ -55,6 +61,7 @@ export const UserSiteDataList = props => (
                 <NumberField source="name" />
             </ReferenceField>
             <DateField source="consented_at" />
+            <ObjectField source="data" addLabel />
             <BooleanField source="blocked" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -76,6 +83,7 @@ export const UserSiteDataCreate = props => (
             </ReferenceInput>
             <DateTimeInput source="consented_at" />
             <BooleanInput source="blocked" />
+            <LongTextInput source="data" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
         </SimpleForm>
     </Create>
 )
@@ -90,6 +98,7 @@ export const UserSiteDataShow = props => (
                 <NumberField source="name" />
             </ReferenceField>
             <DateField source="consented_at" />
+            <ObjectField source="data" addLabel />
             <BooleanField source="blocked" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -102,6 +111,7 @@ export const UserSiteDataEdit = props => (
         <SimpleForm validate={validationEditUserSiteData}>
             <DateTimeInput source="consented_at" />
             <BooleanInput source="blocked" />
+            <LongTextInput source="data" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
         </SimpleForm>
     </Edit>
 )
