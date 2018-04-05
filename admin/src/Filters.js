@@ -6,8 +6,7 @@ import React from 'react';
 import {
     Filter,
     TextInput,
-    NumberInput,
-    BooleanInput
+    NumberInput
 } from 'admin-on-rest';
 
 export const DomainFilter = props => (
