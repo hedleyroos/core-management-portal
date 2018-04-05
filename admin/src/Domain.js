@@ -44,7 +44,7 @@ export const DomainList = props => (
         <Datagrid>
             <NumberField source="id" />
             <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
+                <NumberField source="name" />
             </ReferenceField>
             <TextField source="name" />
             <TextField source="description" />
@@ -61,7 +61,7 @@ export const DomainCreate = props => (
     <Create {...props} title="Domain Create">
         <SimpleForm validate={validationCreateDomain}>
             <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="" />
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
@@ -73,8 +73,8 @@ export const DomainShow = props => (
     <Show {...props} title="Domain Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            <ReferenceField label="Domain" source="parent_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="id" />
+            <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
+                <NumberField source="name" />
             </ReferenceField>
             <TextField source="name" />
             <TextField source="description" />
@@ -87,8 +87,8 @@ export const DomainShow = props => (
 export const DomainEdit = props => (
     <Edit {...props} title="Domain Edit">
         <SimpleForm validate={validationEditDomain}>
-            <ReferenceInput label="Domain" source="parent_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="" />
+            <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
+                <SelectInput source="id" optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
