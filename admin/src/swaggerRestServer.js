@@ -144,7 +144,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
             if (resource in COMPOSITE_KEY_RESOURSES) {
                 let keys = COMPOSITE_KEY_RESOURSES[resource];
                 return {
-                    data: json ? json.map(res => ({ ...res, id: `${keys.map(key => res[key]).join('/')}` })) : json,
+                    data: keys ? json.map(res => ({ ...res, id: `${keys.map(key => res[key]).join('/')}` })) : json,
                     total: 10
                 }
             }
