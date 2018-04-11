@@ -11,6 +11,8 @@ import { pink500, pink300 } from 'material-ui/styles/colors';
 
 import { userLogin } from 'admin-on-rest';
 
+import { muiTheme } from './Theme'
+
 const OIDC_PROVIDER_URL = 'http://core-authentication-service:8000/login/?next=/openid/authorize/'
 const OIDC_PROVIDER_SCOPE = 'openid+profile+roles'
 const OIDC_PROVIDER_CLIENT_ID = 'management_portal'
@@ -40,13 +42,6 @@ const styles = {
         textAlign: 'center ',
     }
 };
-
-const muiTheme = getMuiTheme({
-    palette: {
-        primary1Color: pink500,
-        accent1Color: pink300
-    }
-});
 
 class AuthLoginPage extends Component {
     render() {

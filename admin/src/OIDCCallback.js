@@ -6,12 +6,7 @@ import { pink500, pink300 } from 'material-ui/styles/colors';
 
 import { ViewTitle } from 'admin-on-rest';
 
-const muiTheme = getMuiTheme({
-    palette: {
-        primary1Color: pink500,
-        accent1Color: pink300
-    }
-});
+import { muiTheme } from './Theme'
 
 const Foo = () => (
     <MuiThemeProvider muiTheme={muiTheme}>
