@@ -9,6 +9,7 @@ import { Admin, Delete, fetchUtils, Resource } from 'admin-on-rest';
 import swaggerRestServer from './swaggerRestServer';
 import authClient from './authClient';
 import AuthLoginPage from './authLogin';
+import customRoutes from './customRoutes';
 
 import {
     DomainList,
@@ -141,7 +142,7 @@ const httpClient = (url, options = {}) => {
 const restClient = swaggerRestServer('//core-management-layer:8000', httpClient)
 
 const App = () => (
-    <Admin title="Girl Effect Management Portal" theme={getMuiTheme(muiTheme)} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} >
+    <Admin title="Girl Effect Management Portal" theme={getMuiTheme(muiTheme)} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
         <Resource
             name="domains"
             list={ DomainList }
