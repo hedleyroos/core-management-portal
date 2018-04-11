@@ -14,7 +14,7 @@ import { userLogin } from 'admin-on-rest';
 const OIDC_PROVIDER_URL = 'http://core-authentication-service:8000/login/?next=/openid/authorize/'
 const OIDC_PROVIDER_SCOPE = 'openid+profile+roles'
 const OIDC_PROVIDER_CLIENT_ID = 'management_portal'
-const OIDC_PROVIDER_REDIRECT_URI = encodeURIComponent('http://core-management-portal:3000/#/oidc/callback')
+const OIDC_PROVIDER_REDIRECT_URI = encodeURIComponent('http://core-management-portal:3000/#/oidc/callback?')
 const OIDC_PROVIDER_STATE = btoa(new Date());
 const OIDC_PROVIDER_NONCE = btoa(OIDC_PROVIDER_STATE);
 
