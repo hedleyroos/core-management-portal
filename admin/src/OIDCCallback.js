@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Card } from 'material-ui/Card';
+import queryString from 'query-string'
 
 import { ViewTitle } from 'admin-on-rest';
 
@@ -8,7 +9,8 @@ import { muiTheme } from './Theme'
 
 class OIDCCallback extends Component {
     render () {
-        console.log(this.props.location);
+        const parsed_query = queryString.parse(this.props.location.search);
+        localStorage.setItem('id_token', parsed_query.id_token);
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <Card>
