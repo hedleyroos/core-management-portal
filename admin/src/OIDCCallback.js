@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Card } from 'material-ui/Card';
 import queryString from 'query-string'
@@ -12,11 +13,7 @@ class OIDCCallback extends Component {
         const parsed_query = queryString.parse(this.props.location.search);
         localStorage.setItem('id_token', parsed_query.id_token);
         return (
-            <MuiThemeProvider muiTheme={muiTheme}>
-                <Card>
-                    <ViewTitle title="Login" />
-                </Card>
-            </MuiThemeProvider>
+            <Redirect push to="/" />
         )
     }
 }

@@ -4,7 +4,6 @@ import queryString from 'query-string';
 const OPENID_PROVIDER_URL = '//core-authentication-service:8000/openid/token/';
 const CLIENT_ID = 'management_layer_workaround';
 const CLIENT_SECRET = 'management_layer_workaround';
-const SCOPE = 'openid roles';
 
 export default (type, params) => {
     if (type === AUTH_LOGOUT) {
