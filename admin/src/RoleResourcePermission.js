@@ -16,7 +16,6 @@ import {
     Show,
     SimpleShowLayout,
     DeleteButton,
-    EditButton,
     ShowButton
 } from 'admin-on-rest';
 import {
@@ -51,7 +50,6 @@ export const RoleResourcePermissionList = props => (
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
             <ShowButton />
             <DeleteButton />
         </Datagrid>
@@ -62,13 +60,13 @@ export const RoleResourcePermissionCreate = props => (
     <Create {...props} title="RoleResourcePermission Create">
         <SimpleForm validate={validationCreateRoleResourcePermission}>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
-                <SelectInput source="id" optionText="label" />
+                <SelectInput optionText="label" />
             </ReferenceInput>
             <ReferenceInput label="Resource" source="resource_id" reference="resources" allowEmpty>
-                <SelectInput source="id" optionText="urn" />
+                <SelectInput optionText="urn" />
             </ReferenceInput>
             <ReferenceInput label="Permission" source="permission_id" reference="permissions" allowEmpty>
-                <SelectInput source="id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
         </SimpleForm>
     </Create>

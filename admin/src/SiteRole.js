@@ -65,10 +65,10 @@ export const SiteRoleCreate = props => (
     <Create {...props} title="SiteRole Create">
         <SimpleForm validate={validationCreateSiteRole}>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
-                <SelectInput source="id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
-                <SelectInput source="id" optionText="label" />
+                <SelectInput optionText="label" />
             </ReferenceInput>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
