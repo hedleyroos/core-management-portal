@@ -7,3 +7,21 @@ export const muiTheme = getMuiTheme({
         accent1Color: pink300
     }
 });
+
+export const styles = {
+    main: {
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        height: '1px',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    card: {
+        minWidth: 300,
+    },
+    avatar: {
+        margin: '1em',
+        textAlign: 'center ',
+    }
+};

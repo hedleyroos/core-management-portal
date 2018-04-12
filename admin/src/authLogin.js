@@ -10,7 +10,7 @@ import { pink500, pink300 } from 'material-ui/styles/colors';
 
 import { userLogin } from 'admin-on-rest';
 
-import { muiTheme } from './Theme'
+import { muiTheme, styles } from './Theme'
 
 const OIDC_PROVIDER_URL = 'http://core-authentication-service:8000/login/?next=/openid/authorize/'
 const OIDC_PROVIDER_SCOPE = 'openid+profile+roles'
@@ -23,24 +23,6 @@ const oidc_query_string = encodeURIComponent(
     `?scope=${OIDC_PROVIDER_SCOPE}&response_type=id_token+token&client_id=${OIDC_PROVIDER_CLIENT_ID}&redirect_uri=${OIDC_PROVIDER_REDIRECT_URI}&state=${OIDC_PROVIDER_STATE}&nonce=${OIDC_PROVIDER_NONCE}`
 )
 const login_url = `${OIDC_PROVIDER_URL}${oidc_query_string}`
-
-const styles = {
-    main: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        height: '1px',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    card: {
-        minWidth: 300,
-    },
-    avatar: {
-        margin: '1em',
-        textAlign: 'center ',
-    }
-};
 
 class AuthLoginPage extends Component {
     render() {
