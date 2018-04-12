@@ -1,12 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Card } from 'material-ui/Card';
 import queryString from 'query-string'
-
-import { ViewTitle } from 'admin-on-rest';
-
-import { muiTheme } from './Theme'
 
 class OIDCCallback extends Component {
     render () {
