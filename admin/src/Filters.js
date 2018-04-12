@@ -10,6 +10,12 @@ import {
     BooleanInput
 } from 'admin-on-rest';
 
+export const DomainFilter = props => (
+    <Filter {...props}>
+        <NumberInput label="Parent Id" source="parent_id" />
+    </Filter>
+);
+
 export const DomainRoleFilter = props => (
     <Filter {...props}>
         <NumberInput label="Domain Id" source="domain_id" />
@@ -50,6 +56,12 @@ export const RoleResourcePermissionFilter = props => (
         <NumberInput label="Role Id" source="role_id" />
         <NumberInput label="Resource Id" source="resource_id" />
         <NumberInput label="Permission Id" source="permission_id" />
+    </Filter>
+);
+
+export const SiteFilter = props => (
+    <Filter {...props}>
+        <NumberInput label="Client Id" source="client_id" />
     </Filter>
 );
 

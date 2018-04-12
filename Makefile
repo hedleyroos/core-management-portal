@@ -18,7 +18,8 @@ help:
 
 $(VENV):
 	@echo "$(CYAN)Initialise base ve...$(CLEAR)"
-	virtualenv $(VENV) -p python3.5
+	virtualenv $(VENV) -p python3.6
+	$(PIP) install pip==9.0.3
 	@echo "$(GREEN)DONE$(CLEAR)"
 
 # Creates the virtual environment.
@@ -31,6 +32,11 @@ build-virtualenv: $(VENV)
 clean-virtualenv:
 	@echo "$(CYAN)Clearing virtualenv...$(CLEAR)"
 	rm -rf $(VENV)
+	@echo "$(GREEN)DONE$(CLEAR)"
+
+requirements:
+	@echo "$(GREEN)Installing pip requirements in ve$(CLEAR)"
+	$(PIP) install -r requirements.txt
 	@echo "$(GREEN)DONE$(CLEAR)"
 
 # Build sphinx docs, then move them to docs/ root for GitHub Pages usage.
@@ -57,3 +63,11 @@ docs-build:  $(VENV)
 	cp -r docs/build/html/. docs/
 	rm -rf docs/build/
 	@echo "$(GREEN)DONE$(CLEAR)"
+
+generate-admin:
+	@echo "$(CYAN)Generating Management Portal code and running manual meld.$(CLEAR)"
+	mkdir generated
+	$(PYTHON) $(VENV)/src/swagger-aor-generator/swagger_aor_generator/generator.py swagger/management_layer.yml --output-dir=generated --module-name="Girl Effect Management Portal" --rest-server-url="//core-management-layer:8000"
+	meld admin/src generated
+	rm -rf generated
+	@echo "$(GREEN)Generated code REMOVED and changes Melded$(CLEAR)"

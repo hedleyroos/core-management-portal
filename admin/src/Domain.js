@@ -23,6 +23,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import {
+    DomainFilter
+} from './Filters';
 
 const validationCreateDomain = values => {
     const errors = {};
@@ -38,7 +41,7 @@ const validationEditDomain = values => {
 }
 
 export const DomainList = props => (
-    <List {...props} title="Domain List">
+    <List {...props} title="Domain List" filters={<DomainFilter />}>
         <Datagrid>
             <NumberField source="id" />
             <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
