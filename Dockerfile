@@ -2,10 +2,8 @@ FROM node:alpine
 
 COPY . /app/
 
-WORKDIR /app/
-
-RUN yarn add admin-on-rest
-
 WORKDIR /app/admin/
+
+RUN yarn install
 
 EXPOSE 3000

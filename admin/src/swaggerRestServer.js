@@ -1,3 +1,7 @@
+/**
+ * Generated swaggerRestServer.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import { stringify } from 'query-string';
 import { fetchUtils } from 'admin-on-rest';
 
@@ -10,8 +14,43 @@ export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 
 const COMPOSITE_KEY_RESOURSES = {
-    siteroles: ['site_id', 'role_id'],
-    domainroles: ['domain_id', 'role_id']
+    domainroles: [
+        'domain_id',
+        'role_id',
+    ],
+    invitationdomainroles: [
+        'invitation_id',
+        'domain_id',
+        'role_id',
+    ],
+    invitationsiteroles: [
+        'invitation_id',
+        'site_id',
+        'role_id',
+    ],
+    roleresourcepermissions: [
+        'role_id',
+        'resource_id',
+        'permission_id',
+    ],
+    siteroles: [
+        'site_id',
+        'role_id',
+    ],
+    userdomainroles: [
+        'user_id',
+        'domain_id',
+        'role_id',
+    ],
+    usersiteroles: [
+        'user_id',
+        'site_id',
+        'role_id',
+    ],
+    usersitedata: [
+        'user_id',
+        'site_id',
+    ],
 }
 
 /**
@@ -34,6 +73,7 @@ export const convertRESTRequestToHTTP = ({
     switch (type) {
         case GET_MANY_REFERENCE: {
             query[params.target] = params.id;
+            url = `${apiUrl}/${resource}?${stringify(query)}`;
             break;
         }
         case GET_LIST: {
@@ -73,7 +113,7 @@ export const convertRESTRequestToHTTP = ({
             options.body = JSON.stringify(params.data);
             break;
         case CREATE:
-            url = `${apiUrl}/${resource}/`;
+            url = `${apiUrl}/${resource}`;
             options.method = 'POST';
             options.body = JSON.stringify(params.data);
             break;
@@ -96,18 +136,20 @@ export const convertRESTRequestToHTTP = ({
  */
 const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
     const { headers, json } = response;
+    let keys = COMPOSITE_KEY_RESOURSES[resource];
 
     switch (type) {
-
         // Total required by AOR for all list operations
         case GET_LIST:
-            if (resource in COMPOSITE_KEY_RESOURSES) {
-                let keys = COMPOSITE_KEY_RESOURSES[resource];
-                return {
-                    data: json ? json.map(res => ({ ...res, id: `${res[keys[0]]}/${res[keys[1]]}` })) : json,
-                    total: 10
-                }
+            if (!headers.has('x-total-count')) {
+                throw new Error(
+                    'The X-Total-Count header is missing in the HTTP Response. The jsonServer REST client expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare X-Total-Count in the Access-Control-Expose-Headers header?'
+                );
             }
+            return {
+                data: keys ? json.map(res => ({ ...res, id: `${keys.map(key => res[key]).join('/')}` })) : json,
+                total: parseInt(headers.get('x-total-count')),
+            };
         case GET_MANY_REFERENCE:
             if (!headers.has('x-total-count')) {
                 throw new Error(
@@ -115,14 +157,8 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                 );
             }
             return {
-                data: json,
-                total: parseInt(
-                    headers
-                        .get('x-total-count')
-                        .split('/')
-                        .pop(),
-                    10
-                ),
+                data: keys ? json.map(res => ({ ...res, id: `${keys.map(key => res[key]).join('/')}` })) : json,
+                total: parseInt(headers.get('x-total-count')),
             };
         case CREATE:
             return { data: { ...params.data, id: json.id } };
@@ -167,3 +203,4 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
         );
     };
 };
+/** End of Generated Code **/
