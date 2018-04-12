@@ -44,6 +44,7 @@ const styles = {
 
 class AuthLoginPage extends Component {
     render() {
+        localStorage.setItem('auth_state', OIDC_PROVIDER_STATE);
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={{ ...styles.main, backgroundColor: pink500 }}>
