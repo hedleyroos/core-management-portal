@@ -19,6 +19,7 @@ import {
     BooleanInput,
     Show,
     SimpleShowLayout,
+    ReferenceManyField,
     Edit,
     DeleteButton,
     EditButton,
@@ -49,7 +50,7 @@ export const SiteList = props => (
         <Datagrid>
             <NumberField source="id" />
             <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
-                <TextField source="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                 <NumberField source="name" />
@@ -70,10 +71,10 @@ export const SiteCreate = props => (
     <Create {...props} title="Site Create">
         <SimpleForm validate={validationCreateSite}>
             <ReferenceInput label="Client" source="client_id" reference="clients" allowEmpty>
-                <SelectInput source="client_id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
             <BooleanInput source="is_active" />
@@ -87,7 +88,7 @@ export const SiteShow = props => (
         <SimpleShowLayout>
             <NumberField source="id" />
             <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
-                <TextField source="name" />
+                <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                 <NumberField source="name" />
@@ -97,6 +98,15 @@ export const SiteShow = props => (
             <BooleanField source="is_active" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
+            <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
+                <Datagrid>
+                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                        <NumberField source="label" />
+                    </ReferenceField>
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                </Datagrid>
+            </ReferenceManyField>
         </SimpleShowLayout>
     </Show>
 )
@@ -105,14 +115,24 @@ export const SiteEdit = props => (
     <Edit {...props} title="Site Edit">
         <SimpleForm validate={validationEditSite}>
             <ReferenceInput label="Client" source="client_id" reference="clients" allowEmpty>
-                <SelectInput source="client_id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
             <BooleanInput source="is_active" />
+            <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
+                <Datagrid>
+                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                        <NumberField source="label" />
+                    </ReferenceField>
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                    <EditButton />
+                </Datagrid>
+            </ReferenceManyField>
         </SimpleForm>
     </Edit>
 )

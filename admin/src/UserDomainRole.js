@@ -17,7 +17,6 @@ import {
     Show,
     SimpleShowLayout,
     DeleteButton,
-    EditButton,
     ShowButton
 } from 'admin-on-rest';
 import {
@@ -52,7 +51,6 @@ export const UserDomainRoleList = props => (
             </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
             <ShowButton />
             <DeleteButton />
         </Datagrid>
@@ -63,13 +61,13 @@ export const UserDomainRoleCreate = props => (
     <Create {...props} title="UserDomainRole Create">
         <SimpleForm validate={validationCreateUserDomainRole}>
             <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
-                <SelectInput source="id" optionText="username" />
+                <SelectInput optionText="username" />
             </ReferenceInput>
             <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
-                <SelectInput source="id" optionText="label" />
+                <SelectInput optionText="label" />
             </ReferenceInput>
         </SimpleForm>
     </Create>

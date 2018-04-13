@@ -17,6 +17,7 @@ import {
     TextInput,
     Show,
     SimpleShowLayout,
+    ReferenceManyField,
     Edit,
     DeleteButton,
     EditButton,
@@ -61,7 +62,7 @@ export const DomainCreate = props => (
     <Create {...props} title="Domain Create">
         <SimpleForm validate={validationCreateDomain}>
             <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
@@ -80,6 +81,23 @@ export const DomainShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
+            <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
+                <Datagrid>
+                    <NumberField source="id" />
+                    <TextField source="name" />
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                </Datagrid>
+            </ReferenceManyField>
+            <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
+                <Datagrid>
+                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                        <NumberField source="label" />
+                    </ReferenceField>
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                </Datagrid>
+            </ReferenceManyField>
         </SimpleShowLayout>
     </Show>
 )
@@ -88,10 +106,29 @@ export const DomainEdit = props => (
     <Edit {...props} title="Domain Edit">
         <SimpleForm validate={validationEditDomain}>
             <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
-                <SelectInput source="id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
+            <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
+                <Datagrid>
+                    <NumberField source="id" />
+                    <TextField source="name" />
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                    <EditButton />
+                </Datagrid>
+            </ReferenceManyField>
+            <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
+                <Datagrid>
+                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                        <NumberField source="label" />
+                    </ReferenceField>
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                    <EditButton />
+                </Datagrid>
+            </ReferenceManyField>
         </SimpleForm>
     </Edit>
 )

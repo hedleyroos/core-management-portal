@@ -24,9 +24,6 @@ import {
 import {
     ObjectField
 } from './CustomFields';
-import {
-    SiteDataSchemaFilter
-} from './Filters';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};
@@ -45,7 +42,7 @@ const validationEditSiteDataSchema = values => {
 }
 
 export const SiteDataSchemaList = props => (
-    <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
+    <List {...props} title="SiteDataSchema List">
         <Datagrid>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
@@ -64,7 +61,7 @@ export const SiteDataSchemaCreate = props => (
     <Create {...props} title="SiteDataSchema Create">
         <SimpleForm validate={validationCreateSiteDataSchema}>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
-                <SelectInput source="id" optionText="name" />
+                <SelectInput optionText="name" />
             </ReferenceInput>
             <LongTextInput source="schema" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
         </SimpleForm>
