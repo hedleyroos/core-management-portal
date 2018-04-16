@@ -139,7 +139,7 @@ const httpClient = (url, options = {}) => {
     return fetchUtils.fetchJson(url, options);
 }
 
-const restClient = swaggerRestServer('//core-management-layer:8000', httpClient)
+const restClient = swaggerRestServer(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient)
 
 const App = () => (
     <Admin title="Girl Effect Management Portal" theme={getMuiTheme(muiTheme)} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
