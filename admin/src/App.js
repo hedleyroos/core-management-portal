@@ -3,13 +3,12 @@
  * When regenerated the changes will be lost.
 **/
 import React from 'react';
-import { pink500, pink300 } from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Admin, Delete, fetchUtils, Resource } from 'admin-on-rest';
 import swaggerRestServer from './swaggerRestServer';
-import authClient from './authClient';
-import AuthLoginPage from './authLogin';
+import authClient from './auth/authClient';
+import AuthLoginPage from './auth/authLogin';
 import customRoutes from './customRoutes';
+import { muiTheme } from './Theme';
 
 import {
     DomainList,
@@ -142,7 +141,7 @@ const httpClient = (url, options = {}) => {
 const restClient = swaggerRestServer(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient)
 
 const App = () => (
-    <Admin title="Girl Effect Management Portal" theme={getMuiTheme(muiTheme)} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
+    <Admin title="Girl Effect Management Portal" theme={muiTheme} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
         <Resource
             name="domains"
             list={ DomainList }
@@ -281,13 +280,6 @@ const App = () => (
         />
     </Admin>
 )
-
-const muiTheme = getMuiTheme({
-    palette: {
-        primary1Color: pink500,
-        accent1Color: pink300
-    }
-});
 
 export default App;
 /** End of Generated Code **/
