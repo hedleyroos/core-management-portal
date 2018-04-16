@@ -7,31 +7,14 @@ import AutoComplete from 'material-ui/AutoComplete';
 import { FieldTitle } from 'admin-on-rest';
 import { translate } from 'admin-on-rest';
 
+/** Overwritten AuthcompleteInput. 
+ * It is the same as the admin on rest implementation, 
+ * however it only fires a query and will only show results 
+ * when 3 characters are typed in or more.
+ **/
+
 export class AutocompleteInput extends Component {
     state = { menuDisabled: true };
-
-    componentWillMount() {
-        this.setSearchText(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (
-            this.props.input.value !== nextProps.input.value ||
-            !isEqual(this.props.choices, nextProps.choices)
-        ) {
-            this.setSearchText(nextProps);
-        }
-    }
-
-    setSearchText(props) {
-        const { choices, input, optionValue } = props;
-
-        const selectedSource = choices.find(
-            choice => get(choice, optionValue) === input.value
-        );
-        const searchText = selectedSource && this.getSuggestion(selectedSource);
-        this.setState({ text: searchText });
-    }
 
     handleNewRequest = (chosenRequest, index) => {
         if (index !== -1) {
@@ -80,10 +63,18 @@ export class AutocompleteInput extends Component {
         }
         const { touched, error } = meta;
 
-        const dataSource = choices.map(choice => ({
-            value: get(choice, optionValue),
-            text: this.getSuggestion(choice),
-        }));
+        const dataSource = choices.map((choice, index) => {
+            let omittedResults = choices.length - 10;
+            return index < 10 ? {
+                value: get(choice, optionValue),
+                text: this.getSuggestion(choice),
+                disabled: true
+            } : {
+                value: null,
+                text: `${omittedResults} more`,
+                disabled: true
+            }
+        });
 
         const menuProps = {
             disableAutoFocus: true,

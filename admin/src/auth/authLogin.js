@@ -10,7 +10,7 @@ import { pink500, pink300 } from 'material-ui/styles/colors';
 
 import { userLogin } from 'admin-on-rest';
 
-import { muiTheme, styles } from './Theme'
+import { muiTheme, styles } from '../Theme'
 
 const OIDC_PROVIDER_URL = process.env.REACT_APP_AUTHORIZATION_ENDPOINT;
 const OIDC_PROVIDER_SCOPE = 'openid+profile+roles';
