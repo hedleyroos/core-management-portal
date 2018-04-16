@@ -27,10 +27,10 @@ import {
 import DateTimeInput from 'aor-datetime-input';
 import {
     ObjectField
-} from './CustomFields';
+} from '../fields/ObjectField';
 import {
     UserSiteDataFilter
-} from './Filters';
+} from '../filters/UserSiteDataFilter';
 
 const validationCreateUserSiteData = values => {
     const errors = {};

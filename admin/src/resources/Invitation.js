@@ -26,7 +26,7 @@ import {
 import DateTimeInput from 'aor-datetime-input';
 import {
     InvitationFilter
-} from './Filters';
+} from '../filters/InvitationFilter';
 
 const validationCreateInvitation = values => {
     const errors = {};

@@ -24,7 +24,7 @@ import {
 } from 'admin-on-rest';
 import {
     DomainRoleFilter
-} from './Filters';
+} from '../filters/DomainRoleFilter';
 
 const validationCreateDomainRole = values => {
     const errors = {};

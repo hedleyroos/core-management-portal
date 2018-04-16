@@ -15,118 +15,118 @@ import {
     DomainCreate,
     DomainShow,
     DomainEdit,
-} from './Domain';
+} from './resources/Domain';
 
 import {
     DomainRoleList,
     DomainRoleCreate,
     DomainRoleShow,
     DomainRoleEdit,
-} from './DomainRole';
+} from './resources/DomainRole';
 
 import {
     InvitationList,
     InvitationCreate,
     InvitationShow,
     InvitationEdit,
-} from './Invitation';
+} from './resources/Invitation';
 
 import {
     InvitationDomainRoleList,
     InvitationDomainRoleCreate,
     InvitationDomainRoleShow,
-} from './InvitationDomainRole';
+} from './resources/InvitationDomainRole';
 
 import {
     InvitationSiteRoleList,
     InvitationSiteRoleCreate,
     InvitationSiteRoleShow,
-} from './InvitationSiteRole';
+} from './resources/InvitationSiteRole';
 
 import {
     PermissionList,
     PermissionCreate,
     PermissionShow,
     PermissionEdit,
-} from './Permission';
+} from './resources/Permission';
 
 import {
     ResourceList,
     ResourceCreate,
     ResourceShow,
     ResourceEdit,
-} from './Resource';
+} from './resources/Resource';
 
 import {
     RoleList,
     RoleCreate,
     RoleShow,
     RoleEdit,
-} from './Role';
+} from './resources/Role';
 
 import {
     RoleResourcePermissionList,
     RoleResourcePermissionCreate,
     RoleResourcePermissionShow,
-} from './RoleResourcePermission';
+} from './resources/RoleResourcePermission';
 
 import {
     SiteList,
     SiteCreate,
     SiteShow,
     SiteEdit,
-} from './Site';
+} from './resources/Site';
 
 import {
     SiteRoleList,
     SiteRoleCreate,
     SiteRoleShow,
     SiteRoleEdit,
-} from './SiteRole';
+} from './resources/SiteRole';
 
 import {
     UserDomainRoleList,
     UserDomainRoleCreate,
     UserDomainRoleShow,
-} from './UserDomainRole';
+} from './resources/UserDomainRole';
 
 import {
     UserSiteRoleList,
     UserSiteRoleCreate,
     UserSiteRoleShow,
-} from './UserSiteRole';
+} from './resources/UserSiteRole';
 
 import {
     UserSiteDataList,
     UserSiteDataCreate,
     UserSiteDataShow,
     UserSiteDataEdit,
-} from './UserSiteData';
+} from './resources/UserSiteData';
 
 import {
     AdminNoteList,
     AdminNoteCreate,
     AdminNoteShow,
     AdminNoteEdit,
-} from './AdminNote';
+} from './resources/AdminNote';
 
 import {
     SiteDataSchemaList,
     SiteDataSchemaCreate,
     SiteDataSchemaShow,
     SiteDataSchemaEdit,
-} from './SiteDataSchema';
+} from './resources/SiteDataSchema';
 
 import {
     ClientList,
     ClientShow,
-} from './Client';
+} from './resources/Client';
 
 import {
     UserList,
     UserShow,
     UserEdit,
-} from './User';
+} from './resources/User';
 
 
 const httpClient = (url, options = {}) => {

@@ -23,7 +23,7 @@ import {
 } from 'admin-on-rest';
 import {
     ObjectField
-} from './CustomFields';
+} from '../fields/ObjectField';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};

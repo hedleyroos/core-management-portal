@@ -20,7 +20,7 @@ import {
 } from 'admin-on-rest';
 import {
     RoleResourcePermissionFilter
-} from './Filters';
+} from '../filters/RoleResourcePermissionFilter';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};

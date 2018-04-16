@@ -21,7 +21,7 @@ import {
 } from 'admin-on-rest';
 import {
     InvitationSiteRoleFilter
-} from './Filters';
+} from '../filters/InvitationSiteRoleFilter';
 
 const validationCreateInvitationSiteRole = values => {
     const errors = {};

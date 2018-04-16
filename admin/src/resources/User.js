@@ -25,10 +25,10 @@ import {
 } from 'admin-on-rest';
 import {
     ObjectField
-} from './CustomFields';
+} from '../fields/ObjectField';
 import {
     UserFilter
-} from './Filters';
+} from '../filters/UserFilter';
 
 const validationEditUser = values => {
     const errors = {};

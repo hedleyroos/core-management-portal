@@ -25,7 +25,7 @@ import {
 } from 'admin-on-rest';
 import {
     DomainFilter
-} from './Filters';
+} from '../filters/DomainFilter';
 
 const validationCreateDomain = values => {
     const errors = {};
