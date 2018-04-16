@@ -11,6 +11,10 @@ import { translate } from 'admin-on-rest';
  * It is the same as the admin on rest implementation, 
  * however it only fires a query and will only show results 
  * when 3 characters are typed in or more.
+ *
+ * This input will also omit results beyond ten and prompt the user to
+ * narrow their query down, the input will not submit if there is not a
+ * valid string in the autocomplete.
  **/
 
 export class AutocompleteInput extends Component {
@@ -64,17 +68,20 @@ export class AutocompleteInput extends Component {
         const { touched, error } = meta;
 
         const dataSource = choices.map((choice, index) => {
-            let omittedResults = choices.length - 10;
-            return index < 10 ? {
-                value: get(choice, optionValue),
-                text: this.getSuggestion(choice),
-                disabled: true
-            } : {
-                value: null,
-                text: `${omittedResults} more`,
-                disabled: true
+            if (index < 2) {
+                return {
+                    value: (<AutoComplete.Item primaryText={this.getSuggestion(choice)} value={get(choice, optionValue)} />),
+                    text: this.getSuggestion(choice)
+                }
             }
         });
+
+        let omittedResults = choices.length - 2;
+
+        dataSource.push({
+            value: (<AutoComplete.Item primaryText={`${omittedResults} more`} value="dummy value" disabled />),
+            text: `${omittedResults} more`
+        })
 
         const menuProps = {
             disableAutoFocus: true,
@@ -121,9 +128,7 @@ AutocompleteInput.propTypes = {
     optionValue: PropTypes.string.isRequired,
     resource: PropTypes.string,
     setFilter: PropTypes.func,
-    source: PropTypes.string,
-    translate: PropTypes.func.isRequired,
-    translateChoice: PropTypes.bool.isRequired,
+    source: PropTypes.string
 };
 
 AutocompleteInput.defaultProps = {
