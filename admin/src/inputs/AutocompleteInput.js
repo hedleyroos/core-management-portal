@@ -4,8 +4,7 @@ import get from 'lodash.get';
 import isEqual from 'lodash.isequal';
 import AutoComplete from 'material-ui/AutoComplete';
 
-import { FieldTitle } from 'admin-on-rest';
-import { translate } from 'admin-on-rest';
+import { FieldTitle, translate } from 'admin-on-rest';
 
 /** Overwritten AuthcompleteInput. 
  * It is the same as the admin on rest implementation, 
@@ -19,6 +18,19 @@ import { translate } from 'admin-on-rest';
 
 export class AutocompleteInput extends Component {
     state = { menuDisabled: true };
+
+    componentWillMount() {
+        this.setSearchText(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (
+            this.props.input.value !== nextProps.input.value ||
+            !isEqual(this.props.choices, nextProps.choices)
+        ) {
+            this.setSearchText(nextProps);
+        }
+    }
 
     handleNewRequest = (chosenRequest, index) => {
         if (index !== -1) {
@@ -37,14 +49,22 @@ export class AutocompleteInput extends Component {
     };
 
     getSuggestion(choice) {
-        const { optionText, translate, translateChoice } = this.props;
+        const { optionText } = this.props;
         const choiceName =
             typeof optionText === 'function'
                 ? optionText(choice)
                 : get(choice, optionText);
-        return translateChoice
-            ? translate(choiceName, { _: choiceName })
-            : choiceName;
+        return choiceName;
+    }
+
+    setSearchText(props) {
+        const { choices, input, optionValue } = props;
+
+        const selectedSource = choices.find(
+            choice => get(choice, optionValue) === input.value
+        );
+        const searchText = selectedSource && this.getSuggestion(selectedSource);
+        this.setState({ text: searchText });
     }
 
     render() {
@@ -67,27 +87,27 @@ export class AutocompleteInput extends Component {
         }
         const { touched, error } = meta;
 
-        const dataSource = choices.map((choice, index) => {
-            if (index < 2) {
-                return {
-                    value: (<AutoComplete.Item primaryText={this.getSuggestion(choice)} value={get(choice, optionValue)} />),
-                    text: this.getSuggestion(choice)
-                }
-            }
+        let dataSource = choices.map((choice, index) => {
+            return index < 3 ? {
+                value: (<AutoComplete.Item primaryText={this.getSuggestion(choice)} value={get(choice, optionValue)} />),
+                text: this.getSuggestion(choice)
+            } : null;
         });
+        dataSource = dataSource.filter( Boolean );
 
-        let omittedResults = choices.length - 2;
+        const omittedResults = choices.length - dataSource.length;
 
-        dataSource.push({
-            value: (<AutoComplete.Item primaryText={`${omittedResults} more`} value="dummy value" disabled />),
-            text: `${omittedResults} more`
-        })
+        if (omittedResults > 0) {
+            dataSource.push({
+                value: (<AutoComplete.Item primaryText={`${omittedResults} more`} value="dummy value" disabled />),
+                text: `${omittedResults} more`
+            })
+        }
 
         const menuProps = {
             disableAutoFocus: true,
             maxHeight: this.state.menuDisabled ? 0 : null
         };
-
         return (
             <AutoComplete
                 searchText={this.state.text}
@@ -101,9 +121,10 @@ export class AutocompleteInput extends Component {
                     />
                 }
                 filter={filter}
+                menuProps={menuProps}
+                onClose={this.handleOnClose}
                 onNewRequest={this.handleNewRequest}
                 onUpdateInput={this.handleUpdateInput}
-                menuProps={menuProps}
                 style={elStyle}
                 errorText={touched && error}
                 {...options}
