@@ -88,7 +88,7 @@ export class AutocompleteInput extends Component {
         const { touched, error } = meta;
 
         let dataSource = choices.map((choice, index) => {
-            return index < 3 ? {
+            return index < 10 ? {
                 value: (<AutoComplete.Item primaryText={this.getSuggestion(choice)} value={get(choice, optionValue)} />),
                 text: this.getSuggestion(choice)
             } : null;

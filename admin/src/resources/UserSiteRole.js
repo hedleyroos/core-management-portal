@@ -20,6 +20,9 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import {
+    AutocompleteInput
+} from '../inputs/AutocompleteInput';
+import {
     UserSiteRoleFilter
 } from '../filters/UserSiteRoleFilter';
 
@@ -61,7 +64,7 @@ export const UserSiteRoleCreate = props => (
     <Create {...props} title="UserSiteRole Create">
         <SimpleForm validate={validationCreateUserSiteRole}>
             <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
-                <SelectInput optionText="username" />
+                <AutocompleteInput optionText="username" />
             </ReferenceInput>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput optionText="name" />
