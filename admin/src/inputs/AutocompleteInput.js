@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
-import isEqual from 'lodash.isequal';
 import AutoComplete from 'material-ui/AutoComplete';
 
 import { FieldTitle, translate } from 'admin-on-rest';
@@ -11,9 +10,10 @@ import { FieldTitle, translate } from 'admin-on-rest';
  * however it only fires a query and will only show results 
  * when 3 characters are typed in or more.
  *
- * This input will also omit results beyond ten and prompt the user to
- * narrow their query down, the input will not submit if there is not a
- * valid string in the autocomplete.
+ * This input will also only show a maximum of 10 results and if more,
+ * it will show the number of results found (excluding the shown 10) prompting
+ * the user to narrow their query down. The input will not submit if nothing
+ * has been selected.
  **/
 
 export class AutocompleteInput extends Component {
@@ -23,19 +23,15 @@ export class AutocompleteInput extends Component {
         this.setSearchText(this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (
-            this.props.input.value !== nextProps.input.value ||
-            !isEqual(this.props.choices, nextProps.choices)
-        ) {
-            this.setSearchText(nextProps);
-        }
+    handleOnBlur = (args) => {
+        this.setSearchText(this.props);
     }
 
     handleNewRequest = (chosenRequest, index) => {
         if (index !== -1) {
             const { choices, input, optionValue } = this.props;
             input.onChange(choices[index][optionValue]);
+            this.setSearchText(this.props);
         }
     };
 
@@ -63,7 +59,7 @@ export class AutocompleteInput extends Component {
         const selectedSource = choices.find(
             choice => get(choice, optionValue) === input.value
         );
-        const searchText = selectedSource && this.getSuggestion(selectedSource);
+        const searchText = selectedSource ? this.getSuggestion(selectedSource) : '';
         this.setState({ text: searchText });
     }
 
@@ -122,7 +118,7 @@ export class AutocompleteInput extends Component {
                 }
                 filter={filter}
                 menuProps={menuProps}
-                onClose={this.handleOnClose}
+                onBlur={this.handleOnBlur}
                 onNewRequest={this.handleNewRequest}
                 onUpdateInput={this.handleUpdateInput}
                 style={elStyle}
