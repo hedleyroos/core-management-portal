@@ -163,7 +163,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
         case CREATE:
             return { data: { ...params.data, id: json.id } };
         default:
-            return { data: json };
+            return { data: json ? json : {} };
     }
 };
 
