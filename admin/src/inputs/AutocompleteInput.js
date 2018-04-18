@@ -30,8 +30,9 @@ export class AutocompleteInput extends Component {
     handleNewRequest = (chosenRequest, index) => {
         if (index !== -1) {
             const { choices, input, optionValue } = this.props;
-            input.onChange(choices[index][optionValue]);
-            this.setSearchText(this.props);
+            const selectedSource = choices[index];
+            input.onChange(selectedSource[optionValue]);
+            this.setState({ text: this.getSuggestion(selectedSource) });
         }
     };
 
