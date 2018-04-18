@@ -27,10 +27,13 @@ import {
 import DateTimeInput from 'aor-datetime-input';
 import {
     ObjectField
-} from './CustomFields';
+} from '../fields/ObjectField';
+import {
+    AutocompleteInput
+} from '../inputs/AutocompleteInput';
 import {
     UserSiteDataFilter
-} from './Filters';
+} from '../filters/UserSiteDataFilter';
 
 const validationCreateUserSiteData = values => {
     const errors = {};
@@ -76,7 +79,7 @@ export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
         <SimpleForm validate={validationCreateUserSiteData}>
             <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
-                <SelectInput optionText="username" />
+                <AutocompleteInput optionText="username" />
             </ReferenceInput>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput optionText="name" />

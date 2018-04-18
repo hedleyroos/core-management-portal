@@ -1,5 +1,5 @@
 /**
- * Generated UserDomainRole.js code. Edit at own risk.
+ * Generated InvitationSiteRole.js code. Edit at own risk.
  * When regenerated the changes will be lost.
 **/
 import React from 'react';
@@ -20,16 +20,16 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import {
-    UserDomainRoleFilter
-} from './Filters';
+    InvitationSiteRoleFilter
+} from '../filters/InvitationSiteRoleFilter';
 
-const validationCreateUserDomainRole = values => {
+const validationCreateInvitationSiteRole = values => {
     const errors = {};
-    if (!values.user_id) {
-        errors.user_id = ["user_id is required"];
+    if (!values.invitation_id) {
+        errors.invitation_id = ["invitation_id is required"];
     }
-    if (!values.domain_id) {
-        errors.domain_id = ["domain_id is required"];
+    if (!values.site_id) {
+        errors.site_id = ["site_id is required"];
     }
     if (!values.role_id) {
         errors.role_id = ["role_id is required"];
@@ -37,13 +37,13 @@ const validationCreateUserDomainRole = values => {
     return errors;
 }
 
-export const UserDomainRoleList = props => (
-    <List {...props} title="UserDomainRole List" filters={<UserDomainRoleFilter />}>
+export const InvitationSiteRoleList = props => (
+    <List {...props} title="InvitationSiteRole List" filters={<InvitationSiteRoleFilter />}>
         <Datagrid>
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
+            <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
+                <TextField source="email" />
             </ReferenceField>
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
@@ -57,13 +57,13 @@ export const UserDomainRoleList = props => (
     </List>
 )
 
-export const UserDomainRoleCreate = props => (
-    <Create {...props} title="UserDomainRole Create">
-        <SimpleForm validate={validationCreateUserDomainRole}>
-            <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
-                <SelectInput optionText="username" />
+export const InvitationSiteRoleCreate = props => (
+    <Create {...props} title="InvitationSiteRole Create">
+        <SimpleForm validate={validationCreateInvitationSiteRole}>
+            <ReferenceInput label="Invitation" source="invitation_id" reference="invitations" allowEmpty>
+                <SelectInput optionText="email" />
             </ReferenceInput>
-            <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
+            <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
@@ -73,13 +73,13 @@ export const UserDomainRoleCreate = props => (
     </Create>
 )
 
-export const UserDomainRoleShow = props => (
-    <Show {...props} title="UserDomainRole Show">
+export const InvitationSiteRoleShow = props => (
+    <Show {...props} title="InvitationSiteRole Show">
         <SimpleShowLayout>
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
+            <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
+                <TextField source="email" />
             </ReferenceField>
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>

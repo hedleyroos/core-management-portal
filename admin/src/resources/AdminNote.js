@@ -25,7 +25,7 @@ import {
 } from 'admin-on-rest';
 import {
     AdminNoteFilter
-} from './Filters';
+} from '../filters/AdminNoteFilter';
 
 const validationCreateAdminNote = values => {
     const errors = {};

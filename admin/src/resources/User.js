@@ -1,5 +1,5 @@
 /**
- * Generated Invitation.js code. Edit at own risk.
+ * Generated User.js code. Edit at own risk.
  * When regenerated the changes will be lost.
 **/
 import React from 'react';
@@ -7,60 +7,52 @@ import {
     List,
     Datagrid,
     TextField,
-    ReferenceField,
+    BooleanField,
     DateField,
-    SimpleForm,
-    Create,
-    ReferenceInput,
-    SelectInput,
-    TextInput,
     Show,
     SimpleShowLayout,
     ReferenceManyField,
+    ReferenceField,
     NumberField,
+    SimpleForm,
     Edit,
+    TextInput,
+    BooleanInput,
+    DateInput,
     DeleteButton,
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import DateTimeInput from 'aor-datetime-input';
 import {
-    InvitationFilter
-} from './Filters';
+    ObjectField
+} from '../fields/ObjectField';
+import {
+    UserFilter
+} from '../filters/UserFilter';
 
-const validationCreateInvitation = values => {
-    const errors = {};
-    if (!values.invitor_id) {
-        errors.invitor_id = ["invitor_id is required"];
-    }
-    if (!values.first_name) {
-        errors.first_name = ["first_name is required"];
-    }
-    if (!values.last_name) {
-        errors.last_name = ["last_name is required"];
-    }
-    if (!values.email) {
-        errors.email = ["email is required"];
-    }
-    return errors;
-}
-
-const validationEditInvitation = values => {
+const validationEditUser = values => {
     const errors = {};
     return errors;
 }
 
-export const InvitationList = props => (
-    <List {...props} title="Invitation List" filters={<InvitationFilter />}>
+export const UserList = props => (
+    <List {...props} title="User List" filters={<UserFilter />}>
         <Datagrid>
             <TextField source="id" />
-            <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
+            <TextField source="username" />
             <TextField source="first_name" />
             <TextField source="last_name" />
             <TextField source="email" />
-            <DateField source="expires_at" />
+            <BooleanField source="is_active" />
+            <DateField source="date_joined" />
+            <DateField source="last_login" />
+            <BooleanField source="email_verified" />
+            <BooleanField source="msisdn_verified" />
+            <TextField source="msisdn" />
+            <TextField source="gender" />
+            <DateField source="birth_date" />
+            <TextField source="avatar" />
+            <TextField source="country_code" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <EditButton />
@@ -70,34 +62,27 @@ export const InvitationList = props => (
     </List>
 )
 
-export const InvitationCreate = props => (
-    <Create {...props} title="Invitation Create">
-        <SimpleForm validate={validationCreateInvitation}>
-            <ReferenceInput label="User" source="invitor_id" reference="users" allowEmpty>
-                <SelectInput optionText="username" />
-            </ReferenceInput>
-            <TextInput source="first_name" />
-            <TextInput source="last_name" />
-            <TextInput source="email" />
-            <DateTimeInput source="expires_at" />
-        </SimpleForm>
-    </Create>
-)
-
-export const InvitationShow = props => (
-    <Show {...props} title="Invitation Show">
+export const UserShow = props => (
+    <Show {...props} title="User Show">
         <SimpleShowLayout>
             <TextField source="id" />
-            <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
+            <TextField source="username" />
             <TextField source="first_name" />
             <TextField source="last_name" />
             <TextField source="email" />
-            <DateField source="expires_at" />
+            <BooleanField source="is_active" />
+            <DateField source="date_joined" />
+            <DateField source="last_login" />
+            <BooleanField source="email_verified" />
+            <BooleanField source="msisdn_verified" />
+            <TextField source="msisdn" />
+            <TextField source="gender" />
+            <DateField source="birth_date" />
+            <TextField source="avatar" />
+            <TextField source="country_code" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
+            <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
                 <Datagrid>
                     <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                         <NumberField source="name" />
@@ -109,7 +94,19 @@ export const InvitationShow = props => (
                     <DateField source="updated_at" />
                 </Datagrid>
             </ReferenceManyField>
-            <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
+            <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
+                <Datagrid>
+                    <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                        <NumberField source="name" />
+                    </ReferenceField>
+                    <DateField source="consented_at" />
+                    <ObjectField source="data" addLabel />
+                    <BooleanField source="blocked" />
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                </Datagrid>
+            </ReferenceManyField>
+            <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
                 <Datagrid>
                     <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                         <NumberField source="name" />
@@ -125,14 +122,21 @@ export const InvitationShow = props => (
     </Show>
 )
 
-export const InvitationEdit = props => (
-    <Edit {...props} title="Invitation Edit">
-        <SimpleForm validate={validationEditInvitation}>
+export const UserEdit = props => (
+    <Edit {...props} title="User Edit">
+        <SimpleForm validate={validationEditUser}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
-            <DateTimeInput source="expires_at" />
-            <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
+            <BooleanInput source="is_active" />
+            <BooleanInput source="email_verified" />
+            <BooleanInput source="msisdn_verified" />
+            <TextInput source="msisdn" />
+            <TextInput source="gender" />
+            <DateInput source="birth_date" />
+            <TextInput source="avatar" />
+            <TextInput source="country_code" />
+            <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
                 <Datagrid>
                     <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                         <NumberField source="name" />
@@ -145,7 +149,20 @@ export const InvitationEdit = props => (
                     <EditButton />
                 </Datagrid>
             </ReferenceManyField>
-            <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
+            <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
+                <Datagrid>
+                    <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                        <NumberField source="name" />
+                    </ReferenceField>
+                    <DateField source="consented_at" />
+                    <ObjectField source="data" addLabel />
+                    <BooleanField source="blocked" />
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                    <EditButton />
+                </Datagrid>
+            </ReferenceManyField>
+            <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
                 <Datagrid>
                     <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                         <NumberField source="name" />

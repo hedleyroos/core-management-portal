@@ -3,131 +3,130 @@
  * When regenerated the changes will be lost.
 **/
 import React from 'react';
-import { pink500, pink300 } from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Admin, Delete, fetchUtils, Resource } from 'admin-on-rest';
 import swaggerRestServer from './swaggerRestServer';
-import authClient from './authClient';
-import AuthLoginPage from './authLogin';
+import authClient from './auth/authClient';
+import AuthLoginPage from './auth/authLogin';
 import customRoutes from './customRoutes';
+import { muiTheme } from './Theme';
 
 import {
     DomainList,
     DomainCreate,
     DomainShow,
     DomainEdit,
-} from './Domain';
+} from './resources/Domain';
 
 import {
     DomainRoleList,
     DomainRoleCreate,
     DomainRoleShow,
     DomainRoleEdit,
-} from './DomainRole';
+} from './resources/DomainRole';
 
 import {
     InvitationList,
     InvitationCreate,
     InvitationShow,
     InvitationEdit,
-} from './Invitation';
+} from './resources/Invitation';
 
 import {
     InvitationDomainRoleList,
     InvitationDomainRoleCreate,
     InvitationDomainRoleShow,
-} from './InvitationDomainRole';
+} from './resources/InvitationDomainRole';
 
 import {
     InvitationSiteRoleList,
     InvitationSiteRoleCreate,
     InvitationSiteRoleShow,
-} from './InvitationSiteRole';
+} from './resources/InvitationSiteRole';
 
 import {
     PermissionList,
     PermissionCreate,
     PermissionShow,
     PermissionEdit,
-} from './Permission';
+} from './resources/Permission';
 
 import {
     ResourceList,
     ResourceCreate,
     ResourceShow,
     ResourceEdit,
-} from './Resource';
+} from './resources/Resource';
 
 import {
     RoleList,
     RoleCreate,
     RoleShow,
     RoleEdit,
-} from './Role';
+} from './resources/Role';
 
 import {
     RoleResourcePermissionList,
     RoleResourcePermissionCreate,
     RoleResourcePermissionShow,
-} from './RoleResourcePermission';
+} from './resources/RoleResourcePermission';
 
 import {
     SiteList,
     SiteCreate,
     SiteShow,
     SiteEdit,
-} from './Site';
+} from './resources/Site';
 
 import {
     SiteRoleList,
     SiteRoleCreate,
     SiteRoleShow,
     SiteRoleEdit,
-} from './SiteRole';
+} from './resources/SiteRole';
 
 import {
     UserDomainRoleList,
     UserDomainRoleCreate,
     UserDomainRoleShow,
-} from './UserDomainRole';
+} from './resources/UserDomainRole';
 
 import {
     UserSiteRoleList,
     UserSiteRoleCreate,
     UserSiteRoleShow,
-} from './UserSiteRole';
+} from './resources/UserSiteRole';
 
 import {
     UserSiteDataList,
     UserSiteDataCreate,
     UserSiteDataShow,
     UserSiteDataEdit,
-} from './UserSiteData';
+} from './resources/UserSiteData';
 
 import {
     AdminNoteList,
     AdminNoteCreate,
     AdminNoteShow,
     AdminNoteEdit,
-} from './AdminNote';
+} from './resources/AdminNote';
 
 import {
     SiteDataSchemaList,
     SiteDataSchemaCreate,
     SiteDataSchemaShow,
     SiteDataSchemaEdit,
-} from './SiteDataSchema';
+} from './resources/SiteDataSchema';
 
 import {
     ClientList,
     ClientShow,
-} from './Client';
+} from './resources/Client';
 
 import {
     UserList,
     UserShow,
     UserEdit,
-} from './User';
+} from './resources/User';
 
 
 const httpClient = (url, options = {}) => {
@@ -142,7 +141,7 @@ const httpClient = (url, options = {}) => {
 const restClient = swaggerRestServer(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient)
 
 const App = () => (
-    <Admin title="Girl Effect Management Portal" theme={getMuiTheme(muiTheme)} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
+    <Admin title="Girl Effect Management Portal" theme={muiTheme} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
         <Resource
             name="domains"
             list={ DomainList }
@@ -281,13 +280,6 @@ const App = () => (
         />
     </Admin>
 )
-
-const muiTheme = getMuiTheme({
-    palette: {
-        primary1Color: pink500,
-        accent1Color: pink300
-    }
-});
 
 export default App;
 /** End of Generated Code **/

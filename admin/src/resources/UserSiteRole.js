@@ -1,5 +1,5 @@
 /**
- * Generated SiteRole.js code. Edit at own risk.
+ * Generated UserSiteRole.js code. Edit at own risk.
  * When regenerated the changes will be lost.
 **/
 import React from 'react';
@@ -7,27 +7,30 @@ import {
     List,
     Datagrid,
     ReferenceField,
+    TextField,
     NumberField,
-    BooleanField,
     DateField,
     SimpleForm,
     Create,
     ReferenceInput,
     SelectInput,
-    BooleanInput,
     Show,
     SimpleShowLayout,
-    Edit,
     DeleteButton,
-    EditButton,
     ShowButton
 } from 'admin-on-rest';
 import {
-    SiteRoleFilter
-} from './Filters';
+    AutocompleteInput
+} from '../inputs/AutocompleteInput';
+import {
+    UserSiteRoleFilter
+} from '../filters/UserSiteRoleFilter';
 
-const validationCreateSiteRole = values => {
+const validationCreateUserSiteRole = values => {
     const errors = {};
+    if (!values.user_id) {
+        errors.user_id = ["user_id is required"];
+    }
     if (!values.site_id) {
         errors.site_id = ["site_id is required"];
     }
@@ -37,66 +40,58 @@ const validationCreateSiteRole = values => {
     return errors;
 }
 
-const validationEditSiteRole = values => {
-    const errors = {};
-    return errors;
-}
-
-export const SiteRoleList = props => (
-    <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
+export const UserSiteRoleList = props => (
+    <List {...props} title="UserSiteRole List" filters={<UserSiteRoleFilter />}>
         <Datagrid>
+            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                <TextField source="username" />
+            </ReferenceField>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                 <NumberField source="label" />
             </ReferenceField>
-            <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
             <ShowButton />
             <DeleteButton />
         </Datagrid>
     </List>
 )
 
-export const SiteRoleCreate = props => (
-    <Create {...props} title="SiteRole Create">
-        <SimpleForm validate={validationCreateSiteRole}>
+export const UserSiteRoleCreate = props => (
+    <Create {...props} title="UserSiteRole Create">
+        <SimpleForm validate={validationCreateUserSiteRole}>
+            <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
+                <AutocompleteInput optionText="username" />
+            </ReferenceInput>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
             <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
                 <SelectInput optionText="label" />
             </ReferenceInput>
-            <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Create>
 )
 
-export const SiteRoleShow = props => (
-    <Show {...props} title="SiteRole Show">
+export const UserSiteRoleShow = props => (
+    <Show {...props} title="UserSiteRole Show">
         <SimpleShowLayout>
+            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                <TextField source="username" />
+            </ReferenceField>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                 <NumberField source="label" />
             </ReferenceField>
-            <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
-
-export const SiteRoleEdit = props => (
-    <Edit {...props} title="SiteRole Edit">
-        <SimpleForm validate={validationEditSiteRole}>
-            <BooleanInput source="grant_implicitly" />
-        </SimpleForm>
-    </Edit>
 )
 
 /** End of Generated Code **/

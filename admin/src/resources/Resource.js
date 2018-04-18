@@ -21,7 +21,7 @@ import {
 } from 'admin-on-rest';
 import {
     ResourceFilter
-} from './Filters';
+} from '../filters/ResourceFilter';
 
 const validationCreateResource = values => {
     const errors = {};

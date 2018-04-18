@@ -1,5 +1,5 @@
 /**
- * Generated SiteDataSchema.js code. Edit at own risk.
+ * Generated SiteRole.js code. Edit at own risk.
  * When regenerated the changes will be lost.
 **/
 import React from 'react';
@@ -8,12 +8,13 @@ import {
     Datagrid,
     ReferenceField,
     NumberField,
+    BooleanField,
     DateField,
     SimpleForm,
     Create,
     ReferenceInput,
     SelectInput,
-    LongTextInput,
+    BooleanInput,
     Show,
     SimpleShowLayout,
     Edit,
@@ -22,32 +23,35 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import {
-    ObjectField
-} from './CustomFields';
+    SiteRoleFilter
+} from '../filters/SiteRoleFilter';
 
-const validationCreateSiteDataSchema = values => {
+const validationCreateSiteRole = values => {
     const errors = {};
     if (!values.site_id) {
         errors.site_id = ["site_id is required"];
     }
-    if (!values.schema) {
-        errors.schema = ["schema is required"];
+    if (!values.role_id) {
+        errors.role_id = ["role_id is required"];
     }
     return errors;
 }
 
-const validationEditSiteDataSchema = values => {
+const validationEditSiteRole = values => {
     const errors = {};
     return errors;
 }
 
-export const SiteDataSchemaList = props => (
-    <List {...props} title="SiteDataSchema List">
+export const SiteRoleList = props => (
+    <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
         <Datagrid>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>
-            <ObjectField source="schema" addLabel />
+            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                <NumberField source="label" />
+            </ReferenceField>
+            <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <EditButton />
@@ -57,34 +61,40 @@ export const SiteDataSchemaList = props => (
     </List>
 )
 
-export const SiteDataSchemaCreate = props => (
-    <Create {...props} title="SiteDataSchema Create">
-        <SimpleForm validate={validationCreateSiteDataSchema}>
+export const SiteRoleCreate = props => (
+    <Create {...props} title="SiteRole Create">
+        <SimpleForm validate={validationCreateSiteRole}>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <LongTextInput source="schema" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
+            <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
+                <SelectInput optionText="label" />
+            </ReferenceInput>
+            <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Create>
 )
 
-export const SiteDataSchemaShow = props => (
-    <Show {...props} title="SiteDataSchema Show">
+export const SiteRoleShow = props => (
+    <Show {...props} title="SiteRole Show">
         <SimpleShowLayout>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>
-            <ObjectField source="schema" addLabel />
+            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                <NumberField source="label" />
+            </ReferenceField>
+            <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
 )
 
-export const SiteDataSchemaEdit = props => (
-    <Edit {...props} title="SiteDataSchema Edit">
-        <SimpleForm validate={validationEditSiteDataSchema}>
-            <LongTextInput source="schema" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
+export const SiteRoleEdit = props => (
+    <Edit {...props} title="SiteRole Edit">
+        <SimpleForm validate={validationEditSiteRole}>
+            <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Edit>
 )
