@@ -11,11 +11,12 @@ import { pink500, pink300 } from 'material-ui/styles/colors';
 import { userLogin } from 'admin-on-rest';
 
 import { muiTheme, styles } from '../Theme'
+import { GenerateQueryString } from '../utils';
 
 const OIDC_PROVIDER_URL = process.env.REACT_APP_AUTHORIZATION_ENDPOINT;
 const OIDC_PROVIDER_SCOPE = 'openid profile roles';
 const OIDC_PROVIDER_CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
-const OIDC_PROVIDER_REDIRECT_URI = process.env.REACT_APP_LOGIN_CALLBACK;
+const OIDC_PROVIDER_REDIRECT_URI = process.env.REACT_APP_PORTAL_URL + process.env.REACT_APP_PORTAL_LOGIN_CALLBACK
 const OIDC_PROVIDER_STATE = btoa(new Date());
 const OIDC_PROVIDER_NONCE = btoa(OIDC_PROVIDER_STATE);
 
@@ -28,9 +29,7 @@ const oidc_query_arguments = {
     nonce: `${OIDC_PROVIDER_NONCE}`
 }
 
-const oidc_query_string = Object.entries(oidc_query_arguments).map(
-    ([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
-).join('&');
+const oidc_query_string = GenerateQueryString(oidc_query_arguments);
 
 const login_url = `${OIDC_PROVIDER_URL}?${oidc_query_string}`;
 
