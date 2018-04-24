@@ -129,9 +129,12 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                       id: `${keys.map(key => res[key]).join('/')}`
                   }))
                 : pk
-                    ? json.map(res => {
-                          return res.id ? res : { ...res, id: res[pk] };
-                      })
+                    ? json.map(
+                          res =>
+                              res.hasOwnProperty('id')
+                                  ? res
+                                  : { ...res, id: res[pk] }
+                      )
                     : json;
             return {
                 data: data,
@@ -149,9 +152,12 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                       id: `${keys.map(key => res[key]).join('/')}`
                   }))
                 : pk
-                    ? json.map(res => {
-                          return res.id ? res : { ...res, id: res[pk] };
-                      })
+                    ? json.map(
+                          res =>
+                              res.hasOwnProperty('id')
+                                  ? res
+                                  : { ...res, id: res[pk] }
+                      )
                     : json;
             return {
                 data: data,
