@@ -10,6 +10,7 @@ import {
     ReferenceField,
     TextField,
     DateField,
+    BooleanField,
     SimpleForm,
     Create,
     ReferenceInput,
@@ -26,6 +27,7 @@ import {
 import {
     DomainFilter
 } from '../filters/DomainFilter';
+import RelatedAggregateManyByField from '../fields/RelatedAggregateManyByField';
 
 const validationCreateDomain = values => {
     const errors = {};
@@ -98,6 +100,27 @@ export const DomainShow = props => (
                     <DateField source="updated_at" />
                 </Datagrid>
             </ReferenceManyField>
+            <RelatedAggregateManyByField label="Users" reference="userdomainroles" target="domain_id" by="user_id" >
+                <Datagrid>
+                    <TextField source="id" />
+                    <TextField source="username" />
+                    <TextField source="first_name" />
+                    <TextField source="last_name" />
+                    <TextField source="email" />
+                    <BooleanField source="is_active" />
+                    <DateField source="date_joined" />
+                    <DateField source="last_login" />
+                    <BooleanField source="email_verified" />
+                    <BooleanField source="msisdn_verified" />
+                    <TextField source="msisdn" />
+                    <TextField source="gender" />
+                    <DateField source="birth_date" />
+                    <TextField source="avatar" />
+                    <TextField source="country_code" />
+                    <DateField source="created_at" />
+                    <DateField source="updated_at" />
+                </Datagrid>
+            </RelatedAggregateManyByField>
         </SimpleShowLayout>
     </Show>
 )
