@@ -3,8 +3,8 @@
  * When regenerated the changes will be lost.
 **/
 import React from 'react';
-import { Admin, Delete, fetchUtils, Resource } from 'admin-on-rest';
-import swaggerRestServer from './swaggerRestServer';
+import { Admin, Delete, Resource } from 'admin-on-rest';
+import restClient from './swaggerRestServer';
 import authClient from './auth/authClient';
 import AuthLoginPage from './auth/authLogin';
 import customRoutes from './customRoutes';
@@ -127,18 +127,6 @@ import {
     UserShow,
     UserEdit,
 } from './resources/User';
-
-
-const httpClient = (url, options = {}) => {
-    if (!options.headers) {
-        options.headers = new Headers({ Accept: 'application/json' });
-    }
-    const id_token = localStorage.getItem('id_token');
-    options.headers.set('Authorization', `Bearer ${id_token}`);
-    return fetchUtils.fetchJson(url, options);
-}
-
-const restClient = swaggerRestServer(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient)
 
 const App = () => (
     <Admin title="Girl Effect Management Portal" theme={muiTheme} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >

@@ -4,6 +4,7 @@
 **/
 import React from 'react';
 import {
+    List,
     Datagrid,
     NumberField,
     ReferenceField,
@@ -22,7 +23,6 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import ListWithSearch from '../pageComponents/ListWithSearch'
 import {
     DomainFilter
 } from '../filters/DomainFilter';
@@ -41,7 +41,7 @@ const validationEditDomain = values => {
 }
 
 export const DomainList = props => (
-    <ListWithSearch {...props} title="Domain List" filters={<DomainFilter />}>
+    <List {...props} title="Domain List" filters={<DomainFilter />}>
         <Datagrid>
             <NumberField source="id" />
             <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
@@ -55,7 +55,7 @@ export const DomainList = props => (
             <ShowButton />
             <DeleteButton />
         </Datagrid>
-    </ListWithSearch>
+    </List>
 )
 
 export const DomainCreate = props => (

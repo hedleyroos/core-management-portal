@@ -10,6 +10,7 @@ import {
 
 export const UserFilter = props => (
     <Filter {...props}>
+        <TextInput label="Search" source="q" alwaysOn />
         <TextInput label="Email" source="email" />
         <TextInput label="Username Prefix" source="username_prefix" />
     </Filter>

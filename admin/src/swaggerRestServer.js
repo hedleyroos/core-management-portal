@@ -177,7 +177,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
  * CREATE       => POST http://my.api.url/users/
  * DELETE       => DELETE http://my.api.url/users/123/ or DELETE http://my.api.url/users/123/321/ in the case of a composite key
  */
-export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
+const swaggerRestServer = (apiUrl, httpClient = fetchUtils.fetchJson) => {
     /**
      * @param {string} type Request type, e.g GET_LIST
      * @param {string} resource Resource name, e.g. "users"
@@ -203,4 +203,15 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
         );
     };
 };
+
+const httpClient = (url, options = {}) => {
+    if (!options.headers) {
+        options.headers = new Headers({ Accept: 'application/json' });
+    }
+    const id_token = localStorage.getItem('id_token');
+    options.headers.set('Authorization', `Bearer ${id_token}`);
+    return fetchUtils.fetchJson(url, options);
+};
+
+export default swaggerRestServer(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
 /** End of Generated Code **/
