@@ -1,7 +1,7 @@
 /**
  * Generated swaggerRestServer.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import { stringify } from 'query-string';
 import { fetchUtils } from 'admin-on-rest';
 
@@ -14,44 +14,19 @@ export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 
 const COMPOSITE_KEY_RESOURSES = {
-    domainroles: [
-        'domain_id',
-        'role_id',
-    ],
-    invitationdomainroles: [
-        'invitation_id',
-        'domain_id',
-        'role_id',
-    ],
-    invitationsiteroles: [
-        'invitation_id',
-        'site_id',
-        'role_id',
-    ],
-    roleresourcepermissions: [
-        'role_id',
-        'resource_id',
-        'permission_id',
-    ],
-    siteroles: [
-        'site_id',
-        'role_id',
-    ],
-    userdomainroles: [
-        'user_id',
-        'domain_id',
-        'role_id',
-    ],
-    usersiteroles: [
-        'user_id',
-        'site_id',
-        'role_id',
-    ],
-    usersitedata: [
-        'user_id',
-        'site_id',
-    ],
-}
+    domainroles: ['domain_id', 'role_id'],
+    invitationdomainroles: ['invitation_id', 'domain_id', 'role_id'],
+    invitationsiteroles: ['invitation_id', 'site_id', 'role_id'],
+    roleresourcepermissions: ['role_id', 'resource_id', 'permission_id'],
+    siteroles: ['site_id', 'role_id'],
+    userdomainroles: ['user_id', 'domain_id', 'role_id'],
+    usersiteroles: ['user_id', 'site_id', 'role_id'],
+    usersitedata: ['user_id', 'site_id']
+};
+
+const PK_MAPPING = {
+    sitedataschemas: 'site_id'
+};
 
 /**
  * @param {String} apiUrl The base API url
@@ -102,7 +77,7 @@ export const convertRESTRequestToHTTP = ({
             break;
         case GET_MANY: {
             const query = {
-                filter: JSON.stringify({ id: params.ids }),
+                filter: JSON.stringify({ id: params.ids })
             };
             url = `${apiUrl}/${resource}?${stringify(query)}`;
             break;
@@ -137,6 +112,8 @@ export const convertRESTRequestToHTTP = ({
 const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
     const { headers, json } = response;
     let keys = COMPOSITE_KEY_RESOURSES[resource];
+    let pk = PK_MAPPING[resource];
+    let data = [];
 
     switch (type) {
         // Total required by AOR for all list operations
@@ -146,8 +123,21 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                     'The X-Total-Count header is missing in the HTTP Response. The jsonServer REST client expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare X-Total-Count in the Access-Control-Expose-Headers header?'
                 );
             }
+            data = keys
+                ? json.map(res => ({
+                      ...res,
+                      id: `${keys.map(key => res[key]).join('/')}`
+                  }))
+                : pk
+                    ? json.map(
+                          res =>
+                              res.hasOwnProperty('id')
+                                  ? res
+                                  : { ...res, id: res[pk] }
+                      )
+                    : json;
             return {
-                data: keys ? json.map(res => ({ ...res, id: `${keys.map(key => res[key]).join('/')}` })) : json,
+                data: data,
                 total: parseInt(headers.get('x-total-count'), 10)
             };
         case GET_MANY_REFERENCE:
@@ -156,12 +146,25 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                     'The X-Total-Count header is missing in the HTTP Response. The jsonServer REST client expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare X-Total-Count in the Access-Control-Expose-Headers header?'
                 );
             }
+            data = keys
+                ? json.map(res => ({
+                      ...res,
+                      id: `${keys.map(key => res[key]).join('/')}`
+                  }))
+                : pk
+                    ? json.map(
+                          res =>
+                              res.hasOwnProperty('id')
+                                  ? res
+                                  : { ...res, id: res[pk] }
+                      )
+                    : json;
             return {
-                data: keys ? json.map(res => ({ ...res, id: `${keys.map(key => res[key]).join('/')}` })) : json,
+                data: data,
                 total: parseInt(headers.get('x-total-count'), 10)
             };
         case CREATE:
-            return { data: { ...params.data, id: json.id } };
+            return { data: { ...params.data, id: pk ? json[pk] : json.id } };
         default:
             return { data: json ? json : {} };
     }
@@ -213,5 +216,8 @@ const httpClient = (url, options = {}) => {
     return fetchUtils.fetchJson(url, options);
 };
 
-export default swaggerRestServer(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
+export default swaggerRestServer(
+    process.env.REACT_APP_MANAGEMENT_LAYER,
+    httpClient
+);
 /** End of Generated Code **/
