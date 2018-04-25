@@ -39,7 +39,7 @@ const validationCreateInvitationDomainRole = values => {
 
 export const InvitationDomainRoleList = props => (
     <List {...props} title="InvitationDomainRole List" filters={<InvitationDomainRoleFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
                 <TextField source="email" />
             </ReferenceField>

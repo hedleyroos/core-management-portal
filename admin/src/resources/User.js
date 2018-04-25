@@ -37,7 +37,7 @@ const validationEditUser = values => {
 
 export const UserList = props => (
     <List {...props} title="User List" filters={<UserFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <TextField source="id" />
             <TextField source="username" />
             <TextField source="first_name" />
@@ -83,7 +83,7 @@ export const UserShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>
@@ -95,7 +95,7 @@ export const UserShow = props => (
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>
@@ -107,7 +107,7 @@ export const UserShow = props => (
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>
@@ -137,7 +137,7 @@ export const UserEdit = props => (
             <TextInput source="avatar" />
             <TextInput source="country_code" />
             <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>
@@ -150,7 +150,7 @@ export const UserEdit = props => (
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>
@@ -163,7 +163,7 @@ export const UserEdit = props => (
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>

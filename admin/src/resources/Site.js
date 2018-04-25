@@ -47,7 +47,7 @@ const validationEditSite = values => {
 
 export const SiteList = props => (
     <List {...props} title="Site List" filters={<SiteFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
                 <NumberField source="name" />
@@ -99,7 +99,7 @@ export const SiteShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                         <NumberField source="label" />
                     </ReferenceField>
@@ -124,7 +124,7 @@ export const SiteEdit = props => (
             <TextInput source="description" />
             <BooleanInput source="is_active" />
             <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                         <NumberField source="label" />
                     </ReferenceField>
