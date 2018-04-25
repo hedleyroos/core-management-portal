@@ -1,10 +1,30 @@
 import React, { Component } from 'react';
+import Chip from 'material-ui/Chip';
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow,
+    TableRowColumn
+} from 'material-ui/Table';
 import restClient, { GET_MANY_REFERENCE } from '../swaggerRestServer';
+import { ToTitle } from '../utils';
+
+const styles = {
+    chip: {
+        margin: 4
+    },
+    wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap'
+    }
+};
 
 class RelatedAggregateManyByField extends Component {
     constructor(props) {
         super(props);
-        this.state = { sort: props.sort, data: {}, ids: [] };
+        this.state = { tableHeaders: [], data: [] };
     }
 
     componentWillMount() {
@@ -13,19 +33,30 @@ class RelatedAggregateManyByField extends Component {
 
     getRelatedData = () => {
         const { record, target, reference, by, showNotification } = this.props;
-        restClient(GET_MANY_REFERENCE, 'users', {})
+        let parameters = {};
+        parameters[target] = record.id;
+        restClient(GET_MANY_REFERENCE, reference, parameters)
             .then(response => {
-                const state = {
-                    data:
-                        response.data.length > 0
-                            ? response.data.reduce((mapping, current) => {
-                                  mapping[current.id] = current;
-                                  return mapping;
-                              }, {})
-                            : {},
-                    ids: response.data.map(res => res.id)
-                };
-                this.setState(state);
+                let data = response.data;
+                data = [
+                    {
+                        id: 1,
+                        name: 'David',
+                        roles: ['tech_admin', 'governance_admin']
+                    },
+                    {
+                        id: 3,
+                        name: 'Person No',
+                        roles: ['role_delagator']
+                    }
+                ];
+                if (data.length > 0) {
+                    const tableHeaders = Object.keys(data[0]);
+                    this.setState({
+                        tableHeaders: tableHeaders,
+                        data: data
+                    });
+                }
             })
             .catch(e => {
                 console.error(e);
@@ -34,24 +65,63 @@ class RelatedAggregateManyByField extends Component {
     };
 
     render() {
-        const {
-            resource,
-            reference,
-            children,
-            basePath,
-            isLoading
-        } = this.props;
-        if (React.Children.count(children) !== 1) {
-            throw new Error(
-                '<RelatedAggregateManyByField> only accepts a single child component.'
-            );
-        }
-        return React.cloneElement(children, {
-            resource: reference,
-            ids: this.state.ids,
-            data: this.state.data,
-            currentSort: this.state.sort
-        });
+        const { label, resource, reference } = this.props;
+        return (
+            <div>
+                <label>{label}</label>
+                {this.state.data ? (
+                    <Table>
+                        <TableHeader
+                            displaySelectAll={false}
+                            adjustForCheckbox={false}
+                        >
+                            <TableRow>
+                                {this.state.tableHeaders.map(
+                                    (header, index) => (
+                                        <TableHeaderColumn key={index}>
+                                            {ToTitle(header)}
+                                        </TableHeaderColumn>
+                                    )
+                                )}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody displayRowCheckbox={false}>
+                            {this.state.data.map((entry, index) => (
+                                <TableRow key={index}>
+                                    {this.state.tableHeaders.map(
+                                        (header, index) => (
+                                            <TableRowColumn key={index}>
+                                                {entry[header] instanceof
+                                                Array ? (
+                                                    <div style={styles.wrapper}>
+                                                        {entry[header].map(
+                                                            (str, index) => (
+                                                                <Chip
+                                                                    key={index}
+                                                                    style={
+                                                                        styles.chip
+                                                                    }
+                                                                >
+                                                                    {str}
+                                                                </Chip>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    entry[header]
+                                                )}
+                                            </TableRowColumn>
+                                        )
+                                    )}
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                ) : (
+                    ''
+                )}
+            </div>
+        );
     }
 }
 
