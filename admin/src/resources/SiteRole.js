@@ -44,7 +44,7 @@ const validationEditSiteRole = values => {
 
 export const SiteRoleList = props => (
     <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>

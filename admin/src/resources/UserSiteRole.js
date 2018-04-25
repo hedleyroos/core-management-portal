@@ -39,7 +39,7 @@ const validationCreateUserSiteRole = values => {
 
 export const UserSiteRoleList = props => (
     <List {...props} title="UserSiteRole List" filters={<UserSiteRoleFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                 <TextField source="username" />
             </ReferenceField>

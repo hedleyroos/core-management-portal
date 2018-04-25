@@ -52,7 +52,7 @@ const validationEditInvitation = values => {
 
 export const InvitationList = props => (
     <List {...props} title="Invitation List" filters={<InvitationFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <TextField source="id" />
             <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
                 <TextField source="username" />
@@ -98,7 +98,7 @@ export const InvitationShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>
@@ -110,7 +110,7 @@ export const InvitationShow = props => (
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>
@@ -133,7 +133,7 @@ export const InvitationEdit = props => (
             <TextInput source="email" />
             <DateTimeInput source="expires_at" />
             <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>
@@ -146,7 +146,7 @@ export const InvitationEdit = props => (
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                         <NumberField source="name" />
                     </ReferenceField>

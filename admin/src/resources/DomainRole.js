@@ -44,7 +44,7 @@ const validationEditDomainRole = values => {
 
 export const DomainRoleList = props => (
     <List {...props} title="DomainRole List" filters={<DomainRoleFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>

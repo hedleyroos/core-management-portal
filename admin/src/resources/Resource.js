@@ -38,7 +38,7 @@ const validationEditResource = values => {
 
 export const ResourceList = props => (
     <List {...props} title="Resource List" filters={<ResourceFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <TextField source="urn" />
             <TextField source="description" />

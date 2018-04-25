@@ -20,7 +20,7 @@ import {
 
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <TextField source="_post_logout_redirect_uris" />
             <TextField source="_redirect_uris" />
