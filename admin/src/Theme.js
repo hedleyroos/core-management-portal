@@ -23,5 +23,27 @@ export const styles = {
     avatar: {
         margin: '1em',
         textAlign: 'center ',
+    },
+    customTableDiv: {
+        lineHeight: '24px',
+        width: '100%',
+        height: 'auto',
+        display: 'inline-block',
+        position: 'relative',
+        backgroundColor: 'transparent',
+        fontFamily: 'Roboto, sans-serif',
+        cursor: 'auto',
+        paddingTop: '2em'
+    },
+    customTableLabel: {
+        fontSize: '13px',
+        color: 'rgba(0, 0, 0, 0.35)'
+    },
+    chip: {
+        margin: 4
+    },
+    wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap'
     }
 };

@@ -10,16 +10,7 @@ import {
 } from 'material-ui/Table';
 import restClient, { GET_MANY_REFERENCE } from '../swaggerRestServer';
 import { ToTitle } from '../utils';
-
-const styles = {
-    chip: {
-        margin: 4
-    },
-    wrapper: {
-        display: 'flex',
-        flexWrap: 'wrap'
-    }
-};
+import { styles } from '../Theme';
 
 class RelatedAggregateManyByField extends Component {
     constructor(props) {
@@ -67,8 +58,8 @@ class RelatedAggregateManyByField extends Component {
     render() {
         const { label, resource, reference } = this.props;
         return (
-            <div>
-                <label>{label}</label>
+            <div style={styles.customTableDiv}>
+                <label style={styles.customTableLabel}><span>{label}</span></label>
                 {this.state.data ? (
                     <Table>
                         <TableHeader

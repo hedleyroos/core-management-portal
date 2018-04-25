@@ -82,6 +82,7 @@ export const DomainShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
+            <RelatedAggregateManyByField label="Users" reference="userdomainroles" target="domain_id" by="user_id" />
             <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                 <Datagrid bodyOptions={ { showRowHover: true } }>
                     <NumberField source="id" />
@@ -99,7 +100,6 @@ export const DomainShow = props => (
                     <DateField source="updated_at" />
                 </Datagrid>
             </ReferenceManyField>
-            <RelatedAggregateManyByField label="Users" reference="userdomainroles" target="domain_id" by="user_id" />
         </SimpleShowLayout>
     </Show>
 )
