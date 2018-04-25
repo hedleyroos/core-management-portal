@@ -29,9 +29,6 @@ import {
     ObjectField
 } from '../fields/ObjectField';
 import {
-    AutocompleteInput
-} from '../inputs/AutocompleteInput';
-import {
     UserSiteDataFilter
 } from '../filters/UserSiteDataFilter';
 
@@ -79,7 +76,7 @@ export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
         <SimpleForm validate={validationCreateUserSiteData}>
             <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
-                <AutocompleteInput optionText="username" />
+                <SelectInput optionText="username" />
             </ReferenceInput>
             <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
                 <SelectInput optionText="name" />
