@@ -26,7 +26,7 @@ import {
 import {
     DomainFilter
 } from '../filters/DomainFilter';
-import RelatedAggregateManyByField from '../fields/RelatedAggregateManyByField';
+import UserRoleTableField from '../fields/UserRoleTableField';
 
 const validationCreateDomain = values => {
     const errors = {};
@@ -82,7 +82,7 @@ export const DomainShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <RelatedAggregateManyByField label="Users" reference="userdomainroles" target="domain_id" by="user_id" />
+            <UserRoleTableField label="Users" reference="userdomainroles" target="domain_id" />
             <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                 <Datagrid bodyOptions={ { showRowHover: true } }>
                     <NumberField source="id" />
