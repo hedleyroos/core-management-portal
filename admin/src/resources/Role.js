@@ -42,7 +42,7 @@ const validationEditRole = values => {
 
 export const RoleList = props => (
     <List {...props} title="Role List">
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <TextField source="label" />
             <BooleanField source="requires_2fa" />
@@ -76,7 +76,7 @@ export const RoleShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
                         <NumberField source="urn" />
                     </ReferenceField>
@@ -98,7 +98,7 @@ export const RoleEdit = props => (
             <BooleanInput source="requires_2fa" />
             <TextInput source="description" />
             <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
                         <NumberField source="urn" />
                     </ReferenceField>

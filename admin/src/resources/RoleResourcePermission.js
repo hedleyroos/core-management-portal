@@ -38,7 +38,7 @@ const validationCreateRoleResourcePermission = values => {
 
 export const RoleResourcePermissionList = props => (
     <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                 <NumberField source="label" />
             </ReferenceField>

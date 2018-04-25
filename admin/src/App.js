@@ -8,6 +8,7 @@ import restClient from './swaggerRestServer';
 import authClient from './auth/authClient';
 import AuthLoginPage from './auth/authLogin';
 import customRoutes from './customRoutes';
+import Menu from './Menu';
 import { muiTheme } from './Theme';
 
 import {
@@ -129,7 +130,7 @@ import {
 } from './resources/User';
 
 const App = () => (
-    <Admin title="Girl Effect Management Portal" theme={muiTheme} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
+    <Admin title="Girl Effect Management Portal" menu={Menu} theme={muiTheme} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
         <Resource
             name="domains"
             list={ DomainList }

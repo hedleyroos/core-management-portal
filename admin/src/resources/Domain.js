@@ -42,7 +42,7 @@ const validationEditDomain = values => {
 
 export const DomainList = props => (
     <List {...props} title="Domain List" filters={<DomainFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
                 <NumberField source="name" />
@@ -82,7 +82,7 @@ export const DomainShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <NumberField source="id" />
                     <TextField source="name" />
                     <DateField source="created_at" />
@@ -90,7 +90,7 @@ export const DomainShow = props => (
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                         <NumberField source="label" />
                     </ReferenceField>
@@ -111,7 +111,7 @@ export const DomainEdit = props => (
             <TextInput source="name" />
             <TextInput source="description" />
             <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <NumberField source="id" />
                     <TextField source="name" />
                     <DateField source="created_at" />
@@ -120,7 +120,7 @@ export const DomainEdit = props => (
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
-                <Datagrid>
+                <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                         <NumberField source="label" />
                     </ReferenceField>

@@ -43,7 +43,7 @@ const validationEditSiteDataSchema = values => {
 
 export const SiteDataSchemaList = props => (
     <List {...props} title="SiteDataSchema List">
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
             </ReferenceField>

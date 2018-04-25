@@ -48,7 +48,7 @@ const validationEditAdminNote = values => {
 
 export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
-        <Datagrid>
+        <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                 <TextField source="username" />
