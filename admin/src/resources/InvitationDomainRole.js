@@ -60,13 +60,13 @@ export const InvitationDomainRoleList = props => (
 export const InvitationDomainRoleCreate = props => (
     <Create {...props} title="InvitationDomainRole Create">
         <SimpleForm validate={validationCreateInvitationDomainRole}>
-            <ReferenceInput label="Invitation" source="invitation_id" reference="invitations" allowEmpty>
+            <ReferenceInput label="Invitation" source="invitation_id" reference="invitations" perPage={0} allowEmpty>
                 <SelectInput optionText="email" />
             </ReferenceInput>
-            <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
+            <ReferenceInput label="Domain" source="domain_id" reference="domains" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
+            <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
                 <SelectInput optionText="label" />
             </ReferenceInput>
         </SimpleForm>
