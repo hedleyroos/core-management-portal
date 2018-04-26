@@ -60,7 +60,7 @@ export const SiteDataSchemaList = props => (
 export const SiteDataSchemaCreate = props => (
     <Create {...props} title="SiteDataSchema Create">
         <SimpleForm validate={validationCreateSiteDataSchema}>
-            <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
+            <ReferenceInput label="Site" source="site_id" reference="sites" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
             <LongTextInput source="schema" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />

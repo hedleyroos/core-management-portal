@@ -69,10 +69,10 @@ export const AdminNoteList = props => (
 export const AdminNoteCreate = props => (
     <Create {...props} title="AdminNote Create">
         <SimpleForm validate={validationCreateAdminNote}>
-            <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
+            <ReferenceInput label="User" source="user_id" reference="users" perPage={0} allowEmpty>
                 <SelectInput optionText="username" />
             </ReferenceInput>
-            <ReferenceInput label="User" source="creator_id" reference="users" allowEmpty>
+            <ReferenceInput label="User" source="creator_id" reference="users" perPage={0} allowEmpty>
                 <DisabledInput optionText="username" />
             </ReferenceInput>
             <TextInput source="note" />

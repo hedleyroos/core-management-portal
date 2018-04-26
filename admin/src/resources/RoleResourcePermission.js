@@ -59,13 +59,13 @@ export const RoleResourcePermissionList = props => (
 export const RoleResourcePermissionCreate = props => (
     <Create {...props} title="RoleResourcePermission Create">
         <SimpleForm validate={validationCreateRoleResourcePermission}>
-            <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
+            <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
                 <SelectInput optionText="label" />
             </ReferenceInput>
-            <ReferenceInput label="Resource" source="resource_id" reference="resources" allowEmpty>
+            <ReferenceInput label="Resource" source="resource_id" reference="resources" perPage={0} allowEmpty>
                 <SelectInput optionText="urn" />
             </ReferenceInput>
-            <ReferenceInput label="Permission" source="permission_id" reference="permissions" allowEmpty>
+            <ReferenceInput label="Permission" source="permission_id" reference="permissions" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
         </SimpleForm>

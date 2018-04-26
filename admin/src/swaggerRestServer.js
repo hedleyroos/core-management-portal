@@ -54,8 +54,10 @@ export const convertRESTRequestToHTTP = ({
         case GET_LIST: {
             if (params.pagination) {
                 const { page, perPage } = params.pagination;
-                query['limit'] = perPage;
-                query['offset'] = (page - 1) * perPage;
+                if (perPage > 0) {
+                    query['limit'] = perPage;
+                    query['offset'] = (page - 1) * perPage;
+                }
             }
 
             if (params.sort) {
