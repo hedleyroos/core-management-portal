@@ -64,10 +64,10 @@ export const DomainRoleList = props => (
 export const DomainRoleCreate = props => (
     <Create {...props} title="DomainRole Create">
         <SimpleForm validate={validationCreateDomainRole}>
-            <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
+            <ReferenceInput label="Domain" source="domain_id" reference="domains" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
+            <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
                 <SelectInput optionText="label" />
             </ReferenceInput>
             <BooleanInput source="grant_implicitly" />

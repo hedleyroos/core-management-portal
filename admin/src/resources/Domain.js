@@ -62,7 +62,7 @@ export const DomainList = props => (
 export const DomainCreate = props => (
     <Create {...props} title="Domain Create">
         <SimpleForm validate={validationCreateDomain}>
-            <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
+            <ReferenceInput label="Parent" source="parent_id" reference="domains" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />
@@ -107,7 +107,7 @@ export const DomainShow = props => (
 export const DomainEdit = props => (
     <Edit {...props} title="Domain Edit">
         <SimpleForm validate={validationEditDomain}>
-            <ReferenceInput label="Parent" source="parent_id" reference="domains" allowEmpty>
+            <ReferenceInput label="Parent" source="parent_id" reference="domains" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
             <TextInput source="name" />

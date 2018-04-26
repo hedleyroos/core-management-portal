@@ -75,10 +75,10 @@ export const UserSiteDataList = props => (
 export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
         <SimpleForm validate={validationCreateUserSiteData}>
-            <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
+            <ReferenceInput label="User" source="user_id" reference="users" perPage={0} allowEmpty>
                 <SelectInput optionText="username" />
             </ReferenceInput>
-            <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
+            <ReferenceInput label="Site" source="site_id" reference="sites" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
             <DateTimeInput source="consented_at" />

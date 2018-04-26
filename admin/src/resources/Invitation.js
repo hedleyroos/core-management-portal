@@ -73,7 +73,7 @@ export const InvitationList = props => (
 export const InvitationCreate = props => (
     <Create {...props} title="Invitation Create">
         <SimpleForm validate={validationCreateInvitation}>
-            <ReferenceInput label="User" source="invitor_id" reference="users" allowEmpty>
+            <ReferenceInput label="User" source="invitor_id" reference="users" perPage={0} allowEmpty>
                 <SelectInput optionText="username" />
             </ReferenceInput>
             <TextInput source="first_name" />

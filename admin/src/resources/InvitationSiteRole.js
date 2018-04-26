@@ -60,13 +60,13 @@ export const InvitationSiteRoleList = props => (
 export const InvitationSiteRoleCreate = props => (
     <Create {...props} title="InvitationSiteRole Create">
         <SimpleForm validate={validationCreateInvitationSiteRole}>
-            <ReferenceInput label="Invitation" source="invitation_id" reference="invitations" allowEmpty>
+            <ReferenceInput label="Invitation" source="invitation_id" reference="invitations" perPage={0} allowEmpty>
                 <SelectInput optionText="email" />
             </ReferenceInput>
-            <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
+            <ReferenceInput label="Site" source="site_id" reference="sites" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
+            <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
                 <SelectInput optionText="label" />
             </ReferenceInput>
         </SimpleForm>
