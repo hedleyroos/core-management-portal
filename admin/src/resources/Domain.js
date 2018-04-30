@@ -26,7 +26,7 @@ import {
 import {
     DomainFilter
 } from '../filters/DomainFilter';
-import UserRoleField from '../fields/UserRoleField';
+import TableField from '../fields/TableField';
 
 const validationCreateDomain = values => {
     const errors = {};
@@ -82,7 +82,7 @@ export const DomainShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <UserRoleField label="Users" target="domain" />
+            <TableField label="Users" url="user_and_roles_by_domain" />
             <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                 <Datagrid bodyOptions={ { showRowHover: true } }>
                     <NumberField source="id" />
@@ -112,7 +112,7 @@ export const DomainEdit = props => (
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
-            <UserRoleField label="Users" target="domain" />
+            <TableField label="Users" url="user_and_roles_by_domain" />
             <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                 <Datagrid bodyOptions={ { showRowHover: true } }>
                     <NumberField source="id" />

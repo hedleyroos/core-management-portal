@@ -13,7 +13,7 @@ import restClient, { OPERATIONAL } from '../swaggerRestServer';
 import { ToTitle } from '../utils';
 import { styles } from '../Theme';
 
-class UserRoleField extends Component {
+class TableField extends Component {
     constructor(props) {
         super(props);
         this.state = { tableHeaders: [], data: [] };
@@ -24,10 +24,16 @@ class UserRoleField extends Component {
     }
 
     getRelatedData = () => {
-        const { record, target, showNotification } = this.props;
+        const {
+            record,
+            url,
+            customParameters
+        } = this.props;
         // PROPER API CALL TO REPLACE THIS WHEN EXISTS.
-        restClient(OPERATIONAL, `user_and_roles_by_${target}`, {
-            pathParameters: { domain_id: record.id },
+        restClient(OPERATIONAL, `${url}`, {
+            pathParameters: customParameters
+                ? customParameters
+                : { id: record.id },
             method: 'GET'
         })
             .then(response => {
@@ -40,9 +46,8 @@ class UserRoleField extends Component {
                     });
                 }
             })
-            .catch(e => {
-                console.error(e);
-                showNotification('Error: Related Aggregate Call Failed!');
+            .catch(error => {
+                throw new Error(error);
             });
     };
 
@@ -107,11 +112,12 @@ class UserRoleField extends Component {
     }
 }
 
-UserRoleField.propTypes = {
+TableField.propTypes = {
     label: PropTypes.string,
     record: PropTypes.object,
-    target: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    customParameters: PropTypes.object,
     isLoading: PropTypes.bool
 };
 
-export default UserRoleField;
+export default TableField;

@@ -28,7 +28,7 @@ import {
 import {
     SiteFilter
 } from '../filters/SiteFilter';
-import UserRoleField from '../fields/UserRoleField';
+import TableField from '../fields/TableField';
 
 const validationCreateSite = values => {
     const errors = {};
@@ -99,7 +99,7 @@ export const SiteShow = props => (
             <BooleanField source="is_active" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <UserRoleField label="Users" target="site" />
+            <TableField label="Users" url="user_and_roles_by_site" />
             <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
                 <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
@@ -125,7 +125,7 @@ export const SiteEdit = props => (
             <TextInput source="name" />
             <TextInput source="description" />
             <BooleanInput source="is_active" />
-            <UserRoleField label="Users" target="site" />
+            <TableField label="Users" url="user_and_roles_by_site" />
             <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
                 <Datagrid bodyOptions={ { showRowHover: true } }>
                     <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
