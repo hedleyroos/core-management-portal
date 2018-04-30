@@ -11,6 +11,7 @@ export const GET_MANY = 'GET_MANY';
 export const GET_MANY_REFERENCE = 'GET_MANY_REFERENCE';
 export const CREATE = 'CREATE';
 export const UPDATE = 'UPDATE';
+export const OPERATIONAL = 'OPERATIONAL';
 export const DELETE = 'DELETE';
 
 const COMPOSITE_KEY_RESOURSES = {
@@ -91,6 +92,16 @@ export const convertRESTRequestToHTTP = ({
             url = `${apiUrl}/${resource}`;
             options.method = 'POST';
             options.body = JSON.stringify(params.data);
+            break;
+        case OPERATIONAL:
+            const pathParameters = params.pathParameters
+                ? Object.values(params.pathParameters).reduce(
+                      (pathString, value) => pathString + `/${value}`,
+                      ''
+                  )
+                : '';
+            url = `${apiUrl}/ops/${resource}` + pathParameters;
+            options.method = params.method;
             break;
         case DELETE:
             url = `${apiUrl}/${resource}/${params.id}`;

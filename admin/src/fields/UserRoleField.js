@@ -9,11 +9,11 @@ import {
     TableRow,
     TableRowColumn
 } from 'material-ui/Table';
-import restClient, { GET_LIST } from '../swaggerRestServer';
+import restClient, { OPERATIONAL } from '../swaggerRestServer';
 import { ToTitle } from '../utils';
 import { styles } from '../Theme';
 
-class UserRoleTableField extends Component {
+class UserRoleField extends Component {
     constructor(props) {
         super(props);
         this.state = { tableHeaders: [], data: [] };
@@ -24,25 +24,14 @@ class UserRoleTableField extends Component {
     }
 
     getRelatedData = () => {
-        const { record, target, reference, showNotification } = this.props;
-        let parameters = { filters: {} };
-        parameters[target] = record.id;
+        const { record, target, showNotification } = this.props;
         // PROPER API CALL TO REPLACE THIS WHEN EXISTS.
-        restClient(GET_LIST, reference, parameters)
+        restClient(OPERATIONAL, `user_and_roles_by_${target}`, {
+            pathParameters: { domain_id: record.id },
+            method: 'GET'
+        })
             .then(response => {
                 let data = response.data;
-                data = [
-                    {
-                        id: 1,
-                        name: 'Fake User 1',
-                        roles: ['tech_admin', 'governance_admin']
-                    },
-                    {
-                        id: 3,
-                        name: 'Fake User 2',
-                        roles: ['role_delagator']
-                    }
-                ];
                 if (data.length > 0) {
                     const tableHeaders = Object.keys(data[0]);
                     this.setState({
@@ -61,20 +50,20 @@ class UserRoleTableField extends Component {
         const { label } = this.props;
         return this.state.data.length > 0 ? (
             <div style={styles.customTableDiv}>
-                <label style={styles.customTableLabel}><span>{label}</span></label>
+                <label style={styles.customTableLabel}>
+                    <span>{label}</span>
+                </label>
                 <Table>
                     <TableHeader
                         displaySelectAll={false}
                         adjustForCheckbox={false}
                     >
                         <TableRow>
-                            {this.state.tableHeaders.map(
-                                (header, index) => (
-                                    <TableHeaderColumn key={index}>
-                                        {ToTitle(header)}
-                                    </TableHeaderColumn>
-                                )
-                            )}
+                            {this.state.tableHeaders.map((header, index) => (
+                                <TableHeaderColumn key={index}>
+                                    {ToTitle(header)}
+                                </TableHeaderColumn>
+                            ))}
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
@@ -83,20 +72,22 @@ class UserRoleTableField extends Component {
                                 {this.state.tableHeaders.map(
                                     (header, index) => (
                                         <TableRowColumn key={index}>
-                                            {entry[header] instanceof
-                                            Array ? (
+                                            {entry[header] instanceof Array ? (
                                                 <div style={styles.wrapper}>
                                                     {entry[header].map(
-                                                        (str, index) => (
-                                                            <Chip
-                                                                key={index}
-                                                                style={
-                                                                    styles.chip
-                                                                }
-                                                            >
-                                                                {str}
-                                                            </Chip>
-                                                        )
+                                                        (str, index) =>
+                                                            str ? (
+                                                                <Chip
+                                                                    key={index}
+                                                                    style={
+                                                                        styles.chip
+                                                                    }
+                                                                >
+                                                                    {str}
+                                                                </Chip>
+                                                            ) : (
+                                                                ''
+                                                            )
                                                     )}
                                                 </div>
                                             ) : (
@@ -116,12 +107,11 @@ class UserRoleTableField extends Component {
     }
 }
 
-UserRoleTableField.propTypes = {
+UserRoleField.propTypes = {
     label: PropTypes.string,
     record: PropTypes.object,
-    reference: PropTypes.string.isRequired,
     target: PropTypes.string.isRequired,
-    isLoading: PropTypes.bool,
+    isLoading: PropTypes.bool
 };
 
-export default UserRoleTableField;
+export default UserRoleField;
