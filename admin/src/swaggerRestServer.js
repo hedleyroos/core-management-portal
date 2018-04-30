@@ -54,10 +54,8 @@ export const convertRESTRequestToHTTP = ({
         case GET_LIST: {
             if (params.pagination) {
                 const { page, perPage } = params.pagination;
-                if (perPage > 0) {
-                    query['limit'] = perPage;
-                    query['offset'] = (page - 1) * perPage;
-                }
+                query['limit'] = perPage > 0 ? perPage : 2000; // Maximum arb chosen limit if perPage = 0.
+                query['offset'] = perPage > 0 ? (page - 1) * perPage : 0;
             }
 
             if (params.sort) {
