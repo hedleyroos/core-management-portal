@@ -82,7 +82,7 @@ export const DomainShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <TableField label="Users" url="user_and_roles_by_domain" />
+            <TableField label="Users" url="users_with_roles_for_domain" />
             <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                 <Datagrid bodyOptions={ { showRowHover: true } }>
                     <NumberField source="id" />
@@ -112,7 +112,7 @@ export const DomainEdit = props => (
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
-            <TableField label="Users" url="user_and_roles_by_domain" />
+            <TableField label="Users" url="users_with_roles_for_domain" />
             <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                 <Datagrid bodyOptions={ { showRowHover: true } }>
                     <NumberField source="id" />
