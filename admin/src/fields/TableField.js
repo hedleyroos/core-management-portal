@@ -10,7 +10,6 @@ import {
     TableRowColumn
 } from 'material-ui/Table';
 import restClient, { OPERATIONAL } from '../swaggerRestServer';
-import { ToTitle } from '../utils';
 import { styles } from '../Theme';
 
 class TableField extends Component {
