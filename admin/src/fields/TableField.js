@@ -24,16 +24,12 @@ class TableField extends Component {
     }
 
     getRelatedData = () => {
-        const {
-            record,
-            url,
-            customParameters
-        } = this.props;
+        const { record, url, customPathParameters } = this.props;
         // PROPER API CALL TO REPLACE THIS WHEN EXISTS.
         restClient(OPERATIONAL, `${url}`, {
-            pathParameters: customParameters
-                ? customParameters
-                : { id: record.id },
+            pathParameters: customPathParameters
+                ? customPathParameters
+                : [record.id],
             method: 'GET'
         })
             .then(response => {
@@ -58,20 +54,23 @@ class TableField extends Component {
                 <label style={styles.customTableLabel}>
                     <span>{label}</span>
                 </label>
-                <Table>
+                <Table selectable={false}>
                     <TableHeader
                         displaySelectAll={false}
                         adjustForCheckbox={false}
                     >
                         <TableRow>
                             {this.state.tableHeaders.map((header, index) => (
-                                <TableHeaderColumn key={index}>
-                                    {ToTitle(header)}
+                                <TableHeaderColumn
+                                    key={index}
+                                    style={styles.customTableHeader}
+                                >
+                                    {header.toUpperCase()}
                                 </TableHeaderColumn>
                             ))}
                         </TableRow>
                     </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
+                    <TableBody displayRowCheckbox={false} showRowHover={true}>
                         {this.state.data.map((entry, index) => (
                             <TableRow key={index}>
                                 {this.state.tableHeaders.map(
@@ -116,8 +115,7 @@ TableField.propTypes = {
     label: PropTypes.string,
     record: PropTypes.object,
     url: PropTypes.string.isRequired,
-    customParameters: PropTypes.object,
-    isLoading: PropTypes.bool
+    customPathParameters: PropTypes.array
 };
 
 export default TableField;

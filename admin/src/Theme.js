@@ -15,14 +15,14 @@ export const styles = {
         minHeight: '100vh',
         height: '1px',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     card: {
-        minWidth: 300,
+        minWidth: 300
     },
     avatar: {
         margin: '1em',
-        textAlign: 'center ',
+        textAlign: 'center '
     },
     customTableDiv: {
         lineHeight: '24px',
@@ -34,6 +34,10 @@ export const styles = {
         fontFamily: 'Roboto, sans-serif',
         cursor: 'auto',
         paddingTop: '2em'
+    },
+    customTableHeader: {
+        fontSize: '14px',
+        color: 'rgba(0, 0, 0, 1)'
     },
     customTableLabel: {
         fontSize: '13px',

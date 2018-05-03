@@ -95,7 +95,7 @@ export const convertRESTRequestToHTTP = ({
             break;
         case OPERATIONAL:
             const pathParameters = params.pathParameters
-                ? Object.values(params.pathParameters).reduce(
+                ? params.pathParameters.reduce(
                       (pathString, value) => pathString + `/${value}`,
                       ''
                   )
