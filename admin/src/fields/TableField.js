@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Chip from 'material-ui/Chip';
 import {
@@ -15,7 +16,7 @@ import { styles } from '../Theme';
 class TableField extends Component {
     constructor(props) {
         super(props);
-        this.state = { tableHeaders: [], data: [] };
+        this.state = { data: [] };
     }
 
     componentWillMount() {
@@ -34,9 +35,7 @@ class TableField extends Component {
             .then(response => {
                 let data = response.data;
                 if (data.length > 0) {
-                    const tableHeaders = Object.keys(data[0]);
                     this.setState({
-                        tableHeaders: tableHeaders,
                         data: data
                     });
                 }
@@ -47,7 +46,7 @@ class TableField extends Component {
     };
 
     render() {
-        const { label } = this.props;
+        const { label, linkField, linkedResource } = this.props;
         return this.state.data.length > 0 ? (
             <div style={styles.customTableDiv}>
                 <label style={styles.customTableLabel}>
@@ -59,9 +58,9 @@ class TableField extends Component {
                         adjustForCheckbox={false}
                     >
                         <TableRow>
-                            {this.state.tableHeaders.map((header, index) => (
+                            {Object.keys(this.state.data[0]).map(header => (
                                 <TableHeaderColumn
-                                    key={index}
+                                    key={header}
                                     style={styles.customTableHeader}
                                 >
                                     {header.toUpperCase()}
@@ -72,33 +71,39 @@ class TableField extends Component {
                     <TableBody displayRowCheckbox={false} showRowHover={true}>
                         {this.state.data.map((entry, index) => (
                             <TableRow key={index}>
-                                {this.state.tableHeaders.map(
-                                    (header, index) => (
-                                        <TableRowColumn key={index}>
-                                            {entry[header] instanceof Array ? (
-                                                <div style={styles.wrapper}>
-                                                    {entry[header].map(
-                                                        (str, index) =>
-                                                            str ? (
-                                                                <Chip
-                                                                    key={index}
-                                                                    style={
-                                                                        styles.chip
-                                                                    }
-                                                                >
-                                                                    {str}
-                                                                </Chip>
-                                                            ) : (
-                                                                ''
-                                                            )
-                                                    )}
-                                                </div>
-                                            ) : (
-                                                entry[header]
-                                            )}
-                                        </TableRowColumn>
-                                    )
-                                )}
+                                {Object.keys(entry).map((header, index) => (
+                                    <TableRowColumn key={index}>
+                                        {entry[header] instanceof Array ? (
+                                            <div style={styles.wrapper}>
+                                                {entry[header].map(
+                                                    (str, index) =>
+                                                        str ? (
+                                                            <Chip
+                                                                key={index}
+                                                                style={
+                                                                    styles.chip
+                                                                }
+                                                            >
+                                                                {str}
+                                                            </Chip>
+                                                        ) : (
+                                                            ''
+                                                        )
+                                                )}
+                                            </div>
+                                        ) : linkField === header && entry.id ? (
+                                            <Link
+                                                to={`/${linkedResource}/${
+                                                    entry.id
+                                                }/show`}
+                                            >
+                                                {entry[header]}
+                                            </Link>
+                                        ) : (
+                                            <span>{entry[header]}</span>
+                                        )}
+                                    </TableRowColumn>
+                                ))}
                             </TableRow>
                         ))}
                     </TableBody>
@@ -113,6 +118,8 @@ class TableField extends Component {
 TableField.propTypes = {
     label: PropTypes.string,
     record: PropTypes.object,
+    linkField: PropTypes.string,
+    linkedResource: PropTypes.string,
     url: PropTypes.string.isRequired,
     customPathParameters: PropTypes.array
 };
