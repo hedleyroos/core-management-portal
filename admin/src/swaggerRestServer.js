@@ -66,7 +66,10 @@ export const convertRESTRequestToHTTP = ({
 
             if (params.filter) {
                 Object.keys(params.filter).forEach(key => {
-                    query[key] = params.filter[key];
+                    query[key] =
+                        params.filter[key] instanceof Object
+                            ? JSON.stringify(params.filter[key])
+                            : params.filter[key];
                 });
             }
 
