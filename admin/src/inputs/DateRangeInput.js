@@ -31,6 +31,15 @@ class DateRangeInput extends Component {
 
     render() {
         const { source } = this.props;
+        const today = new Date();
+        const maxDate =
+            this.state.to !== ''
+                ? new Date(this.state.to)
+                : new Date(today.getFullYear() + 100, today.getMonth(), today.getDay());
+        const minDate =
+            this.state.from !== ''
+                ? new Date(this.state.from)
+                : new Date(today.getFullYear() - 100, today.getMonth(), today.getDay());
         return (
             <span>
                 <Field
@@ -38,7 +47,7 @@ class DateRangeInput extends Component {
                     component={this.component}
                     props={{
                         options: {
-                            maxDate: new Date(this.state.to)
+                            maxDate: maxDate
                         }
                     }}
                     label="From"
@@ -49,7 +58,7 @@ class DateRangeInput extends Component {
                     component={this.component}
                     props={{
                         options: {
-                            minDate: new Date(this.state.from)
+                            minDate: minDate
                         }
                     }}
                     label="To"
