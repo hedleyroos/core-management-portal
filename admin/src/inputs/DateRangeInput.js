@@ -13,8 +13,8 @@ class DateRangeInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            from: '',
-            to: ''
+            from: this.props.input.value.from,
+            to: this.props.input.value.to
         };
         this.component = props.time ? COMPONENTS.datetime : COMPONENTS.date;
         this.handleFromOnChange = this.handleFromOnChange.bind(this);
