@@ -29,6 +29,19 @@ const PK_MAPPING = {
     sitedataschemas: 'site_id'
 };
 
+const FILTER_LENGTHS = {
+    users: {
+        country: 2,
+        email: 3,
+        first_name: 3,
+        last_name: 3,
+        msisdn: 3,
+        nickname: 3,
+        username: 3,
+        q: 3,
+    },
+};
+
 /**
  * @param {String} apiUrl The base API url
  * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
@@ -65,13 +78,17 @@ export const convertRESTRequestToHTTP = ({
             }
 
             if (params.filter) {
+                let filterLengths = FILTER_LENGTHS[resource];
                 Object.keys(params.filter).forEach(key => {
                     let filter =
                         params.filter[key] instanceof Object
                             ? JSON.stringify(params.filter[key])
                             : params.filter[key];
-                    // API filters work on trigrams, therefore only add on 3 characters or more.
-                    if (filter.length > 2) {
+                    let minLength =
+                        filterLengths && filterLengths[key]
+                            ? filterLengths[key]
+                            : 0;
+                    if (minLength === 0 || filter.length >= minLength) {
                         query[key] = filter;
                     }
                 });

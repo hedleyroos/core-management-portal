@@ -13,7 +13,7 @@ import DateRangeInput from '../inputs/DateRangeInput';
 
 export const UserFilter = props => (
     <Filter {...props}>
-	    <TextInput label="Search" source="q" alwaysOn />
+	<TextInput label="Search" source="q" alwaysOn />
         <DateRangeInput label="Birth Date" source="birth_date" />
         <TextInput label="Country" source="country" />
         <DateRangeInput label="Date Joined" source="date_joined" />
@@ -30,7 +30,7 @@ export const UserFilter = props => (
         <NumberInput label="Organisational Unit ID" source="organisational_unit_id" />
         <DateRangeInput label="Updated At" source="updated_at" time />
         <TextInput label="Username" source="username" />
-        <BooleanInput label="Three factor Auth Enabled" source="tfa_enabled" />
+        <BooleanInput label="Two factor Auth Enabled" source="tfa_enabled" />
         <BooleanInput label="Has Organisational Unit" source="has_organisational_unit" />
     </Filter>
 );

@@ -1,3 +1,7 @@
+/** 
+ * Generated DateRangeInput.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
@@ -83,3 +87,4 @@ DateRangeInput.defaultProps = {
     time: false
 };
 export default DateRangeInput;
+/** End of Generated Code **/
