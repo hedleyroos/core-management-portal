@@ -29,9 +29,6 @@ const validationCreateRole = values => {
     if (!values.label) {
         errors.label = ["label is required"];
     }
-    if (!values.requires_2fa) {
-        errors.requires_2fa = ["requires_2fa is required"];
-    }
     return errors;
 }
 

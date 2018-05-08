@@ -17,17 +17,27 @@ import { FieldTitle, translate } from 'admin-on-rest';
  **/
 
 export class AutocompleteInput extends Component {
-    state = { menuDisabled: true };
+    constructor(props) {
+        super(props);
+        this.state = {
+            menuDisabled: true
+        };
+        this.handleOnBlur = this.handleOnBlur.bind(this);
+        this.handleNewRequest = this.handleNewRequest.bind(this);
+        this.handleUpdateInput = this.handleUpdateInput.bind(this);
+        this.getSuggestion = this.getSuggestion.bind(this);
+        this.setSearchText = this.setSearchText.bind(this);
+    }
 
     componentWillMount() {
         this.setSearchText(this.props);
     }
 
-    handleOnBlur = (args) => {
+    handleOnBlur() {
         this.setSearchText(this.props);
     }
 
-    handleNewRequest = (chosenRequest, index) => {
+    handleNewRequest(chosenRequest, index) {
         if (index !== -1) {
             const { choices, input, optionValue } = this.props;
             const selectedSource = choices[index];
@@ -36,7 +46,7 @@ export class AutocompleteInput extends Component {
         }
     };
 
-    handleUpdateInput = searchText => {
+    handleUpdateInput(searchText) {
         this.setState({ text: searchText, menuDisabled: true });
         if (searchText.length >= 3) {
             this.setState({ menuDisabled: false });

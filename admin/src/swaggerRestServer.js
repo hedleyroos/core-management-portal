@@ -66,7 +66,14 @@ export const convertRESTRequestToHTTP = ({
 
             if (params.filter) {
                 Object.keys(params.filter).forEach(key => {
-                    query[key] = params.filter[key];
+                    let filter =
+                        params.filter[key] instanceof Object
+                            ? JSON.stringify(params.filter[key])
+                            : params.filter[key];
+                    // API filters work on trigrams, therefore only add on 3 characters or more.
+                    if (filter.length > 2) {
+                        query[key] = filter;
+                    }
                 });
             }
 

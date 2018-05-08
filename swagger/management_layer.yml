@@ -374,11 +374,11 @@ definitions:
         $ref: '#/definitions/role_label'
       requires_2fa:
         type: boolean
+        default: true
       description:
         type: string
     required:
       - label
-      - requires_2fa
 
   role_update:
     type: object
@@ -1377,6 +1377,62 @@ definitions:
         maxLength: 2
     minProperties: 1
 
+  resource_permission:
+    type: object
+    properties:
+      resource:
+        type: string
+        format: uri
+      permission:
+        type: string
+    required:
+      - resource
+      - permission
+
+  user_permissions_check:
+    type: object
+    properties:
+      operator:
+        type: string
+        enum: [all, any]
+      resource_permissions:
+        type: array
+        items:
+          $ref: '#/definitions/resource_permission'
+      site_id:
+        type: integer
+      domain_id:
+        type: integer
+      nocache:
+        type: boolean
+        default: false
+    required:
+      - operator
+      - resource_permissions
+      # site_id or domain_id is required
+
+  user_permissions_check_response:
+    type: object
+    properties:
+      has_permissions:
+        type: boolean
+    required:
+      - has_permissions
+
+  user_with_roles:
+    description: 'A user with their roles.'
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      username:
+        type: string
+      roles:
+        type: array
+        items:
+          type: string
+
 paths:
   /refresh/all:
     parameters:
@@ -1392,6 +1448,20 @@ paths:
         403:
          description: "Forbidden"
 
+  /refresh/clients:
+    parameters:
+      - $ref: '#/parameters/optional_nocache'
+    get:
+      description: "Refresh OIDC client information"
+      operationId: refresh_clients
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Successfully refreshed OIDC client data"
+        403:
+         description: "Forbidden"
+
   /refresh/domains:
     parameters:
       - $ref: '#/parameters/optional_nocache'
@@ -1403,6 +1473,20 @@ paths:
       responses:
         200:
           description: "Successfully refreshed domain mapping data"
+        403:
+         description: "Forbidden"
+
+  /refresh/keys:
+    parameters:
+      - $ref: '#/parameters/optional_nocache'
+    get:
+      description: "Refresh JWKS information"
+      operationId: refresh_keys
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Successfully refreshed keys data"
         403:
          description: "Forbidden"
 
@@ -1550,6 +1634,78 @@ paths:
             $ref: '#/definitions/all_user_roles'
         403:
           description: 'Forbidden'
+        404:
+          description: 'User not found'
+      tags:
+        - operational
+
+  /ops/users_with_roles_for_domain/{domain_id}:
+    parameters:
+      - $ref: '#/parameters/domain_id'
+    get:
+      description: 'Get a list of Users with their effective roles within the given domain.'
+      operationId: get_users_with_roles_for_domain
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user_with_roles'
+        403:
+          description: 'Forbidden'
+        404:
+          description: 'Domain not found'
+      tags:
+        - operational
+
+  /ops/users_with_roles_for_site/{site_id}:
+    parameters:
+      - $ref: '#/parameters/site_id'
+    get:
+      description: 'Get a list of Users with their effective roles within the given site.'
+      operationId: get_users_with_roles_for_site
+      produces:
+        - application/json
+      responses:
+        200:
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user_with_roles'
+        403:
+          description: 'Forbidden'
+        404:
+          description: 'Site not found'
+      tags:
+        - operational
+
+  /ops/user_has_permissions/{user_id}:
+    parameters:
+      - $ref: '#/parameters/user_id'
+      - in: body
+        name: data
+        schema:
+          $ref: '#/definitions/user_permissions_check'
+    post:
+      description: 'Check of the user has the specified resource permissions'
+      operationId: user_has_permissions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: 'True if the user has the permissions, else False'
+          schema:
+            $ref: '#/definitions/user_permissions_check_response'
+        403:
+          description: 'Forbidden'
+        400:
+          description: 'Bad Request'
         404:
           description: 'User not found'
       tags:
@@ -2930,7 +3086,7 @@ paths:
               $ref: '#/definitions/client'
 
       tags:
-        - oidc_provider
+        - authentication
 
   /clients/{client_id}:
     parameters:
@@ -2953,17 +3109,120 @@ paths:
       parameters:
         - $ref: '#/parameters/optional_offset'
         - $ref: '#/parameters/optional_limit'
+        - name: birth_date
+          description: An optional birth_date range filter
+          in: query
+          required: false
+          type: string
+        - name: country
+          description: An optional country filter
+          in: query
+          required: false
+          type: string
+          minLength: 2
+          maxLength: 2
+        - name: date_joined
+          description: An optional date joined range filter
+          in: query
+          required: false
+          type: string
         - name: email
-          description: An optional email filter
+          description: An optional case insensitive email inner match filter
           in: query
           required: false
           type: string
-          format: email
-        - name: username_prefix
-          description: An optional username prefix filter
+          minLength: 3
+        - name: email_verified
+          description: An optional email verified filter
+          in: query
+          required: false
+          type: boolean
+        - name: first_name
+          description: An optional case insensitive first name inner match filter
           in: query
           required: false
           type: string
+          minLength: 3
+        - name: gender
+          description: An optional gender filter
+          in: query
+          required: false
+          type: string
+        - name: is_active
+          description: An optional is_active filter
+          in: query
+          required: false
+          type: boolean
+        - name: last_login
+          description: An optional last login range filter
+          in: query
+          required: false
+          type: string
+        - name: last_name
+          description: An optional case insensitive last name inner match filter
+          in: query
+          required: false
+          type: string
+          minLength: 3
+        - name: msisdn
+          description: An optional case insensitive MSISDN inner match filter
+          in: query
+          required: false
+          type: string
+          minLength: 3
+        - name: msisdn_verified
+          description: An optional MSISDN verified filter
+          in: query
+          required: false
+          type: boolean
+        - name: nickname
+          description: An optional case insensitive nickname inner match filter
+          in: query
+          required: false
+          type: string
+          minLength: 3
+        - name: organisational_unit_id
+          description: An optional filter on the organisational unit id
+          in: query
+          required: false
+          type: integer
+        - name: updated_at
+          description: An optional updated_at range filter
+          in: query
+          required: false
+          type: string
+        - name: username
+          description: An optional case insensitive username inner match filter
+          in: query
+          required: false
+          type: string
+          minLength: 3
+        - name: q
+          description: An optional case insensitive inner match filter across all searchable text fields
+          in: query
+          required: false
+          type: string
+          minLength: 3
+        - name: tfa_enabled
+          description: An optional filter based on whether a user has 2FA enabled or not
+          in: query
+          required: false
+          type: boolean
+        - name: has_organisational_unit
+          description: An optional filter based on whether a user has an organisational unit or not
+          in: query
+          required: false
+          type: boolean
+        - name: order_by
+          description: Fields and directions to order by, e.g. "-created_at,username". Add "-" in front
+            of a field name to indicate descending order.
+          in: query
+          required: false
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+          uniqueItems: true
         - name: user_ids
           description: An optional list of user ids
           in: query
@@ -2989,7 +3248,7 @@ paths:
             items:
               $ref: '#/definitions/user'
       tags:
-        - oidc_provider
+        - authentication
 
   '/users/{user_id}':
     parameters:
@@ -3000,7 +3259,7 @@ paths:
         '204':
           description: ''
       tags:
-        - oidc_provider
+        - authentication
     get:
       operationId: user_read
       produces:
@@ -3011,7 +3270,7 @@ paths:
           schema:
             $ref: '#/definitions/user'
       tags:
-        - oidc_provider
+        - authentication
 
     put:
       consumes:
@@ -3027,8 +3286,10 @@ paths:
       responses:
         '200':
           description: ''
+          schema:
+            $ref: '#/definitions/user'
       tags:
-        - oidc_provider
+        - authentication
 
   '/users/{user_id}/activate':
     parameters:
