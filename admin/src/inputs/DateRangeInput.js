@@ -32,35 +32,43 @@ class DateRangeInput extends Component {
     render() {
         const { source } = this.props;
         const today = new Date();
-        const maxDate =
-            this.state.to !== ''
-                ? new Date(this.state.to)
-                : new Date(today.getFullYear() + 100, today.getMonth(), today.getDay());
-        const minDate =
-            this.state.from !== ''
-                ? new Date(this.state.from)
-                : new Date(today.getFullYear() - 100, today.getMonth(), today.getDay());
+        const fromProps = {
+            options: {
+                maxDate:
+                    this.state.to !== ''
+                        ? new Date(this.state.to)
+                        : new Date(
+                              today.getFullYear() + 100,
+                              today.getMonth(),
+                              today.getDay()
+                          )
+            }
+        };
+        const toProps = {
+            options: {
+                minDate:
+                    this.state.from !== ''
+                        ? new Date(this.state.from)
+                        : new Date(
+                              today.getFullYear() - 100,
+                              today.getMonth(),
+                              today.getDay()
+                          )
+            }
+        };
         return (
             <span>
                 <Field
                     name={`${source}.from`}
                     component={this.component}
-                    props={{
-                        options: {
-                            maxDate: maxDate
-                        }
-                    }}
+                    props={fromProps}
                     label="From"
                     onChange={this.handleFromOnChange}
                 />
                 <Field
                     name={`${source}.to`}
                     component={this.component}
-                    props={{
-                        options: {
-                            minDate: minDate
-                        }
-                    }}
+                    props={toProps}
                     label="To"
                     onChange={this.handleToOnChange}
                 />
