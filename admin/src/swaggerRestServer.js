@@ -31,14 +31,31 @@ const PK_MAPPING = {
 
 const FILTER_LENGTHS = {
     users: {
-        country: 2,
-        email: 3,
-        first_name: 3,
-        last_name: 3,
-        msisdn: 3,
-        nickname: 3,
-        username: 3,
-        q: 3,
+        country: {
+            min: 2,
+            max: 2
+        },
+        email: {
+            min: 3,
+        },
+        first_name: {
+            min: 3,
+        },
+        last_name: {
+            min: 3,
+        },
+        msisdn: {
+            min: 3,
+        },
+        nickname: {
+            min: 3,
+        },
+        username: {
+            min: 3,
+        },
+        q: {
+            min: 3,
+        },
     },
 };
 
@@ -84,11 +101,17 @@ export const convertRESTRequestToHTTP = ({
                         params.filter[key] instanceof Object
                             ? JSON.stringify(params.filter[key])
                             : params.filter[key];
-                    let minLength =
-                        filterLengths && filterLengths[key]
-                            ? filterLengths[key]
-                            : 0;
-                    if (minLength === 0 || filter.length >= minLength) {
+                    if (filterLengths && filterLengths[key]) {
+                        const minLength = filterLengths[key].min;
+                        const maxLength = filterLengths[key].max;
+                        if (!minLength || filter.length >= minLength) {
+                            filter =
+                                maxLength && filter.length > maxLength
+                                    ? filter.slice(0, maxLength)
+                                    : filter;
+                            query[key] = filter;
+                        }
+                    } else {
                         query[key] = filter;
                     }
                 });
