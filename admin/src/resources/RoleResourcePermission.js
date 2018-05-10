@@ -21,6 +21,7 @@ import {
 import {
     RoleResourcePermissionFilter
 } from '../filters/RoleResourcePermissionFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};
@@ -51,7 +52,7 @@ export const RoleResourcePermissionList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore('roleresourcepermissions', 'delete') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

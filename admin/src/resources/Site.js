@@ -29,6 +29,7 @@ import {
     SiteFilter
 } from '../filters/SiteFilter';
 import TableField from '../fields/TableField';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateSite = values => {
     const errors = {};
@@ -61,9 +62,9 @@ export const SiteList = props => (
             <BooleanField source="is_active" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore('sites', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore('sites', 'delete') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -133,7 +134,6 @@ export const SiteEdit = props => (
                     </ReferenceField>
                     <DateField source="created_at" />
                     <DateField source="updated_at" />
-                    <EditButton />
                 </Datagrid>
             </ReferenceManyField>
         </SimpleForm>

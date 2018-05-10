@@ -1,7 +1,7 @@
 /**
  * Generated Menu.js code. Edit at own risk.
  * When regenerated the changes will be lost.
- **/
+**/
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
@@ -37,27 +37,25 @@ const ICONS = {
     adminnotes: <SpeakerNoteIcon />,
     sitedataschemas: <ListIcon />,
     clients: <DeviceIcon />,
-    users: <PeopleIcon />
+    users: <PeopleIcon />,
 };
 
-const Menu = ({ resources, onMenuTap, logout }) => {
-    return (
-        <div>
-            {resources
-                ? resources.map(resource => (
-                      <MenuItemLink
-                          key={resource.name}
-                          to={`/${resource.name}`}
-                          primaryText={`${titleCase(resource.name)}`}
-                          onClick={onMenuTap}
-                          leftIcon={ICONS[resource.name]}
-                      />
-                  ))
-                : ''}
-            {logout}
-        </div>
-    );
-};
+const Menu = ({ resources, onMenuTap, logout }) => (
+    <div>
+        {resources
+            ? resources.map(resource => (
+                    <MenuItemLink
+                        key={resource.name}
+                        to={`/${resource.name}`}
+                        primaryText={`${titleCase(resource.name)}`}
+                        onClick={onMenuTap}
+                        leftIcon={ICONS[resource.name]}
+                    />
+                ))
+            : ''}
+        {logout}
+    </div>
+);
 
 const mapStateToProps = state => ({
     resources: getResources(state)

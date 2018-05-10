@@ -25,6 +25,7 @@ import {
 import {
     SiteRoleFilter
 } from '../filters/SiteRoleFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateSiteRole = values => {
     const errors = {};
@@ -54,9 +55,9 @@ export const SiteRoleList = props => (
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore('siteroles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore('siteroles', 'delete') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

@@ -17,6 +17,7 @@ import {
 import {
     ClientFilter
 } from '../filters/ClientFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />}>
@@ -34,7 +35,6 @@ export const ClientList = props => (
             <TextField source="terms_url" />
             <TextField source="website_url" />
             <ShowButton />
-            <DeleteButton />
         </Datagrid>
     </List>
 )

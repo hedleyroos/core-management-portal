@@ -31,6 +31,7 @@ import {
 import {
     UserSiteDataFilter
 } from '../filters/UserSiteDataFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateUserSiteData = values => {
     const errors = {};
@@ -65,9 +66,9 @@ export const UserSiteDataList = props => (
             <BooleanField source="blocked" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore('usersitedata', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore('usersitedata', 'delete') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

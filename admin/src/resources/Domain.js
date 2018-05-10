@@ -27,6 +27,7 @@ import {
     DomainFilter
 } from '../filters/DomainFilter';
 import TableField from '../fields/TableField';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateDomain = values => {
     const errors = {};
@@ -52,9 +53,9 @@ export const DomainList = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore('domains', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore('domains', 'delete') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -119,7 +120,6 @@ export const DomainEdit = props => (
                     <TextField source="name" />
                     <DateField source="created_at" />
                     <DateField source="updated_at" />
-                    <EditButton />
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
@@ -129,7 +129,6 @@ export const DomainEdit = props => (
                     </ReferenceField>
                     <DateField source="created_at" />
                     <DateField source="updated_at" />
-                    <EditButton />
                 </Datagrid>
             </ReferenceManyField>
         </SimpleForm>

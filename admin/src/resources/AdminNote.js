@@ -26,6 +26,7 @@ import {
 import {
     AdminNoteFilter
 } from '../filters/AdminNoteFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateAdminNote = values => {
     const errors = {};
@@ -59,9 +60,9 @@ export const AdminNoteList = props => (
             <TextField source="note" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore('adminnotes', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore('adminnotes', 'delete') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

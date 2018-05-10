@@ -1,3 +1,7 @@
+/**
+ * Generated utils.js code. Edit at own risk.
+ * When regenerated the changes will be lost.
+**/
 export const GenerateQueryString = parameters => {
     return Object.entries(parameters)
         .map(
@@ -7,6 +11,7 @@ export const GenerateQueryString = parameters => {
         .join('&');
 };
 
+// Produce a title case string
 export const titleCase = string => {
     return string
         .toLowerCase()
@@ -16,3 +21,4 @@ export const titleCase = string => {
         })
         .join(' ');
 };
+/** End of Generated Code **/
