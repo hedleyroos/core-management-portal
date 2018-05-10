@@ -60,9 +60,9 @@ export const AdminNoteList = props => (
             <TextField source="note" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore('adminnotes', 'edit') ? <EditButton /> : null}
+            {permissionsStore.getResourcePermission('adminnotes', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore('adminnotes', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('adminnotes', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

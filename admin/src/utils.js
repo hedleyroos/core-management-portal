@@ -21,4 +21,5 @@ export const titleCase = string => {
         })
         .join(' ');
 };
+
 /** End of Generated Code **/

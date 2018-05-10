@@ -64,9 +64,9 @@ export const InvitationList = props => (
             <DateField source="expires_at" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore('invitations', 'edit') ? <EditButton /> : null}
+            {permissionsStore.getResourcePermission('invitations', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore('invitations', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('invitations', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

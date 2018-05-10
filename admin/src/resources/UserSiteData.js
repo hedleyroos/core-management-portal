@@ -66,9 +66,9 @@ export const UserSiteDataList = props => (
             <BooleanField source="blocked" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore('usersitedata', 'edit') ? <EditButton /> : null}
+            {permissionsStore.getResourcePermission('usersitedata', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore('usersitedata', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('usersitedata', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

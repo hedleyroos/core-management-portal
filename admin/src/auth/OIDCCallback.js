@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router'
-import queryString from 'query-string'
+import { Redirect } from 'react-router';
+import queryString from 'query-string';
+import permissionsStore from '../auth/PermissionsStore';
 
 class OIDCCallback extends Component {
     render () {
@@ -11,7 +12,11 @@ class OIDCCallback extends Component {
                 <Redirect push to="/login" />
             )
         }
+        localStorage.removeItem('permissions');
         localStorage.setItem('id_token', parsed_query.id_token);
+        let userPermissions = ["admin", "dude"];
+        localStorage.setItem('permissions', userPermissions);
+        permissionsStore.loadPermissions(userPermissions);
         return (
             <Redirect push to="/" />
         )

@@ -11,13 +11,11 @@ import {
     BooleanField,
     Show,
     SimpleShowLayout,
-    DeleteButton,
     ShowButton
 } from 'admin-on-rest';
 import {
     ClientFilter
 } from '../filters/ClientFilter';
-import permissionsStore from '../auth/PermissionsStore';
 
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />}>

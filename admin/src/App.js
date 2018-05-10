@@ -7,7 +7,7 @@ import { Admin, Delete, Resource } from 'admin-on-rest';
 import restClient from './swaggerRestServer';
 import authClient from './auth/authClient';
 import AuthLoginPage from './auth/authLogin';
-import permissionsStore from '../auth/PermissionsStore';
+import permissionsStore from './auth/PermissionsStore';
 import customRoutes from './customRoutes';
 import Menu from './Menu';
 import { muiTheme } from './Theme';
@@ -133,7 +133,7 @@ import {
 
 const App = () => (
     <Admin title="Girl Effect Management Portal" menu={Menu} theme={muiTheme} restClient={restClient} authClient={authClient} loginPage={AuthLoginPage} customRoutes={customRoutes} >
-        {[
+        {permissions => [
             permissionsStore.getResourcePermission('domains', 'list')
                 ? <Resource
                       name="domains"

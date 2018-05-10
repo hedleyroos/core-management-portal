@@ -62,9 +62,9 @@ export const SiteList = props => (
             <BooleanField source="is_active" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore('sites', 'edit') ? <EditButton /> : null}
+            {permissionsStore.getResourcePermission('sites', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore('sites', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('sites', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

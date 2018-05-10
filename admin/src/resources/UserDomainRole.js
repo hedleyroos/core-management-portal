@@ -53,7 +53,7 @@ export const UserDomainRoleList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            {permissionsStore('userdomainroles', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('userdomainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

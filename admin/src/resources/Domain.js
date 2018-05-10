@@ -53,9 +53,9 @@ export const DomainList = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore('domains', 'edit') ? <EditButton /> : null}
+            {permissionsStore.getResourcePermission('domains', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore('domains', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('domains', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

@@ -53,7 +53,7 @@ export const InvitationSiteRoleList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            {permissionsStore('invitationsiteroles', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

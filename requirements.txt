@@ -1,1 +1,1 @@
--e git+https://github.com/praekelt/swagger-aor-generator.git@feature/Permissions#egg=swagger-aor-generator
+-e git+https://github.com/praekelt/swagger-aor-generator.git@master#egg=swagger-aor-generator

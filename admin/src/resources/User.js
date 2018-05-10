@@ -56,9 +56,9 @@ export const UserList = props => (
             <TextField source="country_code" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore('users', 'edit') ? <EditButton /> : null}
+            {permissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore('users', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

@@ -1,5 +1,3 @@
-import { allowAccess } from './utils';
-
 /**
  * Generated authPermissions.js code. Edit at own risk.
  * When regenerated the changes will be lost.
@@ -135,11 +133,19 @@ class PermissionsStore {
                 },
                 {}
             );
+            return null;
         });
     }
     getResourcePermission(resource, permission) {
         if (this.permissionFlags) {
             return this.permissionFlags[resource][permission];
+        } else {
+            let userPermissions = localStorage.getItem('permissions');
+            if (userPermissions) {
+                userPermissions = userPermissions.split(',');
+                this.loadPermissions(userPermissions);
+                return this.permissionFlags[resource][permission];
+            }
         }
         console.error("Permissions Store has not been loaded with user permissions yet!")
     }

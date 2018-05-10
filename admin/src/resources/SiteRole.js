@@ -55,9 +55,9 @@ export const SiteRoleList = props => (
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore('siteroles', 'edit') ? <EditButton /> : null}
+            {permissionsStore.getResourcePermission('siteroles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore('siteroles', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('siteroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

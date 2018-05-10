@@ -47,9 +47,9 @@ export const RoleList = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore('roles', 'edit') ? <EditButton /> : null}
+            {permissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore('roles', 'delete') ? <DeleteButton />: null}
+            {permissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
