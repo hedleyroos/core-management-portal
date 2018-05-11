@@ -6,3 +6,20 @@ export const GenerateQueryString = parameters => {
         )
         .join('&');
 };
+
+export const generateNonce = () => {
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
+    const result = [];
+    window.crypto.getRandomValues(new Uint8Array(32)).forEach(c =>
+        result.push(charset[c % charset.length]));
+    return result.join('');
+};
+
+export const base64urlDecode = str => {
+    return new Buffer(base64urlUnescape(str), 'base64').toString();
+};
+
+const base64urlUnescape = str => {
+    str += Array(5 - str.length % 4).join('=');
+    return str.replace(/-/g, '+').replace(/_/g, '/');
+};
