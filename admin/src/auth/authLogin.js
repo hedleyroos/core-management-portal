@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Card, CardActions } from 'material-ui/Card';
+import {Card, CardActions} from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import RaisedButton from 'material-ui/RaisedButton';
 import LockIcon from 'material-ui/svg-icons/action/lock-outline';
-import { pink500, pink300 } from 'material-ui/styles/colors';
+import {pink300, pink500} from 'material-ui/styles/colors';
 
-import { userLogin } from 'admin-on-rest';
+import {userLogin} from 'admin-on-rest';
 
-import { muiTheme, styles } from '../Theme'
-import { GenerateQueryString } from '../utils';
+import {muiTheme, styles} from '../Theme'
+import {generateNonce, GenerateQueryString} from '../utils';
 
 const OIDC_PROVIDER_URL = process.env.REACT_APP_AUTHORIZATION_ENDPOINT;
 const OIDC_PROVIDER_SCOPE = 'openid profile roles';
@@ -34,30 +34,22 @@ To summarise:
 
 */
 
-function generateNonce() {
-    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~'
-    const result = [];
-    window.crypto.getRandomValues(new Uint8Array(32)).forEach(c =>
-        result.push(charset[c % charset.length]));
-    return result.join('');
-}
-
 class AuthLoginPage extends Component {
     render() {
-        let query_arguments = {};
+        let queryArguments = {};
 
         Object.keys(OIDC_QUERY_ARGUMENTS).forEach(function(key) {
-             query_arguments[ key ] = OIDC_QUERY_ARGUMENTS[ key ];
+             queryArguments[ key ] = OIDC_QUERY_ARGUMENTS[ key ];
         });
-        query_arguments.state = btoa(new Date());
-        query_arguments.nonce = generateNonce();
+        queryArguments.state = btoa(new Date());
+        queryArguments.nonce = generateNonce();
 
         // Store values so that they can be used for validation in OIDCCallback.js
-        localStorage.setItem('auth_state', query_arguments.state);
-        localStorage.setItem("auth_nonce", query_arguments.nonce);
+        localStorage.setItem('auth_state', queryArguments.state);
+        localStorage.setItem("auth_nonce", queryArguments.nonce);
 
-        const query_string = GenerateQueryString(query_arguments);
-        const login_url = `${OIDC_PROVIDER_URL}?${query_string}`;
+        const queryString = GenerateQueryString(queryArguments);
+        const loginUrl = `${OIDC_PROVIDER_URL}?${queryString}`;
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={{ ...styles.main, backgroundColor: pink500 }}>
@@ -73,7 +65,7 @@ class AuthLoginPage extends Component {
                         <p>Login with Girl Effect OIDC Provider</p>
                             <RaisedButton
                                 type='button'
-                                href={login_url}
+                                href={ loginUrl}
                                 primary
                                 label='Login'
                                 fullWidth
