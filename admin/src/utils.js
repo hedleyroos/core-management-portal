@@ -8,10 +8,11 @@ export const GenerateQueryString = parameters => {
 };
 
 export const generateNonce = () => {
-    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~'
-    return window.crypto.getRandomValues(new Uint8Array(32)).map(
-        c => {return charset[c % charset.length]}
-        ).join('');
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
+    const result = [];
+    window.crypto.getRandomValues(new Uint8Array(32)).forEach(c =>
+        result.push(charset[c % charset.length]));
+    return result.join('');
 };
 
 export const base64urlDecode = str => {
