@@ -10,6 +10,7 @@ export default (type, params) => {
             })
             localStorage.removeItem('id_token');
             localStorage.removeItem('auth_state');
+            localStorage.removeItem('permissions');
             let logoutURL = `${process.env.REACT_APP_LOGOUT_URL}?${logoutQueryString}`;
             window.location.href = logoutURL;
         }
