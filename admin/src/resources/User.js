@@ -59,13 +59,8 @@ export const UserList = props => (
             <DateField source="updated_at" />
             {permissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
             <ShowButton />
-<<<<<<< HEAD
-            <DeleteButton />
-        </FieldSelectDatagrid>
-=======
             {permissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton />: null}
-        </Datagrid>
->>>>>>> 77b68ab6ce86fb295c4e0a81c33f6ba05735ea2d
+        </FieldSelectDatagrid>
     </List>
 )
 
