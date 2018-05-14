@@ -49,5 +49,11 @@ export const styles = {
     wrapper: {
         display: 'flex',
         flexWrap: 'wrap'
+    },
+    cardCentered: {
+        textAlign: 'center'
+    },
+    circularProgress: {
+        padding: '50px'
     }
 };

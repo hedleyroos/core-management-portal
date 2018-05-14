@@ -11,7 +11,6 @@ export const GenerateQueryString = parameters => {
         .join('&');
 };
 
-<<<<<<< HEAD
 // Produce a title case string
 export const titleCase = string => {
     return string
@@ -23,8 +22,6 @@ export const titleCase = string => {
         .join(' ');
 };
 
-/** End of Generated Code **/
-=======
 export const generateNonce = () => {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
     const result = [];
@@ -41,4 +38,4 @@ const base64urlUnescape = str => {
     str += Array(5 - str.length % 4).join('=');
     return str.replace(/-/g, '+').replace(/_/g, '/');
 };
->>>>>>> c8e1d3495473d40e3f132a05961e76ec10eda877
+/** End of Generated Code **/
