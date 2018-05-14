@@ -29,6 +29,7 @@ import {
 import {
     UserFilter
 } from '../filters/UserFilter';
+import FieldSelectDatagrid from '../listings/FieldSelectDatagrid';
 
 const validationEditUser = values => {
     const errors = {};
@@ -37,7 +38,7 @@ const validationEditUser = values => {
 
 export const UserList = props => (
     <List {...props} title="User List" filters={<UserFilter />}>
-        <Datagrid bodyOptions={ { showRowHover: true } }>
+        <FieldSelectDatagrid bodyOptions={ { showRowHover: true } }>
             <TextField source="id" />
             <TextField source="username" />
             <TextField source="first_name" />
@@ -58,7 +59,7 @@ export const UserList = props => (
             <EditButton />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 )
 
