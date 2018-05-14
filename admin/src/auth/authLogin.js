@@ -1,41 +1,55 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Card, CardActions } from 'material-ui/Card';
+import {Card, CardActions} from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import RaisedButton from 'material-ui/RaisedButton';
 import LockIcon from 'material-ui/svg-icons/action/lock-outline';
-import { pink500, pink300 } from 'material-ui/styles/colors';
+import {pink300, pink500} from 'material-ui/styles/colors';
 
-import { userLogin } from 'admin-on-rest';
+import {userLogin} from 'admin-on-rest';
 
-import { muiTheme, styles } from '../Theme'
-import { GenerateQueryString } from '../utils';
+import {muiTheme, styles} from '../Theme'
+import {generateNonce, GenerateQueryString} from '../utils';
 
 const OIDC_PROVIDER_URL = process.env.REACT_APP_AUTHORIZATION_ENDPOINT;
 const OIDC_PROVIDER_SCOPE = 'openid profile roles';
 const OIDC_PROVIDER_CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 const OIDC_PROVIDER_REDIRECT_URI = process.env.REACT_APP_PORTAL_URL + process.env.REACT_APP_PORTAL_LOGIN_CALLBACK
-const OIDC_PROVIDER_STATE = btoa(new Date());
-const OIDC_PROVIDER_NONCE = btoa(OIDC_PROVIDER_STATE);
 
-const oidc_query_arguments = {
+const OIDC_QUERY_ARGUMENTS = {
     scope: `${OIDC_PROVIDER_SCOPE}`,
     response_type: `id_token token`,
     client_id: `${OIDC_PROVIDER_CLIENT_ID}`,
     redirect_uri: `${OIDC_PROVIDER_REDIRECT_URI}`,
-    state: `${OIDC_PROVIDER_STATE}`,
-    nonce: `${OIDC_PROVIDER_NONCE}`
 }
 
-const oidc_query_string = GenerateQueryString(oidc_query_arguments);
+/* The following link describes the difference between the state and nonce parameters nicely:
+https://stackoverflow.com/questions/46844285/difference-between-oauth-2-0-state-and-openid-nonce-parameter-why-state-cou
 
-const login_url = `${OIDC_PROVIDER_URL}?${oidc_query_string}`;
+To summarise:
+* the `state` parameter is used to protect against CSRF attacks
+* the `nonce` parameter is a token validation parameter, since the nonce will be contained in the token returned
+
+*/
 
 class AuthLoginPage extends Component {
     render() {
-        localStorage.setItem('auth_state', OIDC_PROVIDER_STATE);
+        let queryArguments = {};
+
+        Object.keys(OIDC_QUERY_ARGUMENTS).forEach(function(key) {
+             queryArguments[ key ] = OIDC_QUERY_ARGUMENTS[ key ];
+        });
+        queryArguments.state = btoa(new Date());
+        queryArguments.nonce = generateNonce();
+
+        // Store values so that they can be used for validation in OIDCCallback.js
+        localStorage.setItem('auth_state', queryArguments.state);
+        localStorage.setItem("auth_nonce", queryArguments.nonce);
+
+        const queryString = GenerateQueryString(queryArguments);
+        const loginUrl = `${OIDC_PROVIDER_URL}?${queryString}`;
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={{ ...styles.main, backgroundColor: pink500 }}>
@@ -51,7 +65,7 @@ class AuthLoginPage extends Component {
                         <p>Login with Girl Effect OIDC Provider</p>
                             <RaisedButton
                                 type='button'
-                                href={login_url}
+                                href={ loginUrl}
                                 primary
                                 label='Login'
                                 fullWidth
