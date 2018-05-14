@@ -24,6 +24,7 @@ import {
 import {
     ObjectField
 } from '../fields/ObjectField';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};
@@ -50,9 +51,9 @@ export const SiteDataSchemaList = props => (
             <ObjectField source="schema" addLabel />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore.getResourcePermission('sitedataschemas', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('sitedataschemas', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

@@ -22,6 +22,7 @@ import {
 import {
     ResourceFilter
 } from '../filters/ResourceFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateResource = values => {
     const errors = {};
@@ -44,9 +45,9 @@ export const ResourceList = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore.getResourcePermission('resources', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('resources', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

@@ -22,6 +22,7 @@ import {
 import {
     InvitationDomainRoleFilter
 } from '../filters/InvitationDomainRoleFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateInvitationDomainRole = values => {
     const errors = {};
@@ -52,7 +53,7 @@ export const InvitationDomainRoleList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('invitationdomainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

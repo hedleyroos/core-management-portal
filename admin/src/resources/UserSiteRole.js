@@ -22,6 +22,7 @@ import {
 import {
     UserSiteRoleFilter
 } from '../filters/UserSiteRoleFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateUserSiteRole = values => {
     const errors = {};
@@ -52,7 +53,7 @@ export const UserSiteRoleList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('usersiteroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

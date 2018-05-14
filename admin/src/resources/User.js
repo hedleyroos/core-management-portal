@@ -29,6 +29,7 @@ import {
 import {
     UserFilter
 } from '../filters/UserFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationEditUser = values => {
     const errors = {};
@@ -55,9 +56,9 @@ export const UserList = props => (
             <TextField source="country_code" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -146,7 +147,6 @@ export const UserEdit = props => (
                     </ReferenceField>
                     <DateField source="created_at" />
                     <DateField source="updated_at" />
-                    <EditButton />
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
@@ -159,7 +159,6 @@ export const UserEdit = props => (
                     <BooleanField source="blocked" />
                     <DateField source="created_at" />
                     <DateField source="updated_at" />
-                    <EditButton />
                 </Datagrid>
             </ReferenceManyField>
             <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
@@ -172,7 +171,6 @@ export const UserEdit = props => (
                     </ReferenceField>
                     <DateField source="created_at" />
                     <DateField source="updated_at" />
-                    <EditButton />
                 </Datagrid>
             </ReferenceManyField>
         </SimpleForm>

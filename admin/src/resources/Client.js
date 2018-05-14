@@ -11,7 +11,6 @@ import {
     BooleanField,
     Show,
     SimpleShowLayout,
-    DeleteButton,
     ShowButton
 } from 'admin-on-rest';
 import {
@@ -34,7 +33,6 @@ export const ClientList = props => (
             <TextField source="terms_url" />
             <TextField source="website_url" />
             <ShowButton />
-            <DeleteButton />
         </Datagrid>
     </List>
 )
