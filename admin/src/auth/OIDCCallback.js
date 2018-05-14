@@ -1,4 +1,3 @@
-import { ViewTitle } from 'admin-on-rest';
 import jwtDecode from 'jwt-decode';
 import { Card } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -28,23 +27,24 @@ class OIDCCallback extends Component {
 
         // Check that the state returned in the URL matches the one stored.
         const authState = localStorage.getItem('auth_state');
-        const correctState = authState === parsedQuery.state;
+        const incorrectState = authState !== parsedQuery.state;
         // Check that the nonce returned in the id token matches the one stored.
         const segments = parsedQuery.id_token.split('.');
-        const correctSegments = segments.length === 3;
+        const incorrectSegmentAmount = segments.length !== 3;
         // All segment are base64 encoded
         const payloadSeg = segments[1];
         const payload = JSON.parse(base64urlDecode(payloadSeg));
-
+        // Check that the nonce returned is correct.
         const authNonce = localStorage.getItem('auth_nonce');
-        const correctNonce = authNonce === payload.nonce;
-        if (!(correctState && correctSegments && correctNonce)) {
+        const incorrectNonce = authNonce !== payload.nonce;
+        // Check if none of all the above checks failed.
+        if (incorrectState || incorrectSegmentAmount || incorrectNonce) {
             console.error(
-                !correctSegments
+                incorrectSegmentAmount
                     ? 'Token contains ' +
                       segments.length +
                       ' segments, but it should have 3.'
-                    : !correctNonce
+                    : incorrectNonce
                         ? 'Nonce mismatch: ' + authNonce + ' ' + payload.nonce
                         : 'State mismatch: ' +
                           authState +
