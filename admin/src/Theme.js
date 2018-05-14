@@ -55,5 +55,9 @@ export const styles = {
     },
     circularProgress: {
         padding: '50px'
+    },
+    fieldOptionsCard: {
+        margin: '20px',
+        width: '30rem'
     }
 };

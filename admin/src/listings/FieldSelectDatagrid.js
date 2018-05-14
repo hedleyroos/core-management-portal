@@ -1,9 +1,12 @@
 import { Datagrid } from 'admin-on-rest';
 import React, { Component } from 'react';
+import Card from 'material-ui/Card/Card';
+import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import Checkbox from 'material-ui/Checkbox';
 import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import { styles } from '../Theme';
 
 class FieldSelectDatagrid extends Component {
     constructor(props) {
@@ -47,20 +50,27 @@ class FieldSelectDatagrid extends Component {
     render() {
         return this.state.checkboxes ? (
             <div>
-                <CardText>
-                    {Object.entries(this.state.checkboxes).map(
-                        ([name, value]) => (
-                            <Checkbox
-                                key={name}
-                                label={name}
-                                checked={value}
-                                onCheck={() => this.updateCheckbox(name)}
-                                checkedIcon={<Visibility />}
-                                uncheckedIcon={<VisibilityOff />}
-                            />
-                        )
-                    )}
-                </CardText>
+                <Card style={styles.fieldOptionsCard} >
+                    <CardHeader
+                        title="Hide/Show Fields"
+                        actAsExpander={true}
+                        showExpandableButton={true}
+                    />
+                    <CardText expandable={true}>
+                        {Object.entries(this.state.checkboxes).map(
+                            ([name, value]) => (
+                                <Checkbox
+                                    key={name}
+                                    label={name}
+                                    checked={value}
+                                    onCheck={() => this.updateCheckbox(name)}
+                                    checkedIcon={<Visibility />}
+                                    uncheckedIcon={<VisibilityOff />}
+                                />
+                            )
+                        )}
+                    </CardText>
+                </Card>
                 <Datagrid {...this.props}>{this.state.children}</Datagrid>
             </div>
         ) : (
