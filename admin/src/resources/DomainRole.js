@@ -25,6 +25,7 @@ import {
 import {
     DomainRoleFilter
 } from '../filters/DomainRoleFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateDomainRole = values => {
     const errors = {};
@@ -54,9 +55,9 @@ export const DomainRoleList = props => (
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore.getResourcePermission('domainroles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('domainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

@@ -19,6 +19,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreatePermission = values => {
     const errors = {};
@@ -41,9 +42,9 @@ export const PermissionList = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore.getResourcePermission('permissions', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('permissions', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

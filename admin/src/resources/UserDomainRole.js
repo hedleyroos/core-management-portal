@@ -22,6 +22,7 @@ import {
 import {
     UserDomainRoleFilter
 } from '../filters/UserDomainRoleFilter';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateUserDomainRole = values => {
     const errors = {};
@@ -52,7 +53,7 @@ export const UserDomainRoleList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('userdomainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

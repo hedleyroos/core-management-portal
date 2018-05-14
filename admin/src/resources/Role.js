@@ -23,6 +23,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateRole = values => {
     const errors = {};
@@ -46,9 +47,9 @@ export const RoleList = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <EditButton />
+            {permissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {permissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -104,7 +105,6 @@ export const RoleEdit = props => (
                     </ReferenceField>
                     <DateField source="created_at" />
                     <DateField source="updated_at" />
-                    <EditButton />
                 </Datagrid>
             </ReferenceManyField>
         </SimpleForm>
