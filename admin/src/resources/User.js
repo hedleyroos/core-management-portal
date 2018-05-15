@@ -29,6 +29,7 @@ import {
 import {
     UserFilter
 } from '../filters/UserFilter';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 import permissionsStore from '../auth/PermissionsStore';
 
 const validationEditUser = values => {
@@ -36,9 +37,11 @@ const validationEditUser = values => {
     return errors;
 }
 
+const hiddenFields = ['created_at', 'updated_at', 'avatar', 'country_code'];
+
 export const UserList = props => (
     <List {...props} title="User List" filters={<UserFilter />}>
-        <Datagrid bodyOptions={ { showRowHover: true } }>
+        <FieldSelectDatagrid defaultHiddenFields={hiddenFields} bodyOptions={ { showRowHover: true } }>
             <TextField source="id" />
             <TextField source="username" />
             <TextField source="first_name" />
@@ -59,7 +62,7 @@ export const UserList = props => (
             {permissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {permissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton />: null}
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 )
 
