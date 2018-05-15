@@ -20,22 +20,20 @@ class FieldSelectDatagrid extends Component {
     componentWillMount() {
         // Here we setup the state of all checkboxes for showing/hiding each fields.
         const { children, defaultHiddenFields } = this.props;
+        const hiddenSet = new Set(defaultHiddenFields);
         if (children && !this.state.checkboxes) {
             // Create all checkboxes in state with their default value if given in props.
             const checkboxes = children.reduce((obj, field) => {
                 if (field.props && field.props.source) {
-                    obj[field.props.source] =
-                        defaultHiddenFields[field.props.source] != null
-                            ? defaultHiddenFields[field.props.source]
-                            : true;
+                    obj[field.props.source] = hiddenSet.has(field.props.source)
+                        ? false
+                        : true;
                     return obj;
                 }
                 return obj;
             }, {});
             // Check if all are not shown
-            const allHidden = Object.values(checkboxes).every(
-                value => !value
-            );
+            const allHidden = Object.values(checkboxes).every(value => !value);
             // Set the state with all the children that have false checkboxes omitted.
             this.setState({
                 checkboxes: checkboxes,
@@ -112,10 +110,10 @@ class FieldSelectDatagrid extends Component {
     }
 }
 FieldSelectDatagrid.propTypes = {
-    defaultHiddenFields: PropTypes.object
+    defaultHiddenFields: PropTypes.array
 };
 FieldSelectDatagrid.defaultProps = {
-    defaultHiddenFields: {}
+    defaultHiddenFields: []
 };
 
 export default FieldSelectDatagrid;
