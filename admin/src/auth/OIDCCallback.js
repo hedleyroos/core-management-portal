@@ -24,7 +24,11 @@ class OIDCCallback extends Component {
     }
     getTokenAndPermissions() {
         const parsedQuery = queryString.parse(this.props.location.search);
-
+        // Quick check if a token is retrieved.
+        if (!parsedQuery.id_token) {
+            this.setState({ failure: true });
+            return null;
+        }
         // Check that the state returned in the URL matches the one stored.
         const authState = localStorage.getItem('auth_state');
         const incorrectState = authState !== parsedQuery.state;
