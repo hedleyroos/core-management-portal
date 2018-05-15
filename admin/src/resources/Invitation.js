@@ -24,6 +24,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import DateTimeInput from 'aor-datetime-input';
+import EmptyField from '../fields/EmptyField';
 import {
     InvitationFilter
 } from '../filters/InvitationFilter';
@@ -98,30 +99,38 @@ export const InvitationShow = props => (
             <DateField source="expires_at" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                        <NumberField source="label" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
-            <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                        <NumberField source="label" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
+            {permissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
+                <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('invitationsiteroles', 'list') ? (
+                <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
         </SimpleShowLayout>
     </Show>
 )
@@ -133,30 +142,38 @@ export const InvitationEdit = props => (
             <TextInput source="last_name" />
             <TextInput source="email" />
             <DateTimeInput source="expires_at" />
-            <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                        <NumberField source="label" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
-            <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                        <NumberField source="label" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
+            {permissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
+                <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('invitationsiteroles', 'list') ? (
+                <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
         </SimpleForm>
     </Edit>
 )

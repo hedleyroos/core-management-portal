@@ -23,6 +23,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import EmptyField from '../fields/EmptyField';
 import {
     ObjectField
 } from '../fields/ObjectField';
@@ -86,42 +87,54 @@ export const UserShow = props => (
             <TextField source="country_code" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                        <NumberField source="label" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
-            <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <DateField source="consented_at" />
-                    <ObjectField source="data" addLabel />
-                    <BooleanField source="blocked" />
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
-            <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                        <NumberField source="label" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
+            {permissionsStore.getResourcePermission('userdomainroles', 'list') ? (
+                <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('usersitedata', 'list') ? (
+                <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <DateField source="consented_at" />
+                        <ObjectField source="data" addLabel />
+                        <BooleanField source="blocked" />
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('usersiteroles', 'list') ? (
+                <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
         </SimpleShowLayout>
     </Show>
 )
@@ -140,42 +153,54 @@ export const UserEdit = props => (
             <DateInput source="birth_date" />
             <TextInput source="avatar" />
             <TextInput source="country_code" />
-            <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                        <NumberField source="label" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
-            <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <DateField source="consented_at" />
-                    <ObjectField source="data" addLabel />
-                    <BooleanField source="blocked" />
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
-            <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                        <NumberField source="label" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
+            {permissionsStore.getResourcePermission('userdomainroles', 'list') ? (
+                <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('usersitedata', 'list') ? (
+                <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <DateField source="consented_at" />
+                        <ObjectField source="data" addLabel />
+                        <BooleanField source="blocked" />
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('usersiteroles', 'list') ? (
+                <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
         </SimpleForm>
     </Edit>
 )

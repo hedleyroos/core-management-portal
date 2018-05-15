@@ -23,6 +23,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import EmptyField from '../fields/EmptyField';
 import permissionsStore from '../auth/PermissionsStore';
 
 const validationCreateRole = values => {
@@ -73,18 +74,22 @@ export const RoleShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
-                        <NumberField source="urn" />
-                    </ReferenceField>
-                    <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
+            {permissionsStore.getResourcePermission('roleresourcepermissions', 'list') ? (
+                <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
+                            <NumberField source="urn" />
+                        </ReferenceField>
+                        <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
         </SimpleShowLayout>
     </Show>
 )
@@ -95,18 +100,22 @@ export const RoleEdit = props => (
             <TextInput source="label" />
             <BooleanInput source="requires_2fa" />
             <TextInput source="description" />
-            <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
-                <Datagrid bodyOptions={ { showRowHover: true } }>
-                    <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
-                        <NumberField source="urn" />
-                    </ReferenceField>
-                    <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
-                        <NumberField source="name" />
-                    </ReferenceField>
-                    <DateField source="created_at" />
-                    <DateField source="updated_at" />
-                </Datagrid>
-            </ReferenceManyField>
+            {permissionsStore.getResourcePermission('roleresourcepermissions', 'list') ? (
+                <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
+                    <Datagrid bodyOptions={ { showRowHover: true } }>
+                        <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
+                            <NumberField source="urn" />
+                        </ReferenceField>
+                        <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
         </SimpleForm>
     </Edit>
 )
