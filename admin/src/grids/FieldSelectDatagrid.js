@@ -1,5 +1,6 @@
 import { Datagrid } from 'admin-on-rest';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Card from 'material-ui/Card/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
@@ -16,15 +17,36 @@ class FieldSelectDatagrid extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps, currentProps) {
+    componentWillMount() {
         // Here we setup the state of all checkboxes for showing/hiding each fields.
-        if (nextProps.ids && !this.state.checkboxes) {
-            const fields = Object.keys(Object.entries(nextProps.data)[0][1]);
-            this.setState({
-                checkboxes: fields.reduce((obj, field) => {
-                    obj[field] = true;
+        const { children, defaultHiddenFields } = this.props;
+        if (children && !this.state.checkboxes) {
+            // Create all checkboxes in state with their default value if given in props.
+            const checkboxes = children.reduce((obj, field) => {
+                if (field.props && field.props.source) {
+                    obj[field.props.source] =
+                        defaultHiddenFields[field.props.source] != null
+                            ? defaultHiddenFields[field.props.source]
+                            : true;
                     return obj;
-                }, {})
+                }
+                return obj;
+            }, {});
+            // Check if all are not shown
+            const allHidden = Object.values(checkboxes).every(
+                value => !value
+            );
+            // Set the state with all the children that have false checkboxes omitted.
+            this.setState({
+                checkboxes: checkboxes,
+                children: children.map(child => {
+                    return child.props && child.props.source
+                        ? checkboxes[child.props.source]
+                            ? child
+                            : null
+                        : child;
+                }),
+                allHidden: allHidden
             });
         }
     }
@@ -35,22 +57,29 @@ class FieldSelectDatagrid extends Component {
             ...this.state.checkboxes,
             [name]: !this.state.checkboxes[name]
         };
+        // Check if all are not shown
+        const allHidden = Object.values(nextCheckboxState).every(
+            value => !value
+        );
+        // Set the state with all the children that have false checkboxes omitted.
         this.setState({
             checkboxes: nextCheckboxState,
             children: this.props.children.map(child => {
-                return child.props
+                return child.props && child.props.source
                     ? nextCheckboxState[child.props.source]
                         ? child
-                        : ''
+                        : null
                     : child;
-            })
+            }),
+            allHidden: allHidden
         });
     }
 
     render() {
-        return this.state.checkboxes ? (
+        // Render the Hide/Show field card unless allhidden is true.
+        return (
             <div>
-                <Card style={styles.fieldOptionsCard} >
+                <Card style={styles.fieldOptionsCard}>
                     <CardHeader
                         title="Hide/Show Fields"
                         actAsExpander={true}
@@ -71,12 +100,22 @@ class FieldSelectDatagrid extends Component {
                         )}
                     </CardText>
                 </Card>
-                <Datagrid {...this.props}>{this.state.children}</Datagrid>
+                {!this.state.allHidden ? (
+                    <Datagrid {...this.props}>{this.state.children}</Datagrid>
+                ) : (
+                    <CardText>
+                        Please select at least one field to show.
+                    </CardText>
+                )}
             </div>
-        ) : (
-            <CardText>No results found</CardText>
         );
     }
 }
+FieldSelectDatagrid.propTypes = {
+    defaultHiddenFields: PropTypes.object
+};
+FieldSelectDatagrid.defaultProps = {
+    defaultHiddenFields: {}
+};
 
 export default FieldSelectDatagrid;

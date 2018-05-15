@@ -29,7 +29,7 @@ import {
 import {
     UserFilter
 } from '../filters/UserFilter';
-import FieldSelectDatagrid from '../listings/FieldSelectDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 import permissionsStore from '../auth/PermissionsStore';
 
 const validationEditUser = values => {
