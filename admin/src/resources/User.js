@@ -9,16 +9,18 @@ import {
     TextField,
     BooleanField,
     DateField,
+    ReferenceField,
+    NumberField,
     Show,
     SimpleShowLayout,
     ReferenceManyField,
-    ReferenceField,
-    NumberField,
     SimpleForm,
     Edit,
     TextInput,
     BooleanInput,
     DateInput,
+    ReferenceInput,
+    SelectInput,
     DeleteButton,
     EditButton,
     ShowButton
@@ -57,7 +59,12 @@ export const UserList = props => (
             <TextField source="gender" />
             <DateField source="birth_date" />
             <TextField source="avatar" />
-            <TextField source="country_code" />
+            <ReferenceField label="Country" source="country_code" reference="countries" linkType="show" allowEmpty>
+                <TextField source="name" />
+            </ReferenceField>
+            <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
+                <NumberField source="name" />
+            </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
             {permissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
@@ -84,7 +91,12 @@ export const UserShow = props => (
             <TextField source="gender" />
             <DateField source="birth_date" />
             <TextField source="avatar" />
-            <TextField source="country_code" />
+            <ReferenceField label="Country" source="country_code" reference="countries" linkType="show" allowEmpty>
+                <TextField source="name" />
+            </ReferenceField>
+            <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
+                <NumberField source="name" />
+            </ReferenceField>
             <DateField source="created_at" />
             <DateField source="updated_at" />
             {permissionsStore.getResourcePermission('userdomainroles', 'list') ? (
@@ -109,9 +121,7 @@ export const UserShow = props => (
                         <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                             <NumberField source="name" />
                         </ReferenceField>
-                        <DateField source="consented_at" />
                         <ObjectField source="data" addLabel />
-                        <BooleanField source="blocked" />
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -152,7 +162,9 @@ export const UserEdit = props => (
             <TextInput source="gender" />
             <DateInput source="birth_date" />
             <TextInput source="avatar" />
-            <TextInput source="country_code" />
+            <ReferenceInput label="Country" source="country_code" reference="countries" perPage={0} allowEmpty>
+                <SelectInput optionText="name" />
+            </ReferenceInput>
             {permissionsStore.getResourcePermission('userdomainroles', 'list') ? (
                 <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
@@ -175,9 +187,7 @@ export const UserEdit = props => (
                         <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                             <NumberField source="name" />
                         </ReferenceField>
-                        <DateField source="consented_at" />
                         <ObjectField source="data" addLabel />
-                        <BooleanField source="blocked" />
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>

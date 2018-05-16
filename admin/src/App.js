@@ -126,6 +126,16 @@ import {
 } from './resources/Client';
 
 import {
+    CountryList,
+    CountryShow,
+} from './resources/Country';
+
+import {
+    OrganisationalunitList,
+    OrganisationalunitShow,
+} from './resources/Organisationalunit';
+
+import {
     UserList,
     UserShow,
     UserEdit,
@@ -304,6 +314,20 @@ const App = () => (
                       name="clients"
                       list={ ClientList }
                       show={ ClientShow }
+ 
+                /> : null,
+            permissionsStore.getResourcePermission('countries', 'list')
+                ? <Resource
+                      name="countries"
+                      list={ CountryList }
+                      show={ CountryShow }
+ 
+                /> : null,
+            permissionsStore.getResourcePermission('organisationalunits', 'list')
+                ? <Resource
+                      name="organisationalunits"
+                      list={ OrganisationalunitList }
+                      show={ OrganisationalunitShow }
  
                 /> : null,
             permissionsStore.getResourcePermission('users', 'list')

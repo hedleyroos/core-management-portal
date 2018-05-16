@@ -100,6 +100,12 @@ class PermissionsStore {
                 clients: {
                     list: ['urn:ge:identity_provider:oidc_provider:client:read'],
                 },
+                countries: {
+                    list: [],
+                },
+                organisationalunits: {
+                    list: [],
+                },
                 users: {
                     list: ['urn:ge:identity_provider:user:read'],
                     remove: ['urn:ge:identity_provider:user:delete'],

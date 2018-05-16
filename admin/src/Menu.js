@@ -37,6 +37,8 @@ const ICONS = {
     adminnotes: <SpeakerNoteIcon />,
     sitedataschemas: <ListIcon />,
     clients: <DeviceIcon />,
+    countries: <ListIcon />,
+    organisationalunits: <ListIcon />,
     users: <PeopleIcon />,
 };
 

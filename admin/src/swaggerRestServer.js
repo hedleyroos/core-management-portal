@@ -26,7 +26,8 @@ const COMPOSITE_KEY_RESOURSES = {
 };
 
 const PK_MAPPING = {
-    sitedataschemas: 'site_id'
+    sitedataschemas: 'site_id',
+    countries: 'code'
 };
 
 const FILTER_LENGTHS = {
