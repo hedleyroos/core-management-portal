@@ -21,10 +21,8 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import {
-    ObjectField
-} from '../fields/ObjectField';
 import permissionsStore from '../auth/PermissionsStore';
+import ObjectField from '../fields/ObjectField';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};

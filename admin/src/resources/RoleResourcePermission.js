@@ -18,10 +18,8 @@ import {
     DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import {
-    RoleResourcePermissionFilter
-} from '../filters/RoleResourcePermissionFilter';
 import permissionsStore from '../auth/PermissionsStore';
+import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};

@@ -19,10 +19,8 @@ import {
     DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import {
-    InvitationDomainRoleFilter
-} from '../filters/InvitationDomainRoleFilter';
 import permissionsStore from '../auth/PermissionsStore';
+import InvitationDomainRoleFilter from '../filters/InvitationDomainRoleFilter';
 
 const validationCreateInvitationDomainRole = values => {
     const errors = {};

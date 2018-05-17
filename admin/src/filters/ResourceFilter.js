@@ -8,9 +8,11 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const ResourceFilter = props => (
+const ResourceFilter = props => (
     <Filter {...props}>
         <TextInput label="Prefix" source="prefix" />
     </Filter>
 );
+
+export default ResourceFilter;
 /** End of Generated Code **/

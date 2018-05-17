@@ -25,15 +25,11 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import EmptyField from '../fields/EmptyField';
-import {
-    ObjectField
-} from '../fields/ObjectField';
-import {
-    UserFilter
-} from '../filters/UserFilter';
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
+import ObjectField from '../fields/ObjectField';
+import UserFilter from '../filters/UserFilter';
 
 const validationEditUser = values => {
     const errors = {};

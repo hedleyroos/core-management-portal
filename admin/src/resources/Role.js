@@ -23,8 +23,8 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import EmptyField from '../fields/EmptyField';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
 const validationCreateRole = values => {
     const errors = {};

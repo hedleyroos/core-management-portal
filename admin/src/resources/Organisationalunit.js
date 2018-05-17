@@ -11,11 +11,8 @@ import {
     DateField,
     Show,
     SimpleShowLayout,
-    DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import EmptyField from '../fields/EmptyField';
-import permissionsStore from '../auth/PermissionsStore';
 
 export const OrganisationalunitList = props => (
     <List {...props} title="Organisationalunit List">

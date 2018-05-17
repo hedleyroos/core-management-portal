@@ -8,9 +8,11 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const ClientFilter = props => (
+const ClientFilter = props => (
     <Filter {...props}>
         <TextInput label="Client Token Id" source="client_token_id" />
     </Filter>
 );
+
+export default ClientFilter;
 /** End of Generated Code **/

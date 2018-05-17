@@ -22,14 +22,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import DateTimeInput from 'aor-datetime-input';
-import {
-    ObjectField
-} from '../fields/ObjectField';
-import {
-    UserSiteDataFilter
-} from '../filters/UserSiteDataFilter';
 import permissionsStore from '../auth/PermissionsStore';
+import ObjectField from '../fields/ObjectField';
+import UserSiteDataFilter from '../filters/UserSiteDataFilter';
 
 const validationCreateUserSiteData = values => {
     const errors = {};

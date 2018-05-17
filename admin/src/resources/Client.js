@@ -13,9 +13,7 @@ import {
     SimpleShowLayout,
     ShowButton
 } from 'admin-on-rest';
-import {
-    ClientFilter
-} from '../filters/ClientFilter';
+import ClientFilter from '../filters/ClientFilter';
 
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />}>

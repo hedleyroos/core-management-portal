@@ -8,9 +8,11 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const DomainFilter = props => (
+const DomainFilter = props => (
     <Filter {...props}>
         <NumberInput label="Parent Id" source="parent_id" />
     </Filter>
 );
+
+export default DomainFilter;
 /** End of Generated Code **/

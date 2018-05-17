@@ -19,10 +19,8 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import {
-    ResourceFilter
-} from '../filters/ResourceFilter';
 import permissionsStore from '../auth/PermissionsStore';
+import ResourceFilter from '../filters/ResourceFilter';
 
 const validationCreateResource = values => {
     const errors = {};

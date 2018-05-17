@@ -9,10 +9,8 @@ import {
     TextField,
     Show,
     SimpleShowLayout,
-    DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
 
 export const CountryList = props => (
     <List {...props} title="Country List">

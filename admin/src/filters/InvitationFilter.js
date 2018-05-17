@@ -8,9 +8,11 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const InvitationFilter = props => (
+const InvitationFilter = props => (
     <Filter {...props}>
         <TextInput label="Invitor Id" source="invitor_id" />
     </Filter>
 );
+
+export default InvitationFilter;
 /** End of Generated Code **/

@@ -11,7 +11,7 @@ import {
 } from 'admin-on-rest';
 import DateRangeInput from '../inputs/DateRangeInput';
 
-export const UserFilter = props => (
+const UserFilter = props => (
     <Filter {...props}>
 	<TextInput label="Search" source="q" alwaysOn />
         <DateRangeInput label="Birth Date" source="birth_date" />
@@ -34,4 +34,6 @@ export const UserFilter = props => (
         <BooleanInput label="Has Organisational Unit" source="has_organisational_unit" />
     </Filter>
 );
+
+export default UserFilter;
 /** End of Generated Code **/

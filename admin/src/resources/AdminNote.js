@@ -23,10 +23,8 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import {
-    AdminNoteFilter
-} from '../filters/AdminNoteFilter';
 import permissionsStore from '../auth/PermissionsStore';
+import AdminNoteFilter from '../filters/AdminNoteFilter';
 
 const validationCreateAdminNote = values => {
     const errors = {};

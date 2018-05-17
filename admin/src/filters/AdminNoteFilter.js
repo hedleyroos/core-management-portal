@@ -8,10 +8,12 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const AdminNoteFilter = props => (
+const AdminNoteFilter = props => (
     <Filter {...props}>
         <TextInput label="User Id" source="user_id" />
         <TextInput label="Creator Id" source="creator_id" />
     </Filter>
 );
+
+export default AdminNoteFilter;
 /** End of Generated Code **/

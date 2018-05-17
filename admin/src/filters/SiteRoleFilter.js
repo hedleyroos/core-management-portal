@@ -8,10 +8,12 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const SiteRoleFilter = props => (
+const SiteRoleFilter = props => (
     <Filter {...props}>
         <NumberInput label="Site Id" source="site_id" />
         <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
+
+export default SiteRoleFilter;
 /** End of Generated Code **/
