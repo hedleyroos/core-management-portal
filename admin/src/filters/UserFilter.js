@@ -11,6 +11,19 @@ import {
 } from 'admin-on-rest';
 import DateRangeInput from '../inputs/DateRangeInput';
 
+const parseUserIds = value => value.replace(/[^\w]/gi, ',');
+
+const parseSiteIds = value => value.replace(/[^\w]/gi, ',');
+
+const validateSiteIds = value => {
+    if (value) {
+        const valid = value.replace(/[^\w]/gi, ',').split(',').every(item => !isNaN(item))
+        if (!valid) {
+            return "Site Ids are not all numbers.";
+        }
+    }
+};
+
 const UserFilter = props => (
     <Filter {...props}>
 	<TextInput label="Search" source="q" alwaysOn />
@@ -32,6 +45,8 @@ const UserFilter = props => (
         <TextInput label="Username" source="username" />
         <BooleanInput label="Two factor Auth Enabled" source="tfa_enabled" />
         <BooleanInput label="Has Organisational Unit" source="has_organisational_unit" />
+        <TextInput label="User Ids" source="user_ids" parse={parseUserIds} />
+        <TextInput label="Site Ids" source="site_ids" parse={parseSiteIds} validate={validateSiteIds} />
     </Filter>
 );
 

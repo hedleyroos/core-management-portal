@@ -13,9 +13,10 @@ import {
     SimpleShowLayout,
     ShowButton
 } from 'admin-on-rest';
+import OrganisationalunitFilter from '../filters/OrganisationalunitFilter';
 
 export const OrganisationalunitList = props => (
-    <List {...props} title="Organisationalunit List">
+    <List {...props} title="Organisationalunit List" filters={<OrganisationalunitFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <TextField source="name" />

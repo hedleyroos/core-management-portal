@@ -8,23 +8,22 @@ import {
     Filter
 } from 'admin-on-rest';
 
-const parseClientIds = value => value.replace(/[^\w]/gi, ',');
+const parseRoleIds = value => value.replace(/[^\w]/gi, ',');
 
-const validateClientIds = value => {
+const validateRoleIds = value => {
     if (value) {
         const valid = value.replace(/[^\w]/gi, ',').split(',').every(item => !isNaN(item))
         if (!valid) {
-            return "Client Ids are not all numbers.";
+            return "Role Ids are not all numbers.";
         }
     }
 };
 
-const ClientFilter = props => (
+const RoleFilter = props => (
     <Filter {...props}>
-        <TextInput label="Client Ids" source="client_ids" parse={parseClientIds} validate={validateClientIds} />
-        <TextInput label="Client Token Id" source="client_token_id" />
+        <TextInput label="Role Ids" source="role_ids" parse={parseRoleIds} validate={validateRoleIds} />
     </Filter>
 );
 
-export default ClientFilter;
+export default RoleFilter;
 /** End of Generated Code **/

@@ -11,9 +11,10 @@ import {
     SimpleShowLayout,
     ShowButton
 } from 'admin-on-rest';
+import CountryFilter from '../filters/CountryFilter';
 
 export const CountryList = props => (
-    <List {...props} title="Country List">
+    <List {...props} title="Country List" filters={<CountryFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <TextField source="code" />
             <TextField source="name" />

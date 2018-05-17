@@ -23,6 +23,7 @@ import {
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
 import ObjectField from '../fields/ObjectField';
+import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};
@@ -41,7 +42,7 @@ const validationEditSiteDataSchema = values => {
 }
 
 export const SiteDataSchemaList = props => (
-    <List {...props} title="SiteDataSchema List">
+    <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                 <NumberField source="name" />
