@@ -23,22 +23,23 @@ class FieldSelectDatagrid extends Component {
         const hiddenSet = new Set(defaultHiddenFields);
         if (children && !this.state.checkboxes) {
             // Create all checkboxes in state with their default value if given in props.
-            const checkboxes = children.reduce((obj, field) => {
-                if (field.props && field.props.source) {
-                    obj[field.props.source] = hiddenSet.has(field.props.source)
+            let checkboxes = {};
+            React.Children.map(children, child => {
+                if (child && child.props && child.props.source) {
+                    checkboxes[child.props.source] = hiddenSet.has(
+                        child.props.source
+                    )
                         ? false
                         : true;
-                    return obj;
                 }
-                return obj;
-            }, {});
+            });
             // Check if all are not shown
             const allHidden = Object.values(checkboxes).every(value => !value);
             // Set the state with all the children that have false checkboxes omitted.
             this.setState({
                 checkboxes: checkboxes,
-                children: children.map(child => {
-                    return child.props && child.props.source
+                children: React.Children.map(children, child => {
+                    return child && child.props && child.props.source
                         ? checkboxes[child.props.source]
                             ? child
                             : null
@@ -62,8 +63,8 @@ class FieldSelectDatagrid extends Component {
         // Set the state with all the children that have false checkboxes omitted.
         this.setState({
             checkboxes: nextCheckboxState,
-            children: this.props.children.map(child => {
-                return child.props && child.props.source
+            children: React.Children.map(this.props.children, child => {
+                return child && child.props && child.props.source
                     ? nextCheckboxState[child.props.source]
                         ? child
                         : null
