@@ -9,11 +9,13 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const UserDomainRoleFilter = props => (
+const UserDomainRoleFilter = props => (
     <Filter {...props}>
         <TextInput label="User Id" source="user_id" />
         <NumberInput label="Domain Id" source="domain_id" />
         <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
+
+export default UserDomainRoleFilter;
 /** End of Generated Code **/

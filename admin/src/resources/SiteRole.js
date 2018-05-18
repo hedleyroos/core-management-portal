@@ -22,10 +22,8 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import {
-    SiteRoleFilter
-} from '../filters/SiteRoleFilter';
 import permissionsStore from '../auth/PermissionsStore';
+import SiteRoleFilter from '../filters/SiteRoleFilter';
 
 const validationCreateSiteRole = values => {
     const errors = {};

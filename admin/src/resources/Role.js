@@ -23,8 +23,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import EmptyField from '../fields/EmptyField';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
+import RoleFilter from '../filters/RoleFilter';
 
 const validationCreateRole = values => {
     const errors = {};
@@ -40,7 +41,7 @@ const validationEditRole = values => {
 }
 
 export const RoleList = props => (
-    <List {...props} title="Role List">
+    <List {...props} title="Role List" filters={<RoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <TextField source="label" />

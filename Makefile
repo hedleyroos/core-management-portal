@@ -66,7 +66,7 @@ docs-build:  $(VENV)
 
 generate-admin:
 	@echo "$(CYAN)Generating Management Portal code and running manual meld.$(CLEAR)"
-	mkdir generated
+	mkdir -p generated
 	$(PYTHON) $(VENV)/src/swagger-aor-generator/swagger_aor_generator/generator.py swagger/management_layer.yml --output-dir=generated --module-name="Girl Effect Management Portal" --rest-server-url="//core-management-layer:8000" --permissions
 	meld admin/src generated
 	rm -rf generated

@@ -4,16 +4,17 @@
 **/
 import React from 'react';
 import {
-    NumberInput,
+    TextInput,
     Filter
 } from 'admin-on-rest';
 
-const DomainRoleFilter = props => (
+const parseCountryCodes = value => value.replace(/[^\w]/gi, ',');
+
+const CountryFilter = props => (
     <Filter {...props}>
-        <NumberInput label="Domain Id" source="domain_id" />
-        <NumberInput label="Role Id" source="role_id" />
+        <TextInput label="Country Codes" source="country_codes" parse={parseCountryCodes} />
     </Filter>
 );
 
-export default DomainRoleFilter;
+export default CountryFilter;
 /** End of Generated Code **/

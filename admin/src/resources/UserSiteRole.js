@@ -19,10 +19,8 @@ import {
     DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import {
-    UserSiteRoleFilter
-} from '../filters/UserSiteRoleFilter';
 import permissionsStore from '../auth/PermissionsStore';
+import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 
 const validationCreateUserSiteRole = values => {
     const errors = {};

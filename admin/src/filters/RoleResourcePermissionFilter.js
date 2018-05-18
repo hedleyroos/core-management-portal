@@ -8,11 +8,13 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const RoleResourcePermissionFilter = props => (
+const RoleResourcePermissionFilter = props => (
     <Filter {...props}>
         <NumberInput label="Role Id" source="role_id" />
         <NumberInput label="Resource Id" source="resource_id" />
         <NumberInput label="Permission Id" source="permission_id" />
     </Filter>
 );
+
+export default RoleResourcePermissionFilter;
 /** End of Generated Code **/

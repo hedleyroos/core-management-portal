@@ -23,12 +23,10 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import EmptyField from '../fields/EmptyField';
-import {
-    DomainFilter
-} from '../filters/DomainFilter';
 import TableField from '../fields/TableField';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
+import DomainFilter from '../filters/DomainFilter';
 
 const validationCreateDomain = values => {
     const errors = {};

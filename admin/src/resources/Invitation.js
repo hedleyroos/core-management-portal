@@ -23,12 +23,10 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import permissionsStore from '../auth/PermissionsStore';
 import DateTimeInput from 'aor-datetime-input';
 import EmptyField from '../fields/EmptyField';
-import {
-    InvitationFilter
-} from '../filters/InvitationFilter';
-import permissionsStore from '../auth/PermissionsStore';
+import InvitationFilter from '../filters/InvitationFilter';
 
 const validationCreateInvitation = values => {
     const errors = {};

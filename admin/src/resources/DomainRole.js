@@ -22,10 +22,8 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import {
-    DomainRoleFilter
-} from '../filters/DomainRoleFilter';
 import permissionsStore from '../auth/PermissionsStore';
+import DomainRoleFilter from '../filters/DomainRoleFilter';
 
 const validationCreateDomainRole = values => {
     const errors = {};

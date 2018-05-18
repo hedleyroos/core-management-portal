@@ -9,11 +9,13 @@ import {
     Filter
 } from 'admin-on-rest';
 
-export const InvitationSiteRoleFilter = props => (
+const InvitationSiteRoleFilter = props => (
     <Filter {...props}>
         <TextInput label="Invitation Id" source="invitation_id" />
         <NumberInput label="Site Id" source="site_id" />
         <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
+
+export default InvitationSiteRoleFilter;
 /** End of Generated Code **/
