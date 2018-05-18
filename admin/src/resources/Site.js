@@ -50,12 +50,20 @@ export const SiteList = props => (
     <List {...props} title="Site List" filters={<SiteFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
-            <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('clients', 'list') ? (
+                <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('domains', 'list') ? (
+                <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <TextField source="name" />
             <TextField source="description" />
             <BooleanField source="is_active" />
@@ -88,12 +96,20 @@ export const SiteShow = props => (
     <Show {...props} title="Site Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('clients', 'list') ? (
+                <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('domains', 'list') ? (
+                <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <TextField source="name" />
             <TextField source="description" />
             <BooleanField source="is_active" />

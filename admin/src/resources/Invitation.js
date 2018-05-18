@@ -24,8 +24,8 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
-import DateTimeInput from 'aor-datetime-input';
 import EmptyField from '../fields/EmptyField';
+import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
 
 const validationCreateInvitation = values => {
@@ -54,9 +54,13 @@ export const InvitationList = props => (
     <List {...props} title="Invitation List" filters={<InvitationFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <TextField source="id" />
-            <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <TextField source="first_name" />
             <TextField source="last_name" />
             <TextField source="email" />
@@ -88,9 +92,13 @@ export const InvitationShow = props => (
     <Show {...props} title="Invitation Show">
         <SimpleShowLayout>
             <TextField source="id" />
-            <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <TextField source="first_name" />
             <TextField source="last_name" />
             <TextField source="email" />

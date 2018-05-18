@@ -45,9 +45,13 @@ export const DomainList = props => (
     <List {...props} title="Domain List" filters={<DomainFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
-            <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('domains', 'list') ? (
+                <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <TextField source="name" />
             <TextField source="description" />
             <DateField source="created_at" />
@@ -75,9 +79,13 @@ export const DomainShow = props => (
     <Show {...props} title="Domain Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('domains', 'list') ? (
+                <ReferenceField label="Parent" source="parent_id" reference="domains" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <TextField source="name" />
             <TextField source="description" />
             <DateField source="created_at" />

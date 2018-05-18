@@ -20,6 +20,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 
 const validationCreateUserSiteRole = values => {
@@ -39,15 +40,27 @@ const validationCreateUserSiteRole = values => {
 export const UserSiteRoleList = props => (
     <List {...props} title="UserSiteRole List" filters={<UserSiteRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
-            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('sites', 'list') ? (
+                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
@@ -75,15 +88,27 @@ export const UserSiteRoleCreate = props => (
 export const UserSiteRoleShow = props => (
     <Show {...props} title="UserSiteRole Show">
         <SimpleShowLayout>
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
-            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('sites', 'list') ? (
+                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="created_at" />
             <DateField source="updated_at" />
         </SimpleShowLayout>

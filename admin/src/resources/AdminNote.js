@@ -24,6 +24,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 import AdminNoteFilter from '../filters/AdminNoteFilter';
 
 const validationCreateAdminNote = values => {
@@ -49,12 +50,20 @@ export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
-            <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <TextField source="note" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -83,12 +92,20 @@ export const AdminNoteShow = props => (
     <Show {...props} title="AdminNote Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
-            <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <TextField source="note" />
             <DateField source="created_at" />
             <DateField source="updated_at" />

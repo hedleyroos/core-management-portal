@@ -19,6 +19,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
 
 const validationCreateRoleResourcePermission = values => {
@@ -38,15 +39,27 @@ const validationCreateRoleResourcePermission = values => {
 export const RoleResourcePermissionList = props => (
     <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
-            <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
-                <NumberField source="urn" />
-            </ReferenceField>
-            <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('resources', 'list') ? (
+                <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
+                    <NumberField source="urn" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('permissions', 'list') ? (
+                <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
@@ -74,15 +87,27 @@ export const RoleResourcePermissionCreate = props => (
 export const RoleResourcePermissionShow = props => (
     <Show {...props} title="RoleResourcePermission Show">
         <SimpleShowLayout>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
-            <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
-                <NumberField source="urn" />
-            </ReferenceField>
-            <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('resources', 'list') ? (
+                <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
+                    <NumberField source="urn" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('permissions', 'list') ? (
+                <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="created_at" />
             <DateField source="updated_at" />
         </SimpleShowLayout>

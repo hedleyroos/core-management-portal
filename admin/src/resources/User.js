@@ -55,12 +55,20 @@ export const UserList = props => (
             <TextField source="gender" />
             <DateField source="birth_date" />
             <TextField source="avatar" />
-            <ReferenceField label="Country" source="country_code" reference="countries" linkType="show" allowEmpty>
-                <TextField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('countries', 'list') ? (
+                <ReferenceField label="Country" source="country_code" reference="countries" linkType="show" allowEmpty>
+                    <TextField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('organisationalunits', 'list') ? (
+                <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="created_at" />
             <DateField source="updated_at" />
             {permissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
@@ -87,12 +95,20 @@ export const UserShow = props => (
             <TextField source="gender" />
             <DateField source="birth_date" />
             <TextField source="avatar" />
-            <ReferenceField label="Country" source="country_code" reference="countries" linkType="show" allowEmpty>
-                <TextField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('countries', 'list') ? (
+                <ReferenceField label="Country" source="country_code" reference="countries" linkType="show" allowEmpty>
+                    <TextField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('organisationalunits', 'list') ? (
+                <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="created_at" />
             <DateField source="updated_at" />
             {permissionsStore.getResourcePermission('userdomainroles', 'list') ? (

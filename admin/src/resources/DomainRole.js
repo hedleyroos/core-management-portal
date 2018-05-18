@@ -23,6 +23,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 import DomainRoleFilter from '../filters/DomainRoleFilter';
 
 const validationCreateDomainRole = values => {
@@ -44,12 +45,20 @@ const validationEditDomainRole = values => {
 export const DomainRoleList = props => (
     <List {...props} title="DomainRole List" filters={<DomainRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('domains', 'list') ? (
+                <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -77,12 +86,20 @@ export const DomainRoleCreate = props => (
 export const DomainRoleShow = props => (
     <Show {...props} title="DomainRole Show">
         <SimpleShowLayout>
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('domains', 'list') ? (
+                <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />

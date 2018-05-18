@@ -23,6 +23,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
 
@@ -48,12 +49,20 @@ const validationEditUserSiteData = values => {
 export const UserSiteDataList = props => (
     <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
-            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('sites', 'list') ? (
+                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <ObjectField source="data" addLabel />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -81,12 +90,20 @@ export const UserSiteDataCreate = props => (
 export const UserSiteDataShow = props => (
     <Show {...props} title="UserSiteData Show">
         <SimpleShowLayout>
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
-            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('sites', 'list') ? (
+                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <ObjectField source="data" addLabel />
             <DateField source="created_at" />
             <DateField source="updated_at" />

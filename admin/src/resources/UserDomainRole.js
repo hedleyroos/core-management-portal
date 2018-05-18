@@ -20,6 +20,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 
 const validationCreateUserDomainRole = values => {
@@ -39,15 +40,27 @@ const validationCreateUserDomainRole = values => {
 export const UserDomainRoleList = props => (
     <List {...props} title="UserDomainRole List" filters={<UserDomainRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('domains', 'list') ? (
+                <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
@@ -75,15 +88,27 @@ export const UserDomainRoleCreate = props => (
 export const UserDomainRoleShow = props => (
     <Show {...props} title="UserDomainRole Show">
         <SimpleShowLayout>
-            <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
-                <TextField source="username" />
-            </ReferenceField>
-            <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('users', 'list') ? (
+                <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
+                    <TextField source="username" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('domains', 'list') ? (
+                <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="created_at" />
             <DateField source="updated_at" />
         </SimpleShowLayout>

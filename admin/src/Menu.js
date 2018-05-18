@@ -1,7 +1,7 @@
 /**
  * Generated Menu.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
@@ -17,6 +17,8 @@ import SecurityIcon from 'material-ui/svg-icons/hardware/security';
 import SiteIcon from 'material-ui/svg-icons/action/explore';
 import ShoppingBasketIcon from 'material-ui/svg-icons/action/shopping-basket';
 import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
+import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
+import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
 import { titleCase } from './utils';
 
 const ICONS = {
@@ -37,23 +39,40 @@ const ICONS = {
     adminnotes: <SpeakerNoteIcon />,
     sitedataschemas: <ListIcon />,
     clients: <DeviceIcon />,
-    countries: <ListIcon />,
-    organisationalunits: <ListIcon />,
-    users: <PeopleIcon />,
+    countries: <TerrainIcon />,
+    organisationalunits: <CategoryIcon />,
+    users: <PeopleIcon />
+};
+
+const TITLES = {
+    domainroles: 'Domain Roles',
+    invitationdomainroles: 'Invitation Domain Roles',
+    invitationsiteroles: 'Invitiation Site Roles',
+    roleresourcepermissions: 'Role Resource Permissions',
+    siteroles: 'Site Roles',
+    userdomainroles: 'User Domain Roles',
+    usersiteroles: 'User Site Roles',
+    adminnotes: 'Admin Notes',
+    sitedataschemas: 'Site Data Schemas',
+    organisationalunits: 'Organisational Units'
 };
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
         {resources
             ? resources.map(resource => (
-                    <MenuItemLink
-                        key={resource.name}
-                        to={`/${resource.name}`}
-                        primaryText={`${titleCase(resource.name)}`}
-                        onClick={onMenuTap}
-                        leftIcon={ICONS[resource.name]}
-                    />
-                ))
+                  <MenuItemLink
+                      key={resource.name}
+                      to={`/${resource.name}`}
+                      primaryText={
+                          TITLES[resource.name]
+                              ? TITLES[resource.name]
+                              : `${titleCase(resource.name)}`
+                      }
+                      onClick={onMenuTap}
+                      leftIcon={ICONS[resource.name]}
+                  />
+              ))
             : ''}
         {logout}
     </div>

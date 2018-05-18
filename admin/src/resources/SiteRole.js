@@ -23,6 +23,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 import SiteRoleFilter from '../filters/SiteRoleFilter';
 
 const validationCreateSiteRole = values => {
@@ -44,12 +45,20 @@ const validationEditSiteRole = values => {
 export const SiteRoleList = props => (
     <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('sites', 'list') ? (
+                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -77,12 +86,20 @@ export const SiteRoleCreate = props => (
 export const SiteRoleShow = props => (
     <Show {...props} title="SiteRole Show">
         <SimpleShowLayout>
-            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
-            <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                <NumberField source="label" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('sites', 'list') ? (
+                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            {permissionsStore.getResourcePermission('roles', 'list') ? (
+                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />

@@ -22,6 +22,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import permissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
 
@@ -44,9 +45,13 @@ const validationEditSiteDataSchema = values => {
 export const SiteDataSchemaList = props => (
     <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('sites', 'list') ? (
+                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <ObjectField source="schema" addLabel />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -71,9 +76,13 @@ export const SiteDataSchemaCreate = props => (
 export const SiteDataSchemaShow = props => (
     <Show {...props} title="SiteDataSchema Show">
         <SimpleShowLayout>
-            <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                <NumberField source="name" />
-            </ReferenceField>
+            {permissionsStore.getResourcePermission('sites', 'list') ? (
+                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <ObjectField source="schema" addLabel />
             <DateField source="created_at" />
             <DateField source="updated_at" />
