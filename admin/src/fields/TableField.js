@@ -48,16 +48,16 @@ class TableField extends Component {
     };
 
     render() {
-        const { label, linkField, linkedResource } = this.props;
+        const { label, linkField, linkedResource, selectable } = this.props;
         return this.state.data.length > 0 ? (
             <div style={styles.customTableDiv}>
                 <label style={styles.customTableLabel}>
                     <span>{label}</span>
                 </label>
-                <Table selectable={false}>
+                <Table selectable={selectable}>
                     <TableHeader
                         displaySelectAll={false}
-                        adjustForCheckbox={false}
+                        adjustForCheckbox={selectable}
                     >
                         <TableRow>
                             {Object.keys(this.state.data[0]).map(header => (
@@ -124,11 +124,13 @@ TableField.propTypes = {
     linkedResource: PropTypes.string,
     url: PropTypes.string,
     customPathParameters: PropTypes.array,
-    data: PropTypes.array
+    data: PropTypes.array,
+    selectable: PropTypes.bool
 };
 
 TableField.defaultProps = {
-    data: []
+    data: [],
+    selectable: false
 };
 
 export default TableField;

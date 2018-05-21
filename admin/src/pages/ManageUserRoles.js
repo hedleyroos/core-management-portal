@@ -11,9 +11,11 @@ class ManageUserRoles extends Component {
         super(props);
         this.state = {
             search: '',
-            userResults: [{id: 1, name:"Jono"}]
+            userResults: [{ id: 1, name: 'Jono' }],
+            selectedUser: null
         };
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     }
 
     handleSearch(event) {
@@ -21,6 +23,11 @@ class ManageUserRoles extends Component {
             console.log(event);
         }
         this.setState({ search: event.target.value });
+    }
+
+    handleSelect(event) {
+        console.log(event);
+        this.setState({ selectedUser: event.target.value });
     }
 
     render() {
@@ -36,9 +43,17 @@ class ManageUserRoles extends Component {
                             onChange={this.handleSearch}
                         />
                     </CardText>
-                    <CardText>
-                        <TableField label="Users Found" data={this.state.userResults} />
-                    </CardText>
+                    {this.state.userResults ? (
+                        <CardText>
+                            <TableField
+                                label="Users Found"
+                                data={this.state.userResults}
+                                selectable={true}
+                            />
+                        </CardText>
+                    ) : (
+                        ''
+                    )}
                 </Card>
             </Restricted>
         );
