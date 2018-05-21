@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
 import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
+import ManageIcon from 'material-ui/svg-icons/action/build';
 import InviteIcon from 'material-ui/svg-icons/editor/insert-invitation';
 import FingerprintIcon from 'material-ui/svg-icons/action/fingerprint';
 import ListIcon from 'material-ui/svg-icons/action/view-list';
@@ -74,6 +75,12 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                   />
               ))
             : ''}
+        <MenuItemLink
+            to="/manageuserroles"
+            primaryText="Manage User Roles"
+            onClick={onMenuTap}
+            leftIcon={<ManageIcon />}
+        />
         {logout}
     </div>
 );
