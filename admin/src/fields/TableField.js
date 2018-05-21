@@ -16,11 +16,13 @@ import { styles } from '../Theme';
 class TableField extends Component {
     constructor(props) {
         super(props);
-        this.state = { data: [] };
+        this.state = { data: props.data };
     }
 
     componentWillMount() {
-        this.getRelatedData();
+        this.props.data.length > 0
+            ? console.log('Data props given, no call made.')
+            : this.getRelatedData();
     }
 
     getRelatedData = () => {
@@ -120,8 +122,13 @@ TableField.propTypes = {
     record: PropTypes.object,
     linkField: PropTypes.string,
     linkedResource: PropTypes.string,
-    url: PropTypes.string.isRequired,
-    customPathParameters: PropTypes.array
+    url: PropTypes.string,
+    customPathParameters: PropTypes.array,
+    data: PropTypes.array
+};
+
+TableField.defaultProps = {
+    data: []
 };
 
 export default TableField;
