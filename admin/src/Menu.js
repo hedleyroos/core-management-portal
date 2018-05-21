@@ -54,7 +54,7 @@ const TITLES = {
     usersiteroles: 'User Site Roles',
     adminnotes: 'Admin Notes',
     sitedataschemas: 'Site Data Schemas',
-    organisationalunits: 'Organisational Units'
+    organisationalunits: 'Organisations'
 };
 
 const Menu = ({ resources, onMenuTap, logout }) => (
