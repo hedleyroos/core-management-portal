@@ -22,13 +22,17 @@ class ManageUserRoles extends Component {
             userRoles: null,
             selectedUser: null,
             userdomainroles: {},
-            usersiteroles: {}
+            usersiteroles: {},
+            selectedDomainSite: null,
+            selectedRole: null
         };
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.getWhereUserHasRoles('userdomainroles', 'domain_id');
         this.getWhereUserHasRoles('usersiteroles', 'site_id');
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleDomainSiteChange = this.handleDomainSiteChange.bind(this);
+        this.handleRoleChange = this.handleRoleChange.bind(this);
     }
 
     getWhereUserHasRoles(resource, key) {
@@ -38,7 +42,6 @@ class ManageUserRoles extends Component {
             filter: { user_id: userID }
         })
             .then(response => {
-                console.log(response.data);
                 const places = response.data.reduce((obj, placeRole) => {
                     if (obj[placeRole[key]]) {
                         obj[placeRole[key]].push(placeRole.role_id);
@@ -47,7 +50,6 @@ class ManageUserRoles extends Component {
                     }
                     return obj;
                 }, {});
-                console.log(places);
                 this.setState({ [resource]: places });
             })
             .catch(error => {
@@ -79,7 +81,8 @@ class ManageUserRoles extends Component {
                 search: input,
                 userResults: null,
                 selectedUser: null,
-                userRoles: null
+                userRoles: null,
+                selectedDomainSite: null
             });
         }
     }
@@ -113,6 +116,14 @@ class ManageUserRoles extends Component {
         }
     }
 
+    handleDomainSiteChange(event, index, value) {
+        this.setState({ selectedDomainSite: value });
+    }
+
+    handleRoleChange(event, index, value) {
+        this.setState({ selectedRole: value});
+    }
+
     render() {
         const {
             search,
@@ -120,7 +131,9 @@ class ManageUserRoles extends Component {
             selectedUser,
             userRoles,
             userdomainroles,
-            usersiteroles
+            usersiteroles,
+            selectedDomainSite,
+            selectedRole
         } = this.state;
         const user = selectedUser !== null ? userResults[selectedUser] : null;
         return (
@@ -172,44 +185,53 @@ class ManageUserRoles extends Component {
                                 <Divider />
                                 <CardHeader title="Assign Role" />
                                 <CardText>
-                                    <DropDownMenu>
-                                        {userdomainroles !== {} ? (
-                                            <MenuItem
-                                                primaryText="Domains"
-                                                disabled
-                                            />
-                                        ) : null}
-                                        {userdomainroles !== {}
+                                    <DropDownMenu
+                                        value={selectedDomainSite}
+                                        onChange={this.handleDomainSiteChange}
+                                    >
+                                        <MenuItem
+                                            value={null}
+                                            primaryText="Select Domain/Site"
+                                            disabled
+                                        />
+                                        {Object.keys(userdomainroles).length > 0
                                             ? Object.keys(userdomainroles).map(
                                                   domain => (
                                                       <MenuItem
+                                                          key={domain}
                                                           value={domain}
                                                           primaryText={domain}
+                                                          secondaryText="Domain"
                                                       />
                                                   )
                                               )
                                             : null}
-                                        {userdomainroles !== {} &&
-                                        usersiteroles !== {} ? (
+                                        {Object.keys(userdomainroles).length >
+                                            0 &&
+                                        Object.keys(usersiteroles).length >
+                                            0 ? (
                                             <Divider />
                                         ) : null}
-                                        {usersiteroles !== {} ? (
-                                            <MenuItem
-                                                primaryText="Sites"
-                                                disabled
-                                            />
-                                        ) : null}
-                                        {usersiteroles !== {}
+                                        {Object.keys(usersiteroles).length > 0
                                             ? Object.keys(usersiteroles).map(
                                                   site => (
                                                       <MenuItem
                                                           value={site}
                                                           primaryText={site}
+                                                          secondaryText="Site"
                                                       />
                                                   )
                                               )
                                             : null}
                                     </DropDownMenu>
+                                    {selectedDomainSite ? (
+                                        <DropDownMenu
+                                            value={selectedRole}
+                                            onChange={this.handleRoleChange}
+                                        >
+                                            <MenuItem value={null} primaryText="Select a Role to Assign" />
+                                        </DropDownMenu>
+                                    ) : null}
                                 </CardText>
                             </Card>
                         </CardText>
