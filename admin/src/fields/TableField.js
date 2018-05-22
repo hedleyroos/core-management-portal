@@ -70,7 +70,7 @@ class TableField extends Component {
                             ))}
                         </TableRow>
                     </TableHeader>
-                    <TableBody displayRowCheckbox={false} showRowHover={true}>
+                    <TableBody displayRowCheckbox={selectable} showRowHover={true}>
                         {this.state.data.map((entry, index) => (
                             <TableRow key={index}>
                                 {Object.keys(entry).map((header, index) => (
