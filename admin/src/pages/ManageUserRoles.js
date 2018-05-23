@@ -169,7 +169,13 @@ class ManageUserRoles extends Component {
             id: `${user.id}/${data.id}/${data.role_id}`
         })
             .then(response => {
-                console.log('Element Deleted.');
+                let newUserRoles = this.state.userRoles;
+                if (data.resource.split('domain').length > 1) {
+                    delete newUserRoles.domainRoles[`${data.id}:${data.role_id}`];
+                } else {
+                    delete newUserRoles.siteRoles[`${data.id}:${data.role_id}`];
+                }
+                this.setState({ userRoles: newUserRoles });
             })
             .catch(error => {
                 console.error(error);
@@ -228,7 +234,9 @@ class ManageUserRoles extends Component {
                                 <Divider />
                                 <CardHeader title="Domain Roles" />
                                 <CardText style={styles.wrapper}>
-                                    {userRoles && Object.keys(userRoles.domainRoles).length > 0
+                                    {userRoles &&
+                                    userRoles.domainRoles &&
+                                    Object.keys(userRoles.domainRoles).length > 0
                                         ? Object.values(userRoles.domainRoles).map(
                                               (domainRole, index) => (
                                                   <Chip
@@ -253,7 +261,9 @@ class ManageUserRoles extends Component {
                                 <Divider />
                                 <CardHeader title="Site Roles" />
                                 <CardText style={styles.wrapper}>
-                                    {userRoles && Object.keys(userRoles.siteRoles).length > 0
+                                    {userRoles &&
+                                    userRoles.siteRoles &&
+                                    Object.keys(userRoles.siteRoles).length > 0
                                         ? Object.values(userRoles.siteRoles).map(
                                               (siteRole, index) => (
                                                   <Chip
