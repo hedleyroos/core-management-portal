@@ -9,9 +9,10 @@ import Chip from 'material-ui/Chip';
 import Divider from 'material-ui/Divider';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import TextField from 'material-ui/TextField';
-import restClient, { GET_LIST } from '../swaggerRestServer';
+import restClient, { GET_LIST, GET_MANY, DELETE } from '../swaggerRestServer';
 import TableField from '../fields/TableField';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
+import { styles } from '../Theme';
 
 class ManageUserRoles extends Component {
     constructor(props) {
@@ -31,6 +32,7 @@ class ManageUserRoles extends Component {
         this.getWhereUserHasRoles('usersiteroles', 'site_id');
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.handleDomainSiteChange = this.handleDomainSiteChange.bind(this);
         this.handleRoleChange = this.handleRoleChange.bind(this);
     }
@@ -87,33 +89,91 @@ class ManageUserRoles extends Component {
         }
     }
 
-    handleSelect(rows) {
+    async handleSelect(rows) {
         if (rows.length > 0) {
-            const user = this.state.userResults[rows[0]];
-            restClient(GET_LIST, 'userdomainroles', {
-                filter: { user_id: user.id }
-            })
-                .then(response => {
-                    const domainRoles = response.data;
-                    restClient(GET_LIST, 'usersiteroles', {
-                        filter: { user_id: user.id }
-                    })
-                        .then(response => {
-                            const userRoles = response.data;
-                            userRoles.push(...domainRoles);
-                            this.setState({
-                                selectedUser: rows[0],
-                                userRoles: userRoles
-                            });
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                })
-                .catch(error => {
-                    console.error(error);
+            try {
+                let ids = {};
+                let roles = await restClient(GET_MANY, 'roles', {});
+                roles = roles.data.reduce((obj, role) => {
+                    obj[role.id] = role;
+                    return obj;
+                }, {});
+                const user = this.state.userResults[rows[0]];
+                // GET USERDOMAINROLES FOR SELECTED USER.
+                let domainRoles = await restClient(GET_LIST, 'userdomainroles', {
+                    filter: { user_id: user.id }
                 });
+                domainRoles = domainRoles.data;
+                if (domainRoles.length > 0) {
+                    // GET THE IDS AND REPLACE THEM WITH THE ACTUAL OBJECTS.
+                    ids = domainRoles.map(domainRole => domainRole.domain_id);
+                    let domains = await restClient(GET_MANY, 'domains', {
+                        ids: ids
+                    });
+                    domains = domains.data.reduce((obj, domain) => {
+                        obj[domain.id] = domain;
+                        return obj;
+                    }, {});
+
+                    domainRoles = domainRoles.reduce((obj, domainRole) => {
+                        obj[`${domainRole.domain_id}:${domainRole.role_id}`] = {
+                            domain: domains[domainRole.domain_id],
+                            role: roles[domainRole.role_id]
+                        };
+                        return obj;
+                    }, {});
+                }
+
+                // GET USERSITEROLES FOR SELECTED USER.
+                let siteRoles = await restClient(GET_LIST, 'usersiteroles', {
+                    filter: { user_id: user.id }
+                });
+                siteRoles = siteRoles.data;
+                if (siteRoles.length > 0) {
+                    // GET THE IDS AND REPLACE THEM WITH THE ACTUAL OBJECTS.
+                    ids = siteRoles.map(siteRole => siteRole.site_id);
+                    let sites = await restClient(GET_MANY, 'sites', {
+                        ids: ids
+                    });
+                    sites = sites.data.reduce((obj, site) => {
+                        obj[site.id] = site;
+                        return obj;
+                    }, {});
+
+                    siteRoles = siteRoles.reduce((obj, siteRole) => {
+                        obj[`${siteRole.site_id}:${siteRole.role_id}`] = {
+                            site: sites[siteRole.site_id],
+                            role: roles[siteRole.role_id]
+                        };
+                        return obj;
+                    }, {});
+                }
+                // SET THE STATE WITH THE SELECTED USER AND ALL ROLES FOUND.
+                this.setState({
+                    selectedUser: rows[0],
+                    userRoles: {
+                        domainRoles: domainRoles,
+                        siteRoles: siteRoles
+                    }
+                });
+            } catch (e) {
+                console.error(e);
+            }
         }
+    }
+
+    handleDelete(data) {
+        const { userResults, selectedUser } = this.state;
+        const user = selectedUser !== null ? userResults[selectedUser] : null;
+        restClient(DELETE, data.resource, {
+            id: `${user.id}/${data.id}/${data.role_id}`
+        })
+            .then(response => {
+                console.log('Element Deleted.');
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     handleDomainSiteChange(event, index, value) {
@@ -121,7 +181,7 @@ class ManageUserRoles extends Component {
     }
 
     handleRoleChange(event, index, value) {
-        this.setState({ selectedRole: value});
+        this.setState({ selectedRole: value });
     }
 
     render() {
@@ -164,23 +224,56 @@ class ManageUserRoles extends Component {
                     {selectedUser !== null ? (
                         <CardText>
                             <Card>
-                                <CardTitle
-                                    title={user.username}
-                                    subtitle={`ID: ${user.id}`}
-                                />
+                                <CardTitle title={user.username} subtitle={`ID: ${user.id}`} />
                                 <Divider />
-                                <CardHeader title="Current Roles" />
-                                <CardText>
-                                    {userRoles && userRoles.length > 0
-                                        ? userRoles.map((userRole, index) => (
-                                              <Chip key={index}>
-                                                  {`${userRole.domain_id ||
-                                                      userRole.site_id}: ${
-                                                      userRole.role_id
-                                                  }`}
-                                              </Chip>
-                                          ))
-                                        : 'User currently has no roles.'}
+                                <CardHeader title="Domain Roles" />
+                                <CardText style={styles.wrapper}>
+                                    {userRoles && Object.keys(userRoles.domainRoles).length > 0
+                                        ? Object.values(userRoles.domainRoles).map(
+                                              (domainRole, index) => (
+                                                  <Chip
+                                                      key={index}
+                                                      style={styles.chip}
+                                                      onRequestDelete={() =>
+                                                          this.handleDelete({
+                                                              resource: 'userdomainroles',
+                                                              id: domainRole.domain.id,
+                                                              role_id: domainRole.role.id
+                                                          })
+                                                      }
+                                                  >
+                                                      {`${domainRole.domain.name}: ${
+                                                          domainRole.role.label
+                                                      }`}
+                                                  </Chip>
+                                              )
+                                          )
+                                        : 'User currently has no explicit domain roles.'}
+                                </CardText>
+                                <Divider />
+                                <CardHeader title="Site Roles" />
+                                <CardText style={styles.wrapper}>
+                                    {userRoles && Object.keys(userRoles.siteRoles).length > 0
+                                        ? Object.values(userRoles.siteRoles).map(
+                                              (siteRole, index) => (
+                                                  <Chip
+                                                      key={index}
+                                                      style={styles.chip}
+                                                      onRequestDelete={() =>
+                                                          this.handleDelete({
+                                                              resource: 'usersiteroles',
+                                                              id: siteRole.site.id,
+                                                              role_id: siteRole.role.id
+                                                          })
+                                                      }
+                                                  >
+                                                      {`${siteRole.site.name}: ${
+                                                          siteRole.role.label
+                                                      }`}
+                                                  </Chip>
+                                              )
+                                          )
+                                        : 'User currently has no explicit site roles.'}
                                 </CardText>
                                 <Divider />
                                 <CardHeader title="Assign Role" />
@@ -195,33 +288,27 @@ class ManageUserRoles extends Component {
                                             disabled
                                         />
                                         {Object.keys(userdomainroles).length > 0
-                                            ? Object.keys(userdomainroles).map(
-                                                  domain => (
-                                                      <MenuItem
-                                                          key={domain}
-                                                          value={domain}
-                                                          primaryText={domain}
-                                                          secondaryText="Domain"
-                                                      />
-                                                  )
-                                              )
+                                            ? Object.keys(userdomainroles).map(domain => (
+                                                  <MenuItem
+                                                      key={domain}
+                                                      value={domain}
+                                                      primaryText={domain}
+                                                      secondaryText="Domain"
+                                                  />
+                                              ))
                                             : null}
-                                        {Object.keys(userdomainroles).length >
-                                            0 &&
-                                        Object.keys(usersiteroles).length >
-                                            0 ? (
+                                        {Object.keys(userdomainroles).length > 0 &&
+                                        Object.keys(usersiteroles).length > 0 ? (
                                             <Divider />
                                         ) : null}
                                         {Object.keys(usersiteroles).length > 0
-                                            ? Object.keys(usersiteroles).map(
-                                                  site => (
-                                                      <MenuItem
-                                                          value={site}
-                                                          primaryText={site}
-                                                          secondaryText="Site"
-                                                      />
-                                                  )
-                                              )
+                                            ? Object.keys(usersiteroles).map(site => (
+                                                  <MenuItem
+                                                      value={site}
+                                                      primaryText={site}
+                                                      secondaryText="Site"
+                                                  />
+                                              ))
                                             : null}
                                     </DropDownMenu>
                                     {selectedDomainSite ? (
@@ -229,7 +316,11 @@ class ManageUserRoles extends Component {
                                             value={selectedRole}
                                             onChange={this.handleRoleChange}
                                         >
-                                            <MenuItem value={null} primaryText="Select a Role to Assign" />
+                                            <MenuItem
+                                                value={null}
+                                                primaryText="Select a Role to Assign"
+                                            />
+                                            {}
                                         </DropDownMenu>
                                     ) : null}
                                 </CardText>
