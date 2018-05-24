@@ -7,14 +7,173 @@ import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
 import Checkbox from 'material-ui/Checkbox';
 import Chip from 'material-ui/Chip';
+import Dialog from 'material-ui/Dialog';
 import Divider from 'material-ui/Divider';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import restClient, { CREATE, GET_LIST, GET_MANY, DELETE } from '../swaggerRestServer';
 import TableField from '../fields/TableField';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
 import { styles } from '../Theme';
+
+const UserCard = props => {
+    const { user, userRoles, handleDelete } = props;
+    return (
+        <Card>
+            <CardTitle title={user.username} subtitle={`ID: ${user.id}`} />
+            <Divider />
+            <CardHeader title="Domain Roles" />
+            <CardText style={styles.wrapper}>
+                {userRoles && userRoles.domainRoles && Object.keys(userRoles.domainRoles).length > 0
+                    ? Object.values(userRoles.domainRoles).map((domainRole, index) => (
+                          <Chip
+                              key={index}
+                              style={styles.chip}
+                              onRequestDelete={() =>
+                                  handleDelete({
+                                      resource: 'userdomainroles',
+                                      id: domainRole.domain.id,
+                                      role_id: domainRole.role.id
+                                  })
+                              }
+                          >
+                              {`${domainRole.domain.name}: ${domainRole.role.label}`}
+                          </Chip>
+                      ))
+                    : 'User currently has no explicit domain roles.'}
+            </CardText>
+            <Divider />
+            <CardHeader title="Site Roles" />
+            <CardText style={styles.wrapper}>
+                {userRoles && userRoles.siteRoles && Object.keys(userRoles.siteRoles).length > 0
+                    ? Object.values(userRoles.siteRoles).map((siteRole, index) => (
+                          <Chip
+                              key={index}
+                              style={styles.chip}
+                              onRequestDelete={() =>
+                                  handleDelete({
+                                      resource: 'usersiteroles',
+                                      id: siteRole.site.id,
+                                      role_id: siteRole.role.id
+                                  })
+                              }
+                          >
+                              {`${siteRole.site.name}: ${siteRole.role.label}`}
+                          </Chip>
+                      ))
+                    : 'User currently has no explicit site roles.'}
+            </CardText>
+        </Card>
+    );
+};
+
+const AssignRoleCard = props => {
+    const {
+        selectedDomainSite,
+        handleDomainSiteChange,
+        userdomains,
+        usersites,
+        handleRoleSelection,
+        roleSelections,
+        handleAssign,
+        readyToAssign
+    } = props;
+    return (
+        <Card>
+            <CardTitle title="Assign Role" />
+            <CardText>
+                <CardHeader subtitle="Select a Domain or Site:" />
+                <DropDownMenu
+                    value={selectedDomainSite}
+                    onChange={handleDomainSiteChange}
+                    style={styles.wideDropDown}
+                    autoWidth={false}
+                >
+                    <MenuItem value={null} primaryText="Select Domain/Site" disabled />
+                    {Object.keys(userdomains).length > 0
+                        ? Object.values(userdomains).map(domain => (
+                              <MenuItem
+                                  key={`${domain.id}:domain`}
+                                  value={`${domain.id}:domain`}
+                                  primaryText={domain.name}
+                                  secondaryText="Domain"
+                              />
+                          ))
+                        : null}
+                    {Object.keys(userdomains).length > 0 && Object.keys(usersites).length > 0 ? (
+                        <Divider />
+                    ) : null}
+                    {Object.keys(usersites).length > 0
+                        ? Object.values(usersites).map(site => (
+                              <MenuItem
+                                  key={`${site.id}:site`}
+                                  value={`${site.id}:site`}
+                                  primaryText={site.name}
+                                  secondaryText="Site"
+                              />
+                          ))
+                        : null}
+                </DropDownMenu>
+                {selectedDomainSite ? (
+                    <div>
+                        <CardHeader subtitle="Please choose the roles to add:" />
+                        <CardText>
+                            {Object.keys(roleSelections).length > 0
+                                ? Object.values(roleSelections).map(roleSelection => (
+                                      <Checkbox
+                                          key={roleSelection.id}
+                                          label={roleSelection.label}
+                                          checked={roleSelection.selected}
+                                          onCheck={() => handleRoleSelection(roleSelection.id)}
+                                      />
+                                  ))
+                                : 'No roles to Select on this domain/site.'}
+                        </CardText>
+                    </div>
+                ) : null}
+                {readyToAssign ? (
+                    <CardText>
+                        <RaisedButton
+                            label="Assign Roles"
+                            secondary={true}
+                            onClick={handleAssign}
+                        />
+                    </CardText>
+                ) : null}
+            </CardText>
+        </Card>
+    );
+};
+
+const ConfirmDialog = props => {
+    const { open, handleClose, cancelLabel, submitLabel } = props;
+    const actions = [
+        <FlatButton
+            label={cancelLabel || 'Cancel'}
+            primary={true}
+            onClick={() => handleClose('no')}
+        />,
+        <RaisedButton
+            label={submitLabel || 'Submit'}
+            primary={true}
+            onClick={() => handleClose('yes')}
+        />
+    ];
+
+    return (
+        <Dialog
+            title="Are you sure?"
+            actions={actions}
+            modal={false}
+            open={open}
+            onRequestClose={() => handleClose('no')}
+        >
+            Are you sure you would like to delete?
+        </Dialog>
+    );
+};
 
 class ManageUserRoles extends Component {
     constructor(props) {
@@ -23,7 +182,7 @@ class ManageUserRoles extends Component {
             search: '',
             userResults: null,
             userRoles: null,
-            selectedUser: null,
+            selectedUser: -1,
             userdomains: {},
             userdomainroles: {},
             usersites: {},
@@ -31,7 +190,9 @@ class ManageUserRoles extends Component {
             selectedDomainSite: null,
             roleSelections: null,
             rolesMapping: null,
-            readyToAssign: 0
+            readyToAssign: 0,
+            open: false,
+            roleToDelete: null
         };
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.getWhereUserHasRoles('userdomainroles', 'domain_id');
@@ -42,6 +203,8 @@ class ManageUserRoles extends Component {
         this.handleDomainSiteChange = this.handleDomainSiteChange.bind(this);
         this.handleRoleSelection = this.handleRoleSelection.bind(this);
         this.handleAssign = this.handleAssign.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
     async getWhereUserHasRoles(resource, key) {
@@ -58,7 +221,12 @@ class ManageUserRoles extends Component {
             let placeRoles = await restClient(GET_LIST, resource, {
                 filter: { user_id: userID }
             });
-            const ids = placeRoles.data.map(placeRole => placeRole[key]);
+            const ids = placeRoles.data.reduce((ids, placeRole) => {
+                if (ids.indexOf(placeRole[key]) < 0) {
+                    ids.push(placeRole[key]);
+                }
+                return ids;
+            }, []);
             placeRoles = placeRoles.data.reduce((obj, placeRole) => {
                 if (obj[placeRole[key]]) {
                     obj[placeRole[key]].push(roles[placeRole.role_id]);
@@ -115,7 +283,7 @@ class ManageUserRoles extends Component {
             this.setState({
                 search: input,
                 userResults: null,
-                selectedUser: null,
+                selectedUser: -1,
                 userRoles: null,
                 selectedDomainSite: null
             });
@@ -142,7 +310,12 @@ class ManageUserRoles extends Component {
                 domainRoles = domainRoles.data;
                 if (domainRoles.length > 0) {
                     // GET THE IDS AND REPLACE THEM WITH THE ACTUAL OBJECTS.
-                    ids = domainRoles.map(domainRole => domainRole.domain_id);
+                    ids = domainRoles.reduce((ids, domainRole) => {
+                        if (ids.indexOf(domainRole.domain_id) < 0) {
+                            ids.push(domainRole.domain_id);
+                        }
+                        return ids;
+                    }, []);
                     let domains = await restClient(GET_MANY, 'domains', {
                         ids: ids
                     });
@@ -167,7 +340,12 @@ class ManageUserRoles extends Component {
                 siteRoles = siteRoles.data;
                 if (siteRoles.length > 0) {
                     // GET THE IDS AND REPLACE THEM WITH THE ACTUAL OBJECTS.
-                    ids = siteRoles.map(siteRole => siteRole.site_id);
+                    ids = siteRoles.reduce((ids, siteRole) => {
+                        if (ids.indexOf(siteRole.site_id) < 0) {
+                            ids.push(siteRole.site_id);
+                        }
+                        return ids;
+                    }, []);
                     let sites = await restClient(GET_MANY, 'sites', {
                         ids: ids
                     });
@@ -200,7 +378,7 @@ class ManageUserRoles extends Component {
 
     handleDelete(data) {
         const { userResults, selectedUser, userRoles } = this.state;
-        const user = selectedUser !== null ? userResults[selectedUser] : null;
+        const user = selectedUser >= 0 ? userResults[selectedUser] : null;
         restClient(DELETE, data.resource, {
             id: `${user.id}/${data.id}/${data.role_id}`
         })
@@ -299,6 +477,21 @@ class ManageUserRoles extends Component {
         });
     }
 
+    handleOpen(data) {
+        this.setState({ open: true, roleToDelete: data });
+    }
+
+    handleClose(action) {
+        switch (action) {
+            case 'yes':
+                this.handleDelete(this.state.roleToDelete);
+                this.setState({ open: false });
+                break;
+            default:
+                this.setState({ open: false });
+        }
+    }
+
     render() {
         const {
             search,
@@ -309,9 +502,10 @@ class ManageUserRoles extends Component {
             usersites,
             selectedDomainSite,
             roleSelections,
-            readyToAssign
+            readyToAssign,
+            open
         } = this.state;
-        const user = selectedUser !== null ? userResults[selectedUser] : null;
+        const user = selectedUser >= 0 ? userResults[selectedUser] : null;
         return (
             <Restricted>
                 <Card>
@@ -337,142 +531,33 @@ class ManageUserRoles extends Component {
                             'No Users found.'
                         )}
                     </CardText>
-                    {selectedUser !== null ? (
+                    {selectedUser >= 0 ? (
                         <CardText>
-                            <Card>
-                                <CardTitle title={user.username} subtitle={`ID: ${user.id}`} />
-                                <Divider />
-                                <CardHeader title="Domain Roles" />
-                                <CardText style={styles.wrapper}>
-                                    {userRoles &&
-                                    userRoles.domainRoles &&
-                                    Object.keys(userRoles.domainRoles).length > 0
-                                        ? Object.values(userRoles.domainRoles).map(
-                                              (domainRole, index) => (
-                                                  <Chip
-                                                      key={index}
-                                                      style={styles.chip}
-                                                      onRequestDelete={() =>
-                                                          this.handleDelete({
-                                                              resource: 'userdomainroles',
-                                                              id: domainRole.domain.id,
-                                                              role_id: domainRole.role.id
-                                                          })
-                                                      }
-                                                  >
-                                                      {`${domainRole.domain.name}: ${
-                                                          domainRole.role.label
-                                                      }`}
-                                                  </Chip>
-                                              )
-                                          )
-                                        : 'User currently has no explicit domain roles.'}
-                                </CardText>
-                                <Divider />
-                                <CardHeader title="Site Roles" />
-                                <CardText style={styles.wrapper}>
-                                    {userRoles &&
-                                    userRoles.siteRoles &&
-                                    Object.keys(userRoles.siteRoles).length > 0
-                                        ? Object.values(userRoles.siteRoles).map(
-                                              (siteRole, index) => (
-                                                  <Chip
-                                                      key={index}
-                                                      style={styles.chip}
-                                                      onRequestDelete={() =>
-                                                          this.handleDelete({
-                                                              resource: 'usersiteroles',
-                                                              id: siteRole.site.id,
-                                                              role_id: siteRole.role.id
-                                                          })
-                                                      }
-                                                  >
-                                                      {`${siteRole.site.name}: ${
-                                                          siteRole.role.label
-                                                      }`}
-                                                  </Chip>
-                                              )
-                                          )
-                                        : 'User currently has no explicit site roles.'}
-                                </CardText>
-                                <Divider />
-                                <CardHeader title="Assign Role" />
-                                <CardText>
-                                    <CardHeader subtitle="Select a Domain or Site:" />
-                                    <DropDownMenu
-                                        value={selectedDomainSite}
-                                        onChange={this.handleDomainSiteChange}
-                                        style={styles.wideDropDown}
-                                        autoWidth={false}
-                                    >
-                                        <MenuItem
-                                            value={null}
-                                            primaryText="Select Domain/Site"
-                                            disabled
-                                        />
-                                        {Object.keys(userdomains).length > 0
-                                            ? Object.values(userdomains).map(domain => (
-                                                  <MenuItem
-                                                      key={domain.id}
-                                                      value={`${domain.id}:domain`}
-                                                      primaryText={domain.name}
-                                                      secondaryText="Domain"
-                                                  />
-                                              ))
-                                            : null}
-                                        {Object.keys(userdomains).length > 0 &&
-                                        Object.keys(usersites).length > 0 ? (
-                                            <Divider />
-                                        ) : null}
-                                        {Object.keys(usersites).length > 0
-                                            ? Object.keys(usersites).map(site => (
-                                                  <MenuItem
-                                                      key={site.id}
-                                                      value={`${site.id}:site`}
-                                                      primaryText={site.name}
-                                                      secondaryText="Site"
-                                                  />
-                                              ))
-                                            : null}
-                                    </DropDownMenu>
-                                    {selectedDomainSite ? (
-                                        <div>
-                                            <CardHeader subtitle="Please choose the roles to add:" />
-                                            <CardText>
-                                                {Object.keys(roleSelections).length > 0
-                                                    ? Object.values(roleSelections).map(
-                                                          roleSelection => (
-                                                              <Checkbox
-                                                                  key={roleSelection.id}
-                                                                  label={roleSelection.label}
-                                                                  checked={roleSelection.selected}
-                                                                  onCheck={() =>
-                                                                      this.handleRoleSelection(
-                                                                          roleSelection.id
-                                                                      )
-                                                                  }
-                                                              />
-                                                          )
-                                                      )
-                                                    : 'No roles to Select on this domain/site.'}
-                                            </CardText>
-                                        </div>
-                                    ) : null}
-                                    {readyToAssign ? (
-                                        <CardText>
-                                            <RaisedButton
-                                                label="Assign Roles"
-                                                secondary={true}
-                                                onClick={this.handleAssign}
-                                            />
-                                        </CardText>
-                                    ) : null}
-                                </CardText>
-                            </Card>
+                            <UserCard
+                                user={user}
+                                userRoles={userRoles}
+                                handleDelete={this.handleOpen}
+                            />
+                            <AssignRoleCard
+                                selectedDomainSite={selectedDomainSite}
+                                handleDomainSiteChange={this.handleDomainSiteChange}
+                                userdomains={userdomains}
+                                usersites={usersites}
+                                handleRoleSelection={this.handleRoleSelection}
+                                roleSelections={roleSelections}
+                                handleAssign={this.handleAssign}
+                                readyToAssign={readyToAssign}
+                            />
                         </CardText>
                     ) : (
                         ''
                     )}
+                    <ConfirmDialog
+                        open={open}
+                        handleClose={this.handleClose}
+                        cancelLabel="No"
+                        submitLabel="Delete"
+                    />
                 </Card>
             </Restricted>
         );
