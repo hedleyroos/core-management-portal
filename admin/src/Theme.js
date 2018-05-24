@@ -59,5 +59,8 @@ export const styles = {
     fieldOptionsCard: {
         margin: '20px',
         width: '30rem'
+    },
+    wideDropDown: {
+        width: '500px'
     }
 };

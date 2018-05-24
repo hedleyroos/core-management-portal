@@ -5,11 +5,13 @@ import Card from 'material-ui/Card/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
+import Checkbox from 'material-ui/Checkbox';
 import Chip from 'material-ui/Chip';
 import Divider from 'material-ui/Divider';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import restClient, { GET_LIST, GET_MANY, DELETE } from '../swaggerRestServer';
+import restClient, { CREATE, GET_LIST, GET_MANY, DELETE } from '../swaggerRestServer';
 import TableField from '../fields/TableField';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
 import { styles } from '../Theme';
@@ -22,10 +24,14 @@ class ManageUserRoles extends Component {
             userResults: null,
             userRoles: null,
             selectedUser: null,
+            userdomains: {},
             userdomainroles: {},
+            usersites: {},
             usersiteroles: {},
             selectedDomainSite: null,
-            selectedRole: null
+            roleSelections: null,
+            rolesMapping: null,
+            readyToAssign: 0
         };
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.getWhereUserHasRoles('userdomainroles', 'domain_id');
@@ -34,29 +40,56 @@ class ManageUserRoles extends Component {
         this.handleSelect = this.handleSelect.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDomainSiteChange = this.handleDomainSiteChange.bind(this);
-        this.handleRoleChange = this.handleRoleChange.bind(this);
+        this.handleRoleSelection = this.handleRoleSelection.bind(this);
+        this.handleAssign = this.handleAssign.bind(this);
     }
 
-    getWhereUserHasRoles(resource, key) {
+    async getWhereUserHasRoles(resource, key) {
         const userID = jwtDecode(localStorage.getItem('id_token')).sub;
-
-        restClient(GET_LIST, resource, {
-            filter: { user_id: userID }
-        })
-            .then(response => {
-                const places = response.data.reduce((obj, placeRole) => {
-                    if (obj[placeRole[key]]) {
-                        obj[placeRole[key]].push(placeRole.role_id);
-                    } else {
-                        obj[placeRole[key]] = [placeRole.role_id];
-                    }
+        try {
+            let roles = this.state.rolesMapping;
+            if (!roles) {
+                roles = await restClient(GET_MANY, 'roles', {});
+                roles = roles.data.reduce((obj, role) => {
+                    obj[role.id] = role;
                     return obj;
                 }, {});
-                this.setState({ [resource]: places });
-            })
-            .catch(error => {
-                console.error(error);
+            }
+            let placeRoles = await restClient(GET_LIST, resource, {
+                filter: { user_id: userID }
             });
+            const ids = placeRoles.data.map(placeRole => placeRole[key]);
+            placeRoles = placeRoles.data.reduce((obj, placeRole) => {
+                if (obj[placeRole[key]]) {
+                    obj[placeRole[key]].push(roles[placeRole.role_id]);
+                } else {
+                    obj[placeRole[key]] = [roles[placeRole.role_id]];
+                }
+                return obj;
+            }, {});
+
+            let places = [];
+
+            if (ids.length > 0) {
+                places = await restClient(
+                    GET_LIST,
+                    resource.split('domain').length > 1 ? 'domains' : 'sites',
+                    {
+                        filter: {
+                            [`${key}s`]: ids.join(',')
+                        }
+                    }
+                );
+                places = places.data.reduce((obj, place) => {
+                    obj[place.id] = place;
+                    return obj;
+                }, {});
+            }
+            const placeName = resource.split('roles')[0] + 's';
+            this.setState({ [resource]: placeRoles, [placeName]: places, rolesMapping: roles });
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     handleSearch(event) {
@@ -93,11 +126,14 @@ class ManageUserRoles extends Component {
         if (rows.length > 0) {
             try {
                 let ids = {};
-                let roles = await restClient(GET_MANY, 'roles', {});
-                roles = roles.data.reduce((obj, role) => {
-                    obj[role.id] = role;
-                    return obj;
-                }, {});
+                let roles = this.state.rolesMapping;
+                if (!roles) {
+                    roles = await restClient(GET_MANY, 'roles', {});
+                    roles = roles.data.reduce((obj, role) => {
+                        obj[role.id] = role;
+                        return obj;
+                    }, {});
+                }
                 const user = this.state.userResults[rows[0]];
                 // GET USERDOMAINROLES FOR SELECTED USER.
                 let domainRoles = await restClient(GET_LIST, 'userdomainroles', {
@@ -163,13 +199,13 @@ class ManageUserRoles extends Component {
     }
 
     handleDelete(data) {
-        const { userResults, selectedUser } = this.state;
+        const { userResults, selectedUser, userRoles } = this.state;
         const user = selectedUser !== null ? userResults[selectedUser] : null;
         restClient(DELETE, data.resource, {
             id: `${user.id}/${data.id}/${data.role_id}`
         })
             .then(response => {
-                let newUserRoles = this.state.userRoles;
+                let newUserRoles = userRoles;
                 if (data.resource.split('domain').length > 1) {
                     delete newUserRoles.domainRoles[`${data.id}:${data.role_id}`];
                 } else {
@@ -183,11 +219,84 @@ class ManageUserRoles extends Component {
     }
 
     handleDomainSiteChange(event, index, value) {
-        this.setState({ selectedDomainSite: value });
+        const splitValue = value.split(':');
+        let roles = [];
+        if (splitValue[1] === 'domain') {
+            roles = this.state.userdomainroles[splitValue[0]];
+        } else {
+            roles = this.state.usersiteroles[splitValue[0]];
+        }
+        this.setState({
+            selectedDomainSite: value,
+            roleSelections: roles.reduce((obj, role) => {
+                obj[role.id] = {
+                    ...role,
+                    selected: false
+                };
+                return obj;
+            }, {})
+        });
     }
 
-    handleRoleChange(event, index, value) {
-        this.setState({ selectedRole: value });
+    handleRoleSelection(value) {
+        const { roleSelections, readyToAssign } = this.state;
+        this.setState({
+            readyToAssign: !roleSelections[value].selected ? readyToAssign + 1 : readyToAssign - 1,
+            roleSelections: {
+                ...roleSelections,
+                [value]: {
+                    ...roleSelections[value],
+                    selected: !roleSelections[value].selected
+                }
+            }
+        });
+    }
+
+    handleAssign() {
+        const {
+            userResults,
+            selectedUser,
+            userRoles,
+            userdomains,
+            usersites,
+            selectedDomainSite,
+            rolesMapping,
+            roleSelections
+        } = this.state;
+        const placeSplit = selectedDomainSite.split(':');
+        Object.values(roleSelections).map(roleSelection => {
+            if (roleSelection.selected) {
+                restClient(CREATE, `user${placeSplit[1]}roles`, {
+                    data: {
+                        user_id: userResults[selectedUser].id,
+                        [`${placeSplit[1]}_id`]: parseInt(placeSplit[0], 10),
+                        role_id: roleSelection.id
+                    }
+                })
+                    .then(response => {
+                        let newUserRoles = userRoles;
+                        newUserRoles[`${placeSplit[1]}Roles`][
+                            `${placeSplit[0]}:${roleSelection.id}`
+                        ] = {
+                            [placeSplit[1]]:
+                                placeSplit[1] === 'domain'
+                                    ? userdomains[placeSplit[0]]
+                                    : usersites[placeSplit[0]],
+                            role: rolesMapping[roleSelection.id]
+                        };
+                        this.setState({ userRoles: newUserRoles });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+            return null;
+        });
+        this.setState({
+            readyToAssign: 0,
+            roleSelections: null,
+            selectedDomainSite: null
+        });
     }
 
     render() {
@@ -196,10 +305,11 @@ class ManageUserRoles extends Component {
             userResults,
             selectedUser,
             userRoles,
-            userdomainroles,
-            usersiteroles,
+            userdomains,
+            usersites,
             selectedDomainSite,
-            selectedRole
+            roleSelections,
+            readyToAssign
         } = this.state;
         const user = selectedUser !== null ? userResults[selectedUser] : null;
         return (
@@ -288,50 +398,74 @@ class ManageUserRoles extends Component {
                                 <Divider />
                                 <CardHeader title="Assign Role" />
                                 <CardText>
+                                    <CardHeader subtitle="Select a Domain or Site:" />
                                     <DropDownMenu
                                         value={selectedDomainSite}
                                         onChange={this.handleDomainSiteChange}
+                                        style={styles.wideDropDown}
+                                        autoWidth={false}
                                     >
                                         <MenuItem
                                             value={null}
                                             primaryText="Select Domain/Site"
                                             disabled
                                         />
-                                        {Object.keys(userdomainroles).length > 0
-                                            ? Object.keys(userdomainroles).map(domain => (
+                                        {Object.keys(userdomains).length > 0
+                                            ? Object.values(userdomains).map(domain => (
                                                   <MenuItem
-                                                      key={domain}
-                                                      value={domain}
-                                                      primaryText={domain}
+                                                      key={domain.id}
+                                                      value={`${domain.id}:domain`}
+                                                      primaryText={domain.name}
                                                       secondaryText="Domain"
                                                   />
                                               ))
                                             : null}
-                                        {Object.keys(userdomainroles).length > 0 &&
-                                        Object.keys(usersiteroles).length > 0 ? (
+                                        {Object.keys(userdomains).length > 0 &&
+                                        Object.keys(usersites).length > 0 ? (
                                             <Divider />
                                         ) : null}
-                                        {Object.keys(usersiteroles).length > 0
-                                            ? Object.keys(usersiteroles).map(site => (
+                                        {Object.keys(usersites).length > 0
+                                            ? Object.keys(usersites).map(site => (
                                                   <MenuItem
-                                                      value={site}
-                                                      primaryText={site}
+                                                      key={site.id}
+                                                      value={`${site.id}:site`}
+                                                      primaryText={site.name}
                                                       secondaryText="Site"
                                                   />
                                               ))
                                             : null}
                                     </DropDownMenu>
                                     {selectedDomainSite ? (
-                                        <DropDownMenu
-                                            value={selectedRole}
-                                            onChange={this.handleRoleChange}
-                                        >
-                                            <MenuItem
-                                                value={null}
-                                                primaryText="Select a Role to Assign"
+                                        <div>
+                                            <CardHeader subtitle="Please choose the roles to add:" />
+                                            <CardText>
+                                                {Object.keys(roleSelections).length > 0
+                                                    ? Object.values(roleSelections).map(
+                                                          roleSelection => (
+                                                              <Checkbox
+                                                                  key={roleSelection.id}
+                                                                  label={roleSelection.label}
+                                                                  checked={roleSelection.selected}
+                                                                  onCheck={() =>
+                                                                      this.handleRoleSelection(
+                                                                          roleSelection.id
+                                                                      )
+                                                                  }
+                                                              />
+                                                          )
+                                                      )
+                                                    : 'No roles to Select on this domain/site.'}
+                                            </CardText>
+                                        </div>
+                                    ) : null}
+                                    {readyToAssign ? (
+                                        <CardText>
+                                            <RaisedButton
+                                                label="Assign Roles"
+                                                secondary={true}
+                                                onClick={this.handleAssign}
                                             />
-                                            {}
-                                        </DropDownMenu>
+                                        </CardText>
                                     ) : null}
                                 </CardText>
                             </Card>
