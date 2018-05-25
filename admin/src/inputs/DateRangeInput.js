@@ -36,6 +36,7 @@ class DateRangeInput extends Component {
     }
 
     dateParser(value) {
+        // Value recieved is a string in the DateInput.
         const regexp = /(\d{4})-(\d{2})-(\d{2})/;
         let match = regexp.exec(value);
         if (match === null) return;
@@ -59,6 +60,7 @@ class DateRangeInput extends Component {
     }
 
     dateTimeFormatter(value) {
+        // Value recieved is a date object in the DateTimeInput.
         if (timezoneOffset !== 0 && value) {
             value = new Date(value);
             value = new Date(value.valueOf() + timezoneOffset * 60000);
@@ -67,6 +69,7 @@ class DateRangeInput extends Component {
     }
 
     dateTimeParser(value) {
+        // Value recieved is a date object in the DateTimeInput.
         if (timezoneOffset !== 0 && value) {
             value = new Date(value.valueOf() - timezoneOffset * 60000);
         }
