@@ -2,178 +2,16 @@ import { Restricted } from 'admin-on-rest';
 import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
 import Card from 'material-ui/Card/Card';
-import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
-import Checkbox from 'material-ui/Checkbox';
-import Chip from 'material-ui/Chip';
-import Dialog from 'material-ui/Dialog';
-import Divider from 'material-ui/Divider';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import restClient, { CREATE, GET_LIST, GET_MANY, DELETE } from '../swaggerRestServer';
-import TableField from '../fields/TableField';
-import MenuItem from 'material-ui/MenuItem/MenuItem';
-import { styles } from '../Theme';
+import restClient, { CREATE, GET_LIST, GET_MANY, DELETE } from '../../swaggerRestServer';
+import TableField from '../../fields/TableField';
 
-const UserCard = props => {
-    const { user, userRoles, handleDelete } = props;
-    return (
-        <Card>
-            <CardTitle title={user.username} subtitle={`ID: ${user.id}`} />
-            <Divider />
-            <CardHeader title="Domain Roles" />
-            <CardText style={styles.wrapper}>
-                {userRoles && userRoles.domainRoles && Object.keys(userRoles.domainRoles).length > 0
-                    ? Object.values(userRoles.domainRoles).map((domainRole, index) => (
-                          <Chip
-                              key={index}
-                              style={styles.chip}
-                              onRequestDelete={() =>
-                                  handleDelete({
-                                      resource: 'userdomainroles',
-                                      id: domainRole.domain.id,
-                                      role_id: domainRole.role.id
-                                  })
-                              }
-                          >
-                              {`${domainRole.domain.name}: ${domainRole.role.label}`}
-                          </Chip>
-                      ))
-                    : 'User currently has no explicit domain roles.'}
-            </CardText>
-            <Divider />
-            <CardHeader title="Site Roles" />
-            <CardText style={styles.wrapper}>
-                {userRoles && userRoles.siteRoles && Object.keys(userRoles.siteRoles).length > 0
-                    ? Object.values(userRoles.siteRoles).map((siteRole, index) => (
-                          <Chip
-                              key={index}
-                              style={styles.chip}
-                              onRequestDelete={() =>
-                                  handleDelete({
-                                      resource: 'usersiteroles',
-                                      id: siteRole.site.id,
-                                      role_id: siteRole.role.id
-                                  })
-                              }
-                          >
-                              {`${siteRole.site.name}: ${siteRole.role.label}`}
-                          </Chip>
-                      ))
-                    : 'User currently has no explicit site roles.'}
-            </CardText>
-        </Card>
-    );
-};
+import UserCard from './UserCard';
+import AssignRoleCard from './AssignRoleCard';
+import ConfirmDialog from './ConfirmDialog'
 
-const AssignRoleCard = props => {
-    const {
-        selectedDomainSite,
-        handleDomainSiteChange,
-        userdomains,
-        usersites,
-        handleRoleSelection,
-        roleSelections,
-        handleAssign,
-        readyToAssign
-    } = props;
-    return (
-        <Card>
-            <CardTitle title="Assign Role" />
-            <CardText>
-                <CardHeader subtitle="Select a Domain or Site:" />
-                <DropDownMenu
-                    value={selectedDomainSite}
-                    onChange={handleDomainSiteChange}
-                    style={styles.wideDropDown}
-                    autoWidth={false}
-                >
-                    <MenuItem value={null} primaryText="Select Domain/Site" disabled />
-                    {Object.keys(userdomains).length > 0
-                        ? Object.values(userdomains).map(domain => (
-                              <MenuItem
-                                  key={`${domain.id}:domain`}
-                                  value={`${domain.id}:domain`}
-                                  primaryText={domain.name}
-                                  secondaryText="Domain"
-                              />
-                          ))
-                        : null}
-                    {Object.keys(userdomains).length > 0 && Object.keys(usersites).length > 0 ? (
-                        <Divider />
-                    ) : null}
-                    {Object.keys(usersites).length > 0
-                        ? Object.values(usersites).map(site => (
-                              <MenuItem
-                                  key={`${site.id}:site`}
-                                  value={`${site.id}:site`}
-                                  primaryText={site.name}
-                                  secondaryText="Site"
-                              />
-                          ))
-                        : null}
-                </DropDownMenu>
-                {selectedDomainSite ? (
-                    <div>
-                        <CardHeader subtitle="Please choose the roles to add:" />
-                        <CardText>
-                            {Object.keys(roleSelections).length > 0
-                                ? Object.values(roleSelections).map(roleSelection => (
-                                      <Checkbox
-                                          key={roleSelection.id}
-                                          label={roleSelection.label}
-                                          checked={roleSelection.selected}
-                                          onCheck={() => handleRoleSelection(roleSelection.id)}
-                                      />
-                                  ))
-                                : 'No roles to Select on this domain/site.'}
-                        </CardText>
-                    </div>
-                ) : null}
-                {readyToAssign ? (
-                    <CardText>
-                        <RaisedButton
-                            label="Assign Roles"
-                            secondary={true}
-                            onClick={handleAssign}
-                        />
-                    </CardText>
-                ) : null}
-            </CardText>
-        </Card>
-    );
-};
-
-const ConfirmDialog = props => {
-    const { open, handleClose, cancelLabel, submitLabel } = props;
-    const actions = [
-        <FlatButton
-            label={cancelLabel || 'Cancel'}
-            primary={true}
-            onClick={() => handleClose('no')}
-        />,
-        <RaisedButton
-            label={submitLabel || 'Submit'}
-            primary={true}
-            onClick={() => handleClose('yes')}
-        />
-    ];
-
-    return (
-        <Dialog
-            title="Are you sure?"
-            actions={actions}
-            modal={false}
-            open={open}
-            onRequestClose={() => handleClose('no')}
-        >
-            Are you sure you would like to delete?
-        </Dialog>
-    );
-};
 
 class ManageUserRoles extends Component {
     constructor(props) {
@@ -483,7 +321,7 @@ class ManageUserRoles extends Component {
 
     handleClose(action) {
         switch (action) {
-            case 'yes':
+            case 'submit':
                 this.handleDelete(this.state.roleToDelete);
                 this.setState({ open: false });
                 break;
@@ -557,6 +395,7 @@ class ManageUserRoles extends Component {
                         handleClose={this.handleClose}
                         cancelLabel="No"
                         submitLabel="Delete"
+                        text="Are you sure you want to delete this role?"
                     />
                 </Card>
             </Restricted>

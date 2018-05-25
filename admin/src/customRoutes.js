@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import OIDCCallback from './auth/OIDCCallback';
-import ManageUserRoles from './pages/ManageUserRoles';
+import ManageUserRoles from './pages/ManageUserRoles/ManageUserRoles';
 
 export default [
     <Route exact path="/oidc/callback" component={OIDCCallback} />,
