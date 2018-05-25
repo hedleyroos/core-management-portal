@@ -39,7 +39,7 @@ class DateRangeInput extends Component {
         const fromProps = {
             options: {
                 maxDate:
-                    this.state.to !== ''
+                    this.state.to
                         ? new Date(this.state.to)
                         : new Date(
                               today.getFullYear() + 100,
@@ -51,7 +51,7 @@ class DateRangeInput extends Component {
         const toProps = {
             options: {
                 minDate:
-                    this.state.from !== ''
+                    this.state.from
                         ? new Date(this.state.from)
                         : new Date(
                               today.getFullYear() - 100,
