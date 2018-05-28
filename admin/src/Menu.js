@@ -60,19 +60,19 @@ const TITLES = {
 };
 
 const PERMISSIONS = {
-    manageuserroles: {
-        users: 'list',
-        sites: 'list',
-        siteroles: 'list',
-        usersiteroles: 'list',
-        usersiteroles: 'create',
-        usersiteroles: 'remove',
-        domains: 'list',
-        domainroles: 'list',
-        userdomainroles: 'list',
-        userdomainroles: 'create',
-        userdomainroles: 'remove'
-    }
+    manageuserroles: [
+        ['users', 'list'],
+        ['sites', 'list'],
+        ['siteroles', 'list'],
+        ['usersiteroles', 'list'],
+        ['usersiteroles', 'create'],
+        ['usersiteroles', 'remove'],
+        ['domains', 'list'],
+        ['domainroles', 'list'],
+        ['userdomainroles', 'list'],
+        ['userdomainroles', 'create'],
+        ['userdomainroles', 'remove']
+    ]
 };
 
 const Menu = ({ resources, onMenuTap, logout }) => (

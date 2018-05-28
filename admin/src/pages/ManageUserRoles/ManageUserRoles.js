@@ -1,6 +1,8 @@
 import { Restricted } from 'admin-on-rest';
 import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
+import { Redirect } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import Card from 'material-ui/Card/Card';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
@@ -10,8 +12,7 @@ import TableField from '../../fields/TableField';
 
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
-import ConfirmDialog from './ConfirmDialog'
-
+import ConfirmDialog from './ConfirmDialog';
 
 class ManageUserRoles extends Component {
     constructor(props) {
@@ -30,7 +31,8 @@ class ManageUserRoles extends Component {
             rolesMapping: null,
             readyToAssign: 0,
             open: false,
-            roleToDelete: null
+            roleToDelete: null,
+            validToken: true
         };
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.getWhereUserHasRoles('userdomainroles', 'domain_id');
@@ -43,6 +45,7 @@ class ManageUserRoles extends Component {
         this.handleAssign = this.handleAssign.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleAPIError = this.handleAPIError.bind(this);
     }
 
     async getWhereUserHasRoles(resource, key) {
@@ -94,7 +97,7 @@ class ManageUserRoles extends Component {
             const placeName = resource.split('roles')[0] + 's';
             this.setState({ [resource]: placeRoles, [placeName]: places, rolesMapping: roles });
         } catch (error) {
-            console.error(error);
+            this.handleAPIError(error);
         }
     }
 
@@ -115,7 +118,7 @@ class ManageUserRoles extends Component {
                     });
                 })
                 .catch(error => {
-                    console.error(error);
+                    this.handleAPIError(error);
                 });
         } else {
             this.setState({
@@ -208,8 +211,8 @@ class ManageUserRoles extends Component {
                         siteRoles: siteRoles
                     }
                 });
-            } catch (e) {
-                console.error(e);
+            } catch (error) {
+                this.handleAPIError(error);
             }
         }
     }
@@ -230,7 +233,7 @@ class ManageUserRoles extends Component {
                 this.setState({ userRoles: newUserRoles });
             })
             .catch(error => {
-                console.error(error);
+                this.handleAPIError(error);
             });
     }
 
@@ -303,7 +306,7 @@ class ManageUserRoles extends Component {
                         this.setState({ userRoles: newUserRoles });
                     })
                     .catch(error => {
-                        console.error(error);
+                        this.handleAPIError(error);
                     });
             }
             return null;
@@ -330,6 +333,15 @@ class ManageUserRoles extends Component {
         }
     }
 
+    handleAPIError(error) {
+        if (error.message === 'Token expired') {
+            localStorage.removeItem('id_token');
+            localStorage.removeItem('permissions');
+            this.setState({ validToken: false });
+        }
+        throw new Error(error);
+    }
+
     render() {
         const {
             search,
@@ -341,11 +353,12 @@ class ManageUserRoles extends Component {
             selectedDomainSite,
             roleSelections,
             readyToAssign,
-            open
+            open,
+            validToken
         } = this.state;
         const user = selectedUser >= 0 ? userResults[selectedUser] : null;
-        return (
-            <Restricted location="/manageuserroles">
+        return validToken ? (
+            <Restricted location={this.props.location}>
                 <Card>
                     <CardTitle title="Manage User Roles" />
                     <CardText>
@@ -399,8 +412,10 @@ class ManageUserRoles extends Component {
                     />
                 </Card>
             </Restricted>
+        ) : (
+            <Redirect to="/login" />
         );
     }
 }
 
-export default ManageUserRoles;
+export default withRouter(ManageUserRoles);
