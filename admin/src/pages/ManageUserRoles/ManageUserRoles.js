@@ -102,7 +102,7 @@ class ManageUserRoles extends Component {
         const input = event.target.value;
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input }
+                filter: { q: input, tfa_enabled: true }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -345,7 +345,7 @@ class ManageUserRoles extends Component {
         } = this.state;
         const user = selectedUser >= 0 ? userResults[selectedUser] : null;
         return (
-            <Restricted>
+            <Restricted location="/manageuserroles">
                 <Card>
                     <CardTitle title="Manage User Roles" />
                     <CardText>

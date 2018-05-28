@@ -20,6 +20,7 @@ import ShoppingBasketIcon from 'material-ui/svg-icons/action/shopping-basket';
 import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
 import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
 import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
+import permissionsStore from './auth/PermissionsStore';
 import { titleCase } from './utils';
 
 const ICONS = {
@@ -58,6 +59,22 @@ const TITLES = {
     organisationalunits: 'Organisations'
 };
 
+const PERMISSIONS = {
+    manageuserroles: {
+        users: 'list',
+        sites: 'list',
+        siteroles: 'list',
+        usersiteroles: 'list',
+        usersiteroles: 'create',
+        usersiteroles: 'remove',
+        domains: 'list',
+        domainroles: 'list',
+        userdomainroles: 'list',
+        userdomainroles: 'create',
+        userdomainroles: 'remove'
+    }
+};
+
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
         {resources
@@ -75,12 +92,14 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                   />
               ))
             : ''}
-        <MenuItemLink
-            to="/manageuserroles"
-            primaryText="Manage User Roles"
-            onClick={onMenuTap}
-            leftIcon={<ManageIcon />}
-        />
+        {permissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) ? (
+            <MenuItemLink
+                to="/manageuserroles"
+                primaryText="Manage User Roles"
+                onClick={onMenuTap}
+                leftIcon={<ManageIcon />}
+            />
+        ) : null}
         {logout}
     </div>
 );
