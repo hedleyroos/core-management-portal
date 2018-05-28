@@ -10,6 +10,7 @@ import {
     Filter
 } from 'admin-on-rest';
 import DateRangeInput from '../inputs/DateRangeInput';
+import DropdownFilterInput from '../inputs/DropdownFilterInput';
 
 const parseUserIds = value => value.replace(/[^\w]/gi, ',');
 
@@ -28,7 +29,7 @@ const UserFilter = props => (
     <Filter {...props}>
 	<TextInput label="Search" source="q" alwaysOn />
         <DateRangeInput label="Birth Date" source="birth_date" />
-        <TextInput label="Country" source="country" />
+        <DropdownFilterInput label="Country" source="country" relation="countries" labelField="code" />
         <DateRangeInput label="Date Joined" source="date_joined" />
         <TextInput label="Email" source="email" />
         <BooleanInput label="Email Verified" source="email_verified" />
