@@ -20,7 +20,7 @@ class TableField extends Component {
     }
 
     componentWillMount() {
-        this.props.data.length > 0
+        this.props.data.length
             ? console.log('Data props given, no call made.')
             : this.getRelatedData();
     }
@@ -56,7 +56,7 @@ class TableField extends Component {
             selectable,
             selected
         } = this.props;
-        return this.state.data.length > 0 ? (
+        return this.state.data.length ? (
             <div style={styles.customTableDiv}>
                 <label style={styles.customTableLabel}>
                     <span>{label}</span>
