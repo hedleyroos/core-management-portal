@@ -21,7 +21,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
@@ -45,7 +45,7 @@ const validationEditSiteDataSchema = values => {
 export const SiteDataSchemaList = props => (
     <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
@@ -55,9 +55,9 @@ export const SiteDataSchemaList = props => (
             <ObjectField source="schema" addLabel />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('sitedataschemas', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('sitedataschemas', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('sitedataschemas', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('sitedataschemas', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -76,7 +76,7 @@ export const SiteDataSchemaCreate = props => (
 export const SiteDataSchemaShow = props => (
     <Show {...props} title="SiteDataSchema Show">
         <SimpleShowLayout>
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>

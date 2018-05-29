@@ -18,7 +18,7 @@ import {
     DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
 
@@ -39,21 +39,21 @@ const validationCreateRoleResourcePermission = values => {
 export const RoleResourcePermissionList = props => (
     <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('resources', 'list') ? (
+            {PermissionsStore.getResourcePermission('resources', 'list') ? (
                 <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
                     <NumberField source="urn" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('permissions', 'list') ? (
+            {PermissionsStore.getResourcePermission('permissions', 'list') ? (
                 <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
@@ -63,7 +63,7 @@ export const RoleResourcePermissionList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            {permissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -87,21 +87,21 @@ export const RoleResourcePermissionCreate = props => (
 export const RoleResourcePermissionShow = props => (
     <Show {...props} title="RoleResourcePermission Show">
         <SimpleShowLayout>
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('resources', 'list') ? (
+            {PermissionsStore.getResourcePermission('resources', 'list') ? (
                 <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
                     <NumberField source="urn" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('permissions', 'list') ? (
+            {PermissionsStore.getResourcePermission('permissions', 'list') ? (
                 <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>

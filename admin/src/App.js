@@ -9,7 +9,7 @@ import AuthLoginPage from './auth/authLogin';
 import catchAll from './catchAll';
 import customRoutes from './customRoutes';
 import Menu from './Menu';
-import permissionsStore from './auth/PermissionsStore';
+import PermissionsStore from './auth/PermissionsStore';
 import restClient from './swaggerRestServer';
 import { muiTheme } from './Theme';
 
@@ -150,193 +150,193 @@ const App = () => (
         restClient={restClient}
         authClient={authClient}
         catchAll={catchAll}
-	    loginPage={AuthLoginPage}
+	loginPage={AuthLoginPage}
         customRoutes={customRoutes}
     >
         {permissions => [
-            permissionsStore.getResourcePermission('domains', 'list')
+            PermissionsStore.getResourcePermission('domains', 'list')
                 ? <Resource
                       name="domains"
                       list={ DomainList }
-                      create={permissionsStore.getResourcePermission('domains', 'create') ? DomainCreate : null}
-                      remove={permissionsStore.getResourcePermission('domains', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('domains', 'create') ? DomainCreate : null}
+                      remove={PermissionsStore.getResourcePermission('domains', 'remove') ? Delete : null}
                       show={ DomainShow }
-                      edit={permissionsStore.getResourcePermission('domains', 'edit') ? DomainEdit : null}
+                      edit={PermissionsStore.getResourcePermission('domains', 'edit') ? DomainEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('domainroles', 'list')
+            PermissionsStore.getResourcePermission('domainroles', 'list')
                 ? <Resource
                       name="domainroles"
                       list={ DomainRoleList }
-                      create={permissionsStore.getResourcePermission('domainroles', 'create') ? DomainRoleCreate : null}
-                      remove={permissionsStore.getResourcePermission('domainroles', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('domainroles', 'create') ? DomainRoleCreate : null}
+                      remove={PermissionsStore.getResourcePermission('domainroles', 'remove') ? Delete : null}
                       show={ DomainRoleShow }
-                      edit={permissionsStore.getResourcePermission('domainroles', 'edit') ? DomainRoleEdit : null}
+                      edit={PermissionsStore.getResourcePermission('domainroles', 'edit') ? DomainRoleEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('invitations', 'list')
+            PermissionsStore.getResourcePermission('invitations', 'list')
                 ? <Resource
                       name="invitations"
                       list={ InvitationList }
-                      create={permissionsStore.getResourcePermission('invitations', 'create') ? InvitationCreate : null}
-                      remove={permissionsStore.getResourcePermission('invitations', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('invitations', 'create') ? InvitationCreate : null}
+                      remove={PermissionsStore.getResourcePermission('invitations', 'remove') ? Delete : null}
                       show={ InvitationShow }
-                      edit={permissionsStore.getResourcePermission('invitations', 'edit') ? InvitationEdit : null}
+                      edit={PermissionsStore.getResourcePermission('invitations', 'edit') ? InvitationEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('invitationdomainroles', 'list')
+            PermissionsStore.getResourcePermission('invitationdomainroles', 'list')
                 ? <Resource
                       name="invitationdomainroles"
                       list={ InvitationDomainRoleList }
-                      create={permissionsStore.getResourcePermission('invitationdomainroles', 'create') ? InvitationDomainRoleCreate : null}
-                      remove={permissionsStore.getResourcePermission('invitationdomainroles', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('invitationdomainroles', 'create') ? InvitationDomainRoleCreate : null}
+                      remove={PermissionsStore.getResourcePermission('invitationdomainroles', 'remove') ? Delete : null}
                       show={ InvitationDomainRoleShow }
  
                 /> : null,
-            permissionsStore.getResourcePermission('invitationsiteroles', 'list')
+            PermissionsStore.getResourcePermission('invitationsiteroles', 'list')
                 ? <Resource
                       name="invitationsiteroles"
                       list={ InvitationSiteRoleList }
-                      create={permissionsStore.getResourcePermission('invitationsiteroles', 'create') ? InvitationSiteRoleCreate : null}
-                      remove={permissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('invitationsiteroles', 'create') ? InvitationSiteRoleCreate : null}
+                      remove={PermissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? Delete : null}
                       show={ InvitationSiteRoleShow }
  
                 /> : null,
-            permissionsStore.getResourcePermission('permissions', 'list')
+            PermissionsStore.getResourcePermission('permissions', 'list')
                 ? <Resource
                       name="permissions"
                       list={ PermissionList }
-                      create={permissionsStore.getResourcePermission('permissions', 'create') ? PermissionCreate : null}
-                      remove={permissionsStore.getResourcePermission('permissions', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('permissions', 'create') ? PermissionCreate : null}
+                      remove={PermissionsStore.getResourcePermission('permissions', 'remove') ? Delete : null}
                       show={ PermissionShow }
-                      edit={permissionsStore.getResourcePermission('permissions', 'edit') ? PermissionEdit : null}
+                      edit={PermissionsStore.getResourcePermission('permissions', 'edit') ? PermissionEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('resources', 'list')
+            PermissionsStore.getResourcePermission('resources', 'list')
                 ? <Resource
                       name="resources"
                       list={ ResourceList }
-                      create={permissionsStore.getResourcePermission('resources', 'create') ? ResourceCreate : null}
-                      remove={permissionsStore.getResourcePermission('resources', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('resources', 'create') ? ResourceCreate : null}
+                      remove={PermissionsStore.getResourcePermission('resources', 'remove') ? Delete : null}
                       show={ ResourceShow }
-                      edit={permissionsStore.getResourcePermission('resources', 'edit') ? ResourceEdit : null}
+                      edit={PermissionsStore.getResourcePermission('resources', 'edit') ? ResourceEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('roles', 'list')
+            PermissionsStore.getResourcePermission('roles', 'list')
                 ? <Resource
                       name="roles"
                       list={ RoleList }
-                      create={permissionsStore.getResourcePermission('roles', 'create') ? RoleCreate : null}
-                      remove={permissionsStore.getResourcePermission('roles', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('roles', 'create') ? RoleCreate : null}
+                      remove={PermissionsStore.getResourcePermission('roles', 'remove') ? Delete : null}
                       show={ RoleShow }
-                      edit={permissionsStore.getResourcePermission('roles', 'edit') ? RoleEdit : null}
+                      edit={PermissionsStore.getResourcePermission('roles', 'edit') ? RoleEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('roleresourcepermissions', 'list')
+            PermissionsStore.getResourcePermission('roleresourcepermissions', 'list')
                 ? <Resource
                       name="roleresourcepermissions"
                       list={ RoleResourcePermissionList }
-                      create={permissionsStore.getResourcePermission('roleresourcepermissions', 'create') ? RoleResourcePermissionCreate : null}
-                      remove={permissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('roleresourcepermissions', 'create') ? RoleResourcePermissionCreate : null}
+                      remove={PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? Delete : null}
                       show={ RoleResourcePermissionShow }
  
                 /> : null,
-            permissionsStore.getResourcePermission('sites', 'list')
+            PermissionsStore.getResourcePermission('sites', 'list')
                 ? <Resource
                       name="sites"
                       list={ SiteList }
-                      create={permissionsStore.getResourcePermission('sites', 'create') ? SiteCreate : null}
-                      remove={permissionsStore.getResourcePermission('sites', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('sites', 'create') ? SiteCreate : null}
+                      remove={PermissionsStore.getResourcePermission('sites', 'remove') ? Delete : null}
                       show={ SiteShow }
-                      edit={permissionsStore.getResourcePermission('sites', 'edit') ? SiteEdit : null}
+                      edit={PermissionsStore.getResourcePermission('sites', 'edit') ? SiteEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('siteroles', 'list')
+            PermissionsStore.getResourcePermission('siteroles', 'list')
                 ? <Resource
                       name="siteroles"
                       list={ SiteRoleList }
-                      create={permissionsStore.getResourcePermission('siteroles', 'create') ? SiteRoleCreate : null}
-                      remove={permissionsStore.getResourcePermission('siteroles', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('siteroles', 'create') ? SiteRoleCreate : null}
+                      remove={PermissionsStore.getResourcePermission('siteroles', 'remove') ? Delete : null}
                       show={ SiteRoleShow }
-                      edit={permissionsStore.getResourcePermission('siteroles', 'edit') ? SiteRoleEdit : null}
+                      edit={PermissionsStore.getResourcePermission('siteroles', 'edit') ? SiteRoleEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('userdomainroles', 'list')
+            PermissionsStore.getResourcePermission('userdomainroles', 'list')
                 ? <Resource
                       name="userdomainroles"
                       list={ UserDomainRoleList }
-                      create={permissionsStore.getResourcePermission('userdomainroles', 'create') ? UserDomainRoleCreate : null}
-                      remove={permissionsStore.getResourcePermission('userdomainroles', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('userdomainroles', 'create') ? UserDomainRoleCreate : null}
+                      remove={PermissionsStore.getResourcePermission('userdomainroles', 'remove') ? Delete : null}
                       show={ UserDomainRoleShow }
  
                 /> : null,
-            permissionsStore.getResourcePermission('usersiteroles', 'list')
+            PermissionsStore.getResourcePermission('usersiteroles', 'list')
                 ? <Resource
                       name="usersiteroles"
                       list={ UserSiteRoleList }
-                      create={permissionsStore.getResourcePermission('usersiteroles', 'create') ? UserSiteRoleCreate : null}
-                      remove={permissionsStore.getResourcePermission('usersiteroles', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('usersiteroles', 'create') ? UserSiteRoleCreate : null}
+                      remove={PermissionsStore.getResourcePermission('usersiteroles', 'remove') ? Delete : null}
                       show={ UserSiteRoleShow }
  
                 /> : null,
-            permissionsStore.getResourcePermission('usersitedata', 'list')
+            PermissionsStore.getResourcePermission('usersitedata', 'list')
                 ? <Resource
                       name="usersitedata"
                       list={ UserSiteDataList }
-                      create={permissionsStore.getResourcePermission('usersitedata', 'create') ? UserSiteDataCreate : null}
-                      remove={permissionsStore.getResourcePermission('usersitedata', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('usersitedata', 'create') ? UserSiteDataCreate : null}
+                      remove={PermissionsStore.getResourcePermission('usersitedata', 'remove') ? Delete : null}
                       show={ UserSiteDataShow }
-                      edit={permissionsStore.getResourcePermission('usersitedata', 'edit') ? UserSiteDataEdit : null}
+                      edit={PermissionsStore.getResourcePermission('usersitedata', 'edit') ? UserSiteDataEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('adminnotes', 'list')
+            PermissionsStore.getResourcePermission('adminnotes', 'list')
                 ? <Resource
                       name="adminnotes"
                       list={ AdminNoteList }
-                      create={permissionsStore.getResourcePermission('adminnotes', 'create') ? AdminNoteCreate : null}
-                      remove={permissionsStore.getResourcePermission('adminnotes', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('adminnotes', 'create') ? AdminNoteCreate : null}
+                      remove={PermissionsStore.getResourcePermission('adminnotes', 'remove') ? Delete : null}
                       show={ AdminNoteShow }
-                      edit={permissionsStore.getResourcePermission('adminnotes', 'edit') ? AdminNoteEdit : null}
+                      edit={PermissionsStore.getResourcePermission('adminnotes', 'edit') ? AdminNoteEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('sitedataschemas', 'list')
+            PermissionsStore.getResourcePermission('sitedataschemas', 'list')
                 ? <Resource
                       name="sitedataschemas"
                       list={ SiteDataSchemaList }
-                      create={permissionsStore.getResourcePermission('sitedataschemas', 'create') ? SiteDataSchemaCreate : null}
-                      remove={permissionsStore.getResourcePermission('sitedataschemas', 'remove') ? Delete : null}
+                      create={PermissionsStore.getResourcePermission('sitedataschemas', 'create') ? SiteDataSchemaCreate : null}
+                      remove={PermissionsStore.getResourcePermission('sitedataschemas', 'remove') ? Delete : null}
                       show={ SiteDataSchemaShow }
-                      edit={permissionsStore.getResourcePermission('sitedataschemas', 'edit') ? SiteDataSchemaEdit : null}
+                      edit={PermissionsStore.getResourcePermission('sitedataschemas', 'edit') ? SiteDataSchemaEdit : null}
  
                 /> : null,
-            permissionsStore.getResourcePermission('clients', 'list')
+            PermissionsStore.getResourcePermission('clients', 'list')
                 ? <Resource
                       name="clients"
                       list={ ClientList }
                       show={ ClientShow }
  
                 /> : null,
-            permissionsStore.getResourcePermission('countries', 'list')
+            PermissionsStore.getResourcePermission('countries', 'list')
                 ? <Resource
                       name="countries"
                       list={ CountryList }
                       show={ CountryShow }
  
                 /> : null,
-            permissionsStore.getResourcePermission('organisationalunits', 'list')
+            PermissionsStore.getResourcePermission('organisationalunits', 'list')
                 ? <Resource
                       name="organisationalunits"
                       list={ OrganisationalunitList }
                       show={ OrganisationalunitShow }
  
                 /> : null,
-            permissionsStore.getResourcePermission('users', 'list')
+            PermissionsStore.getResourcePermission('users', 'list')
                 ? <Resource
                       name="users"
                       list={ UserList }
-                      remove={permissionsStore.getResourcePermission('users', 'remove') ? Delete : null}
+                      remove={PermissionsStore.getResourcePermission('users', 'remove') ? Delete : null}
                       show={ UserShow }
-                      edit={permissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
+                      edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
  
                 /> : null,
         ]}

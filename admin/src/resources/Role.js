@@ -23,7 +23,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import RoleFilter from '../filters/RoleFilter';
 
@@ -49,9 +49,9 @@ export const RoleList = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -75,7 +75,7 @@ export const RoleShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('roleresourcepermissions', 'list') ? (
+            {PermissionsStore.getResourcePermission('roleresourcepermissions', 'list') ? (
                 <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
                         <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
@@ -101,7 +101,7 @@ export const RoleEdit = props => (
             <TextInput source="label" />
             <BooleanInput source="requires_2fa" />
             <TextInput source="description" />
-            {permissionsStore.getResourcePermission('roleresourcepermissions', 'list') ? (
+            {PermissionsStore.getResourcePermission('roleresourcepermissions', 'list') ? (
                 <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
                         <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>

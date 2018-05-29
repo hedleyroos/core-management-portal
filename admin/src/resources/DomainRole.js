@@ -22,7 +22,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DomainRoleFilter from '../filters/DomainRoleFilter';
 
@@ -45,14 +45,14 @@ const validationEditDomainRole = values => {
 export const DomainRoleList = props => (
     <List {...props} title="DomainRole List" filters={<DomainRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            {permissionsStore.getResourcePermission('domains', 'list') ? (
+            {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>
@@ -62,9 +62,9 @@ export const DomainRoleList = props => (
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('domainroles', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('domainroles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('domainroles', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('domainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -86,14 +86,14 @@ export const DomainRoleCreate = props => (
 export const DomainRoleShow = props => (
     <Show {...props} title="DomainRole Show">
         <SimpleShowLayout>
-            {permissionsStore.getResourcePermission('domains', 'list') ? (
+            {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>

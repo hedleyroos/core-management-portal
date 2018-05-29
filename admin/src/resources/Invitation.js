@@ -23,7 +23,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
@@ -54,7 +54,7 @@ export const InvitationList = props => (
     <List {...props} title="Invitation List" filters={<InvitationFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <TextField source="id" />
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
@@ -67,9 +67,9 @@ export const InvitationList = props => (
             <DateField source="expires_at" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('invitations', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('invitations', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('invitations', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('invitations', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -92,7 +92,7 @@ export const InvitationShow = props => (
     <Show {...props} title="Invitation Show">
         <SimpleShowLayout>
             <TextField source="id" />
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="invitor_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
@@ -105,7 +105,7 @@ export const InvitationShow = props => (
             <DateField source="expires_at" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
+            {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
                         <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
@@ -121,7 +121,7 @@ export const InvitationShow = props => (
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('invitationsiteroles', 'list') ? (
+            {PermissionsStore.getResourcePermission('invitationsiteroles', 'list') ? (
                 <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
                         <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
@@ -148,7 +148,7 @@ export const InvitationEdit = props => (
             <TextInput source="last_name" />
             <TextInput source="email" />
             <DateTimeInput source="expires_at" />
-            {permissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
+            {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
                         <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
@@ -164,7 +164,7 @@ export const InvitationEdit = props => (
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('invitationsiteroles', 'list') ? (
+            {PermissionsStore.getResourcePermission('invitationsiteroles', 'list') ? (
                 <ReferenceManyField label="Site Roles" reference="invitationsiteroles" target="invitation_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
                         <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>

@@ -22,7 +22,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
@@ -49,14 +49,14 @@ const validationEditUserSiteData = values => {
 export const UserSiteDataList = props => (
     <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
@@ -66,9 +66,9 @@ export const UserSiteDataList = props => (
             <ObjectField source="data" addLabel />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('usersitedata', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('usersitedata', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('usersitedata', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('usersitedata', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -90,14 +90,14 @@ export const UserSiteDataCreate = props => (
 export const UserSiteDataShow = props => (
     <Show {...props} title="UserSiteData Show">
         <SimpleShowLayout>
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>

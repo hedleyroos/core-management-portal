@@ -1,7 +1,7 @@
 /**
  * Generated Menu.js code. Edit at own risk.
  * When regenerated the changes will be lost.
- **/
+**/
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
@@ -20,8 +20,9 @@ import ShoppingBasketIcon from 'material-ui/svg-icons/action/shopping-basket';
 import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
 import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
 import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
-import permissionsStore from './auth/PermissionsStore';
+import PermissionsStore from './auth/PermissionsStore';
 import { titleCase } from './utils';
+import { TITLES, PERMISSIONS } from './constants';
 
 const ICONS = {
     domains: <DomainIcon />,
@@ -46,35 +47,6 @@ const ICONS = {
     users: <PeopleIcon />
 };
 
-const TITLES = {
-    domainroles: 'Domain Roles',
-    invitationdomainroles: 'Invitation Domain Roles',
-    invitationsiteroles: 'Invitiation Site Roles',
-    roleresourcepermissions: 'Role Resource Permissions',
-    siteroles: 'Site Roles',
-    userdomainroles: 'User Domain Roles',
-    usersiteroles: 'User Site Roles',
-    adminnotes: 'Admin Notes',
-    sitedataschemas: 'Site Data Schemas',
-    organisationalunits: 'Organisations'
-};
-
-const PERMISSIONS = {
-    manageuserroles: [
-        ['users', 'list'],
-        ['sites', 'list'],
-        ['siteroles', 'list'],
-        ['usersiteroles', 'list'],
-        ['usersiteroles', 'create'],
-        ['usersiteroles', 'remove'],
-        ['domains', 'list'],
-        ['domainroles', 'list'],
-        ['userdomainroles', 'list'],
-        ['userdomainroles', 'create'],
-        ['userdomainroles', 'remove']
-    ]
-};
-
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
         {resources
@@ -92,7 +64,7 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                   />
               ))
             : ''}
-        {permissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) ? (
+        {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) ? (
             <MenuItemLink
                 to="/manageuserroles"
                 primaryText="Manage User Roles"

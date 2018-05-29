@@ -22,7 +22,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import SiteRoleFilter from '../filters/SiteRoleFilter';
 
@@ -45,14 +45,14 @@ const validationEditSiteRole = values => {
 export const SiteRoleList = props => (
     <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>
@@ -62,9 +62,9 @@ export const SiteRoleList = props => (
             <BooleanField source="grant_implicitly" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('siteroles', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('siteroles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('siteroles', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('siteroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -86,14 +86,14 @@ export const SiteRoleCreate = props => (
 export const SiteRoleShow = props => (
     <Show {...props} title="SiteRole Show">
         <SimpleShowLayout>
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>
