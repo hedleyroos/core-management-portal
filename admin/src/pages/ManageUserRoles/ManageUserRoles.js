@@ -13,6 +13,7 @@ import TableField from '../../fields/TableField';
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
+import { makeIDMapping, getUniqueIDs } from '../../utils';
 
 class ManageUserRoles extends Component {
     constructor(props) {
@@ -54,20 +55,12 @@ class ManageUserRoles extends Component {
             let roles = this.state.rolesMapping;
             if (!roles) {
                 roles = await restClient(GET_MANY, 'roles', {});
-                roles = roles.data.reduce((obj, role) => {
-                    obj[role.id] = role;
-                    return obj;
-                }, {});
+                roles = makeIDMapping(roles.data);
             }
             let placeRoles = await restClient(GET_LIST, resource, {
                 filter: { user_id: userID }
             });
-            const ids = placeRoles.data.reduce((ids, placeRole) => {
-                if (ids.indexOf(placeRole[key]) < 0) {
-                    ids.push(placeRole[key]);
-                }
-                return ids;
-            }, []);
+            const ids = getUniqueIDs(placeRoles.data, key);
             placeRoles = placeRoles.data.reduce((obj, placeRole) => {
                 if (obj[placeRole[key]]) {
                     obj[placeRole[key]].push(roles[placeRole.role_id]);
@@ -89,10 +82,7 @@ class ManageUserRoles extends Component {
                         }
                     }
                 );
-                places = places.data.reduce((obj, place) => {
-                    obj[place.id] = place;
-                    return obj;
-                }, {});
+                places = makeIDMapping(places.data);
             }
             const placeName = resource.split('roles')[0] + 's';
             this.setState({ [resource]: placeRoles, [placeName]: places, rolesMapping: roles });
@@ -105,7 +95,7 @@ class ManageUserRoles extends Component {
         const input = event.target.value;
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true }
+                filter: { q: input }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -131,78 +121,45 @@ class ManageUserRoles extends Component {
         }
     }
 
+    async getUserPlaceRoles(user, place, roles) {
+        let ids = {};
+        // GET USERPLACEROLES FOR SELECTED USER.
+        let placeRoles = await restClient(GET_LIST, `user${place}roles`, {
+            filter: { user_id: user.id }
+        });
+        placeRoles = placeRoles.data;
+        if (placeRoles.length) {
+            // GET THE IDS AND REPLACE THEM WITH THE ACTUAL OBJECTS.
+            ids = getUniqueIDs(placeRoles, `${place}_id`);
+            let places = await restClient(GET_MANY, `${place}s`, {
+                ids: ids
+            });
+            places = makeIDMapping(places.data);
+
+            placeRoles = placeRoles.reduce((obj, placeRole) => {
+                obj[`${placeRole[`${place}_id`]}:${placeRole.role_id}`] = {
+                    [place]: places[placeRole[`${place}_id`]],
+                    role: roles[placeRole.role_id]
+                };
+                return obj;
+            }, {});
+        }
+        return placeRoles;
+    }
+
     async handleSelect(rows) {
         if (rows.length > 0) {
             try {
-                let ids = {};
                 let roles = this.state.rolesMapping;
                 if (!roles) {
                     roles = await restClient(GET_MANY, 'roles', {});
-                    roles = roles.data.reduce((obj, role) => {
-                        obj[role.id] = role;
-                        return obj;
-                    }, {});
+                    roles = makeIDMapping(roles.data);
                 }
                 const user = this.state.userResults[rows[0]];
                 // GET USERDOMAINROLES FOR SELECTED USER.
-                let domainRoles = await restClient(GET_LIST, 'userdomainroles', {
-                    filter: { user_id: user.id }
-                });
-                domainRoles = domainRoles.data;
-                if (domainRoles.length > 0) {
-                    // GET THE IDS AND REPLACE THEM WITH THE ACTUAL OBJECTS.
-                    ids = domainRoles.reduce((ids, domainRole) => {
-                        if (ids.indexOf(domainRole.domain_id) < 0) {
-                            ids.push(domainRole.domain_id);
-                        }
-                        return ids;
-                    }, []);
-                    let domains = await restClient(GET_MANY, 'domains', {
-                        ids: ids
-                    });
-                    domains = domains.data.reduce((obj, domain) => {
-                        obj[domain.id] = domain;
-                        return obj;
-                    }, {});
-
-                    domainRoles = domainRoles.reduce((obj, domainRole) => {
-                        obj[`${domainRole.domain_id}:${domainRole.role_id}`] = {
-                            domain: domains[domainRole.domain_id],
-                            role: roles[domainRole.role_id]
-                        };
-                        return obj;
-                    }, {});
-                }
-
+                const domainRoles = await this.getUserPlaceRoles(user, 'domain', roles);
                 // GET USERSITEROLES FOR SELECTED USER.
-                let siteRoles = await restClient(GET_LIST, 'usersiteroles', {
-                    filter: { user_id: user.id }
-                });
-                siteRoles = siteRoles.data;
-                if (siteRoles.length > 0) {
-                    // GET THE IDS AND REPLACE THEM WITH THE ACTUAL OBJECTS.
-                    ids = siteRoles.reduce((ids, siteRole) => {
-                        if (ids.indexOf(siteRole.site_id) < 0) {
-                            ids.push(siteRole.site_id);
-                        }
-                        return ids;
-                    }, []);
-                    let sites = await restClient(GET_MANY, 'sites', {
-                        ids: ids
-                    });
-                    sites = sites.data.reduce((obj, site) => {
-                        obj[site.id] = site;
-                        return obj;
-                    }, {});
-
-                    siteRoles = siteRoles.reduce((obj, siteRole) => {
-                        obj[`${siteRole.site_id}:${siteRole.role_id}`] = {
-                            site: sites[siteRole.site_id],
-                            role: roles[siteRole.role_id]
-                        };
-                        return obj;
-                    }, {});
-                }
+                const siteRoles = await this.getUserPlaceRoles(user, 'site', roles);
                 // SET THE STATE WITH THE SELECTED USER AND ALL ROLES FOUND.
                 this.setState({
                     selectedUser: rows[0],
@@ -323,13 +280,11 @@ class ManageUserRoles extends Component {
     }
 
     handleClose(action) {
-        switch (action) {
-            case 'submit':
-                this.handleDelete(this.state.roleToDelete);
-                this.setState({ open: false });
-                break;
-            default:
-                this.setState({ open: false });
+        if (action === 'submit') {
+            this.handleDelete(this.state.roleToDelete);
+            this.setState({ open: false });
+        } else {
+            this.setState({ open: false });
         }
     }
 

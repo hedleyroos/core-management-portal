@@ -2,6 +2,22 @@
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
 **/
+export const makeIDMapping = listOfObjects => {
+    return listOfObjects.reduce((accumulator, obj) => {
+        accumulator[obj.id] = obj;
+        return accumulator;
+    }, {});
+};
+
+export const getUniqueIDs = (list, key) => {
+    return list.reduce((accumulator, item) => {
+        if (accumulator.indexOf(item[key]) < 0) {
+            accumulator.push(item[key]);
+        }
+        return accumulator;
+    }, []);
+}
+
 export const GenerateQueryString = parameters => {
     return Object.entries(parameters)
         .map(
