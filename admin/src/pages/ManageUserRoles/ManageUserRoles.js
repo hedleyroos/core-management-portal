@@ -1,8 +1,9 @@
-import { Restricted } from 'admin-on-rest';
+import { Restricted, showNotification as showNotificationAction } from 'admin-on-rest';
 import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Card from 'material-ui/Card/Card';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
@@ -30,46 +31,40 @@ class ManageUserRoles extends Component {
             selectedDomainSite: null,
             roleSelections: null,
             rolesMapping: null,
-            readyToAssign: 0,
+            hasRolesToAssign: 0,
             open: false,
             roleToDelete: null,
             validToken: true
         };
+        this.getAllUserData = this.getAllUserData.bind(this);
+        this.getAllUserData();
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
-        this.getWhereUserHasRoles('userdomainroles', 'domain_id');
-        this.getWhereUserHasRoles('usersiteroles', 'site_id');
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDomainSiteChange = this.handleDomainSiteChange.bind(this);
         this.handleRoleSelection = this.handleRoleSelection.bind(this);
         this.handleAssign = this.handleAssign.bind(this);
-        this.handleOpen = this.handleOpen.bind(this);
+        this.triggerDeleteDialog = this.triggerDeleteDialog.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
-    async getWhereUserHasRoles(resource, key) {
+    async getAllUserData() {
+        let roles = await restClient(GET_MANY, 'roles', {});
+        roles = makeIDMapping(roles.data);
+        this.setState({ rolesMapping: roles });
+        this.getWhereUserHasRoles('userdomainroles', 'domain_id', roles);
+        this.getWhereUserHasRoles('usersiteroles', 'site_id', roles);
+    }
+
+    async getWhereUserHasRoles(resource, key, roles) {
         const userID = jwtDecode(localStorage.getItem('id_token')).sub;
         try {
-            let roles = this.state.rolesMapping;
-            if (!roles) {
-                roles = await restClient(GET_MANY, 'roles', {});
-                roles = makeIDMapping(roles.data);
-            }
             let placeRoles = await restClient(GET_LIST, resource, {
                 filter: { user_id: userID }
             });
             const ids = getUniqueIDs(placeRoles.data, key);
-            placeRoles = placeRoles.data.reduce((obj, placeRole) => {
-                if (obj[placeRole[key]]) {
-                    obj[placeRole[key]].push(roles[placeRole.role_id]);
-                } else {
-                    obj[placeRole[key]] = [roles[placeRole.role_id]];
-                }
-                return obj;
-            }, {});
-
             let places = [];
 
             if (ids.length > 0) {
@@ -84,8 +79,14 @@ class ManageUserRoles extends Component {
                 );
                 places = makeIDMapping(places.data);
             }
+            placeRoles = placeRoles.data.reduce((obj, placeRole) => {
+                obj[placeRole[key]] = obj[placeRole[key]]
+                    ? [...obj[placeRole[key]], roles[placeRole.role_id]]
+                    : [roles[placeRole.role_id]];
+                return obj;
+            }, {});
             const placeName = resource.split('roles')[0] + 's';
-            this.setState({ [resource]: placeRoles, [placeName]: places, rolesMapping: roles });
+            this.setState({ [resource]: placeRoles, [placeName]: places });
         } catch (error) {
             this.handleAPIError(error);
         }
@@ -150,11 +151,7 @@ class ManageUserRoles extends Component {
     async handleSelect(rows) {
         if (rows.length > 0) {
             try {
-                let roles = this.state.rolesMapping;
-                if (!roles) {
-                    roles = await restClient(GET_MANY, 'roles', {});
-                    roles = makeIDMapping(roles.data);
-                }
+                const roles = this.state.rolesMapping;
                 const user = this.state.userResults[rows[0]];
                 // GET USERDOMAINROLES FOR SELECTED USER.
                 const domainRoles = await this.getUserPlaceRoles(user, 'domain', roles);
@@ -175,33 +172,36 @@ class ManageUserRoles extends Component {
     }
 
     handleDelete(data) {
-        const { userResults, selectedUser, userRoles } = this.state;
-        const user = selectedUser >= 0 ? userResults[selectedUser] : null;
-        restClient(DELETE, data.resource, {
-            id: `${user.id}/${data.id}/${data.role_id}`
-        })
-            .then(response => {
-                let newUserRoles = userRoles;
-                if (data.resource.split('domain').length > 1) {
-                    delete newUserRoles.domainRoles[`${data.id}:${data.role_id}`];
-                } else {
-                    delete newUserRoles.siteRoles[`${data.id}:${data.role_id}`];
-                }
-                this.setState({ userRoles: newUserRoles });
+        const { userResults, selectedUser, userRoles, rolesMapping } = this.state;
+        const user = userResults[selectedUser];
+        if (user) {
+            restClient(DELETE, data.resource, {
+                id: `${user.id}/${data.id}/${data.role_id}`
             })
-            .catch(error => {
-                this.handleAPIError(error);
-            });
+                .then(response => {
+                    let newUserRoles = userRoles;
+                    if (data.resource.split('domain').length > 1) {
+                        delete newUserRoles.domainRoles[`${data.id}:${data.role_id}`];
+                    } else {
+                        delete newUserRoles.siteRoles[`${data.id}:${data.role_id}`];
+                    }
+                    this.setState({ userRoles: newUserRoles });
+                })
+                .catch(error => {
+                    this.props.showNotification(
+                        `Error: Role ${rolesMapping[data.role_id]} not removed.`
+                    );
+                    this.handleAPIError(error);
+                });
+        } else {
+            this.props.showNotification('No user selected for role removal', 'warning');
+            console.error('No user was selected for role removal.');
+        }
     }
 
     handleDomainSiteChange(event, index, value) {
         const splitValue = value.split(':');
-        let roles = [];
-        if (splitValue[1] === 'domain') {
-            roles = this.state.userdomainroles[splitValue[0]];
-        } else {
-            roles = this.state.usersiteroles[splitValue[0]];
-        }
+        const roles = this.state[`user${splitValue[1]}roles`][splitValue[0]];
         this.setState({
             selectedDomainSite: value,
             roleSelections: roles.reduce((obj, role) => {
@@ -210,14 +210,17 @@ class ManageUserRoles extends Component {
                     selected: false
                 };
                 return obj;
-            }, {})
+            }, {}),
+            hasRolesToAssign: 0
         });
     }
 
     handleRoleSelection(value) {
-        const { roleSelections, readyToAssign } = this.state;
+        const { roleSelections, hasRolesToAssign } = this.state;
         this.setState({
-            readyToAssign: !roleSelections[value].selected ? readyToAssign + 1 : readyToAssign - 1,
+            hasRolesToAssign: !roleSelections[value].selected
+                ? hasRolesToAssign + 1
+                : hasRolesToAssign - 1,
             roleSelections: {
                 ...roleSelections,
                 [value]: {
@@ -228,7 +231,7 @@ class ManageUserRoles extends Component {
         });
     }
 
-    handleAssign() {
+    async handleAssign() {
         const {
             userResults,
             selectedUser,
@@ -237,19 +240,22 @@ class ManageUserRoles extends Component {
             usersites,
             selectedDomainSite,
             rolesMapping,
-            roleSelections
+            roleSelections,
+            hasRolesToAssign
         } = this.state;
         const placeSplit = selectedDomainSite.split(':');
-        Object.values(roleSelections).map(roleSelection => {
-            if (roleSelection.selected) {
-                restClient(CREATE, `user${placeSplit[1]}roles`, {
-                    data: {
-                        user_id: userResults[selectedUser].id,
-                        [`${placeSplit[1]}_id`]: parseInt(placeSplit[0], 10),
-                        role_id: roleSelection.id
-                    }
-                })
-                    .then(response => {
+        let allCreated = true;
+        await Promise.all(
+            Object.values(roleSelections).map(async roleSelection => {
+                if (roleSelection.selected) {
+                    try {
+                        await restClient(CREATE, `user${placeSplit[1]}roles`, {
+                            data: {
+                                user_id: userResults[selectedUser].id,
+                                [`${placeSplit[1]}_id`]: parseInt(placeSplit[0], 10),
+                                role_id: roleSelection.id
+                            }
+                        });
                         let newUserRoles = userRoles;
                         newUserRoles[`${placeSplit[1]}Roles`][
                             `${placeSplit[0]}:${roleSelection.id}`
@@ -260,22 +266,39 @@ class ManageUserRoles extends Component {
                                     : usersites[placeSplit[0]],
                             role: rolesMapping[roleSelection.id]
                         };
-                        this.setState({ userRoles: newUserRoles });
-                    })
-                    .catch(error => {
+                        this.setState({
+                            userRoles: newUserRoles,
+                            hasRolesToAssign: hasRolesToAssign - 1,
+                            roleSelections: {
+                                ...roleSelections,
+                                [roleSelection.id]: {
+                                    ...roleSelection,
+                                    selected: false
+                                }
+                            }
+                        });
+                    } catch (error) {
+                        allCreated = false;
+                        this.props.showNotification(
+                            `Role ${roleSelection.label}: Exists or Error`,
+                            'warning'
+                        );
                         this.handleAPIError(error);
-                    });
-            }
-            return null;
-        });
-        this.setState({
-            readyToAssign: 0,
-            roleSelections: null,
-            selectedDomainSite: null
-        });
+                    }
+                }
+                return null;
+            })
+        );
+        if (allCreated) {
+            this.setState({
+                hasRolesToAssign: 0,
+                roleSelections: null,
+                selectedDomainSite: null
+            });
+        }
     }
 
-    handleOpen(data) {
+    triggerDeleteDialog(data) {
         this.setState({ open: true, roleToDelete: data });
     }
 
@@ -292,6 +315,7 @@ class ManageUserRoles extends Component {
         if (error.message === 'Token expired') {
             localStorage.removeItem('id_token');
             localStorage.removeItem('permissions');
+            this.props.showNotification('Token Expired: Login');
             this.setState({ validToken: false });
         }
         throw new Error(error);
@@ -307,7 +331,7 @@ class ManageUserRoles extends Component {
             usersites,
             selectedDomainSite,
             roleSelections,
-            readyToAssign,
+            hasRolesToAssign,
             open,
             validToken
         } = this.state;
@@ -342,7 +366,7 @@ class ManageUserRoles extends Component {
                             <UserCard
                                 user={user}
                                 userRoles={userRoles}
-                                handleDelete={this.handleOpen}
+                                handleDelete={this.triggerDeleteDialog}
                             />
                             <AssignRoleCard
                                 selectedDomainSite={selectedDomainSite}
@@ -352,7 +376,7 @@ class ManageUserRoles extends Component {
                                 handleRoleSelection={this.handleRoleSelection}
                                 roleSelections={roleSelections}
                                 handleAssign={this.handleAssign}
-                                readyToAssign={readyToAssign}
+                                hasRolesToAssign={hasRolesToAssign}
                             />
                         </CardText>
                     ) : (
@@ -373,4 +397,8 @@ class ManageUserRoles extends Component {
     }
 }
 
-export default withRouter(ManageUserRoles);
+export default withRouter(
+    connect(null, {
+        showNotification: showNotificationAction
+    })(ManageUserRoles)
+);

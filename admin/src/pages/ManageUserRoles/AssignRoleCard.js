@@ -19,7 +19,7 @@ const AssignRoleCard = props => {
         handleRoleSelection,
         roleSelections,
         handleAssign,
-        readyToAssign
+        hasRolesToAssign
     } = props;
     return (
         <Card>
@@ -74,7 +74,7 @@ const AssignRoleCard = props => {
                         </CardText>
                     </div>
                 ) : null}
-                {readyToAssign ? (
+                {hasRolesToAssign ? (
                     <CardText>
                         <RaisedButton
                             label="Assign Roles"

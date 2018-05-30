@@ -21,7 +21,7 @@ class TableField extends Component {
 
     componentWillMount() {
         this.props.data.length
-            ? console.log('Data props given, no call made.')
+            ? console.log('INFO: Data props given to TableField, no call made.')
             : this.getRelatedData();
     }
 
