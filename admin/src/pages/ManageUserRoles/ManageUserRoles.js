@@ -94,6 +94,9 @@ class ManageUserRoles extends Component {
 
     handleSearch(event) {
         const input = event.target.value;
+        this.setState({
+            search: input
+        });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
                 filter: { q: input }
@@ -104,7 +107,6 @@ class ManageUserRoles extends Component {
                         username: obj.username
                     }));
                     this.setState({
-                        search: input,
                         userResults: userResults
                     });
                 })
@@ -189,9 +191,7 @@ class ManageUserRoles extends Component {
                     this.setState({ userRoles: newUserRoles });
                 })
                 .catch(error => {
-                    showNotification(
-                        `Error: Role ${rolesMapping[data.role_id]} not removed.`
-                    );
+                    showNotification(`Error: Role ${rolesMapping[data.role_id]} not removed.`);
                     this.handleAPIError(error);
                 });
         } else {
@@ -281,20 +281,14 @@ class ManageUserRoles extends Component {
                     });
                 } catch (error) {
                     allCreated = false;
-                    showNotification(
-                        `Role ${roleSelection.label}: Exists or Error`,
-                        'warning'
-                    );
+                    showNotification(`Role ${roleSelection.label}: Exists or Error`, 'warning');
                     this.handleAPIError(error);
                 }
             }
             return null;
         });
         if (allCreated) {
-            showNotification(
-                'All Roles assigned.',
-                'success'
-            )
+            showNotification('All Roles assigned.', 'success');
             this.setState({
                 hasRolesToAssign: 0,
                 roleSelections: null,
