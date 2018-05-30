@@ -173,6 +173,7 @@ class ManageUserRoles extends Component {
 
     handleDelete(data) {
         const { userResults, selectedUser, userRoles, rolesMapping } = this.state;
+        const { showNotification } = this.props;
         const user = userResults[selectedUser];
         if (user) {
             restClient(DELETE, data.resource, {
@@ -188,13 +189,13 @@ class ManageUserRoles extends Component {
                     this.setState({ userRoles: newUserRoles });
                 })
                 .catch(error => {
-                    this.props.showNotification(
+                    showNotification(
                         `Error: Role ${rolesMapping[data.role_id]} not removed.`
                     );
                     this.handleAPIError(error);
                 });
         } else {
-            this.props.showNotification('No user selected for role removal', 'warning');
+            showNotification('No user selected for role removal', 'warning');
             console.error('No user was selected for role removal.');
         }
     }
@@ -243,6 +244,7 @@ class ManageUserRoles extends Component {
             roleSelections,
             hasRolesToAssign
         } = this.state;
+        const { showNotification } = this.props;
         const placeSplit = selectedDomainSite.split(':');
         let allCreated = true;
         await Promise.all(
@@ -279,7 +281,7 @@ class ManageUserRoles extends Component {
                         });
                     } catch (error) {
                         allCreated = false;
-                        this.props.showNotification(
+                        showNotification(
                             `Role ${roleSelection.label}: Exists or Error`,
                             'warning'
                         );
@@ -290,6 +292,10 @@ class ManageUserRoles extends Component {
             })
         );
         if (allCreated) {
+            showNotification(
+                'All Roles assigned.',
+                'success'
+            )
             this.setState({
                 hasRolesToAssign: 0,
                 roleSelections: null,
