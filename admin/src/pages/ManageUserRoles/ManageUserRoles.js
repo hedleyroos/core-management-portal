@@ -247,50 +247,49 @@ class ManageUserRoles extends Component {
         const { showNotification } = this.props;
         const placeSplit = selectedDomainSite.split(':');
         let allCreated = true;
-        await Promise.all(
-            Object.values(roleSelections).map(async roleSelection => {
-                if (roleSelection.selected) {
-                    try {
-                        await restClient(CREATE, `user${placeSplit[1]}roles`, {
-                            data: {
-                                user_id: userResults[selectedUser].id,
-                                [`${placeSplit[1]}_id`]: parseInt(placeSplit[0], 10),
-                                role_id: roleSelection.id
+        // TODO: Maybe look at doing the fetches in parallel rather.
+        Object.values(roleSelections).map(async roleSelection => {
+            if (roleSelection.selected) {
+                try {
+                    await restClient(CREATE, `user${placeSplit[1]}roles`, {
+                        data: {
+                            user_id: userResults[selectedUser].id,
+                            [`${placeSplit[1]}_id`]: parseInt(placeSplit[0], 10),
+                            role_id: roleSelection.id
+                        }
+                    });
+                    let newUserRoles = userRoles;
+                    newUserRoles[`${placeSplit[1]}Roles`][
+                        `${placeSplit[0]}:${roleSelection.id}`
+                    ] = {
+                        [placeSplit[1]]:
+                            placeSplit[1] === 'domain'
+                                ? userdomains[placeSplit[0]]
+                                : usersites[placeSplit[0]],
+                        role: rolesMapping[roleSelection.id]
+                    };
+                    this.setState({
+                        userRoles: newUserRoles,
+                        hasRolesToAssign: hasRolesToAssign - 1,
+                        roleSelections: {
+                            ...roleSelections,
+                            [roleSelection.id]: {
+                                ...roleSelection,
+                                selected: false
                             }
-                        });
-                        let newUserRoles = userRoles;
-                        newUserRoles[`${placeSplit[1]}Roles`][
-                            `${placeSplit[0]}:${roleSelection.id}`
-                        ] = {
-                            [placeSplit[1]]:
-                                placeSplit[1] === 'domain'
-                                    ? userdomains[placeSplit[0]]
-                                    : usersites[placeSplit[0]],
-                            role: rolesMapping[roleSelection.id]
-                        };
-                        this.setState({
-                            userRoles: newUserRoles,
-                            hasRolesToAssign: hasRolesToAssign - 1,
-                            roleSelections: {
-                                ...roleSelections,
-                                [roleSelection.id]: {
-                                    ...roleSelection,
-                                    selected: false
-                                }
-                            }
-                        });
-                    } catch (error) {
-                        allCreated = false;
-                        showNotification(
-                            `Role ${roleSelection.label}: Exists or Error`,
-                            'warning'
-                        );
-                        this.handleAPIError(error);
-                    }
+                        }
+                    });
+                } catch (error) {
+                    allCreated = false;
+                    showNotification(
+                        `Role ${roleSelection.label}: Exists or Error`,
+                        'warning'
+                    );
+                    this.handleAPIError(error);
                 }
-                return null;
-            })
-        );
+            }
+            return null;
+        });
         if (allCreated) {
             showNotification(
                 'All Roles assigned.',
