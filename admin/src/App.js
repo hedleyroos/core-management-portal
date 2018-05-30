@@ -140,6 +140,8 @@ import {
     UserShow,
     UserEdit,
 } from './resources/User';
+import contextReducer from './reducers/contextReducer';
+import Dashboard from './pages/Dashboard';
 
 
 const App = () => (
@@ -150,8 +152,10 @@ const App = () => (
         restClient={restClient}
         authClient={authClient}
         catchAll={catchAll}
-	loginPage={AuthLoginPage}
+	    loginPage={AuthLoginPage}
         customRoutes={customRoutes}
+        customReducers={{ context: contextReducer }}
+        dashboard={Dashboard}
     >
         {permissions => [
             PermissionsStore.getResourcePermission('domains', 'list')
