@@ -19,7 +19,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import PermissionFilter from '../filters/PermissionFilter';
 
 const validationCreatePermission = values => {
@@ -43,9 +43,9 @@ export const PermissionList = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('permissions', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('permissions', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('permissions', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('permissions', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )

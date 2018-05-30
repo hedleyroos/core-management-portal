@@ -23,7 +23,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import AdminNoteFilter from '../filters/AdminNoteFilter';
 
@@ -50,14 +50,14 @@ export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
@@ -67,9 +67,9 @@ export const AdminNoteList = props => (
             <TextField source="note" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('adminnotes', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('adminnotes', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('adminnotes', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -92,14 +92,14 @@ export const AdminNoteShow = props => (
     <Show {...props} title="AdminNote Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="creator_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>

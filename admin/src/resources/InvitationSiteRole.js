@@ -19,7 +19,7 @@ import {
     DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import InvitationSiteRoleFilter from '../filters/InvitationSiteRoleFilter';
 
@@ -40,21 +40,21 @@ const validationCreateInvitationSiteRole = values => {
 export const InvitationSiteRoleList = props => (
     <List {...props} title="InvitationSiteRole List" filters={<InvitationSiteRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            {permissionsStore.getResourcePermission('invitations', 'list') ? (
+            {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
                     <TextField source="email" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>
@@ -64,7 +64,7 @@ export const InvitationSiteRoleList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            {permissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -88,21 +88,21 @@ export const InvitationSiteRoleCreate = props => (
 export const InvitationSiteRoleShow = props => (
     <Show {...props} title="InvitationSiteRole Show">
         <SimpleShowLayout>
-            {permissionsStore.getResourcePermission('invitations', 'list') ? (
+            {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField label="Invitation" source="invitation_id" reference="invitations" linkType="show" allowEmpty>
                     <TextField source="email" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>

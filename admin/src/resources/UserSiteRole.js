@@ -19,7 +19,7 @@ import {
     DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 
@@ -40,21 +40,21 @@ const validationCreateUserSiteRole = values => {
 export const UserSiteRoleList = props => (
     <List {...props} title="UserSiteRole List" filters={<UserSiteRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>
@@ -64,7 +64,7 @@ export const UserSiteRoleList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            {permissionsStore.getResourcePermission('usersiteroles', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('usersiteroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -88,21 +88,21 @@ export const UserSiteRoleCreate = props => (
 export const UserSiteRoleShow = props => (
     <Show {...props} title="UserSiteRole Show">
         <SimpleShowLayout>
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('sites', 'list') ? (
+            {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>

@@ -19,7 +19,7 @@ import {
     DeleteButton,
     ShowButton
 } from 'admin-on-rest';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 
@@ -40,21 +40,21 @@ const validationCreateUserDomainRole = values => {
 export const UserDomainRoleList = props => (
     <List {...props} title="UserDomainRole List" filters={<UserDomainRoleFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('domains', 'list') ? (
+            {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>
@@ -64,7 +64,7 @@ export const UserDomainRoleList = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <ShowButton />
-            {permissionsStore.getResourcePermission('userdomainroles', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('userdomainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -88,21 +88,21 @@ export const UserDomainRoleCreate = props => (
 export const UserDomainRoleShow = props => (
     <Show {...props} title="UserDomainRole Show">
         <SimpleShowLayout>
-            {permissionsStore.getResourcePermission('users', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField label="User" source="user_id" reference="users" linkType="show" allowEmpty>
                     <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('domains', 'list') ? (
+            {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('roles', 'list') ? (
+            {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
                     <NumberField source="label" />
                 </ReferenceField>

@@ -1,11 +1,12 @@
 /**
  * Generated Menu.js code. Edit at own risk.
  * When regenerated the changes will be lost.
- **/
+**/
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
 import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
+import ManageIcon from 'material-ui/svg-icons/action/build';
 import InviteIcon from 'material-ui/svg-icons/editor/insert-invitation';
 import FingerprintIcon from 'material-ui/svg-icons/action/fingerprint';
 import ListIcon from 'material-ui/svg-icons/action/view-list';
@@ -19,7 +20,9 @@ import ShoppingBasketIcon from 'material-ui/svg-icons/action/shopping-basket';
 import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
 import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
 import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
+import PermissionsStore from './auth/PermissionsStore';
 import { titleCase } from './utils';
+import { TITLES, PERMISSIONS } from './constants';
 
 const ICONS = {
     domains: <DomainIcon />,
@@ -44,19 +47,6 @@ const ICONS = {
     users: <PeopleIcon />
 };
 
-const TITLES = {
-    domainroles: 'Domain Roles',
-    invitationdomainroles: 'Invitation Domain Roles',
-    invitationsiteroles: 'Invitiation Site Roles',
-    roleresourcepermissions: 'Role Resource Permissions',
-    siteroles: 'Site Roles',
-    userdomainroles: 'User Domain Roles',
-    usersiteroles: 'User Site Roles',
-    adminnotes: 'Admin Notes',
-    sitedataschemas: 'Site Data Schemas',
-    organisationalunits: 'Organisations'
-};
-
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
         {resources
@@ -74,6 +64,14 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                   />
               ))
             : ''}
+        {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) ? (
+            <MenuItemLink
+                to="/manageuserroles"
+                primaryText="Manage User Roles"
+                onClick={onMenuTap}
+                leftIcon={<ManageIcon />}
+            />
+        ) : null}
         {logout}
     </div>
 );

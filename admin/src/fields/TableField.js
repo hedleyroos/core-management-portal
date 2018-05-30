@@ -16,11 +16,13 @@ import { styles } from '../Theme';
 class TableField extends Component {
     constructor(props) {
         super(props);
-        this.state = { data: [] };
+        this.state = { data: props.data };
     }
 
     componentWillMount() {
-        this.getRelatedData();
+        this.props.data.length
+            ? console.log('INFO: Data props given to TableField, no call made.')
+            : this.getRelatedData();
     }
 
     getRelatedData = () => {
@@ -46,16 +48,23 @@ class TableField extends Component {
     };
 
     render() {
-        const { label, linkField, linkedResource } = this.props;
-        return this.state.data.length > 0 ? (
+        const {
+            label,
+            linkField,
+            linkedResource,
+            onRowSelection,
+            selectable,
+            selected
+        } = this.props;
+        return this.state.data.length ? (
             <div style={styles.customTableDiv}>
                 <label style={styles.customTableLabel}>
                     <span>{label}</span>
                 </label>
-                <Table selectable={false}>
+                <Table selectable={selectable} onRowSelection={onRowSelection}>
                     <TableHeader
                         displaySelectAll={false}
-                        adjustForCheckbox={false}
+                        adjustForCheckbox={selectable}
                     >
                         <TableRow>
                             {Object.keys(this.state.data[0]).map(header => (
@@ -68,44 +77,51 @@ class TableField extends Component {
                             ))}
                         </TableRow>
                     </TableHeader>
-                    <TableBody displayRowCheckbox={false} showRowHover={true}>
-                        {this.state.data.map((entry, index) => (
-                            <TableRow key={index}>
-                                {Object.keys(entry).map((header, index) => (
-                                    <TableRowColumn key={index}>
-                                        {entry[header] instanceof Array ? (
-                                            <div style={styles.wrapper}>
-                                                {entry[header].map(
-                                                    (str, index) =>
-                                                        str ? (
-                                                            <Chip
-                                                                key={index}
-                                                                style={
-                                                                    styles.chip
-                                                                }
-                                                            >
-                                                                {str}
-                                                            </Chip>
-                                                        ) : (
-                                                            ''
-                                                        )
-                                                )}
-                                            </div>
-                                        ) : linkField === header && entry.id ? (
-                                            <Link
-                                                to={`/${linkedResource}/${
-                                                    entry.id
-                                                }/show`}
-                                            >
-                                                {entry[header]}
-                                            </Link>
-                                        ) : (
-                                            <span>{entry[header]}</span>
-                                        )}
-                                    </TableRowColumn>
-                                ))}
-                            </TableRow>
-                        ))}
+                    <TableBody
+                        displayRowCheckbox={selectable}
+                        showRowHover={true}
+                    >
+                        {this.state.data.map((entry, index) => {
+                            const isSelected = onRowSelection ? selected === index : null;
+                            return (
+                                <TableRow key={index} selected={isSelected}>
+                                    {Object.keys(entry).map((header, index) => (
+                                        <TableRowColumn key={index}>
+                                            {entry[header] instanceof Array ? (
+                                                <div style={styles.wrapper}>
+                                                    {entry[header].map(
+                                                        (str, index) =>
+                                                            str ? (
+                                                                <Chip
+                                                                    key={index}
+                                                                    style={
+                                                                        styles.chip
+                                                                    }
+                                                                >
+                                                                    {str}
+                                                                </Chip>
+                                                            ) : (
+                                                                ''
+                                                            )
+                                                    )}
+                                                </div>
+                                            ) : linkField === header &&
+                                            entry.id ? (
+                                                <Link
+                                                    to={`/${linkedResource}/${
+                                                        entry.id
+                                                    }/show`}
+                                                >
+                                                    {entry[header]}
+                                                </Link>
+                                            ) : (
+                                                <span>{entry[header]}</span>
+                                            )}
+                                        </TableRowColumn>
+                                    ))}
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </div>
@@ -120,8 +136,17 @@ TableField.propTypes = {
     record: PropTypes.object,
     linkField: PropTypes.string,
     linkedResource: PropTypes.string,
-    url: PropTypes.string.isRequired,
-    customPathParameters: PropTypes.array
+    url: PropTypes.string,
+    customPathParameters: PropTypes.array,
+    data: PropTypes.array,
+    onRowSelection: PropTypes.func,
+    selectable: PropTypes.bool,
+    selected: PropTypes.number
+};
+
+TableField.defaultProps = {
+    data: [],
+    selectable: false
 };
 
 export default TableField;

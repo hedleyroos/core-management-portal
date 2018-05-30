@@ -26,7 +26,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import TableField from '../fields/TableField';
-import permissionsStore from '../auth/PermissionsStore';
+import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import SiteFilter from '../filters/SiteFilter';
 
@@ -50,14 +50,14 @@ export const SiteList = props => (
     <List {...props} title="Site List" filters={<SiteFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
-            {permissionsStore.getResourcePermission('clients', 'list') ? (
+            {PermissionsStore.getResourcePermission('clients', 'list') ? (
                 <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('domains', 'list') ? (
+            {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
@@ -69,9 +69,9 @@ export const SiteList = props => (
             <BooleanField source="is_active" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            {permissionsStore.getResourcePermission('sites', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('sites', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {permissionsStore.getResourcePermission('sites', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('sites', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
 )
@@ -96,14 +96,14 @@ export const SiteShow = props => (
     <Show {...props} title="Site Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            {permissionsStore.getResourcePermission('clients', 'list') ? (
+            {PermissionsStore.getResourcePermission('clients', 'list') ? (
                 <ReferenceField label="Client" source="client_id" reference="clients" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {permissionsStore.getResourcePermission('domains', 'list') ? (
+            {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
@@ -116,7 +116,7 @@ export const SiteShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
 	    <TableField label="Users" url="users_with_roles_for_site" linkField="username" linkedResource="users" />
-            {permissionsStore.getResourcePermission('siteroles', 'list') ? (
+            {PermissionsStore.getResourcePermission('siteroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
                         <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
@@ -146,7 +146,7 @@ export const SiteEdit = props => (
             <TextInput source="description" />
             <BooleanInput source="is_active" />
 	    <TableField label="Users" url="users_with_roles_for_site" linkField="username" linkedResource="users" />
-            {permissionsStore.getResourcePermission('siteroles', 'list') ? (
+            {PermissionsStore.getResourcePermission('siteroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
                         <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
