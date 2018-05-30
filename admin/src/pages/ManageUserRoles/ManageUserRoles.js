@@ -51,45 +51,45 @@ class ManageUserRoles extends Component {
     }
 
     async getAllUserData() {
-        let roles = await restClient(GET_MANY, 'roles', {});
-        roles = makeIDMapping(roles.data);
-        this.setState({ rolesMapping: roles });
-        this.getWhereUserHasRoles('userdomainroles', 'domain_id', roles);
-        this.getWhereUserHasRoles('usersiteroles', 'site_id', roles);
+        try {
+            let roles = await restClient(GET_MANY, 'roles', {});
+            roles = makeIDMapping(roles.data);
+            this.setState({ rolesMapping: roles });
+            await this.getWhereUserHasRoles('userdomainroles', 'domain_id', roles);
+            await this.getWhereUserHasRoles('usersiteroles', 'site_id', roles);
+        } catch (error) {
+            this.handleAPIError(error);
+        }
     }
 
     async getWhereUserHasRoles(resource, key, roles) {
         const userID = jwtDecode(localStorage.getItem('id_token')).sub;
-        try {
-            let placeRoles = await restClient(GET_LIST, resource, {
-                filter: { user_id: userID }
-            });
-            const ids = getUniqueIDs(placeRoles.data, key);
-            let places = [];
+        let placeRoles = await restClient(GET_LIST, resource, {
+            filter: { user_id: userID }
+        });
+        const ids = getUniqueIDs(placeRoles.data, key);
+        let places = [];
 
-            if (ids.length > 0) {
-                places = await restClient(
-                    GET_LIST,
-                    resource.split('domain').length > 1 ? 'domains' : 'sites',
-                    {
-                        filter: {
-                            [`${key}s`]: ids.join(',')
-                        }
+        if (ids.length > 0) {
+            places = await restClient(
+                GET_LIST,
+                resource.split('domain').length > 1 ? 'domains' : 'sites',
+                {
+                    filter: {
+                        [`${key}s`]: ids.join(',')
                     }
-                );
-                places = makeIDMapping(places.data);
-            }
-            placeRoles = placeRoles.data.reduce((obj, placeRole) => {
-                obj[placeRole[key]] = obj[placeRole[key]]
-                    ? [...obj[placeRole[key]], roles[placeRole.role_id]]
-                    : [roles[placeRole.role_id]];
-                return obj;
-            }, {});
-            const placeName = resource.split('roles')[0] + 's';
-            this.setState({ [resource]: placeRoles, [placeName]: places });
-        } catch (error) {
-            this.handleAPIError(error);
+                }
+            );
+            places = makeIDMapping(places.data);
         }
+        placeRoles = placeRoles.data.reduce((obj, placeRole) => {
+            obj[placeRole[key]] = obj[placeRole[key]]
+                ? [...obj[placeRole[key]], roles[placeRole.role_id]]
+                : [roles[placeRole.role_id]];
+            return obj;
+        }, {});
+        const placeName = resource.split('roles')[0] + 's';
+        this.setState({ [resource]: placeRoles, [placeName]: places });
     }
 
     handleSearch(event) {
@@ -315,7 +315,6 @@ class ManageUserRoles extends Component {
         if (error.message === 'Token expired') {
             localStorage.removeItem('id_token');
             localStorage.removeItem('permissions');
-            this.props.showNotification('Token Expired: Login');
             this.setState({ validToken: false });
         }
         throw new Error(error);
