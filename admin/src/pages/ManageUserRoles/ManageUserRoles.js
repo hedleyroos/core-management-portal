@@ -99,7 +99,7 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true }
+                filter: { q: input, tfa_enabled: true, has_organisational_unit: true }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({

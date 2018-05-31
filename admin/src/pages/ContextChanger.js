@@ -66,7 +66,7 @@ class ContextChanger extends Component {
                     pathParameters: [user_id, splitName[1]]
                 }
             );
-            PermissionsStore.loadPermissions(permissions.data);
+            PermissionsStore.loadPermissions(permissions.data, this.props.domainsAndSites, value);
         }
         this.setState({ redirect: true });
     }
@@ -80,7 +80,7 @@ class ContextChanger extends Component {
                 <div style={{ ...styles.main, backgroundColor: pink500 }}>
                     <Card>
                         <ViewTitle title="Context Changer" />
-                        <CardText>Lorem ipsum sic dolor amet...</CardText>
+                        <CardText>Select the Domain or Site.</CardText>
                         <CardText>
                             <DropDownMenu value={this.state.value} onChange={this.handleChange}>
                                 {domainsAndSites
