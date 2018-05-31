@@ -49,6 +49,7 @@ const ICONS = {
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
+
         {resources
             ? resources.map(resource => (
                   <MenuItemLink
@@ -72,6 +73,11 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                 leftIcon={<ManageIcon />}
             />
         ) : null}
+        <MenuItemLink
+            to="/contextchanger"
+            primaryText="Context Changer"
+            onClick={onMenuTap}
+        />
         {logout}
     </div>
 );

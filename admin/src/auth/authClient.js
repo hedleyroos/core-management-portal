@@ -1,5 +1,6 @@
-import { AUTH_LOGOUT, AUTH_CHECK, AUTH_ERROR } from 'admin-on-rest';
+import { AUTH_LOGOUT, AUTH_CHECK, AUTH_ERROR, AUTH_GET_PERMISSIONS } from 'admin-on-rest';
 import { GenerateQueryString } from '../utils';
+import PermissionsStore from './PermissionsStore';
 
 export default (type, params) => {
     if (type === AUTH_LOGOUT) {
@@ -25,6 +26,8 @@ export default (type, params) => {
     if (type === AUTH_CHECK) {
         return localStorage.getItem('id_token') ? Promise.resolve() : Promise.reject();
     }
-
+    if (type === AUTH_GET_PERMISSIONS) {
+        return Promise.resolve(PermissionsStore);
+    }
     return Promise.resolve();
 }

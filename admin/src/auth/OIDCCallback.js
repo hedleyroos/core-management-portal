@@ -1,28 +1,38 @@
 import jwtDecode from 'jwt-decode';
-import { Card } from 'material-ui/Card';
-import CircularProgress from 'material-ui/CircularProgress';
+import LinearProgress from 'material-ui/LinearProgress';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import WaitIcon from 'material-ui/svg-icons/action/update';
+import { pink500 } from 'material-ui/styles/colors';
 import queryString from 'query-string';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
-import permissionsStore from './PermissionsStore';
 import restClient, { OPERATIONAL } from '../swaggerRestServer';
-import { styles } from '../Theme';
+import { muiTheme, styles } from '../Theme';
+import PermissionsStore from '../auth/PermissionsStore';
 import { base64urlDecode } from '../utils';
+import { contextDomainsAndSitesAdd } from '../actions/context';
+
+const mapDispatchToProps = dispatch => {
+    return {
+        domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites))
+    };
+};
 
 class OIDCCallback extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            failure: false,
-            loginComplete: false
+            loginComplete: false,
+            failure: false
         };
         this.getTokenAndPermissions = this.getTokenAndPermissions.bind(this);
     }
     componentWillMount() {
         this.getTokenAndPermissions();
     }
-    getTokenAndPermissions() {
+    async getTokenAndPermissions() {
         const parsedQuery = queryString.parse(this.props.location.search);
         // Quick check if a token is retrieved.
         if (!parsedQuery.id_token) {
@@ -45,47 +55,60 @@ class OIDCCallback extends Component {
         if (incorrectState || incorrectSegmentAmount || incorrectNonce) {
             console.error(
                 incorrectSegmentAmount
-                    ? 'Token contains ' +
-                      segments.length +
-                      ' segments, but it should have 3.'
+                    ? 'Token contains ' + segments.length + ' segments, but it should have 3.'
                     : incorrectNonce
                         ? 'Nonce mismatch: ' + authNonce + ' ' + payload.nonce
-                        : 'State mismatch: ' +
-                          authState +
-                          ' ' +
-                          parsedQuery.state
+                        : 'State mismatch: ' + authState + ' ' + parsedQuery.state
             );
             this.setState({ failure: true });
         } else {
             // Everything checked out. Store the id token.
             localStorage.setItem('id_token', parsedQuery.id_token);
-
-            restClient(OPERATIONAL, 'user_management_portal_permissions', {
-                pathParameters: [jwtDecode(parsedQuery.id_token).sub]
-            })
-                .then(response => {
-                    permissionsStore.loadPermissions(response.data);
-                    this.setState({ loginComplete: true });
-                })
-                .catch(error => {
-                    console.error(error);
-                    this.setState({ failure: true });
+            const user_id = jwtDecode(parsedQuery.id_token).sub;
+            try {
+                const response = await restClient(OPERATIONAL, 'all_user_roles', {
+                    pathParameters: [user_id]
                 });
+                const domainsAndSites = Object.keys(response.data.roles_map);
+                this.props.domainsAndSitesAdd(domainsAndSites);
+                const splitName = domainsAndSites[0].split(':');
+                const permissions = await restClient(
+                    OPERATIONAL,
+                    splitName[0].indexOf('d') >= 0
+                        ? 'user_domain_permissions'
+                        : 'user_site_permissions',
+                    {
+                        pathParameters: [user_id, splitName[1]]
+                    }
+                );
+                PermissionsStore.loadPermissions(
+                    permissions.data,
+                    domainsAndSites,
+                    domainsAndSites[0]
+                );
+                this.setState({ loginComplete: true });
+            } catch (error) {
+                console.error(error);
+                this.setState({ failure: true });
+            }
         }
     }
     render() {
-        // // Reload page after login id_token and permissions are loaded.
-        if (this.state.loginComplete) {
-            window.location.href = process.env.REACT_APP_PORTAL_URL;
-        }
         return !this.state.failure ? (
-            <Card style={styles.cardCentered}>
-                <CircularProgress style={styles.circularProgress} size={500} thickness={50} />
-            </Card>
+            this.state.loginComplete ? (
+                <Redirect push to="/" />
+            ) : (
+                <MuiThemeProvider muiTheme={muiTheme}>
+                    <div style={{ ...styles.main, backgroundColor: pink500 }}>
+                        <WaitIcon style={styles.waitIcon} />
+                        <LinearProgress mode="indeterminate" style={styles.linearProgress} />
+                    </div>
+                </MuiThemeProvider>
+            )
         ) : (
             <Redirect push to="/login" />
         );
     }
 }
 
-export default OIDCCallback;
+export default connect(null, mapDispatchToProps)(OIDCCallback);
