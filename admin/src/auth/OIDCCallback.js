@@ -69,7 +69,15 @@ class OIDCCallback extends Component {
                 const response = await restClient(OPERATIONAL, 'all_user_roles', {
                     pathParameters: [user_id]
                 });
-                const domainsAndSites = Object.keys(response.data.roles_map);
+                const domainsAndSites = Object.entries(response.data.roles_map).reduce(
+                    (total, [key, value]) => {
+                        if (value.length > 0) {
+                            total.push(key);
+                        }
+                        return total;
+                    },
+                    []
+                );
                 this.props.domainsAndSitesAdd(domainsAndSites);
                 const splitName = domainsAndSites[0].split(':');
                 const permissions = await restClient(
