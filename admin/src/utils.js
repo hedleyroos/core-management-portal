@@ -1,7 +1,31 @@
+import restClient, { GET_LIST } from "./swaggerRestServer";
+
 /**
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
 **/
+export const getUntilDone = async (resource, filter = {}, perPage) => {
+    let collection = [];
+    let done = false;
+    let page = 1;
+    while (!done) {
+        let response = await restClient(GET_LIST, resource, {
+            pagination: {
+                perPage: perPage || 0,
+                page
+            },
+            filter
+        });
+        page++;
+        const total = response.total;
+        collection.push(...response.data);
+        if (collection.length >= total) {
+            done = true;
+        }
+    }
+    return collection;
+};
+
 export const makeIDMapping = listOfObjects => {
     return listOfObjects.reduce((accumulator, obj) => {
         accumulator[obj.id] = obj;

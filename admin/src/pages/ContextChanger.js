@@ -17,8 +17,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { muiTheme, styles } from '../Theme';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../actions/context';
 import PermissionsStore from '../auth/PermissionsStore';
-import restClient, { OPERATIONAL, GET_LIST } from '../swaggerRestServer';
-import { makeIDMapping } from '../utils';
+import restClient, { OPERATIONAL } from '../swaggerRestServer';
+import { makeIDMapping, getUntilDone } from '../utils';
 
 const mapStateToProps = state => {
     return {
@@ -59,28 +59,18 @@ class ContextChanger extends Component {
     }
 
     async getPlaces(placeName, domainsAndSites) {
-        const ids = domainsAndSites
-            .reduce((array, place) => {
-                if (place.indexOf(placeName[0]) >= 0) {
-                    array.push(parseInt(place.split(':')[1], 10));
-                }
-                return array;
-            }, []);
+        const ids = domainsAndSites.reduce((array, place) => {
+            if (place.indexOf(placeName[0]) >= 0) {
+                array.push(parseInt(place.split(':')[1], 10));
+            }
+            return array;
+        }, []);
         const queryArg = ids.join(',');
         if (ids.length > 0) {
             try {
-                let allPlaces = [];
-                let page = 1;
-                while (allPlaces.length < ids.length) {
-                    let response = await restClient(GET_LIST, `${placeName}s`, {
-                        pagination: {
-                            page: page
-                        },
-                        filter: { [`${placeName}_ids`]: queryArg }
-                    });
-                    page++;
-                    allPlaces.push(...response.data);
-                }
+                let allPlaces = await getUntilDone(`${placeName}s`, {
+                    [`${placeName}_ids`]: queryArg
+                });
                 this.setState({ [`${placeName}s`]: makeIDMapping(allPlaces) });
             } catch (error) {
                 this.handleAPIError(error);

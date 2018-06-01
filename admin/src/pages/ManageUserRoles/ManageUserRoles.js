@@ -14,7 +14,7 @@ import TableField from '../../fields/TableField';
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
-import { makeIDMapping, getUniqueIDs } from '../../utils';
+import { makeIDMapping, getUniqueIDs, getUntilDone } from '../../utils';
 
 class ManageUserRoles extends Component {
     constructor(props) {
@@ -64,25 +64,17 @@ class ManageUserRoles extends Component {
 
     async getWhereUserHasRoles(resource, key, roles) {
         const userID = jwtDecode(localStorage.getItem('id_token')).sub;
-        let placeRoles = await restClient(GET_LIST, resource, {
-            filter: { user_id: userID }
-        });
-        const ids = getUniqueIDs(placeRoles.data, key);
+        let placeRoles = await getUntilDone(resource, { user_id: userID });
+        const ids = getUniqueIDs(placeRoles, key);
         let places = [];
 
         if (ids.length > 0) {
-            places = await restClient(
-                GET_LIST,
-                resource.split('domain').length > 1 ? 'domains' : 'sites',
-                {
-                    filter: {
-                        [`${key}s`]: ids.join(',')
-                    }
-                }
-            );
-            places = makeIDMapping(places.data);
+            places = await getUntilDone(resource.split('domain').length > 1 ? 'domains' : 'sites', {
+                [`${key}s`]: ids.join(',')
+            });
+            places = makeIDMapping(places);
         }
-        placeRoles = placeRoles.data.reduce((obj, placeRole) => {
+        placeRoles = placeRoles.reduce((obj, placeRole) => {
             obj[placeRole[key]] = obj[placeRole[key]]
                 ? [...obj[placeRole[key]], roles[placeRole.role_id]]
                 : [roles[placeRole.role_id]];
@@ -134,10 +126,10 @@ class ManageUserRoles extends Component {
         if (placeRoles.length) {
             // GET THE IDS AND REPLACE THEM WITH THE ACTUAL OBJECTS.
             ids = getUniqueIDs(placeRoles, `${place}_id`);
-            let places = await restClient(GET_MANY, `${place}s`, {
+            let places = await getUntilDone(`${place}s`, {
                 ids: ids
             });
-            places = makeIDMapping(places.data);
+            places = makeIDMapping(places);
 
             placeRoles = placeRoles.reduce((obj, placeRole) => {
                 obj[`${placeRole[`${place}_id`]}:${placeRole.role_id}`] = {
