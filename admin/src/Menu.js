@@ -1,7 +1,7 @@
 /**
  * Generated Menu.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
@@ -52,7 +52,6 @@ const ICONS = {
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
-
         {resources
             ? resources.map(resource => (
                   <MenuItemLink
@@ -76,12 +75,14 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                 leftIcon={<ManageIcon />}
             />
         ) : null}
-        <MenuItemLink
-            to="/contextchanger"
-            primaryText="Context Changer"
-            onClick={onMenuTap}
-            leftIcon={<ContextSwitchIcon color={red300} />}
-        />
+        {PermissionsStore.getPermissionFlags().contexts.length > 1 ? (
+            <MenuItemLink
+                to="/contextchanger"
+                primaryText="Context Changer"
+                onClick={onMenuTap}
+                leftIcon={<ContextSwitchIcon color={red300} />}
+            />
+        ) : null}
         {logout}
     </div>
 );

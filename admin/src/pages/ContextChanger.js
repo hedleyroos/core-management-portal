@@ -3,17 +3,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { ViewTitle } from 'admin-on-rest/lib/mui';
-import Avatar from 'material-ui/Avatar';
 import Card from 'material-ui/Card/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardText from 'material-ui/Card/CardText';
-import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
 import CircularProgress from 'material-ui/CircularProgress';
 import DropDownMenu from 'material-ui/DropDownMenu/DropDownMenu';
 import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { pink500, pink300 } from 'material-ui/styles/colors';
+import { pink500 } from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { muiTheme, styles } from '../Theme';
