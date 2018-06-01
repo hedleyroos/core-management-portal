@@ -46,7 +46,9 @@ class ContextChanger extends Component {
             changing: false,
             value: this.props.GMPContext || permissions.currentContext,
             redirect: false,
-            validToken: true
+            validToken: true,
+            domains: null,
+            sites: null
         };
         this.getPlaces = this.getPlaces.bind(this);
         this.getPlaces('domain', this.props.domainsAndSites || permissions.contexts);
@@ -56,28 +58,33 @@ class ContextChanger extends Component {
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
-    getPlaces(placeName, domainsAndSites) {
+    async getPlaces(placeName, domainsAndSites) {
         const ids = domainsAndSites
-            .reduce((ids, place) => {
+            .reduce((array, place) => {
                 if (place.indexOf(placeName[0]) >= 0) {
-                    ids.push(parseInt(place.split(':')[1], 10));
+                    array.push(parseInt(place.split(':')[1], 10));
                 }
-                return ids;
-            }, [])
-            .join(',');
+                return array;
+            }, []);
+        const queryArg = ids.join(',');
         if (ids.length > 0) {
-            restClient(GET_LIST, `${placeName}s`, {
-                pagination: {
-                    perPage: 0
-                },
-                filter: { [`${placeName}_ids`]: ids }
-            })
-                .then(response => {
-                    this.setState({ [`${placeName}s`]: makeIDMapping(response.data) });
-                })
-                .catch(error => {
-                    this.handleAPIError(error);
-                });
+            try {
+                let allPlaces = [];
+                let page = 1;
+                while (allPlaces.length < ids.length) {
+                    let response = await restClient(GET_LIST, `${placeName}s`, {
+                        pagination: {
+                            page: page
+                        },
+                        filter: { [`${placeName}_ids`]: queryArg }
+                    });
+                    page++;
+                    allPlaces.push(...response.data);
+                }
+                this.setState({ [`${placeName}s`]: makeIDMapping(allPlaces) });
+            } catch (error) {
+                this.handleAPIError(error);
+            }
         }
     }
 
@@ -141,7 +148,7 @@ class ContextChanger extends Component {
                                 <ViewTitle title="Context Changer" />
                                 <CardText>Select the Domain or Site.</CardText>
                                 <CardText>
-                                    {domains || sites ? (
+                                    {domains && sites ? (
                                         <DropDownMenu value={value} onChange={this.handleChange}>
                                             {domainsAndSites
                                                 ? domainsAndSites.map(place => {
