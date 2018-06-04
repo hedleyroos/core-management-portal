@@ -21,7 +21,7 @@ import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
 import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
 import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
 import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
-import { red300 } from 'material-ui/styles/colors';
+import { pink300 } from 'material-ui/styles/colors';
 
 import PermissionsStore from './auth/PermissionsStore';
 import { titleCase } from './utils';
@@ -80,7 +80,7 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                 to="/contextchanger"
                 primaryText="Context Changer"
                 onClick={onMenuTap}
-                leftIcon={<ContextSwitchIcon color={red300} />}
+                leftIcon={<ContextSwitchIcon color={pink300} />}
             />
         ) : null}
         {logout}
