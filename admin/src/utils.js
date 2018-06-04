@@ -1,14 +1,14 @@
-import restClient, { GET_LIST } from "./swaggerRestServer";
+import restClient, { GET_LIST } from './swaggerRestServer';
 
 /**
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
-export const getUntilDone = async (resource, filter = {}, perPage) => {
+ **/
+export const getUntilDone = async (resource, filter = {}, perPage, maxAttempts = 10) => {
     let collection = [];
     let done = false;
     let page = 1;
-    while (!done) {
+    while (!done && page !== maxAttempts) {
         let response = await restClient(GET_LIST, resource, {
             pagination: {
                 perPage: perPage || 0,
@@ -22,6 +22,9 @@ export const getUntilDone = async (resource, filter = {}, perPage) => {
         if (collection.length >= total) {
             done = true;
         }
+    }
+    if (page === maxAttempts) {
+        console.error('Warning: Max attempts for `getUntilDone` function reached!');
     }
     return collection;
 };
@@ -40,14 +43,11 @@ export const getUniqueIDs = (list, key) => {
         }
         return accumulator;
     }, []);
-}
+};
 
 export const GenerateQueryString = parameters => {
     return Object.entries(parameters)
-        .map(
-            ([key, value]) =>
-                `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-        )
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         .join('&');
 };
 
@@ -65,8 +65,9 @@ export const titleCase = string => {
 export const generateNonce = () => {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
     const result = [];
-    window.crypto.getRandomValues(new Uint8Array(32)).forEach(c =>
-        result.push(charset[c % charset.length]));
+    window.crypto
+        .getRandomValues(new Uint8Array(32))
+        .forEach(c => result.push(charset[c % charset.length]));
     return result.join('');
 };
 

@@ -140,30 +140,28 @@ class ContextChanger extends Component {
                                 <CardText>
                                     {domains && sites ? (
                                         <DropDownMenu value={value} onChange={this.handleChange}>
-                                            {domainsAndSites
-                                                ? domainsAndSites.map(place => {
-                                                      const splitPlace = place.split(':');
-                                                      const text =
-                                                          splitPlace[0].indexOf('d') >= 0
-                                                              ? domains
-                                                                  ? domains[
-                                                                        parseInt(splitPlace[1], 10)
-                                                                    ].name
-                                                                  : place
-                                                              : sites
-                                                                  ? sites[
-                                                                        parseInt(splitPlace[1], 10)
-                                                                    ].name
-                                                                  : place;
-                                                      return (
-                                                          <MenuItem
-                                                              key={place}
-                                                              value={place}
-                                                              primaryText={text}
-                                                          />
-                                                      );
-                                                  })
-                                                : null}
+                                            {domainsAndSites &&
+                                                domainsAndSites.map(place => {
+                                                    const splitPlace = place.split(':');
+                                                    const text =
+                                                        splitPlace[0].indexOf('d') >= 0
+                                                            ? domains
+                                                                ? domains[
+                                                                      parseInt(splitPlace[1], 10)
+                                                                  ].name
+                                                                : place
+                                                            : sites
+                                                                ? sites[parseInt(splitPlace[1], 10)]
+                                                                      .name
+                                                                : place;
+                                                    return (
+                                                        <MenuItem
+                                                            key={place}
+                                                            value={place}
+                                                            primaryText={text}
+                                                        />
+                                                    );
+                                                })}
                                         </DropDownMenu>
                                     ) : (
                                         <CircularProgress />

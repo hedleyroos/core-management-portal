@@ -14,11 +14,9 @@ import PermissionsStore from '../auth/PermissionsStore';
 import { base64urlDecode } from '../utils';
 import { contextDomainsAndSitesAdd } from '../actions/context';
 
-const mapDispatchToProps = dispatch => {
-    return {
-        domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites))
-    };
-};
+const mapDispatchToProps = dispatch => ({
+    domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites))
+});
 
 class OIDCCallback extends Component {
     constructor(props) {
@@ -55,10 +53,10 @@ class OIDCCallback extends Component {
         if (incorrectState || incorrectSegmentAmount || incorrectNonce) {
             console.error(
                 incorrectSegmentAmount
-                    ? 'Token contains ' + segments.length + ' segments, but it should have 3.'
+                    ? `Token contains ${segments.length} segments, but it should have 3.`
                     : incorrectNonce
-                        ? 'Nonce mismatch: ' + authNonce + ' ' + payload.nonce
-                        : 'State mismatch: ' + authState + ' ' + parsedQuery.state
+                        ? `Nonce mismatch: ${authNonce} ${payload.nonce}`
+                        : `State mismatch: ${authState} ${parsedQuery.state}`
             );
             this.setState({ failure: true });
         } else {
