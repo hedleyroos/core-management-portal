@@ -12,6 +12,7 @@ import Menu from './Menu';
 import PermissionsStore from './auth/PermissionsStore';
 import restClient from './swaggerRestServer';
 import { muiTheme } from './Theme';
+import contextReducer from './reducers/contextReducer';
 
 import {
     DomainList,
@@ -150,8 +151,9 @@ const App = () => (
         restClient={restClient}
         authClient={authClient}
         catchAll={catchAll}
-	loginPage={AuthLoginPage}
+	    loginPage={AuthLoginPage}
         customRoutes={customRoutes}
+        customReducers={{ context: contextReducer }}
     >
         {permissions => [
             PermissionsStore.getResourcePermission('domains', 'list')
@@ -162,7 +164,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('domains', 'remove') ? Delete : null}
                       show={ DomainShow }
                       edit={PermissionsStore.getResourcePermission('domains', 'edit') ? DomainEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('domainroles', 'list')
                 ? <Resource
@@ -172,7 +173,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('domainroles', 'remove') ? Delete : null}
                       show={ DomainRoleShow }
                       edit={PermissionsStore.getResourcePermission('domainroles', 'edit') ? DomainRoleEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('invitations', 'list')
                 ? <Resource
@@ -182,7 +182,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('invitations', 'remove') ? Delete : null}
                       show={ InvitationShow }
                       edit={PermissionsStore.getResourcePermission('invitations', 'edit') ? InvitationEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('invitationdomainroles', 'list')
                 ? <Resource
@@ -191,7 +190,6 @@ const App = () => (
                       create={PermissionsStore.getResourcePermission('invitationdomainroles', 'create') ? InvitationDomainRoleCreate : null}
                       remove={PermissionsStore.getResourcePermission('invitationdomainroles', 'remove') ? Delete : null}
                       show={ InvitationDomainRoleShow }
- 
                 /> : null,
             PermissionsStore.getResourcePermission('invitationsiteroles', 'list')
                 ? <Resource
@@ -200,7 +198,6 @@ const App = () => (
                       create={PermissionsStore.getResourcePermission('invitationsiteroles', 'create') ? InvitationSiteRoleCreate : null}
                       remove={PermissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? Delete : null}
                       show={ InvitationSiteRoleShow }
- 
                 /> : null,
             PermissionsStore.getResourcePermission('permissions', 'list')
                 ? <Resource
@@ -210,7 +207,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('permissions', 'remove') ? Delete : null}
                       show={ PermissionShow }
                       edit={PermissionsStore.getResourcePermission('permissions', 'edit') ? PermissionEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('resources', 'list')
                 ? <Resource
@@ -220,7 +216,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('resources', 'remove') ? Delete : null}
                       show={ ResourceShow }
                       edit={PermissionsStore.getResourcePermission('resources', 'edit') ? ResourceEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('roles', 'list')
                 ? <Resource
@@ -230,7 +225,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('roles', 'remove') ? Delete : null}
                       show={ RoleShow }
                       edit={PermissionsStore.getResourcePermission('roles', 'edit') ? RoleEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('roleresourcepermissions', 'list')
                 ? <Resource
@@ -239,7 +233,6 @@ const App = () => (
                       create={PermissionsStore.getResourcePermission('roleresourcepermissions', 'create') ? RoleResourcePermissionCreate : null}
                       remove={PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? Delete : null}
                       show={ RoleResourcePermissionShow }
- 
                 /> : null,
             PermissionsStore.getResourcePermission('sites', 'list')
                 ? <Resource
@@ -249,7 +242,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('sites', 'remove') ? Delete : null}
                       show={ SiteShow }
                       edit={PermissionsStore.getResourcePermission('sites', 'edit') ? SiteEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('siteroles', 'list')
                 ? <Resource
@@ -259,7 +251,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('siteroles', 'remove') ? Delete : null}
                       show={ SiteRoleShow }
                       edit={PermissionsStore.getResourcePermission('siteroles', 'edit') ? SiteRoleEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('userdomainroles', 'list')
                 ? <Resource
@@ -268,7 +259,6 @@ const App = () => (
                       create={PermissionsStore.getResourcePermission('userdomainroles', 'create') ? UserDomainRoleCreate : null}
                       remove={PermissionsStore.getResourcePermission('userdomainroles', 'remove') ? Delete : null}
                       show={ UserDomainRoleShow }
- 
                 /> : null,
             PermissionsStore.getResourcePermission('usersiteroles', 'list')
                 ? <Resource
@@ -277,7 +267,6 @@ const App = () => (
                       create={PermissionsStore.getResourcePermission('usersiteroles', 'create') ? UserSiteRoleCreate : null}
                       remove={PermissionsStore.getResourcePermission('usersiteroles', 'remove') ? Delete : null}
                       show={ UserSiteRoleShow }
- 
                 /> : null,
             PermissionsStore.getResourcePermission('usersitedata', 'list')
                 ? <Resource
@@ -287,7 +276,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('usersitedata', 'remove') ? Delete : null}
                       show={ UserSiteDataShow }
                       edit={PermissionsStore.getResourcePermission('usersitedata', 'edit') ? UserSiteDataEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('adminnotes', 'list')
                 ? <Resource
@@ -297,7 +285,6 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('adminnotes', 'remove') ? Delete : null}
                       show={ AdminNoteShow }
                       edit={PermissionsStore.getResourcePermission('adminnotes', 'edit') ? AdminNoteEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('sitedataschemas', 'list')
                 ? <Resource
@@ -307,28 +294,24 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('sitedataschemas', 'remove') ? Delete : null}
                       show={ SiteDataSchemaShow }
                       edit={PermissionsStore.getResourcePermission('sitedataschemas', 'edit') ? SiteDataSchemaEdit : null}
- 
                 /> : null,
             PermissionsStore.getResourcePermission('clients', 'list')
                 ? <Resource
                       name="clients"
                       list={ ClientList }
                       show={ ClientShow }
- 
                 /> : null,
             PermissionsStore.getResourcePermission('countries', 'list')
                 ? <Resource
                       name="countries"
                       list={ CountryList }
                       show={ CountryShow }
- 
                 /> : null,
             PermissionsStore.getResourcePermission('organisationalunits', 'list')
                 ? <Resource
                       name="organisationalunits"
                       list={ OrganisationalunitList }
                       show={ OrganisationalunitShow }
- 
                 /> : null,
             PermissionsStore.getResourcePermission('users', 'list')
                 ? <Resource
@@ -337,9 +320,9 @@ const App = () => (
                       remove={PermissionsStore.getResourcePermission('users', 'remove') ? Delete : null}
                       show={ UserShow }
                       edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
- 
                 /> : null,
-        ]}
+        ]
+    }
     </Admin>
 )
 

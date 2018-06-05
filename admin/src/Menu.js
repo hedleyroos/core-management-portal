@@ -1,7 +1,7 @@
 /**
  * Generated Menu.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
@@ -20,6 +20,9 @@ import ShoppingBasketIcon from 'material-ui/svg-icons/action/shopping-basket';
 import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
 import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
 import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
+import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
+import { pink300 } from 'material-ui/styles/colors';
+
 import PermissionsStore from './auth/PermissionsStore';
 import { titleCase } from './utils';
 import { TITLES, PERMISSIONS } from './constants';
@@ -70,6 +73,14 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                 primaryText="Manage User Roles"
                 onClick={onMenuTap}
                 leftIcon={<ManageIcon />}
+            />
+        ) : null}
+        {PermissionsStore.getPermissionFlags().contexts.length > 1 ? (
+            <MenuItemLink
+                to="/contextchanger"
+                primaryText="Context Changer"
+                onClick={onMenuTap}
+                leftIcon={<ContextSwitchIcon color={pink300} />}
             />
         ) : null}
         {logout}

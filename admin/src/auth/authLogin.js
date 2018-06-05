@@ -65,7 +65,7 @@ class AuthLoginPage extends Component {
                         <p>Login with Girl Effect OIDC Provider</p>
                             <RaisedButton
                                 type='button'
-                                href={ loginUrl}
+                                href={loginUrl}
                                 primary
                                 label='Login'
                                 fullWidth

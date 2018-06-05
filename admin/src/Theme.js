@@ -53,8 +53,13 @@ export const styles = {
     cardCentered: {
         textAlign: 'center'
     },
-    circularProgress: {
-        padding: '50px'
+    waitIcon: {
+        width: '20rem',
+        height: '20rem',
+        color: 'white' 
+    },
+    linearProgress: {
+        width: '50%'
     },
     fieldOptionsCard: {
         margin: '20px',
