@@ -38,10 +38,6 @@ class ContextChanger extends Component {
     constructor(props) {
         super(props);
         const permissions = PermissionsStore.getPermissionFlags();
-        if (!this.props.GMPContext) {
-            this.props.domainsAndSitesAdd(permissions.contexts);
-            this.props.changeContext(permissions.currentContext);
-        }
         this.state = {
             changing: false,
             value: this.props.GMPContext || permissions.currentContext,
@@ -50,11 +46,15 @@ class ContextChanger extends Component {
             domains: null,
             sites: null
         };
+        if (!this.props.GMPContext) {
+            this.props.domainsAndSitesAdd(permissions.contexts);
+            this.props.changeContext(permissions.currentContext);
+        }
         this.getPlaces = this.getPlaces.bind(this);
         this.getPlaces('domain', this.props.domainsAndSites || permissions.contexts);
         this.getPlaces('site', this.props.domainsAndSites || permissions.contexts);
         this.handleChange = this.handleChange.bind(this);
-        this.handleBack = this.handleBack.bind(this);
+        this.handleSelection = this.handleSelection.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
@@ -65,9 +65,9 @@ class ContextChanger extends Component {
             }
             return array;
         }, []);
-        const queryArg = ids.join(',');
         if (ids.length > 0) {
             try {
+                const queryArg = ids.join(',');
                 let allPlaces = await getUntilDone(`${placeName}s`, {
                     [`${placeName}_ids`]: queryArg
                 });
@@ -82,9 +82,9 @@ class ContextChanger extends Component {
         this.setState({ value });
     }
 
-    async handleBack(changed) {
+    async handleSelection() {
         this.setState({ changing: true });
-        if (changed) {
+        if (this.state.value !== this.props.GMPContext) {
             const { value } = this.state;
             this.props.changeContext(value);
             const splitName = value.split(':');
@@ -170,12 +170,12 @@ class ContextChanger extends Component {
                                 <CardActions>
                                     <FlatButton
                                         label="Back"
-                                        onClick={() => this.handleBack(false)}
+                                        onClick={() => this.handleSelection()}
                                     />
                                     <RaisedButton
                                         label="Confirm"
                                         primary={true}
-                                        onClick={() => this.handleBack(true)}
+                                        onClick={() => this.handleSelection()}
                                     />
                                 </CardActions>
                             </div>
