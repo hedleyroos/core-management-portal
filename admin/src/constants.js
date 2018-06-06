@@ -13,6 +13,7 @@ export const TITLES = {
 
 export const PERMISSIONS = {
     manageuserroles: [
+        ['roles', 'list'],
         ['users', 'list'],
         ['sites', 'list'],
         ['siteroles', 'list'],
