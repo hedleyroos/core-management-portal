@@ -5,14 +5,16 @@
 import React from 'react';
 import {
     TextInput,
-    NumberInput,
+    SelectInput,
+    ReferenceInput,
     Filter
 } from 'admin-on-rest';
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const UserSiteDataFilter = props => (
     <Filter {...props}>
         <TextInput label="User Id" source="user_id" />
-        <NumberInput label="Site Id" source="site_id" />
+        <UnlimitedDropdownInput label="Site" source="site_id" reference="sites" optionText="name" />
     </Filter>
 );
 

@@ -4,14 +4,15 @@
 **/
 import React from 'react';
 import {
+    SelectInput,
+    ReferenceInput,
     TextInput,
     BooleanInput,
     NumberInput,
-    ReferenceInput,
-    SelectInput,
     Filter
 } from 'admin-on-rest';
 import DateRangeInput from '../inputs/DateRangeInput';
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const parseUserIds = value => value.replace(/[^\w]/gi, ',');
 
@@ -39,9 +40,7 @@ const UserFilter = props => (
         <BooleanInput label="Two factor Auth Enabled" source="tfa_enabled" />
         <BooleanInput label="Has Organisational Unit" source="has_organisational_unit" />
         <TextInput label="User Ids" source="user_ids" parse={parseUserIds} />
-        <ReferenceInput label="Site" source="site_ids" reference="sites" allowEmpty>
-            <SelectInput optionText="name" />
-        </ReferenceInput>
+        <UnlimitedDropdownInput label="Site" source="site_ids" reference="sites" optionText="name" />
     </Filter>
 );
 

@@ -4,10 +4,12 @@
 **/
 import React from 'react';
 import {
-    NumberInput,
+    SelectInput,
+    ReferenceInput,
     TextInput,
     Filter
 } from 'admin-on-rest';
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const parseDomainIds = value => value.replace(/[^\w]/gi, ',');
 
@@ -22,7 +24,7 @@ const validateDomainIds = value => {
 
 const DomainFilter = props => (
     <Filter {...props}>
-        <NumberInput label="Parent Id" source="parent_id" />
+        <UnlimitedDropdownInput label="Parent" source="parent_id" reference="domains" optionText="name" />
         <TextInput label="Domain Ids" source="domain_ids" parse={parseDomainIds} validate={validateDomainIds} />
     </Filter>
 );
