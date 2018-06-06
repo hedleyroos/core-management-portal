@@ -13,8 +13,8 @@ class UnlimitedDropdownInput extends Component {
             value: null,
             choices: null
         };
-		this.loadChoices = this.loadChoices.bind(this);
-		this.loadChoices();
+        this.loadChoices = this.loadChoices.bind(this);
+        this.loadChoices();
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -23,7 +23,7 @@ class UnlimitedDropdownInput extends Component {
         try {
             const results = await getUntilDone(reference, filter || {});
             this.setState({ choices: results });
-        } catch(error) {
+        } catch (error) {
             console.error(error);
         }
     }
@@ -33,13 +33,13 @@ class UnlimitedDropdownInput extends Component {
     }
 
     render() {
-		const { source, label, optionText, optionValue } = this.props;
-		const selectProps = {
-			source: source,
-			choices: this.state.choices,
-			optionText: optionText,
-			optionValue: optionValue || 'id'
-		}
+        const { source, label, optionText, optionValue } = this.props;
+        const selectProps = {
+            source: source,
+            choices: this.state.choices,
+            optionText: optionText,
+            optionValue: optionValue || 'id'
+        };
         return (
             <span>
                 {this.state.choices ? (
