@@ -4,11 +4,11 @@
 **/
 import React from 'react';
 import {
+    SelectInput,
+    ReferenceInput,
     TextInput,
     BooleanInput,
     NumberInput,
-    ReferenceInput,
-    SelectInput,
     Filter
 } from 'admin-on-rest';
 import DateRangeInput from '../inputs/DateRangeInput';

@@ -4,7 +4,8 @@
 **/
 import React from 'react';
 import {
-    NumberInput,
+    SelectInput,
+    ReferenceInput,
     Filter
 } from 'admin-on-rest';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
@@ -12,7 +13,9 @@ import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 const DomainRoleFilter = props => (
     <Filter {...props}>
         <UnlimitedDropdownInput label="Domain" source="domain_id" reference="domains" optionText="name" />
-        <NumberInput label="Role Id" source="role_id" />
+        <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
+            <SelectInput optionText="label" />
+        </ReferenceInput>
     </Filter>
 );
 
