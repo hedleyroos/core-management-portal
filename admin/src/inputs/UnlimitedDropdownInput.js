@@ -20,8 +20,12 @@ class UnlimitedDropdownInput extends Component {
 
     async loadChoices() {
         const { reference, filter } = this.props;
-        const results = await getUntilDone(reference, filter || {});
-        this.setState({ choices: results });
+        try {
+            const results = await getUntilDone(reference, filter || {});
+            this.setState({ choices: results });
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     handleChange(value) {
