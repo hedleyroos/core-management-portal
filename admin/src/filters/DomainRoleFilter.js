@@ -7,10 +7,11 @@ import {
     NumberInput,
     Filter
 } from 'admin-on-rest';
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const DomainRoleFilter = props => (
     <Filter {...props}>
-        <NumberInput label="Domain Id" source="domain_id" />
+        <UnlimitedDropdownInput label="Domain" source="domain_id" reference="domains" optionText="name" />
         <NumberInput label="Role Id" source="role_id" />
     </Filter>
 );
