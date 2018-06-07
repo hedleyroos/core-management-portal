@@ -67,12 +67,7 @@ const FILTER_LENGTHS = {
  * @param {Object} params The REST request params, depending on the type
  * @returns {Object} { url, options } The HTTP request parameters
  */
-export const convertRESTRequestToHTTP = ({
-    apiUrl,
-    type,
-    resource,
-    params
-}) => {
+export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => {
     let url = '';
     const options = {};
     const query = {};
@@ -143,10 +138,7 @@ export const convertRESTRequestToHTTP = ({
             break;
         case OPERATIONAL:
             const pathParameters = params.pathParameters
-                ? params.pathParameters.reduce(
-                      (pathString, value) => pathString + `/${value}`,
-                      ''
-                  )
+                ? params.pathParameters.reduce((pathString, value) => pathString + `/${value}`, '')
                 : '';
             url = `${apiUrl}/ops/${resource}` + pathParameters;
             options.method = params.method;
@@ -188,12 +180,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                       id: `${keys.map(key => res[key]).join('/')}`
                   }))
                 : pk
-                    ? json.map(
-                          res =>
-                              res.hasOwnProperty('id')
-                                  ? res
-                                  : { ...res, id: res[pk] }
-                      )
+                    ? json.map(res => (res.hasOwnProperty('id') ? res : { ...res, id: res[pk] }))
                     : json;
             return {
                 data: data,
@@ -211,19 +198,19 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                       id: `${keys.map(key => res[key]).join('/')}`
                   }))
                 : pk
-                    ? json.map(
-                          res =>
-                              res.hasOwnProperty('id')
-                                  ? res
-                                  : { ...res, id: res[pk] }
-                      )
+                    ? json.map(res => (res.hasOwnProperty('id') ? res : { ...res, id: res[pk] }))
                     : json;
             return {
                 data: data,
                 total: parseInt(headers.get('x-total-count'), 10)
             };
         case CREATE:
-            return { data: { ...params.data, id: pk ? json[pk] : json.id } };
+            return {
+                data: {
+                    ...params.data,
+                    id: keys ? keys.map(key => json[key]).join('/') : pk ? json[pk] : json.id
+                }
+            };
         default:
             return { data: json ? json : {} };
     }
@@ -275,8 +262,5 @@ const httpClient = (url, options = {}) => {
     return fetchUtils.fetchJson(url, options);
 };
 
-export default swaggerRestServer(
-    process.env.REACT_APP_MANAGEMENT_LAYER,
-    httpClient
-);
+export default swaggerRestServer(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
 /** End of Generated Code **/
