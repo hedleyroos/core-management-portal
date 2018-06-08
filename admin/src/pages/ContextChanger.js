@@ -59,7 +59,7 @@ class ContextChanger extends Component {
     }
 
     async getPlaces(placeName, domainsAndSites) {
-        const ids = domainsAndSites.reduce((array, place) => {
+        const ids = Object.keys(domainsAndSites).reduce((array, place) => {
             if (place.indexOf(placeName[0]) >= 0) {
                 array.push(parseInt(place.split(':')[1], 10));
             }
@@ -141,7 +141,7 @@ class ContextChanger extends Component {
                                     {domains && sites ? (
                                         <DropDownMenu value={value} onChange={this.handleChange}>
                                             {domainsAndSites &&
-                                                domainsAndSites.map(place => {
+                                                Object.keys(domainsAndSites).map(place => {
                                                     const splitPlace = place.split(':');
                                                     const text =
                                                         splitPlace[0].indexOf('d') >= 0

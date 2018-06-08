@@ -4,8 +4,6 @@
 **/
 import React from 'react';
 import {
-    SelectInput,
-    ReferenceInput,
     TextInput,
     Filter
 } from 'admin-on-rest';

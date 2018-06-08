@@ -1,5 +1,4 @@
 import { Restricted, showNotification as showNotificationAction } from 'admin-on-rest';
-import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { withRouter } from 'react-router-dom';
@@ -15,19 +14,36 @@ import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
 import { makeIDMapping, getUniqueIDs, getUntilDone } from '../../utils';
+import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
+import PermissionsStore from '../../auth/PermissionsStore';
+import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
+
+const mapStateToProps = state => ({
+    domainsAndSites: state.context.domainsAndSites
+});
+
+const mapDispatchToProps = dispatch => ({
+    domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites)),
+    changeContext: newContext => dispatch(contextChangeGMPContext(newContext)),
+    showNotification: showNotificationAction
+});
 
 class ManageUserRoles extends Component {
     constructor(props) {
         super(props);
+        const permissions = PermissionsStore.getPermissionFlags();
+        if (!this.props.GMPContext) {
+            this.props.domainsAndSitesAdd(permissions.contexts);
+            this.props.changeContext(permissions.currentContext);
+        }
         this.state = {
+            managerRoles: null,
             search: '',
             userResults: null,
             userRoles: null,
             selectedUser: -1,
             userdomains: {},
-            userdomainroles: {},
             usersites: {},
-            usersiteroles: {},
             selectedDomainSite: null,
             roleSelections: null,
             rolesMapping: null,
@@ -37,7 +53,7 @@ class ManageUserRoles extends Component {
             validToken: true
         };
         this.getAllUserData = this.getAllUserData.bind(this);
-        this.getAllUserData();
+        this.getAllUserData(this.props.domainsAndSites || permissions.contexts);
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
@@ -50,38 +66,54 @@ class ManageUserRoles extends Component {
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
-    async getAllUserData() {
+    async getAllUserData(contexts) {
         try {
             let roles = await restClient(GET_MANY, 'roles', {});
             roles = makeIDMapping(roles.data);
             this.setState({ rolesMapping: roles });
-            await this.getWhereUserHasRoles('userdomainroles', 'domain_id', roles);
-            await this.getWhereUserHasRoles('usersiteroles', 'site_id', roles);
+            this.getWhereUserHasRoles(contexts, roles);
         } catch (error) {
             this.handleAPIError(error);
         }
     }
 
-    async getWhereUserHasRoles(resource, key, roles) {
-        const userID = jwtDecode(localStorage.getItem('id_token')).sub;
-        let placeRoles = await getUntilDone(resource, { user_id: userID });
-        const ids = getUniqueIDs(placeRoles, key);
-        let places = [];
-
-        if (ids.length > 0) {
-            places = await getUntilDone(resource.split('domain').length > 1 ? 'domains' : 'sites', {
-                [`${key}s`]: ids.join(',')
+    async getWhereUserHasRoles(contexts, roles) {
+        const ids = Object.keys(contexts).reduce(
+            (accumulator, place) => {
+                const splitPlace = place.split(':');
+                splitPlace[0] === 'd'
+                    ? accumulator.domains.push(splitPlace[1])
+                    : accumulator.sites.push(splitPlace[1]);
+                return accumulator;
+            },
+            { domains: [], sites: [] }
+        );
+        let domains = {},
+            sites = {};
+        if (ids.domains.length > 0) {
+            domains = await getUntilDone('domains', {
+                ids: ids.domains
             });
-            places = makeIDMapping(places);
+            domains = makeIDMapping(domains);
         }
-        placeRoles = placeRoles.reduce((obj, placeRole) => {
-            obj[placeRole[key]] = obj[placeRole[key]]
-                ? [...obj[placeRole[key]], roles[placeRole.role_id]]
-                : [roles[placeRole.role_id]];
-            return obj;
-        }, {});
-        const placeName = resource.split('roles')[0] + 's';
-        this.setState({ [resource]: placeRoles, [placeName]: places });
+        if (ids.sites.length > 0) {
+            sites = await getUntilDone('sites', {
+                ids: ids.sites
+            });
+            sites = makeIDMapping(sites);
+        }
+        const managerRoles = Object.entries(contexts).reduce(
+            (accumulator, [place, placeRoles]) => {
+                const splitPlace = place.split(':');
+                const roleObjects = placeRoles.map(id => roles[id]);
+                splitPlace[0] === 'd'
+                    ? (accumulator.domains[splitPlace[1]] = roleObjects)
+                    : (accumulator.sites[splitPlace[1]] = roleObjects);
+                return accumulator;
+            },
+            { domains: {}, sites: {} }
+        );
+        this.setState({ managerRoles, userdomains: domains, usersites: sites });
     }
 
     handleSearch(event) {
@@ -91,7 +123,7 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true, has_organisational_unit: true }
+                filter: { q: input }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -194,7 +226,7 @@ class ManageUserRoles extends Component {
 
     handleDomainSiteChange(event, index, value) {
         const splitValue = value.split(':');
-        const roles = this.state[`user${splitValue[1]}roles`][splitValue[0]];
+        const roles = this.state.managerRoles[`${splitValue[1]}s`][splitValue[0]];
         this.setState({
             selectedDomainSite: value,
             roleSelections: roles.reduce((obj, role) => {
@@ -313,6 +345,7 @@ class ManageUserRoles extends Component {
 
     render() {
         const {
+            managerRoles,
             search,
             userResults,
             selectedUser,
@@ -327,60 +360,64 @@ class ManageUserRoles extends Component {
         } = this.state;
         const user = selectedUser >= 0 ? userResults[selectedUser] : null;
         return validToken ? (
-            <Restricted location={this.props.location}>
-                <Card>
-                    <CardTitle title="Manage User Roles" />
-                    <CardText>
-                        <TextField
-                            name="UserSearch"
-                            placeholder="Search for User"
-                            value={search}
-                            onChange={this.handleSearch}
-                        />
-                    </CardText>
-                    <CardText>
-                        {userResults && userResults.length > 0 ? (
-                            <TableField
-                                label="Users Found"
-                                data={userResults}
-                                selectable={true}
-                                selected={selectedUser}
-                                onRowSelection={this.handleSelect}
-                            />
-                        ) : (
-                            'No Users found.'
-                        )}
-                    </CardText>
-                    {selectedUser >= 0 ? (
+            managerRoles ? (
+                <Restricted location={this.props.location}>
+                    <Card>
+                        <CardTitle title="Manage User Roles" />
                         <CardText>
-                            <UserCard
-                                user={user}
-                                userRoles={userRoles}
-                                handleDelete={this.triggerDeleteDialog}
-                            />
-                            <AssignRoleCard
-                                selectedDomainSite={selectedDomainSite}
-                                handleDomainSiteChange={this.handleDomainSiteChange}
-                                userdomains={userdomains}
-                                usersites={usersites}
-                                handleRoleSelection={this.handleRoleSelection}
-                                roleSelections={roleSelections}
-                                handleAssign={this.handleAssign}
-                                hasRolesToAssign={hasRolesToAssign}
+                            <TextField
+                                name="UserSearch"
+                                placeholder="Search for User"
+                                value={search}
+                                onChange={this.handleSearch}
                             />
                         </CardText>
-                    ) : (
-                        ''
-                    )}
-                    <ConfirmDialog
-                        open={open}
-                        handleClose={this.handleClose}
-                        cancelLabel="No"
-                        submitLabel="Delete"
-                        text="Are you sure you want to delete this role?"
-                    />
-                </Card>
-            </Restricted>
+                        <CardText>
+                            {userResults && userResults.length > 0 ? (
+                                <TableField
+                                    label="Users Found"
+                                    data={userResults}
+                                    selectable={true}
+                                    selected={selectedUser}
+                                    onRowSelection={this.handleSelect}
+                                />
+                            ) : (
+                                'No Users found.'
+                            )}
+                        </CardText>
+                        {selectedUser >= 0 ? (
+                            <CardText>
+                                <UserCard
+                                    user={user}
+                                    userRoles={userRoles}
+                                    handleDelete={this.triggerDeleteDialog}
+                                />
+                                <AssignRoleCard
+                                    selectedDomainSite={selectedDomainSite}
+                                    handleDomainSiteChange={this.handleDomainSiteChange}
+                                    userdomains={userdomains}
+                                    usersites={usersites}
+                                    handleRoleSelection={this.handleRoleSelection}
+                                    roleSelections={roleSelections}
+                                    handleAssign={this.handleAssign}
+                                    hasRolesToAssign={hasRolesToAssign}
+                                />
+                            </CardText>
+                        ) : (
+                            ''
+                        )}
+                        <ConfirmDialog
+                            open={open}
+                            handleClose={this.handleClose}
+                            cancelLabel="No"
+                            submitLabel="Delete"
+                            text="Are you sure you want to delete this role?"
+                        />
+                    </Card>
+                </Restricted>
+            ) : (
+                <CircularProgress />
+            )
         ) : (
             <Redirect to="/login" />
         );
@@ -388,7 +425,8 @@ class ManageUserRoles extends Component {
 }
 
 export default withRouter(
-    connect(null, {
-        showNotification: showNotificationAction
-    })(ManageUserRoles)
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(ManageUserRoles)
 );

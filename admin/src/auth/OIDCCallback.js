@@ -8,7 +8,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
-import restClient, { OPERATIONAL } from '../swaggerRestServer';
 import { muiTheme, styles } from '../Theme';
 import PermissionsStore from '../auth/PermissionsStore';
 import { base64urlDecode } from '../utils';
@@ -62,36 +61,10 @@ class OIDCCallback extends Component {
         } else {
             // Everything checked out. Store the id token.
             localStorage.setItem('id_token', parsedQuery.id_token);
-            const user_id = jwtDecode(parsedQuery.id_token).sub;
+            const userID = jwtDecode(parsedQuery.id_token).sub;
             try {
-                const response = await restClient(OPERATIONAL, 'all_user_roles', {
-                    pathParameters: [user_id]
-                });
-                const domainsAndSites = Object.entries(response.data.roles_map).reduce(
-                    (total, [key, value]) => {
-                        if (value.length > 0) {
-                            total.push(key);
-                        }
-                        return total;
-                    },
-                    []
-                );
-                this.props.domainsAndSitesAdd(domainsAndSites);
-                const splitName = domainsAndSites[0].split(':');
-                const permissions = await restClient(
-                    OPERATIONAL,
-                    splitName[0].indexOf('d') >= 0
-                        ? 'user_domain_permissions'
-                        : 'user_site_permissions',
-                    {
-                        pathParameters: [user_id, splitName[1]]
-                    }
-                );
-                PermissionsStore.loadPermissions(
-                    permissions.data,
-                    domainsAndSites,
-                    domainsAndSites[0]
-                );
+                const details = await PermissionsStore.getAndLoadPermissions(userID);
+                this.props.domainsAndSitesAdd(details.contexts);
                 this.setState({ loginComplete: true });
             } catch (error) {
                 console.error(error);
