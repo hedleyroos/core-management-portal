@@ -17,6 +17,7 @@ import { makeIDMapping, getUniqueIDs, getUntilDone } from '../../utils';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
 import PermissionsStore from '../../auth/PermissionsStore';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
+import { SUPERADMIN } from '../../constants';
 
 const mapStateToProps = state => ({
     domainsAndSites: state.context.domainsAndSites
@@ -92,20 +93,29 @@ class ManageUserRoles extends Component {
             sites = {};
         if (ids.domains.length > 0) {
             domains = await getUntilDone('domains', {
-                ids: ids.domains
+                domain_ids: ids.domains.join(',')
             });
             domains = makeIDMapping(domains);
         }
         if (ids.sites.length > 0) {
             sites = await getUntilDone('sites', {
-                ids: ids.sites
+                site_ids: ids.sites.join(',')
             });
             sites = makeIDMapping(sites);
         }
         const managerRoles = Object.entries(contexts).reduce(
             (accumulator, [place, placeRoles]) => {
                 const splitPlace = place.split(':');
-                const roleObjects = placeRoles.map(id => roles[id]);
+                let isSuperAdmin = false;
+                let roleObjects = placeRoles.map(id => {
+                    if (roles[id].label === SUPERADMIN) {
+                        isSuperAdmin = true;
+                    }
+                    return roles[id];
+                });
+                if (isSuperAdmin) {
+                    roleObjects = Object.values(roles);
+                }
                 splitPlace[0] === 'd'
                     ? (accumulator.domains[splitPlace[1]] = roleObjects)
                     : (accumulator.sites[splitPlace[1]] = roleObjects);
@@ -123,7 +133,7 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input }
+                filter: { q: input, tfa_enabled: true, has_organizational_unit: true }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
