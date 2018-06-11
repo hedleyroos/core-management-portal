@@ -212,6 +212,12 @@ class PermissionsStore {
         }
         return this.permissionFlags;
     }
+    getAllContexts() {
+        return this.getPermissionFlags().contexts;
+    }
+    getCurrentContext() {
+        return this.getPermissionFlags().currentContext;
+    }
 }
 
 const storeInstance = new PermissionsStore();

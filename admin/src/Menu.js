@@ -52,18 +52,14 @@ const ICONS = {
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
-        {Object.keys(PermissionsStore.getPermissionFlags().contexts).length > 1 ? (
+        {Object.keys(PermissionsStore.getAllContexts()).length > 1 ? (
             <MenuItemLink
                 to="/contextchanger"
-                primaryText={`Context: ${
-                    PermissionsStore.getPermissionFlags().currentContext.obj
-                        ? titleCase(
-                              PermissionsStore.getPermissionFlags()
-                                  .currentContext.obj.name.split('_')
-                                  .join(' ')
-                          )
-                        : 'Error: Not loaded yet! Something is wrong.'
-                }`}
+                primaryText={`Context: ${titleCase(
+                    PermissionsStore.getCurrentContext()
+                        .obj.name.split('_')
+                        .join(' ')
+                )}`}
                 onClick={onMenuTap}
                 leftIcon={<ContextSwitchIcon color={pink300} />}
             />

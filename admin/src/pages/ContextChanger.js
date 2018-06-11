@@ -37,24 +37,29 @@ const mapDispatchToProps = dispatch => {
 class ContextChanger extends Component {
     constructor(props) {
         super(props);
-        const permissions = PermissionsStore.getPermissionFlags();
+        let currentContext = null,
+            contexts = null;
+
+        if (this.props.GMPContext) {
+            currentContext = this.props.GMPContext;
+            contexts = this.props.domainsAndSites
+        } else {
+            currentContext = PermissionsStore.getCurrentContext();
+            contexts = PermissionsStore.getAllContexts();
+            this.props.domainsAndSitesAdd(contexts);
+            this.props.changeContext(currentContext);
+        }
         this.state = {
             changing: false,
-            value:
-                (this.props.GMPContext && this.props.GMPContext.key) ||
-                permissions.currentContext.key,
+            value: currentContext.key,
             redirect: false,
             validToken: true,
             domains: null,
             sites: null
         };
-        if (!this.props.GMPContext) {
-            this.props.domainsAndSitesAdd(permissions.contexts);
-            this.props.changeContext(permissions.currentContext);
-        }
         this.getPlaces = this.getPlaces.bind(this);
-        this.getPlaces('domain', this.props.domainsAndSites || permissions.contexts);
-        this.getPlaces('site', this.props.domainsAndSites || permissions.contexts);
+        this.getPlaces('domain', contexts);
+        this.getPlaces('site', contexts);
         this.handleChange = this.handleChange.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
