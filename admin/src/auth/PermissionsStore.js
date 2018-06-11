@@ -2,6 +2,8 @@
  * Generated authPermissions.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
+import restClient, { OPERATIONAL } from '../swaggerRestServer';
+
 class PermissionsStore {
     constructor() {
         if (!PermissionsStore.instance) {
@@ -113,12 +115,39 @@ class PermissionsStore {
                 }
             };
             this.permissionFlags = null;
+            this.getAndLoadPermissions = this.getAndLoadPermissions.bind(this);
             this.loadPermissions = this.loadPermissions.bind(this);
             this.getResourcePermission = this.getResourcePermission.bind(this);
             this.manyResourcePermissions = this.manyResourcePermissions.bind(this);
+            this.getPermissionFlags = this.getPermissionFlags.bind(this);
             PermissionsStore.instance = this;
         }
         return PermissionsStore.instance;
+    }
+    async getAndLoadPermissions(userID) {
+        const response = await restClient(OPERATIONAL, 'all_user_roles', {
+            pathParameters: [userID]
+        });
+        const contexts = Object.entries(response.data.roles_map).reduce(
+            (result, [key, value]) => {
+                if (value.length > 0) {
+                    result[key] = value;
+                }
+                return result;
+            },
+            {}
+        );
+        const currentContext = Object.keys(contexts)[0]
+        const [contextType, contextID] = currentContext.split(':');
+        const permissions = await restClient(
+            OPERATIONAL,
+            contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
+            {
+                pathParameters: [userID, contextID]
+            }
+        );
+        this.loadPermissions(permissions.data, contexts, currentContext);
+        return Promise.resolve({ contexts, currentContext });
     }
     loadPermissions(userPermissions, contexts, currentContext) {
         this.permissionFlags = {};

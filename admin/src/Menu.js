@@ -75,7 +75,7 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                 leftIcon={<ManageIcon />}
             />
         ) : null}
-        {PermissionsStore.getPermissionFlags().contexts.length > 1 ? (
+        {Object.keys(PermissionsStore.getPermissionFlags().contexts).length > 1 ? (
             <MenuItemLink
                 to="/contextchanger"
                 primaryText="Context Changer"

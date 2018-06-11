@@ -27,3 +27,5 @@ export const PERMISSIONS = {
         ['userdomainroles', 'remove']
     ]
 };
+
+export const TECH_ADMIN = 'tech_admin';

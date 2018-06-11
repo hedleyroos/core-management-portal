@@ -5,8 +5,6 @@
 import React from 'react';
 import {
     TextInput,
-    SelectInput,
-    ReferenceInput,
     Filter
 } from 'admin-on-rest';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
