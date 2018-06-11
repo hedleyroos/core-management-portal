@@ -81,10 +81,10 @@ class ManageUserRoles extends Component {
     async getWhereUserHasRoles(contexts, roles) {
         const ids = Object.keys(contexts).reduce(
             (accumulator, place) => {
-                const splitPlace = place.split(':');
-                splitPlace[0] === 'd'
-                    ? accumulator.domains.push(splitPlace[1])
-                    : accumulator.sites.push(splitPlace[1]);
+                const [placeLetter, placeID] = place.split(':');
+                placeLetter === 'd'
+                    ? accumulator.domains.push(placeID)
+                    : accumulator.sites.push(placeID);
                 return accumulator;
             },
             { domains: [], sites: [] }
@@ -110,8 +110,8 @@ class ManageUserRoles extends Component {
                 if (hasTechAdmin) {
                     roleObjects = Object.values(roles);
                 }
-                const [place, placeID] = place.split(':');
-                place === 'd'
+                const [placeLetter, placeID] = place.split(':');
+                placeLetter === 'd'
                     ? (accumulator.domains[placeID] = roleObjects)
                     : (accumulator.sites[placeID] = roleObjects);
                 return accumulator;
@@ -280,7 +280,7 @@ class ManageUserRoles extends Component {
         Object.values(roleSelections).map(async roleSelection => {
             if (roleSelection.selected) {
                 try {
-                    await restClient(CREATE, `user${placeSplit[1]}roles`, {
+                    await restClient(CREATE, `user${place}roles`, {
                         data: {
                             user_id: userResults[selectedUser].id,
                             [`${place}_id`]: parseInt(placeID, 10),
