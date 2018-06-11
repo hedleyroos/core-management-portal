@@ -87,16 +87,14 @@ class ContextChanger extends Component {
         if (this.state.value !== this.props.GMPContext) {
             const { value } = this.state;
             this.props.changeContext(value);
-            const splitName = value.split(':');
-            const user_id = jwtDecode(localStorage.getItem('id_token')).sub;
+            const [contextType, contextID] = value.split(':');
+            const userID = jwtDecode(localStorage.getItem('id_token')).sub;
             try {
                 const permissions = await restClient(
                     OPERATIONAL,
-                    splitName[0].indexOf('d') >= 0
-                        ? 'user_domain_permissions'
-                        : 'user_site_permissions',
+                    contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
                     {
-                        pathParameters: [user_id, splitName[1]]
+                        pathParameters: [userID, contextID]
                     }
                 );
                 PermissionsStore.loadPermissions(
@@ -142,16 +140,18 @@ class ContextChanger extends Component {
                                         <DropDownMenu value={value} onChange={this.handleChange}>
                                             {domainsAndSites &&
                                                 Object.keys(domainsAndSites).map(place => {
-                                                    const splitPlace = place.split(':');
+                                                    const [contextType, contextID] = place.split(
+                                                        ':'
+                                                    );
                                                     const text =
-                                                        splitPlace[0].indexOf('d') >= 0
+                                                        contextType === 'd'
                                                             ? domains
                                                                 ? domains[
-                                                                      parseInt(splitPlace[1], 10)
+                                                                      parseInt(contextID, 10)
                                                                   ].name
                                                                 : place
                                                             : sites
-                                                                ? sites[parseInt(splitPlace[1], 10)]
+                                                                ? sites[parseInt(contextID, 10)]
                                                                       .name
                                                                 : place;
                                                     return (
@@ -187,4 +187,7 @@ class ContextChanger extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContextChanger);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ContextChanger);

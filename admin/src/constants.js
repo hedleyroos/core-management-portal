@@ -28,4 +28,4 @@ export const PERMISSIONS = {
     ]
 };
 
-export const SUPERADMIN = 'tech_admin';
+export const TECH_ADMIN = 'tech_admin';

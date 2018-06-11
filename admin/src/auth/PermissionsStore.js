@@ -138,12 +138,12 @@ class PermissionsStore {
             {}
         );
         const currentContext = Object.keys(contexts)[0]
-        const splitName = currentContext.split(':');
+        const [contextType, contextID] = currentContext.split(':');
         const permissions = await restClient(
             OPERATIONAL,
-            splitName[0].indexOf('d') >= 0 ? 'user_domain_permissions' : 'user_site_permissions',
+            contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
             {
-                pathParameters: [userID, splitName[1]]
+                pathParameters: [userID, contextID]
             }
         );
         this.loadPermissions(permissions.data, contexts, currentContext);

@@ -17,7 +17,7 @@ import { makeIDMapping, getUniqueIDs, getUntilDone } from '../../utils';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
 import PermissionsStore from '../../auth/PermissionsStore';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
-import { SUPERADMIN } from '../../constants';
+import { TECH_ADMIN } from '../../constants';
 
 const mapStateToProps = state => ({
     domainsAndSites: state.context.domainsAndSites
@@ -105,20 +105,15 @@ class ManageUserRoles extends Component {
         }
         const managerRoles = Object.entries(contexts).reduce(
             (accumulator, [place, placeRoles]) => {
-                const splitPlace = place.split(':');
-                let isSuperAdmin = false;
-                let roleObjects = placeRoles.map(id => {
-                    if (roles[id].label === SUPERADMIN) {
-                        isSuperAdmin = true;
-                    }
-                    return roles[id];
-                });
-                if (isSuperAdmin) {
+                const hasTechAdmin = placeRoles.some(id => roles[id].label === TECH_ADMIN);
+                let roleObjects = placeRoles.map(id => roles[id]);
+                if (hasTechAdmin) {
                     roleObjects = Object.values(roles);
                 }
-                splitPlace[0] === 'd'
-                    ? (accumulator.domains[splitPlace[1]] = roleObjects)
-                    : (accumulator.sites[splitPlace[1]] = roleObjects);
+                const [place, placeID] = place.split(':');
+                place === 'd'
+                    ? (accumulator.domains[placeID] = roleObjects)
+                    : (accumulator.sites[placeID] = roleObjects);
                 return accumulator;
             },
             { domains: {}, sites: {} }
@@ -133,7 +128,7 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true, has_organizational_unit: true }
+                filter: { q: input, tfa_enabled: true, has_organisational_unit: true }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -279,7 +274,7 @@ class ManageUserRoles extends Component {
             hasRolesToAssign
         } = this.state;
         const { showNotification } = this.props;
-        const placeSplit = selectedDomainSite.split(':');
+        const [placeID, place] = selectedDomainSite.split(':');
         let allCreated = true;
         // TODO: Maybe look at doing the fetches in parallel rather.
         Object.values(roleSelections).map(async roleSelection => {
@@ -288,18 +283,13 @@ class ManageUserRoles extends Component {
                     await restClient(CREATE, `user${placeSplit[1]}roles`, {
                         data: {
                             user_id: userResults[selectedUser].id,
-                            [`${placeSplit[1]}_id`]: parseInt(placeSplit[0], 10),
+                            [`${place}_id`]: parseInt(placeID, 10),
                             role_id: roleSelection.id
                         }
                     });
                     let newUserRoles = userRoles;
-                    newUserRoles[`${placeSplit[1]}Roles`][
-                        `${placeSplit[0]}:${roleSelection.id}`
-                    ] = {
-                        [placeSplit[1]]:
-                            placeSplit[1] === 'domain'
-                                ? userdomains[placeSplit[0]]
-                                : usersites[placeSplit[0]],
+                    newUserRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
+                        [place]: place === 'domain' ? userdomains[placeID] : usersites[placeID],
                         role: rolesMapping[roleSelection.id]
                     };
                     this.setState({
@@ -387,9 +377,9 @@ class ManageUserRoles extends Component {
                                 <TableField
                                     label="Users Found"
                                     data={userResults}
-                                    selectable={true}
                                     selected={selectedUser}
                                     onRowSelection={this.handleSelect}
+                                    selectable
                                 />
                             ) : (
                                 'No Users found.'
