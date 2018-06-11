@@ -7,7 +7,7 @@ export default (type, params) => {
             const logoutQueryString = GenerateQueryString({
                 id_token_hint: localStorage.getItem('id_token'),
                 post_logout_redirect_uri: process.env.REACT_APP_PORTAL_URL
-            })
+            });
             localStorage.removeItem('id_token');
             localStorage.removeItem('auth_state');
             localStorage.removeItem('permissions');
@@ -23,7 +23,9 @@ export default (type, params) => {
         return Promise.resolve();
     }
     if (type === AUTH_CHECK) {
-        return localStorage.getItem('id_token') ? Promise.resolve() : Promise.reject();
+        return localStorage.getItem('id_token') && localStorage.getItem('permissions')
+            ? Promise.resolve()
+            : Promise.reject();
     }
     return Promise.resolve();
-}
+};

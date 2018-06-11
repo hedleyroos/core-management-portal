@@ -52,10 +52,12 @@ const ICONS = {
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
-        <span>
-            {PermissionsStore.getPermissionFlags().currentContext.obj
-                ? PermissionsStore.getPermissionFlags().currentContext.obj.name
-                : null}
+        <span style={{lineHeight: '48px', fontWeight: 'bold', margin: '1rem'}}>
+            {`${PermissionsStore.getPermissionFlags().currentContext.obj
+                ? titleCase(
+                      PermissionsStore.getPermissionFlags().currentContext.obj.name.split('_').join(' ')
+                  )
+                : null}`}
         </span>
         {Object.keys(PermissionsStore.getPermissionFlags().contexts).length > 1 ? (
             <MenuItemLink
