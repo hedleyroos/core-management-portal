@@ -2,7 +2,7 @@
  * Generated authPermissions.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
-import restClient, { OPERATIONAL } from '../swaggerRestServer';
+import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
 
 class PermissionsStore {
     constructor() {
@@ -128,17 +128,24 @@ class PermissionsStore {
         const response = await restClient(OPERATIONAL, 'all_user_roles', {
             pathParameters: [userID]
         });
-        const contexts = Object.entries(response.data.roles_map).reduce(
-            (result, [key, value]) => {
-                if (value.length > 0) {
-                    result[key] = value;
-                }
-                return result;
-            },
-            {}
-        );
-        const currentContext = Object.keys(contexts)[0]
+        const contexts = Object.entries(response.data.roles_map).reduce((result, [key, value]) => {
+            if (value.length > 0) {
+                result[key] = value;
+            }
+            return result;
+        }, {});
+        let currentContext = Object.keys(contexts)[0];
         const [contextType, contextID] = currentContext.split(':');
+        const currentContextObject = await restClient(
+            GET_ONE,
+            contextType === 'd' ? 'domains' : 'sites',
+            { id: contextID }
+        );
+        currentContext = {
+            key: currentContext,
+            obj: currentContextObject.data
+        } 
+
         const permissions = await restClient(
             OPERATIONAL,
             contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',

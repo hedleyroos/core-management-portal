@@ -17,7 +17,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { muiTheme, styles } from '../Theme';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../actions/context';
 import PermissionsStore from '../auth/PermissionsStore';
-import restClient, { OPERATIONAL } from '../swaggerRestServer';
+import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
 import { makeIDMapping, getUntilDone } from '../utils';
 
 const mapStateToProps = state => {
@@ -40,7 +40,9 @@ class ContextChanger extends Component {
         const permissions = PermissionsStore.getPermissionFlags();
         this.state = {
             changing: false,
-            value: this.props.GMPContext || permissions.currentContext,
+            value:
+                (this.props.GMPContext && this.props.GMPContext.key) ||
+                permissions.currentContext.key,
             redirect: false,
             validToken: true,
             domains: null,
@@ -84,10 +86,14 @@ class ContextChanger extends Component {
 
     async handleSelection() {
         this.setState({ changing: true });
-        if (this.state.value !== this.props.GMPContext) {
+        if (this.state.value !== this.props.GMPContext.key) {
             const { value } = this.state;
-            this.props.changeContext(value);
             const [contextType, contextID] = value.split(':');
+            const place = await restClient(GET_ONE, contextType === 'd' ? 'domains' : 'sites', {
+                id: contextID
+            });
+            const newContext = { key: value, obj: place.data };
+            this.props.changeContext(newContext);
             const userID = jwtDecode(localStorage.getItem('id_token')).sub;
             try {
                 const permissions = await restClient(
@@ -100,7 +106,7 @@ class ContextChanger extends Component {
                 PermissionsStore.loadPermissions(
                     permissions.data,
                     this.props.domainsAndSites,
-                    value
+                    newContext
                 );
             } catch (error) {
                 this.handleAPIError(error);
@@ -146,9 +152,8 @@ class ContextChanger extends Component {
                                                     const text =
                                                         contextType === 'd'
                                                             ? domains
-                                                                ? domains[
-                                                                      parseInt(contextID, 10)
-                                                                  ].name
+                                                                ? domains[parseInt(contextID, 10)]
+                                                                      .name
                                                                 : place
                                                             : sites
                                                                 ? sites[parseInt(contextID, 10)]

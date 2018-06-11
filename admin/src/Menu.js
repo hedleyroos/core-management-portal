@@ -52,7 +52,11 @@ const ICONS = {
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
-        <span>{PermissionsStore.getPermissionFlags().currentContext}</span>
+        <span>
+            {PermissionsStore.getPermissionFlags().currentContext.obj
+                ? PermissionsStore.getPermissionFlags().currentContext.obj.name
+                : null}
+        </span>
         {Object.keys(PermissionsStore.getPermissionFlags().contexts).length > 1 ? (
             <MenuItemLink
                 to="/contextchanger"
