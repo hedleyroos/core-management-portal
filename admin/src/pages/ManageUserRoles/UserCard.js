@@ -7,6 +7,7 @@ import CardTitle from 'material-ui/Card/CardTitle';
 import Chip from 'material-ui/Chip';
 import Divider from 'material-ui/Divider';
 import { styles } from '../../Theme';
+import { NotEmptyObject } from '../../utils';
 
 const UserCard = props => {
     const { user, userRoles, handleDelete } = props;
@@ -16,7 +17,7 @@ const UserCard = props => {
             <Divider />
             <CardHeader title="Domain Roles" />
             <CardText style={styles.wrapper}>
-                {userRoles && userRoles.domainRoles && Object.keys(userRoles.domainRoles).length > 0
+                {userRoles && userRoles.domainRoles && NotEmptyObject(userRoles.domainRoles)
                     ? Object.values(userRoles.domainRoles).map((domainRole, index) => (
                           <Chip
                               key={index}
@@ -37,7 +38,7 @@ const UserCard = props => {
             <Divider />
             <CardHeader title="Site Roles" />
             <CardText style={styles.wrapper}>
-                {userRoles && userRoles.siteRoles && Object.keys(userRoles.siteRoles).length > 0
+                {userRoles && userRoles.siteRoles && NotEmptyObject(userRoles.siteRoles)
                     ? Object.values(userRoles.siteRoles).map((siteRole, index) => (
                           <Chip
                               key={index}

@@ -45,6 +45,8 @@ export const getUniqueIDs = (list, key) => {
     }, []);
 };
 
+export const NotEmptyObject = obj => Object.keys(obj).length > 0;
+
 export const GenerateQueryString = parameters => {
     return Object.entries(parameters)
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
@@ -76,7 +78,7 @@ export const base64urlDecode = str => {
 };
 
 const base64urlUnescape = str => {
-    str += Array(5 - str.length % 4).join('=');
+    str += Array(5 - (str.length % 4)).join('=');
     return str.replace(/-/g, '+').replace(/_/g, '/');
 };
 /** End of Generated Code **/

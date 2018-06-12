@@ -24,7 +24,7 @@ import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
 import { pink300 } from 'material-ui/styles/colors';
 
 import PermissionsStore from './auth/PermissionsStore';
-import { titleCase } from './utils';
+import { titleCase, NotEmptyObject } from './utils';
 import { TITLES, PERMISSIONS } from './constants';
 
 const ICONS = {
@@ -52,7 +52,7 @@ const ICONS = {
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
-        {Object.keys(PermissionsStore.getAllContexts()).length > 1 ? (
+        {NotEmptyObject(PermissionsStore.getAllContexts()) ? (
             <MenuItemLink
                 to="/contextchanger"
                 primaryText={`Context: ${titleCase(
