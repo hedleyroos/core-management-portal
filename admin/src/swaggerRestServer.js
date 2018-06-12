@@ -260,7 +260,9 @@ const httpClient = (url, options = {}) => {
     const id_token = localStorage.getItem('id_token');
     const permissions = JSON.parse(localStorage.getItem('permissions'));
     options.headers.set('Authorization', `Bearer ${id_token}`);
-    options.headers.set('X-GE-Portal-Context', permissions ? permissions.currentContext.key : null);
+    if (permissions) {
+        options.headers.set('X-GE-Portal-Context', permissions.currentContext.key);
+    }
     return fetchUtils.fetchJson(url, options);
 };
 

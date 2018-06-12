@@ -3,6 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
+import { NotEmptyObject } from '../utils';
 
 class PermissionsStore {
     constructor() {
@@ -134,27 +135,30 @@ class PermissionsStore {
             }
             return result;
         }, {});
-        let currentContext = Object.keys(contexts)[0];
-        const [contextType, contextID] = currentContext.split(':');
-        const currentContextObject = await restClient(
-            GET_ONE,
-            contextType === 'd' ? 'domains' : 'sites',
-            { id: contextID }
-        );
-        currentContext = {
-            key: currentContext,
-            obj: currentContextObject.data
-        } 
+        if (NotEmptyObject(contexts)) {
+            let currentContext = Object.keys(contexts)[0];
+            const [contextType, contextID] = currentContext.split(':');
+            const currentContextObject = await restClient(
+                GET_ONE,
+                contextType === 'd' ? 'domains' : 'sites',
+                { id: contextID }
+            );
+            currentContext = {
+                key: currentContext,
+                obj: currentContextObject.data
+            };
 
-        const permissions = await restClient(
-            OPERATIONAL,
-            contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
-            {
-                pathParameters: [userID, contextID]
-            }
-        );
-        this.loadPermissions(permissions.data, contexts, currentContext);
-        return Promise.resolve({ contexts, currentContext });
+            const permissions = await restClient(
+                OPERATIONAL,
+                contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
+                {
+                    pathParameters: [userID, contextID]
+                }
+            );
+            this.loadPermissions(permissions.data, contexts, currentContext);
+            return Promise.resolve({ contexts, currentContext });
+        }
+        return Promise.resolve({ contexts: {}, currentContext: {} });
     }
     loadPermissions(userPermissions, contexts, currentContext) {
         this.permissionFlags = {};
@@ -213,10 +217,12 @@ class PermissionsStore {
         return this.permissionFlags;
     }
     getAllContexts() {
-        return this.getPermissionFlags().contexts;
+        const permissions = this.getPermissionFlags();
+        return permissions ? this.getPermissionFlags().contexts : {};
     }
     getCurrentContext() {
-        return this.getPermissionFlags().currentContext;
+        const permissions = this.getPermissionFlags();
+        return permissions ? this.getPermissionFlags().currentContext : {};
     }
 }
 
