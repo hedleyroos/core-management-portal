@@ -8,6 +8,8 @@ import Divider from 'material-ui/Divider';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import RaisedButton from 'material-ui/RaisedButton';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
+
+import { NotEmptyObject } from '../../utils';
 import { styles } from '../../Theme';
 
 const AssignRoleCard = props => {
@@ -33,7 +35,7 @@ const AssignRoleCard = props => {
                     autoWidth={false}
                 >
                     <MenuItem value={null} primaryText="Select Domain/Site" disabled />
-                    {Object.keys(userdomains).length > 0
+                    {NotEmptyObject(userdomains)
                         ? Object.values(userdomains).map(domain => (
                               <MenuItem
                                   key={`${domain.id}:domain`}
@@ -43,10 +45,10 @@ const AssignRoleCard = props => {
                               />
                           ))
                         : null}
-                    {Object.keys(userdomains).length > 0 && Object.keys(usersites).length > 0 ? (
+                    {NotEmptyObject(userdomains) && NotEmptyObject(usersites) ? (
                         <Divider />
                     ) : null}
-                    {Object.keys(usersites).length > 0
+                    {NotEmptyObject(usersites)
                         ? Object.values(usersites).map(site => (
                               <MenuItem
                                   key={`${site.id}:site`}
@@ -61,7 +63,7 @@ const AssignRoleCard = props => {
                     <div>
                         <CardHeader subtitle="Please choose the roles to add:" />
                         <CardText>
-                            {Object.keys(roleSelections).length > 0
+                            {NotEmptyObject(roleSelections)
                                 ? Object.values(roleSelections).map(roleSelection => (
                                       <Checkbox
                                           key={roleSelection.id}

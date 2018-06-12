@@ -24,7 +24,7 @@ import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
 import { pink300 } from 'material-ui/styles/colors';
 
 import PermissionsStore from './auth/PermissionsStore';
-import { titleCase } from './utils';
+import { titleCase, NotEmptyObject } from './utils';
 import { TITLES, PERMISSIONS } from './constants';
 
 const ICONS = {
@@ -52,6 +52,18 @@ const ICONS = {
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
+        {NotEmptyObject(PermissionsStore.getAllContexts()) ? (
+            <MenuItemLink
+                to="/contextchanger"
+                primaryText={`Context: ${titleCase(
+                    PermissionsStore.getCurrentContext()
+                        .obj.name.split('_')
+                        .join(' ')
+                )}`}
+                onClick={onMenuTap}
+                leftIcon={<ContextSwitchIcon color={pink300} />}
+            />
+        ) : null}
         {resources
             ? resources.map(resource => (
                   <MenuItemLink
@@ -73,14 +85,6 @@ const Menu = ({ resources, onMenuTap, logout }) => (
                 primaryText="Manage User Roles"
                 onClick={onMenuTap}
                 leftIcon={<ManageIcon />}
-            />
-        ) : null}
-        {Object.keys(PermissionsStore.getPermissionFlags().contexts).length > 1 ? (
-            <MenuItemLink
-                to="/contextchanger"
-                primaryText="Context Changer"
-                onClick={onMenuTap}
-                leftIcon={<ContextSwitchIcon color={pink300} />}
             />
         ) : null}
         {logout}

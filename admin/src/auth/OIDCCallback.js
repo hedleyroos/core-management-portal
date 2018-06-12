@@ -1,20 +1,17 @@
 import jwtDecode from 'jwt-decode';
-import LinearProgress from 'material-ui/LinearProgress';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import WaitIcon from 'material-ui/svg-icons/action/update';
-import { pink500 } from 'material-ui/styles/colors';
 import queryString from 'query-string';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
-import { muiTheme, styles } from '../Theme';
 import PermissionsStore from '../auth/PermissionsStore';
 import { base64urlDecode } from '../utils';
-import { contextDomainsAndSitesAdd } from '../actions/context';
+import { contextDomainsAndSitesAdd, contextChangeGMPContext } from '../actions/context';
+import WaitingPage from '../pages/WaitingPage';
 
 const mapDispatchToProps = dispatch => ({
-    domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites))
+    domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites)),
+    changeContext: newContext => dispatch(contextChangeGMPContext(newContext))
 });
 
 class OIDCCallback extends Component {
@@ -63,8 +60,11 @@ class OIDCCallback extends Component {
             localStorage.setItem('id_token', parsedQuery.id_token);
             const userID = jwtDecode(parsedQuery.id_token).sub;
             try {
-                const details = await PermissionsStore.getAndLoadPermissions(userID);
-                this.props.domainsAndSitesAdd(details.contexts);
+                const { contexts, currentContext } = await PermissionsStore.getAndLoadPermissions(
+                    userID
+                );
+                this.props.domainsAndSitesAdd(contexts);
+                this.props.changeContext(currentContext);
                 this.setState({ loginComplete: true });
             } catch (error) {
                 console.error(error);
@@ -77,12 +77,7 @@ class OIDCCallback extends Component {
             this.state.loginComplete ? (
                 <Redirect push to="/" />
             ) : (
-                <MuiThemeProvider muiTheme={muiTheme}>
-                    <div style={{ ...styles.main, backgroundColor: pink500 }}>
-                        <WaitIcon style={styles.waitIcon} />
-                        <LinearProgress mode="indeterminate" style={styles.linearProgress} />
-                    </div>
-                </MuiThemeProvider>
+                <WaitingPage />
             )
         ) : (
             <Redirect push to="/login" />
@@ -90,4 +85,7 @@ class OIDCCallback extends Component {
     }
 }
 
-export default connect(null, mapDispatchToProps)(OIDCCallback);
+export default connect(
+    null,
+    mapDispatchToProps
+)(OIDCCallback);

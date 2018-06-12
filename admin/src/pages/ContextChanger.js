@@ -17,7 +17,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { muiTheme, styles } from '../Theme';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../actions/context';
 import PermissionsStore from '../auth/PermissionsStore';
-import restClient, { OPERATIONAL } from '../swaggerRestServer';
+import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
 import { makeIDMapping, getUntilDone } from '../utils';
 
 const mapStateToProps = state => {
@@ -37,22 +37,29 @@ const mapDispatchToProps = dispatch => {
 class ContextChanger extends Component {
     constructor(props) {
         super(props);
-        const permissions = PermissionsStore.getPermissionFlags();
+        let currentContext = null,
+            contexts = null;
+
+        if (this.props.GMPContext) {
+            currentContext = this.props.GMPContext;
+            contexts = this.props.domainsAndSites
+        } else {
+            currentContext = PermissionsStore.getCurrentContext();
+            contexts = PermissionsStore.getAllContexts();
+            this.props.domainsAndSitesAdd(contexts);
+            this.props.changeContext(currentContext);
+        }
         this.state = {
             changing: false,
-            value: this.props.GMPContext || permissions.currentContext,
+            value: currentContext.key,
             redirect: false,
             validToken: true,
             domains: null,
             sites: null
         };
-        if (!this.props.GMPContext) {
-            this.props.domainsAndSitesAdd(permissions.contexts);
-            this.props.changeContext(permissions.currentContext);
-        }
         this.getPlaces = this.getPlaces.bind(this);
-        this.getPlaces('domain', this.props.domainsAndSites || permissions.contexts);
-        this.getPlaces('site', this.props.domainsAndSites || permissions.contexts);
+        this.getPlaces('domain', contexts);
+        this.getPlaces('site', contexts);
         this.handleChange = this.handleChange.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
@@ -84,10 +91,14 @@ class ContextChanger extends Component {
 
     async handleSelection() {
         this.setState({ changing: true });
-        if (this.state.value !== this.props.GMPContext) {
+        if (this.state.value !== this.props.GMPContext.key) {
             const { value } = this.state;
-            this.props.changeContext(value);
             const [contextType, contextID] = value.split(':');
+            const place = await restClient(GET_ONE, contextType === 'd' ? 'domains' : 'sites', {
+                id: contextID
+            });
+            const newContext = { key: value, obj: place.data };
+            this.props.changeContext(newContext);
             const userID = jwtDecode(localStorage.getItem('id_token')).sub;
             try {
                 const permissions = await restClient(
@@ -100,7 +111,7 @@ class ContextChanger extends Component {
                 PermissionsStore.loadPermissions(
                     permissions.data,
                     this.props.domainsAndSites,
-                    value
+                    newContext
                 );
             } catch (error) {
                 this.handleAPIError(error);
@@ -146,9 +157,8 @@ class ContextChanger extends Component {
                                                     const text =
                                                         contextType === 'd'
                                                             ? domains
-                                                                ? domains[
-                                                                      parseInt(contextID, 10)
-                                                                  ].name
+                                                                ? domains[parseInt(contextID, 10)]
+                                                                      .name
                                                                 : place
                                                             : sites
                                                                 ? sites[parseInt(contextID, 10)]

@@ -32,10 +32,9 @@ const mapDispatchToProps = dispatch => ({
 class ManageUserRoles extends Component {
     constructor(props) {
         super(props);
-        const permissions = PermissionsStore.getPermissionFlags();
         if (!this.props.GMPContext) {
-            this.props.domainsAndSitesAdd(permissions.contexts);
-            this.props.changeContext(permissions.currentContext);
+            this.props.domainsAndSitesAdd(PermissionsStore.getAllContexts());
+            this.props.changeContext(PermissionsStore.getCurrentContext());
         }
         this.state = {
             managerRoles: null,
@@ -54,7 +53,7 @@ class ManageUserRoles extends Component {
             validToken: true
         };
         this.getAllUserData = this.getAllUserData.bind(this);
-        this.getAllUserData(this.props.domainsAndSites || permissions.contexts);
+        this.getAllUserData(this.props.domainsAndSites || PermissionsStore.getAllContexts());
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSelect = this.handleSelect.bind(this);

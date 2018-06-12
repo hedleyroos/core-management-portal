@@ -5,7 +5,7 @@ export default (state = {}, { type, payload }) => {
         case CONTEXT_DOMAINS_AND_SITES_ADD:
             return {
                 domainsAndSites: payload,
-                GMPContext: Object.keys(payload)[0]
+                GMPContext: {}
             };
         case CONTEXT_CHANGE_GMP_CONTEXT:
             return {

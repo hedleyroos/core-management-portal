@@ -2,7 +2,8 @@
  * Generated authPermissions.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
-import restClient, { OPERATIONAL } from '../swaggerRestServer';
+import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
+import { NotEmptyObject } from '../utils';
 
 class PermissionsStore {
     constructor() {
@@ -128,26 +129,36 @@ class PermissionsStore {
         const response = await restClient(OPERATIONAL, 'all_user_roles', {
             pathParameters: [userID]
         });
-        const contexts = Object.entries(response.data.roles_map).reduce(
-            (result, [key, value]) => {
-                if (value.length > 0) {
-                    result[key] = value;
-                }
-                return result;
-            },
-            {}
-        );
-        const currentContext = Object.keys(contexts)[0]
-        const [contextType, contextID] = currentContext.split(':');
-        const permissions = await restClient(
-            OPERATIONAL,
-            contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
-            {
-                pathParameters: [userID, contextID]
+        const contexts = Object.entries(response.data.roles_map).reduce((result, [key, value]) => {
+            if (value.length > 0) {
+                result[key] = value;
             }
-        );
-        this.loadPermissions(permissions.data, contexts, currentContext);
-        return Promise.resolve({ contexts, currentContext });
+            return result;
+        }, {});
+        if (NotEmptyObject(contexts)) {
+            let currentContext = Object.keys(contexts)[0];
+            const [contextType, contextID] = currentContext.split(':');
+            const currentContextObject = await restClient(
+                GET_ONE,
+                contextType === 'd' ? 'domains' : 'sites',
+                { id: contextID }
+            );
+            currentContext = {
+                key: currentContext,
+                obj: currentContextObject.data
+            };
+
+            const permissions = await restClient(
+                OPERATIONAL,
+                contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
+                {
+                    pathParameters: [userID, contextID]
+                }
+            );
+            this.loadPermissions(permissions.data, contexts, currentContext);
+            return Promise.resolve({ contexts, currentContext });
+        }
+        return Promise.resolve({ contexts: {}, currentContext: {} });
     }
     loadPermissions(userPermissions, contexts, currentContext) {
         this.permissionFlags = {};
@@ -204,6 +215,14 @@ class PermissionsStore {
             }
         }
         return this.permissionFlags;
+    }
+    getAllContexts() {
+        const permissions = this.getPermissionFlags();
+        return permissions ? this.getPermissionFlags().contexts : {};
+    }
+    getCurrentContext() {
+        const permissions = this.getPermissionFlags();
+        return permissions ? this.getPermissionFlags().currentContext : {};
     }
 }
 
