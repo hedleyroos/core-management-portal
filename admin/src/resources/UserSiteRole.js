@@ -22,6 +22,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const validationCreateUserSiteRole = values => {
     const errors = {};
@@ -72,9 +73,13 @@ export const UserSiteRoleList = props => (
 export const UserSiteRoleCreate = props => (
     <Create {...props} title="UserSiteRole Create">
         <SimpleForm validate={validationCreateUserSiteRole}>
-            <ReferenceInput label="User" source="user_id" reference="users" perPage={0} allowEmpty>
-                <SelectInput optionText="username" />
-            </ReferenceInput>
+            <UnlimitedDropdownInput
+                label="User"
+                source="user_id"
+                reference="users"
+                optionText="username"
+                filter={{ site_ids: '' }}
+            />
             <ReferenceInput label="Site" source="site_id" reference="sites" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>

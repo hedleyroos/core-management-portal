@@ -4,7 +4,11 @@ import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
-export const getSitesForContext = async (currentContext) => {
+// This exists to check if the string for the array filters have more than
+// one id in them. eg idsInString == '5,7,12'
+export const moreThanOneID = idsInString => idsInString.split(',').length > 1;
+
+export const getSitesForContext = async currentContext => {
     if (currentContext) {
         const [contextType, contextID] = currentContext.key.split(':');
         if (contextType === 's') {

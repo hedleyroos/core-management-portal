@@ -65,12 +65,14 @@ const FILTER_LENGTHS = {
 
 // These are default filters that were required for the
 // context implied filter. Permanent filter props on listings were not
-// used as they could not be overridden.
-const DEFAULT_FILTERS = {
+// used as they could not be overridden. To override the default provide
+// the same filter in your restClient call. eg. `{ site_ids: '' }`
+// NOTE: Must be a function as the PermissionsStore can change.
+const DEFAULT_FILTERS = () => ({
     users: {
         site_ids: PermissionsStore.getSiteIDs()
     }
-};
+});
 
 /**
  * @param {String} apiUrl The base API url
@@ -104,7 +106,7 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
 
             if (params.filter) {
                 let filterLengths = FILTER_LENGTHS[resource];
-                const defaultFilters = DEFAULT_FILTERS[resource];
+                const defaultFilters = DEFAULT_FILTERS()[resource];
                 if (defaultFilters) {
                     query = {
                         ...query,
