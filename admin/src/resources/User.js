@@ -40,7 +40,7 @@ const validationEditUser = values => {
 const hiddenFields = ['created_at', 'updated_at', 'avatar', 'country_code'];
 
 export const UserList = props => (
-    <List {...props} title="User List" filters={<UserFilter />} filter={{ site_ids: PermissionsStore.getSiteIDs() }} >
+    <List {...props} title="User List" filters={<UserFilter />} >
         <FieldSelectDatagrid defaultHiddenFields={hiddenFields} bodyOptions={ { showRowHover: true } }>
             <TextField source="id" />
             <TextField source="username" />

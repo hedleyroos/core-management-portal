@@ -5,6 +5,8 @@
 import { stringify } from 'query-string';
 import { fetchUtils } from 'admin-on-rest';
 
+import PermissionsStore from './auth/PermissionsStore';
+
 export const GET_LIST = 'GET_LIST';
 export const GET_ONE = 'GET_ONE';
 export const GET_MANY = 'GET_MANY';
@@ -25,6 +27,7 @@ const COMPOSITE_KEY_RESOURSES = {
     usersitedata: ['user_id', 'site_id']
 };
 
+// For models with different Primary Key fields rather than 'id'.
 const PK_MAPPING = {
     sitedataschemas: 'site_id',
     countries: 'code'
@@ -60,6 +63,15 @@ const FILTER_LENGTHS = {
     },
 };
 
+// These are default filters that were required for the
+// context implied filter. Permanent filter props on listings were not
+// used as they could not be overridden.
+const DEFAULT_FILTERS = {
+    users: {
+        site_ids: PermissionsStore.getSiteIDs()
+    }
+};
+
 /**
  * @param {String} apiUrl The base API url
  * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
@@ -70,7 +82,7 @@ const FILTER_LENGTHS = {
 export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => {
     let url = '';
     const options = {};
-    const query = {};
+    let query = {};
 
     switch (type) {
         case GET_MANY_REFERENCE: {
@@ -92,6 +104,13 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
 
             if (params.filter) {
                 let filterLengths = FILTER_LENGTHS[resource];
+                const defaultFilters = DEFAULT_FILTERS[resource];
+                if (defaultFilters) {
+                    query = {
+                        ...query,
+                        ...defaultFilters
+                    };
+                }
                 Object.keys(params.filter).forEach(key => {
                     let filter =
                         params.filter[key] instanceof Object
@@ -110,9 +129,11 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
                     } else {
                         query[key] = filter;
                     }
+                    if (query[key].length === 0) {
+                        delete query[key];
+                    }
                 });
             }
-
             url = `${apiUrl}/${resource}?${stringify(query)}`;
             break;
         }

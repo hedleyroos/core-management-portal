@@ -32,7 +32,7 @@ const mapStateToProps = state => {
     return {
         domainsAndSites,
         GMPContext
-    }
+    };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -135,7 +135,7 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true, has_organisational_unit: true }
+                filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({

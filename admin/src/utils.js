@@ -1,5 +1,4 @@
 import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
-import PermissionsStore from './auth/PermissionsStore';
 
 /**
  * Generated utils.js code. Edit at own risk.
