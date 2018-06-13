@@ -1,7 +1,7 @@
-/** 
+/**
  * Generated Filters.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import {
     SelectInput,
@@ -11,14 +11,17 @@ import {
     NumberInput,
     Filter
 } from 'admin-on-rest';
+
+import PermissionsStore from '../auth/PermissionsStore';
 import DateRangeInput from '../inputs/DateRangeInput';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+import { moreThanOneID } from '../utils';
 
 const parseUserIds = value => value.replace(/[^\w]/gi, ',');
 
 const UserFilter = props => (
     <Filter {...props}>
-	<TextInput label="Search" source="q" alwaysOn />
+        <TextInput label="Search" source="q" alwaysOn />
         <DateRangeInput label="Birth Date" source="birth_date" />
         <ReferenceInput label="Country" source="country" reference="countries" allowEmpty>
             <SelectInput optionText="code" />
@@ -40,7 +43,15 @@ const UserFilter = props => (
         <BooleanInput label="Two factor Auth Enabled" source="tfa_enabled" />
         <BooleanInput label="Has Organisational Unit" source="has_organisational_unit" />
         <TextInput label="User Ids" source="user_ids" parse={parseUserIds} />
-        <UnlimitedDropdownInput label="Site" source="site_ids" reference="sites" optionText="name" />
+        {moreThanOneID(PermissionsStore.getSiteIDs()) ? (
+            <UnlimitedDropdownInput
+                label="Site"
+                source="site_ids"
+                reference="sites"
+                optionText="name"
+                filter={{ site_ids: PermissionsStore.getSiteIDs() }}
+            />
+        ) : null}
     </Filter>
 );
 

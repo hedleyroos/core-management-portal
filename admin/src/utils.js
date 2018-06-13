@@ -1,9 +1,30 @@
-import restClient, { GET_LIST } from './swaggerRestServer';
+import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
 
 /**
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
+// This exists to check if the string for the array filters have more than
+// one id in them. eg idsInString == '5,7,12'
+export const moreThanOneID = idsInString => idsInString.split(',').length > 1;
+
+export const getSitesForContext = async currentContext => {
+    if (currentContext) {
+        const [contextType, contextID] = currentContext.key.split(':');
+        if (contextType === 's') {
+            return contextID;
+        }
+        let results = await restClient(OPERATIONAL, 'get_sites_under_domain', {
+            pathParameters: [contextID]
+        });
+        results = results.data;
+        const site_ids = getUniqueIDs(results, 'id').join(',');
+        return site_ids;
+    } else {
+        return '';
+    }
+};
+
 export const getUntilDone = async (resource, filter = {}, perPage, maxAttempts = 10) => {
     let collection = [];
     let done = false;

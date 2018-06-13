@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
-import { NotEmptyObject } from '../utils';
+import { NotEmptyObject, getSitesForContext } from '../utils';
 
 class PermissionsStore {
     constructor() {
@@ -155,12 +155,13 @@ class PermissionsStore {
                     pathParameters: [userID, contextID]
                 }
             );
-            this.loadPermissions(permissions.data, contexts, currentContext);
-            return Promise.resolve({ contexts, currentContext });
+            const siteIDs = await getSitesForContext(currentContext);
+            this.loadPermissions(permissions.data, contexts, currentContext, siteIDs);
+            return Promise.resolve({ contexts, currentContext, siteIDs });
         }
         return Promise.resolve({ contexts: {}, currentContext: {} });
     }
-    loadPermissions(userPermissions, contexts, currentContext) {
+    loadPermissions(userPermissions, contexts, currentContext, siteIDs) {
         this.permissionFlags = {};
         const allowAccess = (userPermissions, requiredPermissions) => {
             if (requiredPermissions.length > 0) {
@@ -185,7 +186,8 @@ class PermissionsStore {
         this.permissionFlags = {
             ...this.permissionFlags,
             contexts,
-            currentContext
+            currentContext,
+            siteIDs
         };
         localStorage.setItem('permissions', JSON.stringify(this.permissionFlags));
     }
@@ -223,6 +225,10 @@ class PermissionsStore {
     getCurrentContext() {
         const permissions = this.getPermissionFlags();
         return permissions ? this.getPermissionFlags().currentContext : {};
+    }
+    getSiteIDs() {
+        const permissions = this.getPermissionFlags();
+        return permissions ? this.getPermissionFlags().siteIDs : '';
     }
 }
 

@@ -6,12 +6,11 @@ import { Redirect } from 'react-router';
 
 import PermissionsStore from '../auth/PermissionsStore';
 import { base64urlDecode } from '../utils';
-import { contextDomainsAndSitesAdd, contextChangeGMPContext } from '../actions/context';
+import { contextChangeAll } from '../actions/context';
 import WaitingPage from '../pages/WaitingPage';
 
 const mapDispatchToProps = dispatch => ({
-    domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites)),
-    changeContext: newContext => dispatch(contextChangeGMPContext(newContext))
+    contextChangeAll: payload => dispatch(contextChangeAll(payload))
 });
 
 class OIDCCallback extends Component {
@@ -60,11 +59,16 @@ class OIDCCallback extends Component {
             localStorage.setItem('id_token', parsedQuery.id_token);
             const userID = jwtDecode(parsedQuery.id_token).sub;
             try {
-                const { contexts, currentContext } = await PermissionsStore.getAndLoadPermissions(
-                    userID
-                );
-                this.props.domainsAndSitesAdd(contexts);
-                this.props.changeContext(currentContext);
+                const {
+                    contexts,
+                    currentContext,
+                    siteIDs
+                } = await PermissionsStore.getAndLoadPermissions(userID);
+                this.props.contextChangeAll({
+                    domainsAndSites: contexts,
+                    GMPContext: currentContext,
+                    siteIDs
+                });
                 this.setState({ loginComplete: true });
             } catch (error) {
                 console.error(error);

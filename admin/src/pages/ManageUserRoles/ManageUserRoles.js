@@ -19,9 +19,21 @@ import PermissionsStore from '../../auth/PermissionsStore';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import { TECH_ADMIN } from '../../constants';
 
-const mapStateToProps = state => ({
-    domainsAndSites: state.context.domainsAndSites
-});
+const mapStateToProps = state => {
+    let GMPContext = {},
+        domainsAndSites = {};
+    if (state.context.GMPContext) {
+        GMPContext = state.context.GMPContext;
+        domainsAndSites = state.context.domainsAndSites;
+    } else {
+        GMPContext = PermissionsStore.getCurrentContext();
+        domainsAndSites = PermissionsStore.getAllContexts();
+    }
+    return {
+        domainsAndSites,
+        GMPContext
+    };
+};
 
 const mapDispatchToProps = dispatch => ({
     domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites)),
@@ -32,10 +44,6 @@ const mapDispatchToProps = dispatch => ({
 class ManageUserRoles extends Component {
     constructor(props) {
         super(props);
-        if (!this.props.GMPContext) {
-            this.props.domainsAndSitesAdd(PermissionsStore.getAllContexts());
-            this.props.changeContext(PermissionsStore.getCurrentContext());
-        }
         this.state = {
             managerRoles: null,
             search: '',
@@ -53,7 +61,7 @@ class ManageUserRoles extends Component {
             validToken: true
         };
         this.getAllUserData = this.getAllUserData.bind(this);
-        this.getAllUserData(this.props.domainsAndSites || PermissionsStore.getAllContexts());
+        this.getAllUserData(this.props.domainsAndSites);
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
@@ -127,7 +135,7 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true, has_organisational_unit: true }
+                filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({

@@ -25,6 +25,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
@@ -39,7 +40,7 @@ const validationEditUser = values => {
 const hiddenFields = ['created_at', 'updated_at', 'avatar', 'country_code'];
 
 export const UserList = props => (
-    <List {...props} title="User List" filters={<UserFilter />}>
+    <List {...props} title="User List" filters={<UserFilter />} >
         <FieldSelectDatagrid defaultHiddenFields={hiddenFields} bodyOptions={ { showRowHover: true } }>
             <TextField source="id" />
             <TextField source="username" />

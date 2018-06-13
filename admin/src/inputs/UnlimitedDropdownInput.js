@@ -5,6 +5,7 @@ import { SelectInput } from 'admin-on-rest';
 import CircularProgress from 'material-ui/CircularProgress';
 
 import { getUntilDone } from '../utils';
+import restClient, { GET_LIST } from '../swaggerRestServer';
 
 class UnlimitedDropdownInput extends Component {
     constructor(props) {
@@ -19,9 +20,11 @@ class UnlimitedDropdownInput extends Component {
     }
 
     async loadChoices() {
-        const { reference, filter } = this.props;
+        const { reference, filter, limited } = this.props;
         try {
-            const results = await getUntilDone(reference, filter || {});
+            const results = limited
+                ? await restClient(GET_LIST, reference, { filter })
+                : await getUntilDone(reference, filter);
             this.setState({ choices: results });
         } catch (error) {
             console.error(error);
@@ -63,10 +66,13 @@ UnlimitedDropdownInput.propTypes = {
     filter: PropTypes.object,
     label: PropTypes.string,
     optionText: PropTypes.string,
-    optionValue: PropTypes.string
+    optionValue: PropTypes.string,
+    limited: PropTypes.bool
 };
 UnlimitedDropdownInput.defaultProps = {
-    optionText: 'id'
+    optionText: 'id',
+    limited: false,
+    filter: {}
 };
 
 export default UnlimitedDropdownInput;

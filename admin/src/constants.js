@@ -6,6 +6,7 @@ export const TITLES = {
     siteroles: 'Site Roles',
     userdomainroles: 'User Domain Roles',
     usersiteroles: 'User Site Roles',
+    usersitedata: 'User Site Data',
     adminnotes: 'Admin Notes',
     sitedataschemas: 'Site Data Schemas',
     organisationalunits: 'Organisations'

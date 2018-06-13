@@ -22,6 +22,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const validationCreateUserDomainRole = values => {
     const errors = {};
@@ -72,9 +73,13 @@ export const UserDomainRoleList = props => (
 export const UserDomainRoleCreate = props => (
     <Create {...props} title="UserDomainRole Create">
         <SimpleForm validate={validationCreateUserDomainRole}>
-            <ReferenceInput label="User" source="user_id" reference="users" perPage={0} allowEmpty>
-                <SelectInput optionText="username" />
-            </ReferenceInput>
+            <UnlimitedDropdownInput
+                label="User"
+                source="user_id"
+                reference="users"
+                optionText="username"
+                filter={{ site_ids: '' }}
+            />
             <ReferenceInput label="Domain" source="domain_id" reference="domains" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>

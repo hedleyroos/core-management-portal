@@ -15,10 +15,10 @@ import { pink500 } from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { muiTheme, styles } from '../Theme';
-import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../actions/context';
+import { contextChangeAll } from '../actions/context';
 import PermissionsStore from '../auth/PermissionsStore';
 import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
-import { makeIDMapping, getUntilDone } from '../utils';
+import { makeIDMapping, getUntilDone, getSitesForContext } from '../utils';
 
 const mapStateToProps = state => {
     return {
@@ -27,27 +27,27 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites)),
-        changeContext: newContext => dispatch(contextChangeGMPContext(newContext))
-    };
-};
+const mapDispatchToProps = dispatch => ({
+    contextChangeAll: payload => dispatch(contextChangeAll(payload))
+});
 
 class ContextChanger extends Component {
     constructor(props) {
         super(props);
         let currentContext = null,
             contexts = null;
-
         if (this.props.GMPContext) {
             currentContext = this.props.GMPContext;
             contexts = this.props.domainsAndSites
         } else {
             currentContext = PermissionsStore.getCurrentContext();
             contexts = PermissionsStore.getAllContexts();
-            this.props.domainsAndSitesAdd(contexts);
-            this.props.changeContext(currentContext);
+            let siteIDs = PermissionsStore.getSiteIDs();
+            this.props.contextChangeAll({
+                domainsAndSites: contexts,
+                GMPContext: currentContext,
+                siteIDs
+            })
         }
         this.state = {
             changing: false,
@@ -98,7 +98,6 @@ class ContextChanger extends Component {
                 id: contextID
             });
             const newContext = { key: value, obj: place.data };
-            this.props.changeContext(newContext);
             const userID = jwtDecode(localStorage.getItem('id_token')).sub;
             try {
                 const permissions = await restClient(
@@ -108,10 +107,17 @@ class ContextChanger extends Component {
                         pathParameters: [userID, contextID]
                     }
                 );
+                const siteIDs = await getSitesForContext(newContext);
+                this.props.contextChangeAll({
+                    domainsAndSites: this.props.domainsAndSites,
+                    GMPContext: newContext,
+                    siteIDs
+                });
                 PermissionsStore.loadPermissions(
                     permissions.data,
                     this.props.domainsAndSites,
-                    newContext
+                    newContext,
+                    siteIDs
                 );
             } catch (error) {
                 this.handleAPIError(error);
