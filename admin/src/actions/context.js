@@ -18,11 +18,7 @@ export const contextChangeSiteIDs = siteIDs => ({
     payload: siteIDs
 });
 
-export const contextChangeAll = ({ domainsAndSites, GMPContext, siteIDs }) => ({
+export const contextChangeAll = newContextState => ({
     type: CONTEXT_CHANGE_ALL,
-    payload: {
-        domainsAndSites,
-        GMPContext,
-        siteIDs
-    }
+    payload: newContextState
 });
