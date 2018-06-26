@@ -61,7 +61,7 @@ class TreeviewInput extends Component {
                             ...domains,
                             ...makeIDMapping(data, 's:')
                         };
-                        this.setState({ treeData: CreateTreeData(places, 'domain_id', 'd') });
+                        this.setState({ treeData: CreateTreeData(places, 'domain_id', 's') });
                     })
                     .catch(error => {
                         throw new Error(error);
@@ -75,10 +75,9 @@ class TreeviewInput extends Component {
     render() {
         const { source, label } = this.props;
         const { treeData } = this.state;
-        console.log(treeData);
         return treeData ? (
             <span>
-                <Field name="test" component={TreeviewField} label="test" />
+                <Field name="test" component={TreeviewField} label="test" props={{ treeData }} />
             </span>
         ) : (
             <CircularProgress />

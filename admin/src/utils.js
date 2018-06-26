@@ -5,32 +5,63 @@ import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
  * When regenerated the changes will be lost.
  **/
 
-export const CreateTreeData = (data, parentField = null, parentType = null) => {
+export const CreateTreeData = (data, parentField = null, childType = null) => {
     /**
      * This function creates a hierarchy data structure from
      * a list of objects for the tree select of Ant Design
      */
-    const referenceList = Object.entries(data).reduce((accumulator, [key, obj]) => {
-        const children = Object.entries(data).reduce((children, [childKey, childObj]) => {
-            if (
-                (parentType ? key.indexOf(parentType) >= 0 : true) &&
-                childKey !== key &&
-                (childObj.parent_id === obj.id || childObj[parentField] === obj.id)
-            ) {
-                children.push(childKey);
-            }
-            return children;
-        }, []);
+    const referenceMapping = Object.entries(data).reduce((accumulator, [key, obj]) => {
         const newObject = {
             ...obj,
+            label: obj.name,
             value: key,
-            key,
-            children
+            key: obj.name
         };
-        accumulator.push(newObject);
+        if (childType ? key.indexOf(childType) < 0 : true) {
+            const children = Object.entries(data).reduce((children, [childKey, childObj]) => {
+                if (
+                    childKey !== key &&
+                    (childObj.parent_id === obj.id || childObj[parentField] === obj.id)
+                ) {
+                    children.push(childKey);
+                }
+                return children;
+            }, []);
+            newObject['children'] = children;
+        }
+        accumulator[key] = (newObject);
         return accumulator;
-    }, []);
-    return referenceList;
+    }, {});
+
+    let childrenEvaluated = new Set([]);
+    let treeData = {};
+
+    const childrenLoop = obj => {
+        const newObj = obj;
+        if (newObj.children) {
+            newObj.children = newObj.children.map(childKey => {
+                childrenEvaluated.add(childKey);
+                let childObj = null;
+                if (treeData[childKey]) {
+                    childObj = treeData[childKey];
+                } else {
+                    childObj = referenceMapping[childKey];
+                    childObj = childrenLoop(childObj);
+                }
+                return childObj;
+            });
+        }
+        return newObj;
+    };
+
+    Object.entries(referenceMapping).reduce((accumulator, [key, obj]) => {
+        if (!childrenEvaluated.has(key)) {
+            const newObj = childrenLoop(obj);
+            treeData[key] = newObj;
+        }
+    }, {});
+
+    return Object.values(treeData);
 };
 
 // This exists to check if the string for the array filters have more than
