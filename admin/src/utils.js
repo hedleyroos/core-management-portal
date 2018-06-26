@@ -4,6 +4,35 @@ import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
+
+export const CreateTreeData = (data, parentField = null, parentType = null) => {
+    /**
+     * This function creates a hierarchy data structure from
+     * a list of objects for the tree select of Ant Design
+     */
+    const referenceList = Object.entries(data).reduce((accumulator, [key, obj]) => {
+        const children = Object.entries(data).reduce((children, [childKey, childObj]) => {
+            if (
+                (parentType ? key.indexOf(parentType) >= 0 : true) &&
+                childKey !== key &&
+                (childObj.parent_id === obj.id || childObj[parentField] === obj.id)
+            ) {
+                children.push(childKey);
+            }
+            return children;
+        }, []);
+        const newObject = {
+            ...obj,
+            value: key,
+            key,
+            children
+        };
+        accumulator.push(newObject);
+        return accumulator;
+    }, []);
+    return referenceList;
+};
+
 // This exists to check if the string for the array filters have more than
 // one id in them. eg idsInString == '5,7,12'
 export const moreThanOneID = idsInString => idsInString.split(',').length > 1;
@@ -50,9 +79,9 @@ export const getUntilDone = async (resource, filter = {}, perPage, maxAttempts =
     return collection;
 };
 
-export const makeIDMapping = listOfObjects => {
+export const makeIDMapping = (listOfObjects, prefix = '') => {
     return listOfObjects.reduce((accumulator, obj) => {
-        accumulator[obj.id] = obj;
+        accumulator[`${prefix}${obj.id}`] = obj;
         return accumulator;
     }, {});
 };

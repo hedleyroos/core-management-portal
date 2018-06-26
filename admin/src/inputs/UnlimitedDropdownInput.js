@@ -11,12 +11,10 @@ class UnlimitedDropdownInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: null,
             choices: null
         };
         this.loadChoices = this.loadChoices.bind(this);
         this.loadChoices();
-        this.handleChange = this.handleChange.bind(this);
     }
 
     async loadChoices() {
@@ -29,10 +27,6 @@ class UnlimitedDropdownInput extends Component {
         } catch (error) {
             console.error(error);
         }
-    }
-
-    handleChange(value) {
-        this.setState({ value });
     }
 
     render() {
@@ -51,7 +45,6 @@ class UnlimitedDropdownInput extends Component {
                         component={SelectInput}
                         props={selectProps}
                         label={label || source}
-                        onChange={this.handleChange}
                     />
                 ) : (
                     <CircularProgress />
