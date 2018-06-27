@@ -59,6 +59,7 @@ export const CreateTreeData = (data, parentField = null, childType = null) => {
             const newObj = childrenLoop(obj);
             treeData[key] = newObj;
         }
+        return accumulator;
     }, {});
 
     return Object.values(treeData);

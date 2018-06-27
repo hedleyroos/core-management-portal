@@ -1,55 +1,37 @@
-import 'antd/dist/antd.css';
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { TreeSelect } from 'antd';
 
 import { getUntilDone, makeIDMapping, CreateTreeData } from '../utils';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
+import TreeviewSelect from './TreeviewSelect';
 
-const TreeNode = TreeSelect.TreeNode;
-
-class TreeviewField extends Component {
+class DomainTreeInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: ''
+            treeData: props.treeData
         };
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(value) {
-        this.props.input.onChange(value);
-        this.setState({ value });
-    }
-
-    render() {
-        const { label, treeData } = this.props;
-        const { value } = this.state;
-        return (
-            <TreeSelect
-                showSearch
-                treeData={treeData}
-                style={{ width: 300 }}
-                value={value}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder={label}
-                allowClear
-                onChange={this.handleChange}
-            />
-        );
-    }
-}
-
-class TreeviewInput extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            treeData: null
-        };
+        this.parser = this.parser.bind(this);
+        this.formatter = this.formatter.bind(this);
         this.loadData = this.loadData.bind(this);
-        this.loadData();
+        if (!props.treeData) {
+            this.loadData();
+        }
+    }
+
+    parser(value, name) {
+        if (this.props.onlyDomains && value){
+            return value.split(':')[1];
+        }
+        return value;
+    }
+
+    formatter(value, name) {
+        if (this.props.onlyDomains && value) {
+            return `d:${value}`;
+        }
+        return value;
     }
 
     loadData() {
@@ -82,18 +64,26 @@ class TreeviewInput extends Component {
         const { treeData } = this.state;
         return treeData ? (
             <span>
-                <Field name="test" component={TreeviewField} label="test" props={{ treeData }} />
+                <Field
+                    name={source}
+                    component={TreeviewSelect}
+                    label={label}
+                    props={{ treeData, label }}
+                    parse={this.parser}
+                    format={this.formatter}
+                />
             </span>
         ) : (
             <CircularProgress />
         );
     }
 }
-TreeviewInput.propTypes = {
-    onlyDomains: PropTypes.bool
-}
-TreeviewInput.defaultProps = {
+DomainTreeInput.propTypes = {
+    onlyDomains: PropTypes.bool,
+    treeData: PropTypes.array
+};
+DomainTreeInput.defaultProps = {
     onlyDomains: true
-}
+};
 
-export default TreeviewInput;
+export default DomainTreeInput;

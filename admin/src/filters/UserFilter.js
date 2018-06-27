@@ -16,7 +16,6 @@ import PermissionsStore from '../auth/PermissionsStore';
 import DateRangeInput from '../inputs/DateRangeInput';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 import { moreThanOneID } from '../utils';
-import TreeviewInput from '../inputs/TreeviewInput';
 
 const parseUserIds = value => value.replace(/[^\w]/gi, ',');
 
@@ -44,7 +43,6 @@ const UserFilter = props => (
         <BooleanInput label="Two factor Auth Enabled" source="tfa_enabled" />
         <BooleanInput label="Has Organisational Unit" source="has_organisational_unit" />
         <TextInput label="User Ids" source="user_ids" parse={parseUserIds} />
-        <TreeviewInput label="Domain" source="place" />
         {moreThanOneID(PermissionsStore.getSiteIDs()) ? (
             <UnlimitedDropdownInput
                 label="Site"
