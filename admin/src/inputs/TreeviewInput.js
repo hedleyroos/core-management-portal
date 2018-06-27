@@ -1,6 +1,7 @@
 import 'antd/dist/antd.css';
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { TreeSelect } from 'antd';
 
@@ -55,17 +56,21 @@ class TreeviewInput extends Component {
         getUntilDone('domains')
             .then(data => {
                 const domains = makeIDMapping(data, 'd:');
-                getUntilDone('sites')
-                    .then(data => {
-                        const places = {
-                            ...domains,
-                            ...makeIDMapping(data, 's:')
-                        };
-                        this.setState({ treeData: CreateTreeData(places, 'domain_id', 's') });
-                    })
-                    .catch(error => {
-                        throw new Error(error);
-                    });
+                if (this.props.onlyDomains) {
+                    this.setState({ treeData: CreateTreeData(domains) });
+                } else {
+                    getUntilDone('sites')
+                        .then(data => {
+                            const places = {
+                                ...domains,
+                                ...makeIDMapping(data, 's:')
+                            };
+                            this.setState({ treeData: CreateTreeData(places, 'domain_id', 's') });
+                        })
+                        .catch(error => {
+                            throw new Error(error);
+                        });
+                }
             })
             .catch(error => {
                 throw new Error(error);
@@ -83,6 +88,12 @@ class TreeviewInput extends Component {
             <CircularProgress />
         );
     }
+}
+TreeviewInput.propTypes = {
+    onlyDomains: PropTypes.bool
+}
+TreeviewInput.defaultProps = {
+    onlyDomains: true
 }
 
 export default TreeviewInput;
