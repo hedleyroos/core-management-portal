@@ -22,7 +22,7 @@ class DomainTreeInput extends Component {
 
     parser(value, name) {
         if (this.props.onlyDomains && value){
-            return value.split(':')[1];
+            return parseInt(value.split(':')[1], 10);
         }
         return value;
     }

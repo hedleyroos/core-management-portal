@@ -1,6 +1,7 @@
 import 'antd/dist/antd.css';
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { TreeSelect } from 'antd';
 
 class TreeviewSelect extends Component {
@@ -18,16 +19,17 @@ class TreeviewSelect extends Component {
     }
 
     render() {
-        const { label, treeData } = this.props;
+        const { label, treeData, showSearch } = this.props;
         const { value } = this.state;
         return (
             <TreeSelect
-                showSearch
+                showSearch={showSearch}
                 treeData={treeData}
                 style={{
                     fontSize: 16,
-                    height: 44,
-                    width: 256
+                    height: 40,
+					width: 256,
+					marginTop: 40
                 }}
                 value={value}
                 dropdownStyle={{
@@ -39,6 +41,12 @@ class TreeviewSelect extends Component {
             />
         );
     }
+}
+TreeviewSelect.propTypes = {
+	showSearch: PropTypes.bool
+}
+TreeviewSelect.defaultProps = {
+	showSearch: false
 }
 
 export default TreeviewSelect;
