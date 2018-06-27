@@ -1,19 +1,26 @@
 import React from 'react';
+import Avatar from 'material-ui/Avatar';
 import Card from 'material-ui/Card/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
 import Checkbox from 'material-ui/Checkbox';
+import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle';
+import ErrorIcon from 'material-ui/svg-icons/alert/error';
 import RaisedButton from 'material-ui/RaisedButton';
+import { pink300, pink500 } from 'material-ui/styles/colors';
 
 import { NotEmptyObject } from '../../utils';
 import DomainTreeInput from '../../inputs/DomainTreeInput';
+import Chip from 'material-ui/Chip/Chip';
+import { styles } from '../../Theme';
 
 const AssignRoleCard = props => {
     const {
         assigning,
         message,
+        clearMessage,
         selectedDomainSite,
         handleDomainSiteChange,
         handleRoleSelection,
@@ -61,7 +68,19 @@ const AssignRoleCard = props => {
                         />
                     </CardActions>
                 ) : null}
-                {message ? <CardText>{message}</CardText> : null}
+                {message ? (
+                    <CardText style={styles.wrapper}>
+                        <Chip
+                            style={{ margin: 4, backgroundColor: pink300 }}
+                            onRequestDelete={clearMessage}
+                        >
+                            <Avatar size={32} color={pink300} backgroundColor={pink500}>
+                                {hasRolesToAssign ? <ErrorIcon /> : <CheckCircleIcon />}
+                            </Avatar>
+                            {message}
+                        </Chip>
+                    </CardText>
+                ) : null}
             </CardText>
         </Card>
     );

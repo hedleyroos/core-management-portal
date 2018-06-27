@@ -70,6 +70,7 @@ class ManageUserRoles extends Component {
         this.handleAssign = this.handleAssign.bind(this);
         this.triggerDeleteDialog = this.triggerDeleteDialog.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.clearMessage = this.clearMessage.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
@@ -134,7 +135,7 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, site_ids: '' }
+                filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -346,6 +347,10 @@ class ManageUserRoles extends Component {
         }
     }
 
+    clearMessage() {
+        this.setState({ message: null });
+    }
+
     handleAPIError(error) {
         if (error.message === 'Token expired') {
             localStorage.removeItem('id_token');
@@ -407,6 +412,7 @@ class ManageUserRoles extends Component {
                                 <AssignRoleCard
                                     assigning={assigning}
                                     message={message}
+                                    clearMessage={this.clearMessage}
                                     selectedDomainSite={selectedDomainSite}
                                     handleDomainSiteChange={this.handleDomainSiteChange}
                                     handleRoleSelection={this.handleRoleSelection}
