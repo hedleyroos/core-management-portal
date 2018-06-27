@@ -1,64 +1,39 @@
 import React from 'react';
 import Card from 'material-ui/Card/Card';
+import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
 import Checkbox from 'material-ui/Checkbox';
-import Divider from 'material-ui/Divider';
-import DropDownMenu from 'material-ui/DropDownMenu';
 import RaisedButton from 'material-ui/RaisedButton';
-import MenuItem from 'material-ui/MenuItem/MenuItem';
 
 import { NotEmptyObject } from '../../utils';
-import { styles } from '../../Theme';
+import DomainTreeInput from '../../inputs/DomainTreeInput';
 
 const AssignRoleCard = props => {
     const {
+        assigning,
+        message,
         selectedDomainSite,
         handleDomainSiteChange,
-        userdomains,
-        usersites,
         handleRoleSelection,
         roleSelections,
         handleAssign,
         hasRolesToAssign
     } = props;
     return (
-        <Card>
+        <Card style={{ marginTop: 20 }}>
             <CardTitle title="Assign Role" />
             <CardText>
                 <CardHeader subtitle="Select a Domain or Site:" />
-                <DropDownMenu
+                <DomainTreeInput
+                    label="Select Domain/Site"
+                    source="place"
                     value={selectedDomainSite}
                     onChange={handleDomainSiteChange}
-                    style={styles.wideDropDown}
-                    autoWidth={false}
-                >
-                    <MenuItem value={null} primaryText="Select Domain/Site" disabled />
-                    {NotEmptyObject(userdomains)
-                        ? Object.values(userdomains).map(domain => (
-                              <MenuItem
-                                  key={`${domain.id}:domain`}
-                                  value={`${domain.id}:domain`}
-                                  primaryText={domain.name}
-                                  secondaryText="Domain"
-                              />
-                          ))
-                        : null}
-                    {NotEmptyObject(userdomains) && NotEmptyObject(usersites) ? (
-                        <Divider />
-                    ) : null}
-                    {NotEmptyObject(usersites)
-                        ? Object.values(usersites).map(site => (
-                              <MenuItem
-                                  key={`${site.id}:site`}
-                                  value={`${site.id}:site`}
-                                  primaryText={site.name}
-                                  secondaryText="Site"
-                              />
-                          ))
-                        : null}
-                </DropDownMenu>
+                    onlyDomains={false}
+                    useReduxFormField={false}
+                />
                 {selectedDomainSite ? (
                     <div>
                         <CardHeader subtitle="Please choose the roles to add:" />
@@ -77,14 +52,16 @@ const AssignRoleCard = props => {
                     </div>
                 ) : null}
                 {hasRolesToAssign ? (
-                    <CardText>
+                    <CardActions>
                         <RaisedButton
                             label="Assign Roles"
                             secondary={true}
                             onClick={handleAssign}
+                            disabled={assigning}
                         />
-                    </CardText>
+                    </CardActions>
                 ) : null}
+                {message ? <CardText>{message}</CardText> : null}
             </CardText>
         </Card>
     );

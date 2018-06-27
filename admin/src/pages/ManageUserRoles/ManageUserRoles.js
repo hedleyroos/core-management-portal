@@ -1,4 +1,4 @@
-import { Restricted, showNotification as showNotificationAction } from 'admin-on-rest';
+import { Restricted } from 'admin-on-rest';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { withRouter } from 'react-router-dom';
@@ -37,8 +37,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites)),
-    changeContext: newContext => dispatch(contextChangeGMPContext(newContext)),
-    showNotification: showNotificationAction
+    changeContext: newContext => dispatch(contextChangeGMPContext(newContext))
 });
 
 class ManageUserRoles extends Component {
@@ -135,7 +134,7 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
+                filter: { q: input, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -236,9 +235,10 @@ class ManageUserRoles extends Component {
         }
     }
 
-    handleDomainSiteChange(event, index, value) {
-        const splitValue = value.split(':');
-        const roles = this.state.managerRoles[`${splitValue[1]}s`][splitValue[0]];
+    handleDomainSiteChange(value) {
+        const [placeType, placeID] = value.split(':');
+        const placeName = placeType === 'd' ? 'domains' : 'sites';
+        const roles = this.state.managerRoles[placeName][placeID];
         this.setState({
             selectedDomainSite: value,
             roleSelections: roles.reduce((obj, role) => {
@@ -264,11 +264,12 @@ class ManageUserRoles extends Component {
                     ...roleSelections[value],
                     selected: !roleSelections[value].selected
                 }
-            }
+            },
+            message: null
         });
     }
 
-    async handleAssign() {
+    handleAssign() {
         const {
             userResults,
             selectedUser,
@@ -276,56 +277,60 @@ class ManageUserRoles extends Component {
             userdomains,
             usersites,
             selectedDomainSite,
-            rolesMapping,
-            roleSelections,
-            hasRolesToAssign
+            rolesMapping
         } = this.state;
-        const { showNotification } = this.props;
-        const [placeID, place] = selectedDomainSite.split(':');
-        let allCreated = true;
-        // TODO: Maybe look at doing the fetches in parallel rather.
-        Object.values(roleSelections).map(async roleSelection => {
+        let { roleSelections, hasRolesToAssign } = this.state;
+        this.setState({ assigning: true });
+        const [placeType, placeID] = selectedDomainSite.split(':');
+        const place = placeType === 'd' ? 'domain' : 'site';
+        Object.values(roleSelections).map((roleSelection, index) => {
             if (roleSelection.selected) {
-                try {
-                    await restClient(CREATE, `user${place}roles`, {
-                        data: {
-                            user_id: userResults[selectedUser].id,
-                            [`${place}_id`]: parseInt(placeID, 10),
-                            role_id: roleSelection.id
-                        }
-                    });
-                    let newUserRoles = userRoles;
-                    newUserRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
-                        [place]: place === 'domain' ? userdomains[placeID] : usersites[placeID],
-                        role: rolesMapping[roleSelection.id]
-                    };
-                    this.setState({
-                        userRoles: newUserRoles,
-                        hasRolesToAssign: hasRolesToAssign - 1,
-                        roleSelections: {
+                restClient(CREATE, `user${place}roles`, {
+                    data: {
+                        user_id: userResults[selectedUser].id,
+                        [`${place}_id`]: parseInt(placeID, 10),
+                        role_id: roleSelection.id
+                    }
+                })
+                    .then(response => {
+                        hasRolesToAssign -= 1;
+                        roleSelections = {
                             ...roleSelections,
                             [roleSelection.id]: {
                                 ...roleSelection,
                                 selected: false
                             }
+                        };
+                        let newUserRoles = userRoles;
+                        newUserRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
+                            [place]: place === 'domain' ? userdomains[placeID] : usersites[placeID],
+                            role: rolesMapping[roleSelection.id]
+                        };
+                        this.setState({
+                            userRoles: newUserRoles,
+                            hasRolesToAssign,
+                            roleSelections
+                        });
+                        if (hasRolesToAssign === 0) {
+                            this.setState({
+                                assigning: false,
+                                message: 'All roles assigned successfully!',
+                                roleSelections: null,
+                                selectedDomainSite: null
+                            });
                         }
+                    })
+                    .catch(error => {
+                        this.setState({
+                            assigning: index < roleSelections.length - 1,
+                            message:
+                                'Some roles are not able to assign or have already been assigned to this user.'
+                        });
+                        this.handleAPIError(error);
                     });
-                } catch (error) {
-                    allCreated = false;
-                    showNotification(`Role ${roleSelection.label}: Exists or Error`, 'warning');
-                    this.handleAPIError(error);
-                }
             }
             return null;
         });
-        if (allCreated) {
-            showNotification('All Roles assigned.', 'success');
-            this.setState({
-                hasRolesToAssign: 0,
-                roleSelections: null,
-                selectedDomainSite: null
-            });
-        }
     }
 
     triggerDeleteDialog(data) {
@@ -352,13 +357,13 @@ class ManageUserRoles extends Component {
 
     render() {
         const {
+            assigning,
+            message,
             managerRoles,
             search,
             userResults,
             selectedUser,
             userRoles,
-            userdomains,
-            usersites,
             selectedDomainSite,
             roleSelections,
             hasRolesToAssign,
@@ -400,10 +405,10 @@ class ManageUserRoles extends Component {
                                     handleDelete={this.triggerDeleteDialog}
                                 />
                                 <AssignRoleCard
+                                    assigning={assigning}
+                                    message={message}
                                     selectedDomainSite={selectedDomainSite}
                                     handleDomainSiteChange={this.handleDomainSiteChange}
-                                    userdomains={userdomains}
-                                    usersites={usersites}
                                     handleRoleSelection={this.handleRoleSelection}
                                     roleSelections={roleSelections}
                                     handleAssign={this.handleAssign}

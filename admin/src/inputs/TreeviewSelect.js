@@ -6,7 +6,7 @@ import { TreeSelect } from 'antd';
 
 class TreeviewSelect extends Component {
     constructor(props) {
-        super(props);
+		super(props);
         this.state = {
             value: props.input.value || undefined
         };
@@ -14,13 +14,24 @@ class TreeviewSelect extends Component {
     }
 
     handleChange(value) {
-        this.props.input.onChange(value);
-        this.setState({ value });
+        const { input, onChange } = this.props;
+        if (input.onChange) {
+            input.onChange(value);
+            this.setState({ value });
+        }
+        if (onChange) {
+            onChange(value);
+        }
     }
 
     render() {
-        const { label, treeData, showSearch } = this.props;
-        const { value } = this.state;
+		const { label, treeData, showSearch } = this.props;
+		let value;
+		if (this.props.value) {
+			value = this.props.value || undefined;
+		} else {
+			value = this.state.value;
+		}
         return (
             <TreeSelect
                 showSearch={showSearch}
@@ -28,8 +39,8 @@ class TreeviewSelect extends Component {
                 style={{
                     fontSize: 16,
                     height: 40,
-					width: 256,
-					marginTop: 40
+                    width: 256,
+                    marginTop: 40
                 }}
                 value={value}
                 dropdownStyle={{
@@ -43,10 +54,12 @@ class TreeviewSelect extends Component {
     }
 }
 TreeviewSelect.propTypes = {
-	showSearch: PropTypes.bool
-}
+    onChange: PropTypes.func,
+	showSearch: PropTypes.bool,
+	value: PropTypes.string
+};
 TreeviewSelect.defaultProps = {
-	showSearch: false
-}
+    showSearch: false
+};
 
 export default TreeviewSelect;

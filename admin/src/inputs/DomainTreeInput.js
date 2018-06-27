@@ -21,7 +21,7 @@ class DomainTreeInput extends Component {
     }
 
     parser(value, name) {
-        if (this.props.onlyDomains && value){
+        if (this.props.onlyDomains && value) {
             return parseInt(value.split(':')[1], 10);
         }
         return value;
@@ -60,18 +60,28 @@ class DomainTreeInput extends Component {
     }
 
     render() {
-        const { source, label } = this.props;
+        const { useReduxFormField, value, source, label, onChange } = this.props;
         const { treeData } = this.state;
         return treeData ? (
             <span>
-                <Field
-                    name={source}
-                    component={TreeviewSelect}
-                    label={label}
-                    props={{ treeData, label }}
-                    parse={this.parser}
-                    format={this.formatter}
-                />
+                {useReduxFormField ? (
+                    <Field
+                        name={source}
+                        component={TreeviewSelect}
+                        label={label}
+                        props={{ treeData, label, onChange }}
+                        parse={this.parser}
+                        format={this.formatter}
+                    />
+                ) : (
+                    <TreeviewSelect
+                        treeData={treeData}
+                        label={label}
+                        onChange={onChange}
+                        value={value}
+                        input={{}}
+                    />
+                )}
             </span>
         ) : (
             <CircularProgress />
@@ -79,10 +89,14 @@ class DomainTreeInput extends Component {
     }
 }
 DomainTreeInput.propTypes = {
+    useReduxFormField: PropTypes.bool,
+    value: PropTypes.string,
+    onChange: PropTypes.func,
     onlyDomains: PropTypes.bool,
     treeData: PropTypes.array
 };
 DomainTreeInput.defaultProps = {
+    useReduxFormField: true,
     onlyDomains: true
 };
 
