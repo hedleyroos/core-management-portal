@@ -22,6 +22,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import InvitationDomainRoleFilter from '../filters/InvitationDomainRoleFilter';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 
 const validationCreateInvitationDomainRole = values => {
     const errors = {};
@@ -75,9 +76,7 @@ export const InvitationDomainRoleCreate = props => (
             <ReferenceInput label="Invitation" source="invitation_id" reference="invitations" perPage={0} allowEmpty>
                 <SelectInput optionText="email" />
             </ReferenceInput>
-            <ReferenceInput label="Domain" source="domain_id" reference="domains" perPage={0} allowEmpty>
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            <DomainTreeInput label="Domain" source="domain_id" />
             <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
                 <SelectInput optionText="label" />
             </ReferenceInput>

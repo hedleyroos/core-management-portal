@@ -8,11 +8,11 @@ import {
     ReferenceInput,
     Filter
 } from 'admin-on-rest';
-import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 
 const DomainRoleFilter = props => (
     <Filter {...props}>
-        <UnlimitedDropdownInput label="Domain" source="domain_id" reference="domains" optionText="name" />
+        <DomainTreeInput label="Domain" source="domain_id" />
         <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
             <SelectInput optionText="label" />
         </ReferenceInput>

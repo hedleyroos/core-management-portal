@@ -1,4 +1,4 @@
-import { Restricted, showNotification as showNotificationAction } from 'admin-on-rest';
+import { Restricted } from 'admin-on-rest';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { withRouter } from 'react-router-dom';
@@ -13,7 +13,7 @@ import TableField from '../../fields/TableField';
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
-import { makeIDMapping, getUniqueIDs, getUntilDone } from '../../utils';
+import { makeIDMapping, getUniqueIDs, getUntilDone, createTreeData } from '../../utils';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
 import PermissionsStore from '../../auth/PermissionsStore';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
@@ -37,8 +37,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     domainsAndSitesAdd: domainsAndSites => dispatch(contextDomainsAndSitesAdd(domainsAndSites)),
-    changeContext: newContext => dispatch(contextChangeGMPContext(newContext)),
-    showNotification: showNotificationAction
+    changeContext: newContext => dispatch(contextChangeGMPContext(newContext))
 });
 
 class ManageUserRoles extends Component {
@@ -52,6 +51,7 @@ class ManageUserRoles extends Component {
             selectedUser: -1,
             userdomains: {},
             usersites: {},
+            treeData: null,
             selectedDomainSite: null,
             roleSelections: null,
             rolesMapping: null,
@@ -71,6 +71,7 @@ class ManageUserRoles extends Component {
         this.handleAssign = this.handleAssign.bind(this);
         this.triggerDeleteDialog = this.triggerDeleteDialog.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.clearMessage = this.clearMessage.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
@@ -102,13 +103,13 @@ class ManageUserRoles extends Component {
             domains = await getUntilDone('domains', {
                 domain_ids: ids.domains.join(',')
             });
-            domains = makeIDMapping(domains);
+            domains = makeIDMapping(domains, 'd:');
         }
         if (ids.sites.length > 0) {
             sites = await getUntilDone('sites', {
                 site_ids: ids.sites.join(',')
             });
-            sites = makeIDMapping(sites);
+            sites = makeIDMapping(sites, 's:');
         }
         const managerRoles = Object.entries(contexts).reduce(
             (accumulator, [place, placeRoles]) => {
@@ -125,7 +126,12 @@ class ManageUserRoles extends Component {
             },
             { domains: {}, sites: {} }
         );
-        this.setState({ managerRoles, userdomains: domains, usersites: sites });
+        this.setState({
+            managerRoles,
+            userdomains: domains,
+            usersites: sites,
+            treeData: createTreeData({ ...domains, ...sites }, 'domain_id', 's')
+        });
     }
 
     handleSearch(event) {
@@ -236,9 +242,10 @@ class ManageUserRoles extends Component {
         }
     }
 
-    handleDomainSiteChange(event, index, value) {
-        const splitValue = value.split(':');
-        const roles = this.state.managerRoles[`${splitValue[1]}s`][splitValue[0]];
+    handleDomainSiteChange(value) {
+        const [placeType, placeID] = value.split(':');
+        const placeName = placeType === 'd' ? 'domains' : 'sites';
+        const roles = this.state.managerRoles[placeName][placeID];
         this.setState({
             selectedDomainSite: value,
             roleSelections: roles.reduce((obj, role) => {
@@ -264,11 +271,12 @@ class ManageUserRoles extends Component {
                     ...roleSelections[value],
                     selected: !roleSelections[value].selected
                 }
-            }
+            },
+            message: null
         });
     }
 
-    async handleAssign() {
+    handleAssign() {
         const {
             userResults,
             selectedUser,
@@ -276,56 +284,63 @@ class ManageUserRoles extends Component {
             userdomains,
             usersites,
             selectedDomainSite,
-            rolesMapping,
-            roleSelections,
-            hasRolesToAssign
+            rolesMapping
         } = this.state;
-        const { showNotification } = this.props;
-        const [placeID, place] = selectedDomainSite.split(':');
-        let allCreated = true;
-        // TODO: Maybe look at doing the fetches in parallel rather.
-        Object.values(roleSelections).map(async roleSelection => {
+        let { roleSelections, hasRolesToAssign } = this.state;
+        this.setState({ assigning: true });
+        const [placeType, placeID] = selectedDomainSite.split(':');
+        const place = placeType === 'd' ? 'domain' : 'site';
+        Object.values(roleSelections).map((roleSelection, index) => {
             if (roleSelection.selected) {
-                try {
-                    await restClient(CREATE, `user${place}roles`, {
-                        data: {
-                            user_id: userResults[selectedUser].id,
-                            [`${place}_id`]: parseInt(placeID, 10),
-                            role_id: roleSelection.id
-                        }
-                    });
-                    let newUserRoles = userRoles;
-                    newUserRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
-                        [place]: place === 'domain' ? userdomains[placeID] : usersites[placeID],
-                        role: rolesMapping[roleSelection.id]
-                    };
-                    this.setState({
-                        userRoles: newUserRoles,
-                        hasRolesToAssign: hasRolesToAssign - 1,
-                        roleSelections: {
+                restClient(CREATE, `user${place}roles`, {
+                    data: {
+                        user_id: userResults[selectedUser].id,
+                        [`${place}_id`]: parseInt(placeID, 10),
+                        role_id: roleSelection.id
+                    }
+                })
+                    .then(response => {
+                        hasRolesToAssign -= 1;
+                        roleSelections = {
                             ...roleSelections,
                             [roleSelection.id]: {
                                 ...roleSelection,
                                 selected: false
                             }
+                        };
+                        let newUserRoles = userRoles;
+                        newUserRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
+                            [place]:
+                                place === 'domain'
+                                    ? userdomains[`d:${placeID}`]
+                                    : usersites[`s:${placeID}`],
+                            role: rolesMapping[roleSelection.id]
+                        };
+                        this.setState({
+                            userRoles: newUserRoles,
+                            hasRolesToAssign,
+                            roleSelections
+                        });
+                        if (!hasRolesToAssign) {
+                            this.setState({
+                                assigning: false,
+                                message: 'All roles assigned successfully!',
+                                roleSelections: null,
+                                selectedDomainSite: null
+                            });
                         }
+                    })
+                    .catch(error => {
+                        this.setState({
+                            assigning: index < roleSelections.length - 1,
+                            message:
+                                'Some roles are not able to assign or have already been assigned to this user.'
+                        });
+                        this.handleAPIError(error);
                     });
-                } catch (error) {
-                    allCreated = false;
-                    showNotification(`Role ${roleSelection.label}: Exists or Error`, 'warning');
-                    this.handleAPIError(error);
-                }
             }
             return null;
         });
-        if (allCreated) {
-            showNotification('All Roles assigned.', 'success');
-            this.setState({
-                hasRolesToAssign: 0,
-                roleSelections: null,
-                selectedDomainSite: null
-            });
-        }
     }
 
     triggerDeleteDialog(data) {
@@ -341,6 +356,10 @@ class ManageUserRoles extends Component {
         }
     }
 
+    clearMessage() {
+        this.setState({ message: null });
+    }
+
     handleAPIError(error) {
         if (error.message === 'Token expired') {
             localStorage.removeItem('id_token');
@@ -352,13 +371,14 @@ class ManageUserRoles extends Component {
 
     render() {
         const {
+            assigning,
+            message,
             managerRoles,
+            treeData,
             search,
             userResults,
             selectedUser,
             userRoles,
-            userdomains,
-            usersites,
             selectedDomainSite,
             roleSelections,
             hasRolesToAssign,
@@ -400,10 +420,12 @@ class ManageUserRoles extends Component {
                                     handleDelete={this.triggerDeleteDialog}
                                 />
                                 <AssignRoleCard
+                                    assigning={assigning}
+                                    message={message}
+                                    clearMessage={this.clearMessage}
+                                    treeData={treeData}
                                     selectedDomainSite={selectedDomainSite}
                                     handleDomainSiteChange={this.handleDomainSiteChange}
-                                    userdomains={userdomains}
-                                    usersites={usersites}
                                     handleRoleSelection={this.handleRoleSelection}
                                     roleSelections={roleSelections}
                                     handleAssign={this.handleAssign}

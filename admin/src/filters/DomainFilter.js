@@ -7,7 +7,7 @@ import {
     TextInput,
     Filter
 } from 'admin-on-rest';
-import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 
 const parseDomainIds = value => value.replace(/[^\w]/gi, ',');
 
@@ -22,7 +22,7 @@ const validateDomainIds = value => {
 
 const DomainFilter = props => (
     <Filter {...props}>
-        <UnlimitedDropdownInput label="Parent" source="parent_id" reference="domains" optionText="name" />
+        <DomainTreeInput label="Parent Domain" source="parent_id" />
         <TextInput label="Domain Ids" source="domain_ids" parse={parseDomainIds} validate={validateDomainIds} />
     </Filter>
 );

@@ -1,65 +1,49 @@
 import React from 'react';
+import Avatar from 'material-ui/Avatar';
 import Card from 'material-ui/Card/Card';
+import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
 import Checkbox from 'material-ui/Checkbox';
-import Divider from 'material-ui/Divider';
-import DropDownMenu from 'material-ui/DropDownMenu';
+import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle';
+import ErrorIcon from 'material-ui/svg-icons/alert/error';
 import RaisedButton from 'material-ui/RaisedButton';
-import MenuItem from 'material-ui/MenuItem/MenuItem';
+import { pink300, pink500 } from 'material-ui/styles/colors';
 
 import { NotEmptyObject } from '../../utils';
+import DomainTreeInput from '../../inputs/DomainTreeInput';
+import Chip from 'material-ui/Chip/Chip';
 import { styles } from '../../Theme';
 
 const AssignRoleCard = props => {
     const {
+        assigning,
+        message,
+        clearMessage,
+        treeData,
         selectedDomainSite,
         handleDomainSiteChange,
-        userdomains,
-        usersites,
         handleRoleSelection,
         roleSelections,
         handleAssign,
         hasRolesToAssign
     } = props;
     return (
-        <Card>
+        <Card style={{ marginTop: 20 }}>
             <CardTitle title="Assign Role" />
             <CardText>
                 <CardHeader subtitle="Select a Domain or Site:" />
-                <DropDownMenu
+                <DomainTreeInput
+                    label="Select Domain/Site"
+                    source="place"
+                    treeData={treeData}
                     value={selectedDomainSite}
                     onChange={handleDomainSiteChange}
-                    style={styles.wideDropDown}
-                    autoWidth={false}
-                >
-                    <MenuItem value={null} primaryText="Select Domain/Site" disabled />
-                    {NotEmptyObject(userdomains)
-                        ? Object.values(userdomains).map(domain => (
-                              <MenuItem
-                                  key={`${domain.id}:domain`}
-                                  value={`${domain.id}:domain`}
-                                  primaryText={domain.name}
-                                  secondaryText="Domain"
-                              />
-                          ))
-                        : null}
-                    {NotEmptyObject(userdomains) && NotEmptyObject(usersites) ? (
-                        <Divider />
-                    ) : null}
-                    {NotEmptyObject(usersites)
-                        ? Object.values(usersites).map(site => (
-                              <MenuItem
-                                  key={`${site.id}:site`}
-                                  value={`${site.id}:site`}
-                                  primaryText={site.name}
-                                  secondaryText="Site"
-                              />
-                          ))
-                        : null}
-                </DropDownMenu>
-                {selectedDomainSite ? (
+                    onlyDomains={false}
+                    useReduxFormField={false}
+                />
+                {selectedDomainSite && (
                     <div>
                         <CardHeader subtitle="Please choose the roles to add:" />
                         <CardText>
@@ -75,16 +59,30 @@ const AssignRoleCard = props => {
                                 : 'No roles to Select on this domain/site.'}
                         </CardText>
                     </div>
-                ) : null}
-                {hasRolesToAssign ? (
-                    <CardText>
+                )}
+                {hasRolesToAssign > 0 && (
+                    <CardActions>
                         <RaisedButton
                             label="Assign Roles"
                             secondary={true}
                             onClick={handleAssign}
+                            disabled={assigning}
                         />
+                    </CardActions>
+                )}
+                {message && (
+                    <CardText style={styles.wrapper}>
+                        <Chip
+                            style={{ margin: 4, backgroundColor: pink300 }}
+                            onRequestDelete={clearMessage}
+                        >
+                            <Avatar size={32} color={pink300} backgroundColor={pink500}>
+                                {hasRolesToAssign ? <ErrorIcon /> : <CheckCircleIcon />}
+                            </Avatar>
+                            {message}
+                        </Chip>
                     </CardText>
-                ) : null}
+                )}
             </CardText>
         </Card>
     );

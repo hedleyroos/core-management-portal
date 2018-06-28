@@ -25,6 +25,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DomainRoleFilter from '../filters/DomainRoleFilter';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 
 const validationCreateDomainRole = values => {
     const errors = {};
@@ -72,9 +73,7 @@ export const DomainRoleList = props => (
 export const DomainRoleCreate = props => (
     <Create {...props} title="DomainRole Create">
         <SimpleForm validate={validationCreateDomainRole}>
-            <ReferenceInput label="Domain" source="domain_id" reference="domains" perPage={0} allowEmpty>
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            <DomainTreeInput label="Domain" source="domain_id" />
             <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
                 <SelectInput optionText="label" />
             </ReferenceInput>

@@ -22,6 +22,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const validationCreateUserDomainRole = values => {
@@ -80,9 +81,7 @@ export const UserDomainRoleCreate = props => (
                 optionText="username"
                 filter={{ site_ids: '' }}
             />
-            <ReferenceInput label="Domain" source="domain_id" reference="domains" perPage={0} allowEmpty>
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            <DomainTreeInput label="Domain" source="domain_id" />
             <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
                 <SelectInput optionText="label" />
             </ReferenceInput>
