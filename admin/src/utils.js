@@ -10,12 +10,31 @@ export const CreateTreeData = (data, parentField = null, childType = null) => {
      * This function creates a hierarchy data structure from
      * a list of objects for the tree select of Ant Design
      */
+
+    /*
+        This reference mapping will be a mapping of an object ID to the object data with
+        a list of all the children object IDs. (Value/label/key were added for Ant Design TreeSelect)
+        eg.
+        {
+            1: {
+                id: 1,
+                name: 'obj1',
+                parent_id: null,
+                label: 'obj1',
+                key: 1,
+                value: 1,
+                children: [2, 3]
+            }
+            ... etc ...
+        }
+    */
+
     const referenceMapping = Object.entries(data).reduce((accumulator, [key, obj]) => {
         const newObject = {
             ...obj,
             label: obj.name,
             value: key,
-            key: obj.name
+            key
         };
         if (childType ? key.indexOf(childType) < 0 : true) {
             const children = Object.entries(data).reduce((children, [childKey, childObj]) => {
@@ -29,31 +48,44 @@ export const CreateTreeData = (data, parentField = null, childType = null) => {
             }, []);
             newObject['children'] = children;
         }
-        accumulator[key] = (newObject);
+        accumulator[key] = newObject;
         return accumulator;
     }, {});
 
+    // This set will hold all of the objects that are evaluated in the
+    // reference mapping so they are not evaluated again unnecessarily.
     let childrenEvaluated = new Set([]);
     let treeData = {};
 
+    /*
+        This loop is recursive and will replace all children it finds in the object
+        with the actual children objects, not their ID's. IF a child is found in the
+        current treeData, then it is removed from the top level and placed in as a child.
+    */
     const childrenLoop = obj => {
         const newObj = obj;
         if (newObj.children) {
             newObj.children = newObj.children.map(childKey => {
-                childrenEvaluated.add(childKey);
+                childrenEvaluated.add(childKey.toString());
                 let childObj = null;
-                if (treeData[childKey]) {
-                    childObj = treeData[childKey];
+                if (treeData[childKey.toString()]) {
+                  childObj = treeData[childKey.toString()];
+                  delete treeData[childKey.toString()]
                 } else {
-                    childObj = referenceMapping[childKey];
-                    childObj = childrenLoop(childObj);
+                  childObj = referenceMapping[childKey];
+                  childObj = childrenLoop(childObj);
                 }
                 return childObj;
-            });
+              });
         }
         return newObj;
     };
 
+    /*
+        This loops through the reference mapping and if the object has not been evaluated yet as
+        a child, it will then run the childrenLoop on it to fill out its tree and then add to the
+        treeData object.
+    */
     Object.entries(referenceMapping).reduce((accumulator, [key, obj]) => {
         if (!childrenEvaluated.has(key)) {
             const newObj = childrenLoop(obj);
@@ -62,6 +94,10 @@ export const CreateTreeData = (data, parentField = null, childType = null) => {
         return accumulator;
     }, {});
 
+    /*
+        The treeData returned must be a list of the top level objects. This will just be
+        the values of the treeData Object.
+    */
     return Object.values(treeData);
 };
 
