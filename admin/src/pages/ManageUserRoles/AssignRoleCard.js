@@ -21,6 +21,7 @@ const AssignRoleCard = props => {
         assigning,
         message,
         clearMessage,
+        treeData,
         selectedDomainSite,
         handleDomainSiteChange,
         handleRoleSelection,
@@ -36,6 +37,7 @@ const AssignRoleCard = props => {
                 <DomainTreeInput
                     label="Select Domain/Site"
                     source="place"
+                    treeData={treeData}
                     value={selectedDomainSite}
                     onChange={handleDomainSiteChange}
                     onlyDomains={false}

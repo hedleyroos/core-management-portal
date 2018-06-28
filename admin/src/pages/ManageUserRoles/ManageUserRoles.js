@@ -13,7 +13,7 @@ import TableField from '../../fields/TableField';
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
-import { makeIDMapping, getUniqueIDs, getUntilDone } from '../../utils';
+import { makeIDMapping, getUniqueIDs, getUntilDone, CreateTreeData } from '../../utils';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
 import PermissionsStore from '../../auth/PermissionsStore';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
@@ -51,6 +51,7 @@ class ManageUserRoles extends Component {
             selectedUser: -1,
             userdomains: {},
             usersites: {},
+            treeData: null,
             selectedDomainSite: null,
             roleSelections: null,
             rolesMapping: null,
@@ -102,13 +103,13 @@ class ManageUserRoles extends Component {
             domains = await getUntilDone('domains', {
                 domain_ids: ids.domains.join(',')
             });
-            domains = makeIDMapping(domains);
+            domains = makeIDMapping(domains, 'd:');
         }
         if (ids.sites.length > 0) {
             sites = await getUntilDone('sites', {
                 site_ids: ids.sites.join(',')
             });
-            sites = makeIDMapping(sites);
+            sites = makeIDMapping(sites, 's:');
         }
         const managerRoles = Object.entries(contexts).reduce(
             (accumulator, [place, placeRoles]) => {
@@ -125,7 +126,12 @@ class ManageUserRoles extends Component {
             },
             { domains: {}, sites: {} }
         );
-        this.setState({ managerRoles, userdomains: domains, usersites: sites });
+        this.setState({
+            managerRoles,
+            userdomains: domains,
+            usersites: sites,
+            treeData: CreateTreeData({ ...domains, ...sites }, 'domain_id', 's')
+        });
     }
 
     handleSearch(event) {
@@ -135,7 +141,8 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
+                // filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
+                filter: { q: input, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -304,7 +311,10 @@ class ManageUserRoles extends Component {
                         };
                         let newUserRoles = userRoles;
                         newUserRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
-                            [place]: place === 'domain' ? userdomains[placeID] : usersites[placeID],
+                            [place]:
+                                place === 'domain'
+                                    ? userdomains[`d:${placeID}`]
+                                    : usersites[`s:${placeID}`],
                             role: rolesMapping[roleSelection.id]
                         };
                         this.setState({
@@ -365,6 +375,7 @@ class ManageUserRoles extends Component {
             assigning,
             message,
             managerRoles,
+            treeData,
             search,
             userResults,
             selectedUser,
@@ -413,6 +424,7 @@ class ManageUserRoles extends Component {
                                     assigning={assigning}
                                     message={message}
                                     clearMessage={this.clearMessage}
+                                    treeData={treeData}
                                     selectedDomainSite={selectedDomainSite}
                                     handleDomainSiteChange={this.handleDomainSiteChange}
                                     handleRoleSelection={this.handleRoleSelection}
