@@ -43,7 +43,7 @@ const AssignRoleCard = props => {
                     onlyDomains={false}
                     useReduxFormField={false}
                 />
-                {selectedDomainSite ? (
+                {selectedDomainSite && (
                     <div>
                         <CardHeader subtitle="Please choose the roles to add:" />
                         <CardText>
@@ -59,8 +59,8 @@ const AssignRoleCard = props => {
                                 : 'No roles to Select on this domain/site.'}
                         </CardText>
                     </div>
-                ) : null}
-                {hasRolesToAssign ? (
+                )}
+                {hasRolesToAssign > 0 && (
                     <CardActions>
                         <RaisedButton
                             label="Assign Roles"
@@ -69,8 +69,8 @@ const AssignRoleCard = props => {
                             disabled={assigning}
                         />
                     </CardActions>
-                ) : null}
-                {message ? (
+                )}
+                {message && (
                     <CardText style={styles.wrapper}>
                         <Chip
                             style={{ margin: 4, backgroundColor: pink300 }}
@@ -82,7 +82,7 @@ const AssignRoleCard = props => {
                             {message}
                         </Chip>
                     </CardText>
-                ) : null}
+                )}
             </CardText>
         </Card>
     );
