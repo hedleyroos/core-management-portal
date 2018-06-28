@@ -19,7 +19,7 @@ import { styles } from '../../Theme';
 const AssignRoleCard = props => {
     const {
         assigning,
-        message,
+        messages,
         clearMessage,
         treeData,
         selectedDomainSite,
@@ -70,19 +70,24 @@ const AssignRoleCard = props => {
                         />
                     </CardActions>
                 )}
-                {message && (
-                    <CardText style={styles.wrapper}>
-                        <Chip
-                            style={{ margin: 4, backgroundColor: pink300 }}
-                            onRequestDelete={clearMessage}
+                {messages &&
+                    messages.length > 0 &&
+                    messages.map((message, index) => (
+                        <CardText
+                            key={`${index}${message.text}`}
+                            style={{ ...styles.wrapper, padding: 0 }}
                         >
-                            <Avatar size={32} color={pink300} backgroundColor={pink500}>
-                                {hasRolesToAssign ? <ErrorIcon /> : <CheckCircleIcon />}
-                            </Avatar>
-                            {message}
-                        </Chip>
-                    </CardText>
-                )}
+                            <Chip
+                                style={{ margin: 4, backgroundColor: pink300 }}
+                                onRequestDelete={() => clearMessage(index)}
+                            >
+                                <Avatar size={32} color={pink300} backgroundColor={pink500}>
+                                    {message.type === 'error' ? <ErrorIcon /> : <CheckCircleIcon />}
+                                </Avatar>
+                                {message.text}
+                            </Chip>
+                        </CardText>
+                    ))}
             </CardText>
         </Card>
     );

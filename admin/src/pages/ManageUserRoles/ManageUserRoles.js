@@ -272,7 +272,7 @@ class ManageUserRoles extends Component {
                     selected: !roleSelections[value].selected
                 }
             },
-            message: null
+            messages: []
         });
     }
 
@@ -280,13 +280,13 @@ class ManageUserRoles extends Component {
         const {
             userResults,
             selectedUser,
-            userRoles,
             userdomains,
             usersites,
             selectedDomainSite,
             rolesMapping
         } = this.state;
-        let { roleSelections, hasRolesToAssign } = this.state;
+        let { userRoles, roleSelections, hasRolesToAssign } = this.state;
+        let messages = [];
         this.setState({ assigning: true });
         const [placeType, placeID] = selectedDomainSite.split(':');
         const place = placeType === 'd' ? 'domain' : 'site';
@@ -308,33 +308,56 @@ class ManageUserRoles extends Component {
                                 selected: false
                             }
                         };
-                        let newUserRoles = userRoles;
-                        newUserRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
-                            [place]:
-                                place === 'domain'
-                                    ? userdomains[`d:${placeID}`]
-                                    : usersites[`s:${placeID}`],
+                        let placeObj =
+                            place === 'domain'
+                                ? userdomains[`d:${placeID}`]
+                                : usersites[`s:${placeID}`];
+                        userRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
+                            [place]: placeObj,
                             role: rolesMapping[roleSelection.id]
                         };
+                        messages = [
+                            ...messages,
+                            {
+                                type: 'success',
+                                text: `Role '${roleSelection.label}' assigned on ${place} '${
+                                    placeObj.name
+                                }'`
+                            }
+                        ];
                         this.setState({
-                            userRoles: newUserRoles,
+                            messages,
+                            userRoles,
                             hasRolesToAssign,
                             roleSelections
                         });
                         if (!hasRolesToAssign) {
                             this.setState({
                                 assigning: false,
-                                message: 'All roles assigned successfully!',
+                                messages: [
+                                    {
+                                        type: 'success',
+                                        text: 'All roles assigned successfully!'
+                                    }
+                                ],
                                 roleSelections: null,
                                 selectedDomainSite: null
                             });
                         }
                     })
                     .catch(error => {
+                        messages = [
+                            ...messages,
+                            {
+                                type: 'error',
+                                text: `Role ${
+                                    roleSelection.label
+                                } either exists for the user or the required ${place} role does not exist.`
+                            }
+                        ];
                         this.setState({
                             assigning: index < roleSelections.length - 1,
-                            message:
-                                'Some roles are not able to assign or have already been assigned to this user.'
+                            messages
                         });
                         this.handleAPIError(error);
                     });
@@ -356,8 +379,11 @@ class ManageUserRoles extends Component {
         }
     }
 
-    clearMessage() {
-        this.setState({ message: null });
+    clearMessage(index) {
+        const { messages } = this.state;
+        this.setState({
+            messages: [...messages.slice(0, index), ...messages.slice(index + 1, messages.length)]
+        });
     }
 
     handleAPIError(error) {
@@ -372,7 +398,7 @@ class ManageUserRoles extends Component {
     render() {
         const {
             assigning,
-            message,
+            messages,
             managerRoles,
             treeData,
             search,
@@ -421,7 +447,7 @@ class ManageUserRoles extends Component {
                                 />
                                 <AssignRoleCard
                                     assigning={assigning}
-                                    message={message}
+                                    messages={messages}
                                     clearMessage={this.clearMessage}
                                     treeData={treeData}
                                     selectedDomainSite={selectedDomainSite}
