@@ -6,32 +6,31 @@ import { TreeSelect } from 'antd';
 
 class TreeviewSelect extends Component {
     constructor(props) {
-		super(props);
+        super(props);
         this.state = {
+            // Ant Design TreeSelect does not show the placeholder unless undefined.
             value: props.input.value || undefined
         };
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(value) {
-        const { input, onChange } = this.props;
-        if (input.onChange) {
-            input.onChange(value);
-            this.setState({ value });
-        }
-        if (onChange) {
-            onChange(value);
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.value !== this.state.value) {
+            // Ant Design TreeSelect does not show the placeholder unless undefined.
+            this.setState({ value: nextProps.value || undefined });
         }
     }
 
+    handleChange(value) {
+        const { input, onChange } = this.props;
+        input.onChange && input.onChange(value);
+        onChange && onChange(value);
+        this.setState({ value });
+    }
+
     render() {
-		const { label, treeData, showSearch } = this.props;
-		let value;
-		if (this.props.value) {
-			value = this.props.value || undefined;
-		} else {
-			value = this.state.value;
-		}
+        const { label, treeData, showSearch } = this.props;
+        const { value } = this.state;
         return (
             <TreeSelect
                 showSearch={showSearch}
@@ -55,8 +54,8 @@ class TreeviewSelect extends Component {
 }
 TreeviewSelect.propTypes = {
     onChange: PropTypes.func,
-	showSearch: PropTypes.bool,
-	value: PropTypes.string
+    showSearch: PropTypes.bool,
+    value: PropTypes.string
 };
 TreeviewSelect.defaultProps = {
     showSearch: false

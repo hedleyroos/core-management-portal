@@ -5,7 +5,7 @@ import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
  * When regenerated the changes will be lost.
  **/
 
-export const CreateTreeData = (data, parentField = null, childType = null) => {
+export const createTreeData = (data, parentField = null, childType = null) => {
     /**
      * This function creates a hierarchy data structure from
      * a list of objects for the tree select of Ant Design

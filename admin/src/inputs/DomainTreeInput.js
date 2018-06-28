@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
-import { getUntilDone, makeIDMapping, CreateTreeData } from '../utils';
+import { getUntilDone, makeIDMapping, createTreeData } from '../utils';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import TreeviewSelect from './TreeviewSelect';
 
@@ -15,7 +15,10 @@ class DomainTreeInput extends Component {
         this.parser = this.parser.bind(this);
         this.formatter = this.formatter.bind(this);
         this.loadData = this.loadData.bind(this);
-        if (!props.treeData) {
+    }
+
+    componentDidMount() {
+        if (!this.props.treeData) {
             this.loadData();
         }
     }
@@ -39,7 +42,7 @@ class DomainTreeInput extends Component {
             .then(data => {
                 const domains = makeIDMapping(data, 'd:');
                 if (this.props.onlyDomains) {
-                    this.setState({ treeData: CreateTreeData(domains) });
+                    this.setState({ treeData: createTreeData(domains) });
                 } else {
                     getUntilDone('sites')
                         .then(data => {
@@ -47,7 +50,7 @@ class DomainTreeInput extends Component {
                                 ...domains,
                                 ...makeIDMapping(data, 's:')
                             };
-                            this.setState({ treeData: CreateTreeData(places, 'domain_id', 's') });
+                            this.setState({ treeData: createTreeData(places, 'domain_id', 's') });
                         })
                         .catch(error => {
                             throw new Error(error);

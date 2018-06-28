@@ -13,7 +13,7 @@ import TableField from '../../fields/TableField';
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
-import { makeIDMapping, getUniqueIDs, getUntilDone, CreateTreeData } from '../../utils';
+import { makeIDMapping, getUniqueIDs, getUntilDone, createTreeData } from '../../utils';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
 import PermissionsStore from '../../auth/PermissionsStore';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
@@ -130,7 +130,7 @@ class ManageUserRoles extends Component {
             managerRoles,
             userdomains: domains,
             usersites: sites,
-            treeData: CreateTreeData({ ...domains, ...sites }, 'domain_id', 's')
+            treeData: createTreeData({ ...domains, ...sites }, 'domain_id', 's')
         });
     }
 
@@ -141,7 +141,8 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
+                // filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
+                filter: { q: input, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -321,7 +322,7 @@ class ManageUserRoles extends Component {
                             hasRolesToAssign,
                             roleSelections
                         });
-                        if (hasRolesToAssign === 0) {
+                        if (!hasRolesToAssign) {
                             this.setState({
                                 assigning: false,
                                 message: 'All roles assigned successfully!',
