@@ -2,6 +2,7 @@
  * Generated App.js code. Edit at own risk.
  * When regenerated the changes will be lost.
 **/
+import 'antd/dist/antd.css';
 import React from 'react';
 import { Admin, Delete, Resource } from 'admin-on-rest';
 import authClient from './auth/authClient';

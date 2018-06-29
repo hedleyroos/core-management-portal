@@ -1,5 +1,3 @@
-import 'antd/dist/antd.css';
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TreeSelect } from 'antd';

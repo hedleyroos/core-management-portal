@@ -6,17 +6,24 @@ import { connect } from 'react-redux';
 import Card from 'material-ui/Card/Card';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
+import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import TextField from 'material-ui/TextField';
+
 import restClient, { CREATE, GET_LIST, GET_MANY, DELETE } from '../../swaggerRestServer';
 import TableField from '../../fields/TableField';
-
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
-import { makeIDMapping, getUniqueIDs, getUntilDone, createTreeData } from '../../utils';
+import {
+    makeIDMapping,
+    getUniqueIDs,
+    getUntilDone,
+    createTreeData,
+    successNotificationAnt,
+    errorNotificationAnt
+} from '../../utils';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
 import PermissionsStore from '../../auth/PermissionsStore';
-import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import { TECH_ADMIN } from '../../constants';
 
 const mapStateToProps = state => {
@@ -57,7 +64,7 @@ class ManageUserRoles extends Component {
             rolesMapping: null,
             hasRolesToAssign: 0,
             open: false,
-            roleToDelete: null,
+            checkedToDelete: {},
             validToken: true
         };
         this.getAllUserData = this.getAllUserData.bind(this);
@@ -65,13 +72,13 @@ class ManageUserRoles extends Component {
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleCheck = this.handleCheck.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDomainSiteChange = this.handleDomainSiteChange.bind(this);
         this.handleRoleSelection = this.handleRoleSelection.bind(this);
         this.handleAssign = this.handleAssign.bind(this);
         this.triggerDeleteDialog = this.triggerDeleteDialog.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.clearMessage = this.clearMessage.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
@@ -215,29 +222,57 @@ class ManageUserRoles extends Component {
         }
     }
 
-    handleDelete(data) {
-        const { userResults, selectedUser, userRoles, rolesMapping } = this.state;
-        const { showNotification } = this.props;
+    handleCheck(data) {
+        let checkedToDelete = this.state.checkedToDelete;
+        if (checkedToDelete[data.key]) {
+            delete checkedToDelete[data.key];
+        } else {
+            checkedToDelete[data.key] = data;
+        }
+        this.setState({
+            checkedToDelete
+        });
+    }
+
+    handleDelete() {
+        const { userResults, userRoles, selectedUser, checkedToDelete } = this.state;
         const user = userResults[selectedUser];
         if (user) {
-            restClient(DELETE, data.resource, {
-                id: `${user.id}/${data.id}/${data.role_id}`
-            })
-                .then(response => {
-                    let newUserRoles = userRoles;
-                    if (data.resource.split('domain').length > 1) {
-                        delete newUserRoles.domainRoles[`${data.id}:${data.role_id}`];
-                    } else {
-                        delete newUserRoles.siteRoles[`${data.id}:${data.role_id}`];
-                    }
-                    this.setState({ userRoles: newUserRoles });
+            let newCheckedToDelete = checkedToDelete;
+            Object.values(checkedToDelete).map(data => {
+                let roleLabel =
+                    data.resource.split('domain').length > 1
+                        ? userRoles.domainRoles[`${data.id}:${data.role_id}`].role.label
+                        : userRoles.siteRoles[`${data.id}:${data.role_id}`].role.label;
+                let placeName =
+                    data.resource.split('domain').length > 1
+                        ? userRoles.domainRoles[`${data.id}:${data.role_id}`].domain.name
+                        : userRoles.siteRoles[`${data.id}:${data.role_id}`].site.name;
+                restClient(DELETE, data.resource, {
+                    id: `${user.id}/${data.id}/${data.role_id}`
                 })
-                .catch(error => {
-                    showNotification(`Error: Role ${rolesMapping[data.role_id]} not removed.`);
-                    this.handleAPIError(error);
-                });
+                    .then(response => {
+                        if (data.resource.split('domain').length > 1) {
+                            delete userRoles.domainRoles[`${data.id}:${data.role_id}`];
+                            delete newCheckedToDelete[`d:${data.id}${data.role_id}`];
+                        } else {
+                            delete userRoles.siteRoles[`${data.id}:${data.role_id}`];
+                            delete newCheckedToDelete[`s:${data.id}${data.role_id}`];
+                        }
+                        this.setState({ userRoles, checkedToDelete: newCheckedToDelete });
+                        successNotificationAnt(`Removed role '${roleLabel}' from '${placeName}'!`);
+                    })
+                    .catch(error => {
+                        let description =
+                            error.status === 403
+                                ? `You do not have permission to remove role '${roleLabel}' from '${placeName}'.`
+                                : `Something went wrong. Cannot delete role '${roleLabel}' from '${placeName}' for user`;
+                        errorNotificationAnt(description);
+                        this.handleAPIError(error);
+                    });
+                return null;
+            });
         } else {
-            showNotification('No user selected for role removal', 'warning');
             console.error('No user was selected for role removal.');
         }
     }
@@ -271,22 +306,22 @@ class ManageUserRoles extends Component {
                     ...roleSelections[value],
                     selected: !roleSelections[value].selected
                 }
-            },
-            message: null
+            }
         });
     }
 
     handleAssign() {
         const {
             userResults,
-            selectedUser,
             userRoles,
+            roleSelections,
+            selectedUser,
             userdomains,
             usersites,
             selectedDomainSite,
             rolesMapping
         } = this.state;
-        let { roleSelections, hasRolesToAssign } = this.state;
+        let hasRolesToAssign = this.state.hasRolesToAssign;
         this.setState({ assigning: true });
         const [placeType, placeID] = selectedDomainSite.split(':');
         const place = placeType === 'd' ? 'domain' : 'site';
@@ -301,40 +336,44 @@ class ManageUserRoles extends Component {
                 })
                     .then(response => {
                         hasRolesToAssign -= 1;
-                        roleSelections = {
-                            ...roleSelections,
-                            [roleSelection.id]: {
-                                ...roleSelection,
-                                selected: false
-                            }
+                        roleSelections[roleSelection.id] = {
+                            ...roleSelection,
+                            selected: false
                         };
-                        let newUserRoles = userRoles;
-                        newUserRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
-                            [place]:
-                                place === 'domain'
-                                    ? userdomains[`d:${placeID}`]
-                                    : usersites[`s:${placeID}`],
+                        let placeObj =
+                            place === 'domain'
+                                ? userdomains[`d:${placeID}`]
+                                : usersites[`s:${placeID}`];
+                        userRoles[`${place}Roles`][`${placeID}:${roleSelection.id}`] = {
+                            [place]: placeObj,
                             role: rolesMapping[roleSelection.id]
                         };
+                        successNotificationAnt(
+                            `Role '${roleSelection.label}' assigned on ${place} '${placeObj.name}'`,
+                            3
+                        );
                         this.setState({
-                            userRoles: newUserRoles,
+                            userRoles,
                             hasRolesToAssign,
                             roleSelections
                         });
                         if (!hasRolesToAssign) {
+                            successNotificationAnt('All roles assigned successfully!', 4);
                             this.setState({
                                 assigning: false,
-                                message: 'All roles assigned successfully!',
                                 roleSelections: null,
                                 selectedDomainSite: null
                             });
                         }
                     })
                     .catch(error => {
+                        errorNotificationAnt(
+                            `Role ${
+                                roleSelection.label
+                            } either exists for the user or the required ${place} role does not exist.`
+                        );
                         this.setState({
-                            assigning: index < roleSelections.length - 1,
-                            message:
-                                'Some roles are not able to assign or have already been assigned to this user.'
+                            assigning: index < roleSelections.length - 1
                         });
                         this.handleAPIError(error);
                     });
@@ -344,20 +383,12 @@ class ManageUserRoles extends Component {
     }
 
     triggerDeleteDialog(data) {
-        this.setState({ open: true, roleToDelete: data });
+        this.setState({ open: true });
     }
 
     handleClose(action) {
-        if (action === 'submit') {
-            this.handleDelete(this.state.roleToDelete);
-            this.setState({ open: false });
-        } else {
-            this.setState({ open: false });
-        }
-    }
-
-    clearMessage() {
-        this.setState({ message: null });
+        action === 'submit' && this.handleDelete();
+        this.setState({ open: false });
     }
 
     handleAPIError(error) {
@@ -372,7 +403,6 @@ class ManageUserRoles extends Component {
     render() {
         const {
             assigning,
-            message,
             managerRoles,
             treeData,
             search,
@@ -383,6 +413,7 @@ class ManageUserRoles extends Component {
             roleSelections,
             hasRolesToAssign,
             open,
+            checkedToDelete,
             validToken
         } = this.state;
         const user = selectedUser >= 0 ? userResults[selectedUser] : null;
@@ -417,12 +448,12 @@ class ManageUserRoles extends Component {
                                 <UserCard
                                     user={user}
                                     userRoles={userRoles}
-                                    handleDelete={this.triggerDeleteDialog}
+                                    checkedToDelete={checkedToDelete}
+                                    handleCheck={this.handleCheck}
+                                    triggerDeleteDialog={this.triggerDeleteDialog}
                                 />
                                 <AssignRoleCard
                                     assigning={assigning}
-                                    message={message}
-                                    clearMessage={this.clearMessage}
                                     treeData={treeData}
                                     selectedDomainSite={selectedDomainSite}
                                     handleDomainSiteChange={this.handleDomainSiteChange}
@@ -440,7 +471,7 @@ class ManageUserRoles extends Component {
                             handleClose={this.handleClose}
                             cancelLabel="No"
                             submitLabel="Delete"
-                            text="Are you sure you want to delete this role?"
+                            text="Are you sure you want to delete the selected roles?"
                         />
                     </Card>
                 </Restricted>
