@@ -235,8 +235,7 @@ class ManageUserRoles extends Component {
     }
 
     handleDelete() {
-        const { userResults, selectedUser, checkedToDelete } = this.state;
-        let { userRoles } = this.state;
+        const { userResults, userRoles, selectedUser, checkedToDelete } = this.state;
         const user = userResults[selectedUser];
         if (user) {
             let newCheckedToDelete = checkedToDelete;
@@ -261,7 +260,7 @@ class ManageUserRoles extends Component {
                             delete newCheckedToDelete[`s:${data.id}${data.role_id}`];
                         }
                         this.setState({ userRoles, checkedToDelete: newCheckedToDelete });
-                        successNotificationAnt(`Deleted role '${roleLabel}' from '${placeName}'!`);
+                        successNotificationAnt(`Removed role '${roleLabel}' from '${placeName}'!`);
                     })
                     .catch(error => {
                         let description =
@@ -314,13 +313,15 @@ class ManageUserRoles extends Component {
     handleAssign() {
         const {
             userResults,
+            userRoles,
+            roleSelections,
             selectedUser,
             userdomains,
             usersites,
             selectedDomainSite,
             rolesMapping
         } = this.state;
-        let { userRoles, roleSelections, hasRolesToAssign } = this.state;
+        let hasRolesToAssign = this.state.hasRolesToAssign;
         this.setState({ assigning: true });
         const [placeType, placeID] = selectedDomainSite.split(':');
         const place = placeType === 'd' ? 'domain' : 'site';
@@ -335,12 +336,9 @@ class ManageUserRoles extends Component {
                 })
                     .then(response => {
                         hasRolesToAssign -= 1;
-                        roleSelections = {
-                            ...roleSelections,
-                            [roleSelection.id]: {
-                                ...roleSelection,
-                                selected: false
-                            }
+                        roleSelections[roleSelection.id] = {
+                            ...roleSelection,
+                            selected: false
                         };
                         let placeObj =
                             place === 'domain'

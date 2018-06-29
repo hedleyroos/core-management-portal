@@ -9,7 +9,7 @@ import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { styles } from '../../Theme';
-import { notEmptyObject } from '../../utils';
+import { notEmptyObject, toBool } from '../../utils';
 import { CardActions } from 'material-ui/Card';
 
 const UserCard = props => {
@@ -25,11 +25,9 @@ const UserCard = props => {
                           <Checkbox
                               key={`${domainRole.domain.id}${domainRole.role.id}`}
                               label={`${domainRole.domain.name}: ${domainRole.role.label}`}
-                              checked={
-                                  !!checkedToDelete[
-                                      `d:${domainRole.domain.id}${domainRole.role.id}`
-                                  ]
-                              }
+                              checked={toBool(
+                                  checkedToDelete[`d:${domainRole.domain.id}${domainRole.role.id}`]
+                              )}
                               onCheck={() =>
                                   handleCheck({
                                       resource: 'userdomainroles',
@@ -50,9 +48,9 @@ const UserCard = props => {
                           <Checkbox
                               key={`${siteRole.site.id}${siteRole.role.id}`}
                               label={`${siteRole.site.name}: ${siteRole.role.label}`}
-                              checked={
-                                  !!checkedToDelete[`s:${siteRole.site.id}${siteRole.role.id}`]
-                              }
+                              checked={toBool(
+                                  checkedToDelete[`s:${siteRole.site.id}${siteRole.role.id}`]
+                              )}
                               onCheck={() =>
                                   handleCheck({
                                       resource: 'usersiteroles',

@@ -7,6 +7,8 @@ import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
  * When regenerated the changes will be lost.
  **/
 
+export const toBool = thing => !!thing;
+
 export const successNotificationAnt = (description, duration = 3) => {
     notification.success({
         message: 'Success!',
