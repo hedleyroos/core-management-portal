@@ -1,4 +1,3 @@
-import { notification } from 'antd';
 import { Restricted } from 'admin-on-rest';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
@@ -7,10 +6,11 @@ import { connect } from 'react-redux';
 import Card from 'material-ui/Card/Card';
 import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
+import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import TextField from 'material-ui/TextField';
+
 import restClient, { CREATE, GET_LIST, GET_MANY, DELETE } from '../../swaggerRestServer';
 import TableField from '../../fields/TableField';
-
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
@@ -24,7 +24,6 @@ import {
 } from '../../utils';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
 import PermissionsStore from '../../auth/PermissionsStore';
-import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import { TECH_ADMIN } from '../../constants';
 
 const mapStateToProps = state => {
@@ -65,7 +64,7 @@ class ManageUserRoles extends Component {
             rolesMapping: null,
             hasRolesToAssign: 0,
             open: false,
-            roleToDelete: null,
+            checkedToDelete: {},
             validToken: true
         };
         this.getAllUserData = this.getAllUserData.bind(this);
@@ -73,6 +72,7 @@ class ManageUserRoles extends Component {
         this.getWhereUserHasRoles = this.getWhereUserHasRoles.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleCheck = this.handleCheck.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDomainSiteChange = this.handleDomainSiteChange.bind(this);
         this.handleRoleSelection = this.handleRoleSelection.bind(this);
@@ -223,32 +223,57 @@ class ManageUserRoles extends Component {
         }
     }
 
-    handleDelete(data) {
-        const { userResults, selectedUser, userRoles, rolesMapping } = this.state;
+    handleCheck(data) {
+        let checkedToDelete = this.state.checkedToDelete;
+        if (checkedToDelete[data.key]) {
+            delete checkedToDelete[data.key];
+        } else {
+            checkedToDelete[data.key] = data;
+        }
+        this.setState({
+            checkedToDelete
+        });
+    }
+
+    handleDelete() {
+        const { userResults, selectedUser, checkedToDelete } = this.state;
+        let { userRoles } = this.state;
         const user = userResults[selectedUser];
         if (user) {
-            restClient(DELETE, data.resource, {
-                id: `${user.id}/${data.id}/${data.role_id}`
-            })
-                .then(response => {
-                    let newUserRoles = userRoles;
-                    if (data.resource.split('domain').length > 1) {
-                        delete newUserRoles.domainRoles[`${data.id}:${data.role_id}`];
-                    } else {
-                        delete newUserRoles.siteRoles[`${data.id}:${data.role_id}`];
-                    }
-                    this.setState({ userRoles: newUserRoles });
-                    successNotificationAnt('Deleted role!');
+            let newCheckedToDelete = checkedToDelete;
+            Object.values(checkedToDelete).map(data => {
+                let roleLabel =
+                    data.resource.split('domain').length > 1
+                        ? userRoles.domainRoles[`${data.id}:${data.role_id}`].role.label
+                        : userRoles.siteRoles[`${data.id}:${data.role_id}`].role.label;
+                let placeName =
+                    data.resource.split('domain').length > 1
+                        ? userRoles.domainRoles[`${data.id}:${data.role_id}`].domain.name
+                        : userRoles.siteRoles[`${data.id}:${data.role_id}`].site.name;
+                restClient(DELETE, data.resource, {
+                    id: `${user.id}/${data.id}/${data.role_id}`
                 })
-                .catch(error => {
-                    console.log(error);
-                    let description =
-                        error.status === 403
-                            ? `You do not permission to remove this role.`
-                            : `Something went wrong. Cannot delete role from user`;
-                    errorNotificationAnt(description);
-                    this.handleAPIError(error);
-                });
+                    .then(response => {
+                        if (data.resource.split('domain').length > 1) {
+                            delete userRoles.domainRoles[`${data.id}:${data.role_id}`];
+                            delete newCheckedToDelete[`d:${data.id}${data.role_id}`];
+                        } else {
+                            delete userRoles.siteRoles[`${data.id}:${data.role_id}`];
+                            delete newCheckedToDelete[`s:${data.id}${data.role_id}`];
+                        }
+                        this.setState({ userRoles, checkedToDelete: newCheckedToDelete });
+                        successNotificationAnt(`Deleted role '${roleLabel}' from '${placeName}'!`);
+                    })
+                    .catch(error => {
+                        let description =
+                            error.status === 403
+                                ? `You do not have permission to remove role '${roleLabel}' from '${placeName}'.`
+                                : `Something went wrong. Cannot delete role '${roleLabel}' from '${placeName}' for user`;
+                        errorNotificationAnt(description);
+                        this.handleAPIError(error);
+                    });
+                return null;
+            });
         } else {
             console.error('No user was selected for role removal.');
         }
@@ -327,7 +352,8 @@ class ManageUserRoles extends Component {
                             role: rolesMapping[roleSelection.id]
                         };
                         successNotificationAnt(
-                            `Role '${roleSelection.label}' assigned on ${place} '${placeObj.name}'`
+                            `Role '${roleSelection.label}' assigned on ${place} '${placeObj.name}'`,
+                            3
                         );
                         this.setState({
                             userRoles,
@@ -360,16 +386,12 @@ class ManageUserRoles extends Component {
     }
 
     triggerDeleteDialog(data) {
-        this.setState({ open: true, roleToDelete: data });
+        this.setState({ open: true });
     }
 
     handleClose(action) {
-        if (action === 'submit') {
-            this.handleDelete(this.state.roleToDelete);
-            this.setState({ open: false });
-        } else {
-            this.setState({ open: false });
-        }
+        action === 'submit' && this.handleDelete();
+        this.setState({ open: false });
     }
 
     handleAPIError(error) {
@@ -394,6 +416,7 @@ class ManageUserRoles extends Component {
             roleSelections,
             hasRolesToAssign,
             open,
+            checkedToDelete,
             validToken
         } = this.state;
         const user = selectedUser >= 0 ? userResults[selectedUser] : null;
@@ -428,7 +451,9 @@ class ManageUserRoles extends Component {
                                 <UserCard
                                     user={user}
                                     userRoles={userRoles}
-                                    handleDelete={this.triggerDeleteDialog}
+                                    checkedToDelete={checkedToDelete}
+                                    handleCheck={this.handleCheck}
+                                    triggerDeleteDialog={this.triggerDeleteDialog}
                                 />
                                 <AssignRoleCard
                                     assigning={assigning}
@@ -449,7 +474,7 @@ class ManageUserRoles extends Component {
                             handleClose={this.handleClose}
                             cancelLabel="No"
                             submitLabel="Delete"
-                            text="Are you sure you want to delete this role?"
+                            text="Are you sure you want to delete the selected roles?"
                         />
                     </Card>
                 </Restricted>
