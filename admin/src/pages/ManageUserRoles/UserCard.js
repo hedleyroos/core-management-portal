@@ -9,7 +9,7 @@ import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { styles } from '../../Theme';
-import { NotEmptyObject } from '../../utils';
+import { notEmptyObject } from '../../utils';
 import { CardActions } from 'material-ui/Card';
 
 const UserCard = props => {
@@ -20,7 +20,7 @@ const UserCard = props => {
             <Divider />
             <CardHeader title="Domain Roles" />
             <CardText style={styles.wrapper}>
-                {userRoles && userRoles.domainRoles && NotEmptyObject(userRoles.domainRoles)
+                {userRoles && userRoles.domainRoles && notEmptyObject(userRoles.domainRoles)
                     ? Object.values(userRoles.domainRoles).map((domainRole, index) => (
                           <Checkbox
                               key={`${domainRole.domain.id}${domainRole.role.id}`}
@@ -45,7 +45,7 @@ const UserCard = props => {
             <Divider />
             <CardHeader title="Site Roles" />
             <CardText style={styles.wrapper}>
-                {userRoles && userRoles.siteRoles && NotEmptyObject(userRoles.siteRoles)
+                {userRoles && userRoles.siteRoles && notEmptyObject(userRoles.siteRoles)
                     ? Object.values(userRoles.siteRoles).map((siteRole, index) => (
                           <Checkbox
                               key={`${siteRole.site.id}${siteRole.role.id}`}
@@ -65,7 +65,7 @@ const UserCard = props => {
                       ))
                     : 'User currently has no explicit site roles.'}
             </CardText>
-            {NotEmptyObject(checkedToDelete) && (
+            {notEmptyObject(checkedToDelete) && (
                 <div>
                     <Divider />
                     <CardText>

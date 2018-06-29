@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
-import { NotEmptyObject, getSitesForContext } from '../utils';
+import { notEmptyObject, getSitesForContext } from '../utils';
 
 class PermissionsStore {
     constructor() {
@@ -135,7 +135,7 @@ class PermissionsStore {
             }
             return result;
         }, {});
-        if (NotEmptyObject(contexts)) {
+        if (notEmptyObject(contexts)) {
             let currentContext = Object.keys(contexts)[0];
             const [contextType, contextID] = currentContext.split(':');
             const currentContextObject = await restClient(

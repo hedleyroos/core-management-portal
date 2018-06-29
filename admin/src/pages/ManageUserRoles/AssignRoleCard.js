@@ -7,7 +7,7 @@ import CardTitle from 'material-ui/Card/CardTitle';
 import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { NotEmptyObject } from '../../utils';
+import { notEmptyObject } from '../../utils';
 import DomainTreeInput from '../../inputs/DomainTreeInput';
 
 const AssignRoleCard = props => {
@@ -39,7 +39,7 @@ const AssignRoleCard = props => {
                     <div>
                         <CardHeader subtitle="Please choose the roles to add:" />
                         <CardText>
-                            {NotEmptyObject(roleSelections)
+                            {notEmptyObject(roleSelections)
                                 ? Object.values(roleSelections).map(roleSelection => (
                                       <Checkbox
                                           key={roleSelection.id}

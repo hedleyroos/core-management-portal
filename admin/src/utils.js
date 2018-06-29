@@ -191,7 +191,7 @@ export const getUniqueIDs = (list, key) => {
     }, []);
 };
 
-export const NotEmptyObject = obj => Object.keys(obj).length > 0;
+export const notEmptyObject = obj => Object.keys(obj).length > 0;
 
 export const GenerateQueryString = parameters => {
     return Object.entries(parameters)
