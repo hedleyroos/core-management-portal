@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import { Restricted } from 'admin-on-rest';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
@@ -13,7 +14,14 @@ import TableField from '../../fields/TableField';
 import UserCard from './UserCard';
 import AssignRoleCard from './AssignRoleCard';
 import ConfirmDialog from './ConfirmDialog';
-import { makeIDMapping, getUniqueIDs, getUntilDone, createTreeData } from '../../utils';
+import {
+    makeIDMapping,
+    getUniqueIDs,
+    getUntilDone,
+    createTreeData,
+    successNotificationAnt,
+    errorNotificationAnt
+} from '../../utils';
 import { contextChangeGMPContext, contextDomainsAndSitesAdd } from '../../actions/context';
 import PermissionsStore from '../../auth/PermissionsStore';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
@@ -71,7 +79,6 @@ class ManageUserRoles extends Component {
         this.handleAssign = this.handleAssign.bind(this);
         this.triggerDeleteDialog = this.triggerDeleteDialog.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.clearMessage = this.clearMessage.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
@@ -141,7 +148,8 @@ class ManageUserRoles extends Component {
         });
         if (input.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
+                filter: { q: input, site_ids: '' }
+                // filter: { q: input, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -217,7 +225,6 @@ class ManageUserRoles extends Component {
 
     handleDelete(data) {
         const { userResults, selectedUser, userRoles, rolesMapping } = this.state;
-        const { showNotification } = this.props;
         const user = userResults[selectedUser];
         if (user) {
             restClient(DELETE, data.resource, {
@@ -231,13 +238,18 @@ class ManageUserRoles extends Component {
                         delete newUserRoles.siteRoles[`${data.id}:${data.role_id}`];
                     }
                     this.setState({ userRoles: newUserRoles });
+                    successNotificationAnt('Deleted role!');
                 })
                 .catch(error => {
-                    showNotification(`Error: Role ${rolesMapping[data.role_id]} not removed.`);
+                    console.log(error);
+                    let description =
+                        error.status === 403
+                            ? `You do not permission to remove this role.`
+                            : `Something went wrong. Cannot delete role from user`;
+                    errorNotificationAnt(description);
                     this.handleAPIError(error);
                 });
         } else {
-            showNotification('No user selected for role removal', 'warning');
             console.error('No user was selected for role removal.');
         }
     }
@@ -271,8 +283,7 @@ class ManageUserRoles extends Component {
                     ...roleSelections[value],
                     selected: !roleSelections[value].selected
                 }
-            },
-            messages: []
+            }
         });
     }
 
@@ -286,7 +297,6 @@ class ManageUserRoles extends Component {
             rolesMapping
         } = this.state;
         let { userRoles, roleSelections, hasRolesToAssign } = this.state;
-        let messages = [];
         this.setState({ assigning: true });
         const [placeType, placeID] = selectedDomainSite.split(':');
         const place = placeType === 'd' ? 'domain' : 'site';
@@ -316,48 +326,31 @@ class ManageUserRoles extends Component {
                             [place]: placeObj,
                             role: rolesMapping[roleSelection.id]
                         };
-                        messages = [
-                            ...messages,
-                            {
-                                type: 'success',
-                                text: `Role '${roleSelection.label}' assigned on ${place} '${
-                                    placeObj.name
-                                }'`
-                            }
-                        ];
+                        successNotificationAnt(
+                            `Role '${roleSelection.label}' assigned on ${place} '${placeObj.name}'`
+                        );
                         this.setState({
-                            messages,
                             userRoles,
                             hasRolesToAssign,
                             roleSelections
                         });
                         if (!hasRolesToAssign) {
+                            successNotificationAnt('All roles assigned successfully!', 4);
                             this.setState({
                                 assigning: false,
-                                messages: [
-                                    {
-                                        type: 'success',
-                                        text: 'All roles assigned successfully!'
-                                    }
-                                ],
                                 roleSelections: null,
                                 selectedDomainSite: null
                             });
                         }
                     })
                     .catch(error => {
-                        messages = [
-                            ...messages,
-                            {
-                                type: 'error',
-                                text: `Role ${
-                                    roleSelection.label
-                                } either exists for the user or the required ${place} role does not exist.`
-                            }
-                        ];
+                        errorNotificationAnt(
+                            `Role ${
+                                roleSelection.label
+                            } either exists for the user or the required ${place} role does not exist.`
+                        );
                         this.setState({
-                            assigning: index < roleSelections.length - 1,
-                            messages
+                            assigning: index < roleSelections.length - 1
                         });
                         this.handleAPIError(error);
                     });
@@ -379,13 +372,6 @@ class ManageUserRoles extends Component {
         }
     }
 
-    clearMessage(index) {
-        const { messages } = this.state;
-        this.setState({
-            messages: [...messages.slice(0, index), ...messages.slice(index + 1, messages.length)]
-        });
-    }
-
     handleAPIError(error) {
         if (error.message === 'Token expired') {
             localStorage.removeItem('id_token');
@@ -398,7 +384,6 @@ class ManageUserRoles extends Component {
     render() {
         const {
             assigning,
-            messages,
             managerRoles,
             treeData,
             search,
@@ -447,8 +432,6 @@ class ManageUserRoles extends Component {
                                 />
                                 <AssignRoleCard
                                     assigning={assigning}
-                                    messages={messages}
-                                    clearMessage={this.clearMessage}
                                     treeData={treeData}
                                     selectedDomainSite={selectedDomainSite}
                                     handleDomainSiteChange={this.handleDomainSiteChange}

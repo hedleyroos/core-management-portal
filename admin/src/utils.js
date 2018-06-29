@@ -1,9 +1,37 @@
+import { notification } from 'antd';
+
 import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
 
 /**
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
+
+export const successNotificationAnt = (description, duration = 3) => {
+    notification.success({
+        message: 'Success!',
+        description,
+        duration,
+        style: {
+            fontFamily: 'Roboto, sans-serif',
+            fontSize: 16
+        },
+        placement: 'bottomRight'
+    });
+};
+
+export const errorNotificationAnt = (description, duration = 0) => {
+    notification.error({
+        message: 'Oh No!',
+        description,
+        duration,
+        style: {
+            fontFamily: 'Roboto, sans-serif',
+            fontSize: 16
+        },
+        placement: 'bottomRight'
+    });
+};
 
 export const createTreeData = (data, parentField = null, childType = null) => {
     /**
@@ -69,14 +97,14 @@ export const createTreeData = (data, parentField = null, childType = null) => {
                 childrenEvaluated.add(childKey.toString());
                 let childObj = null;
                 if (treeData[childKey.toString()]) {
-                  childObj = treeData[childKey.toString()];
-                  delete treeData[childKey.toString()]
+                    childObj = treeData[childKey.toString()];
+                    delete treeData[childKey.toString()];
                 } else {
-                  childObj = referenceMapping[childKey];
-                  childObj = childrenLoop(childObj);
+                    childObj = referenceMapping[childKey];
+                    childObj = childrenLoop(childObj);
                 }
                 return childObj;
-              });
+            });
         }
         return newObj;
     };

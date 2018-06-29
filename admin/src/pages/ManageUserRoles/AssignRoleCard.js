@@ -19,8 +19,6 @@ import { styles } from '../../Theme';
 const AssignRoleCard = props => {
     const {
         assigning,
-        messages,
-        clearMessage,
         treeData,
         selectedDomainSite,
         handleDomainSiteChange,
@@ -70,24 +68,6 @@ const AssignRoleCard = props => {
                         />
                     </CardActions>
                 )}
-                {messages &&
-                    messages.length > 0 &&
-                    messages.map((message, index) => (
-                        <CardText
-                            key={`${index}${message.text}`}
-                            style={{ ...styles.wrapper, padding: 0 }}
-                        >
-                            <Chip
-                                style={{ margin: 4, backgroundColor: pink300 }}
-                                onRequestDelete={() => clearMessage(index)}
-                            >
-                                <Avatar size={32} color={pink300} backgroundColor={pink500}>
-                                    {message.type === 'error' ? <ErrorIcon /> : <CheckCircleIcon />}
-                                </Avatar>
-                                {message.text}
-                            </Chip>
-                        </CardText>
-                    ))}
             </CardText>
         </Card>
     );
