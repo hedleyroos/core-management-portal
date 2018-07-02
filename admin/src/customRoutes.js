@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import OIDCCallback from './auth/OIDCCallback';
-import ManageUserRoles from './pages/ManageUserRoles/ManageUserRoles';
+import ManageUserRoles from './pages/ManageUserRoles';
 import ContextChanger from './pages/ContextChanger';
 
 export default [
