@@ -66,8 +66,7 @@ class UserSearch extends Component {
         });
         if (value.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: value, site_ids: '' }
-                // filter: { q: value, has_organisational_unit: true, site_ids: '' }
+                filter: { q: value, has_organisational_unit: true, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
@@ -131,9 +130,11 @@ class UserSearch extends Component {
                         <TableField
                             label="Users Found"
                             data={userResults}
+                            limit={5}
                             selected={selectedUser}
                             onRowSelection={this.handleSelect}
                             selectable
+                            useCard
                         />
                     ) : (
                         'No Users found.'
