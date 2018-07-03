@@ -56,30 +56,32 @@ class UserCard extends Component {
         const user = userResults[selectedUser];
         if (user) {
             Object.entries(userRoles).map(([key, userRole]) => {
-                const { resource } = key.indexOf('d:') === 0 ? 'domain' : 'site';
-                restClient(DELETE, `${resource}s`, {
-                    id: `${user.id}/${userRole[resource].id}/${userRole.role.id}`
-                })
-                    .then(response => {
-                        this.props.deleteRole(key);
-                        successNotificationAnt(
-                            `Removed role '${userRole.role.label}' from '${
-                                userRole[resource].name
-                            }'!`
-                        );
+                if (userRole.checked) {
+                    const resource = key.startsWith('d') ? 'domain' : 'site';
+                    restClient(DELETE, `user${resource}roles`, {
+                        id: `${user.id}/${userRole[resource].id}/${userRole.role.id}`
                     })
-                    .catch(error => {
-                        let description =
-                            error.status === 403
-                                ? `You do not have permission to remove role '${
-                                      userRole.role.label
-                                  }' from '${userRole[resource].name}'.`
-                                : `Something went wrong. Cannot delete role '${
-                                      userRole.role.label
-                                  }' from '${userRole[resource].name}' for user`;
-                        errorNotificationAnt(description);
-                        this.handleAPIError(error);
-                    });
+                        .then(response => {
+                            this.props.deleteRole(key);
+                            successNotificationAnt(
+                                `Removed role '${userRole.role.label}' from '${
+                                    userRole[resource].name
+                                }'!`
+                            );
+                        })
+                        .catch(error => {
+                            let description =
+                                error.status === 403
+                                    ? `You do not have permission to remove role '${
+                                          userRole.role.label
+                                      }' from '${userRole[resource].name}'.`
+                                    : `Something went wrong. Cannot delete role '${
+                                          userRole.role.label
+                                      }' from '${userRole[resource].name}' for user`;
+                            errorNotificationAnt(description);
+                            this.handleAPIError(error);
+                        });
+                }
                 return null;
             });
         }
@@ -103,11 +105,11 @@ class UserCard extends Component {
             userRoles
         } = this.props.manageUserRoles;
         const user = userResults[selectedUser];
-        const domainRoles = Object.entries(userRoles).filter(
-            ([key, userRole]) => key.indexOf('d:') === 0
+        const domainRoles = Object.entries(userRoles).filter(([key, userRole]) =>
+            key.startsWith('d')
         );
-        const siteRoles = Object.entries(userRoles).filter(
-            ([key, userRole]) => key.indexOf('s:') === 0
+        const siteRoles = Object.entries(userRoles).filter(([key, userRole]) =>
+            key.startsWith('s')
         );
         return (
             <Card>

@@ -53,6 +53,7 @@ class AssignRoleCard extends Component {
 
     handleAssign() {
         const {
+            amountSelectedToAssign,
             assignmentLocation,
             managerDomains,
             managerSites,
@@ -61,54 +62,58 @@ class AssignRoleCard extends Component {
             userResults,
             rolesToAssign
         } = this.props.manageUserRoles;
-        let successCount = this.props.manageUserRoles.amountSelectedToAssign;
-        this.setState({ assigning: true });
-        const [placeType, placeID] = assignmentLocation.split(':');
-        const place = placeType === 'd' ? 'domain' : 'site';
-        Object.values(rolesToAssign).map((role, index) => {
-            if (role.selected) {
-                restClient(CREATE, `user${place}roles`, {
-                    data: {
-                        user_id: userResults[selectedUser].id,
-                        [`${place}_id`]: parseInt(placeID, 10),
-                        role_id: role.id
-                    }
-                })
-                    .then(response => {
-                        successCount -= 1;
-                        const placeObject =
-                            place === 'domain'
-                                ? managerDomains[`d:${placeID}`]
-                                : managerSites[`s:${placeID}`];
-                        this.props.assignRole(`${placeType}:${placeID}:${role.id}`, {
-                            [place]: placeObject,
-                            role: roleMapping[role.id],
-                            checked: false
-                        });
-                        successNotificationAnt(
-                            `Role '${role.label}' assigned on ${place} '${placeObject.name}'`,
-                            3
-                        );
-                        if (!successCount) {
-                            successNotificationAnt('All roles assigned successfully!', 4);
-                            this.setState({ assigning: false });
-                            this.props.allAssigned();
+        let successCount = amountSelectedToAssign;
+        if (successCount) {
+            this.setState({ assigning: true });
+            const [placeType, placeID] = assignmentLocation.split(':');
+            const place = placeType === 'd' ? 'domain' : 'site';
+            let count = 0;
+            Object.values(rolesToAssign).map((role, index) => {
+                if (role.checked) {
+                    count += 1;
+                    restClient(CREATE, `user${place}roles`, {
+                        data: {
+                            user_id: userResults[selectedUser].id,
+                            [`${place}_id`]: parseInt(placeID, 10),
+                            role_id: role.id
                         }
                     })
-                    .catch(error => {
-                        errorNotificationAnt(
-                            `Role ${
-                                role.label
-                            } either exists for the user or the required ${place} role does not exist.`
-                        );
-                        this.setState({
-                            assigning: index < Object.keys(rolesToAssign).length - 1
+                        .then(response => {
+                            successCount -= 1;
+                            const placeObject =
+                                place === 'domain'
+                                    ? managerDomains[`d:${placeID}`]
+                                    : managerSites[`s:${placeID}`];
+                            this.props.assignRole(`${placeType}:${placeID}:${role.id}`, {
+                                [place]: placeObject,
+                                role: roleMapping[role.id],
+                                checked: false
+                            });
+                            successNotificationAnt(
+                                `Role '${role.label}' assigned on ${place} '${placeObject.name}'`,
+                                3
+                            );
+                            if (!successCount) {
+                                successNotificationAnt('Assignment Action Complete', 4);
+                                this.setState({ assigning: false });
+                                this.props.allAssigned();
+                            } else {
+                                this.setState({ assigning: count !== amountSelectedToAssign });
+                            }
+                        })
+                        .catch(error => {
+                            errorNotificationAnt(
+                                `Role '${
+                                    role.label
+                                }' either exists for the user or the required ${place} role does not exist.`
+                            );
+                            this.setState({ assigning: count !== amountSelectedToAssign });
+                            this.handleAPIError(error);
                         });
-                        this.handleAPIError(error);
-                    });
-            }
-            return null;
-        });
+                }
+                return null;
+            });
+        }
     }
 
     handleAPIError(error) {
@@ -151,7 +156,7 @@ class AssignRoleCard extends Component {
                                           <Checkbox
                                               key={role.id}
                                               label={role.label}
-                                              checked={role.selected}
+                                              checked={role.checked}
                                               onCheck={() => this.handleSelect(role.id)}
                                           />
                                       ))

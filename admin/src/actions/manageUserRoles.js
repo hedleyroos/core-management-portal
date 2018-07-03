@@ -31,9 +31,12 @@ export const setManagerPlaces = (managerDomains, managerSites) => ({
     }
 });
 
-export const setSearchResults = userResults => ({
+export const setSearchResults = (search, userResults) => ({
     type: MANAGE_USER_ROLES_SET_SEARCH_RESULTS,
-    payload: userResults
+    payload: {
+        search,
+        userResults
+    }
 });
 
 export const selectUser = (selectedUser, userRoles) => ({

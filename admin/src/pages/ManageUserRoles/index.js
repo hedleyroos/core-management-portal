@@ -41,7 +41,7 @@ class ManageUserRoles extends Component {
     }
 
     componentDidMount() {
-        if (this.props.manageUserRoles.roleMapping) {
+        if (!this.props.manageUserRoles.roleMapping) {
             this.setupManageUserRolesStore();
         }
     }
@@ -75,7 +75,7 @@ class ManageUserRoles extends Component {
                 this.props.setManagerRoles(managerRoles);
             })
             .catch(error => {
-                this.handleAPIError();
+                this.handleAPIError(error);
             });
         // Set the manager places (ie Domains and Sites)
         const ids = Object.keys(allContexts).reduce(
@@ -111,7 +111,7 @@ class ManageUserRoles extends Component {
                 }
             })
             .catch(error => {
-                this.handleAPIError();
+                this.handleAPIError(error);
             });
     }
 

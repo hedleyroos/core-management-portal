@@ -19,14 +19,17 @@ export default (state = { validToken: true }, { type, payload }) => {
     switch (type) {
         case MANAGE_USER_ROLES_SET_ROLE_MAPPING:
             return {
-                roleMapping: payload.roleMapping
+                ...state,
+                roleMapping: payload
             };
         case MANAGE_USER_ROLES_SET_MANAGER_ROLES:
             return {
-                managerRoles: payload.managerRoles
+                ...state,
+                managerRoles: payload
             };
         case MANAGE_USER_ROLES_SET_MANAGER_PLACES:
             return {
+                ...state,
                 managerDomains: payload.managerDomains,
                 managerSites: payload.managerSites,
                 treeData: createTreeData(
@@ -38,7 +41,8 @@ export default (state = { validToken: true }, { type, payload }) => {
         case MANAGE_USER_ROLES_SET_SEARCH_RESULTS:
             return {
                 ...state,
-                userResults: payload
+                search: payload.search,
+                userResults: payload.userResults
             };
         case MANAGE_USER_ROLES_SELECT_USER:
             return {
@@ -62,9 +66,10 @@ export default (state = { validToken: true }, { type, payload }) => {
                     : state.amountSelectedToDelete - 1
             };
         case MANAGE_USER_ROLES_DELETE_ROLE:
-            delete state.userRoles[payload];
+            const { [payload]: value, ...userRoles } = state.userRoles;
             return {
                 ...state,
+                userRoles,
                 amountSelectedToDelete: state.amountSelectedToDelete - 1
             };
         case MANAGE_USER_ROLES_SET_ASSIGNMENT_LOCATION:
@@ -111,17 +116,21 @@ export default (state = { validToken: true }, { type, payload }) => {
                 amountSelectedToAssign: state.amountSelectedToAssign - 1
             };
         case MANAGE_USER_ROLES_ALL_ASSIGNED:
-            delete state.assignmentLocation;
-            delete state.rolesToAssign;
-            delete state.amountSelectedToAssign;
-            return state;
+            const {
+                assignmentLocation,
+                rolesToAssign,
+                amountSelectedToAssign,
+                ...nextState
+            } = state;
+            return nextState;
         case MANAGE_USER_ROLES_RESET:
             return {
-                managerDomains: payload.managerDomains,
-                managerSites: payload.managerSites,
-                managerRoles: payload.managerRoles,
-                treeData: payload.treeData,
-                roleMapping: payload.roleMapping
+                validToken: state.validToken,
+                managerDomains: state.managerDomains,
+                managerSites: state.managerSites,
+                managerRoles: state.managerRoles,
+                treeData: state.treeData,
+                roleMapping: state.roleMapping
             };
         case MANAGE_USER_ROLES_INVALID_TOKEN:
             return {

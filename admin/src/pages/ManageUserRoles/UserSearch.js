@@ -1,7 +1,7 @@
-import { TextField } from 'admin-on-rest';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CardText from 'material-ui/Card/CardText';
+import TextField from 'material-ui/TextField';
 
 import { reset, setSearchResults, selectUser, invalidToken } from '../../actions/manageUserRoles';
 import restClient, { GET_LIST } from '../../swaggerRestServer';
@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     invalidToken: () => dispatch(invalidToken()),
-    setSearchResults: userResults => dispatch(setSearchResults(userResults)),
+    setSearchResults: (search, userResults) => dispatch(setSearchResults(search, userResults)),
     selectUser: (selectedUser, userRoles) => dispatch(selectUser(selectedUser, userRoles)),
     reset: () => dispatch(reset())
 });
@@ -23,7 +23,7 @@ class UserSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: ''
+            value: this.props.manageUserRoles.search || ''
         };
         this.getUserPlaceRoles = this.getUserPlaceRoles.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -66,14 +66,15 @@ class UserSearch extends Component {
         });
         if (value.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: value, tfa_enabled: true, has_organisational_unit: true, site_ids: '' }
+                filter: { q: value, site_ids: '' }
+                // filter: { q: value, has_organisational_unit: true, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({
                         id: obj.id,
                         username: obj.username
                     }));
-                    this.props.setSearchResults(userResults);
+                    this.props.setSearchResults(value, userResults);
                 })
                 .catch(error => {
                     this.handleAPIError(error);
