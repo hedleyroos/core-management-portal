@@ -29,7 +29,6 @@ const GenerateTable = ({ data, props }) => {
         selected,
         useCard
     } = props;
-    console.log(selectable);
     return (
         <React.Fragment>
             {useCard ? (
@@ -129,7 +128,6 @@ class TableField extends Component {
 
     render() {
         const { data } = this.state;
-        console.log(this.props);
         return data.length ? (
             this.props.useCard ? (
                 <Card style={styles.customTableDiv}>
