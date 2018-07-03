@@ -87,11 +87,11 @@ export const createTreeData = (data, parentField = null, childType = null) => {
     let childrenEvaluated = new Set([]);
     let treeData = {};
 
-    /*
-        This loop is recursive and will replace all children it finds in the object
-        with the actual children objects, not their ID's. IF a child is found in the
-        current treeData, then it is removed from the top level and placed in as a child.
-    */
+    /**
+     * This loop is recursive and will replace all children it finds in the object
+     * with the actual children objects, not their ID's. IF a child is found in the
+     * current treeData, then it is removed from the top level and placed in as a child.
+     */
     const childrenLoop = obj => {
         const newObj = obj;
         if (newObj.children) {
@@ -111,11 +111,11 @@ export const createTreeData = (data, parentField = null, childType = null) => {
         return newObj;
     };
 
-    /*
-        This loops through the reference mapping and if the object has not been evaluated yet as
-        a child, it will then run the childrenLoop on it to fill out its tree and then add to the
-        treeData object.
-    */
+    /**
+     * This loops through the reference mapping and if the object has not been evaluated yet as
+     * a child, it will then run the childrenLoop on it to fill out its tree and then add to the
+     * treeData object.
+     */
     Object.entries(referenceMapping).reduce((accumulator, [key, obj]) => {
         if (!childrenEvaluated.has(key)) {
             const newObj = childrenLoop(obj);
@@ -124,10 +124,10 @@ export const createTreeData = (data, parentField = null, childType = null) => {
         return accumulator;
     }, {});
 
-    /*
-        The treeData returned must be a list of the top level objects. This will just be
-        the values of the treeData Object.
-    */
+    /**
+     * The treeData returned must be a list of the top level objects. This will just be
+     * the values of the treeData Object.
+     */
     return Object.values(treeData);
 };
 

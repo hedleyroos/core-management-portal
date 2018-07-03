@@ -109,7 +109,7 @@ class UserSearch extends Component {
             localStorage.removeItem('permissions');
             this.props.invalidToken();
         }
-        throw new Error(error);
+        console.error(error);
     }
 
     render() {

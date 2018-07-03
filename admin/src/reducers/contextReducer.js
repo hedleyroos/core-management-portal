@@ -3,7 +3,7 @@ import {
     CONTEXT_CHANGE_GMP_CONTEXT,
     CONTEXT_CHANGE_SITE_IDS,
     CONTEXT_CHANGE_ALL
-} from '../actions/context';
+} from '../actionTypes';
 
 export default (state = {}, { type, payload }) => {
     switch (type) {

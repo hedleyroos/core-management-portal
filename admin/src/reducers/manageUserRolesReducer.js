@@ -12,7 +12,7 @@ import {
     MANAGE_USER_ROLES_INVALID_TOKEN,
     MANAGE_USER_ROLES_SET_ROLE_MAPPING,
     MANAGE_USER_ROLES_SET_MANAGER_ROLES
-} from '../actions/manageUserRoles';
+} from '../actionTypes';
 import { createTreeData } from '../utils';
 
 export default (state = { validToken: true }, { type, payload }) => {

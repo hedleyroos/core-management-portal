@@ -36,21 +36,24 @@ const mapDispatchToProps = dispatch => ({
 class ManageUserRoles extends Component {
     constructor(props) {
         super(props);
-        this.setupManageUserRolesStore = this.setupManageUserRolesStore.bind(this);
+        this.setupRoles = this.setupRoles.bind(this);
+        this.setupManager = this.setupManager.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
     componentDidMount() {
+        /**
+         * This method will initialize the store of the Manage User Roles page
+         * if not setup already.
+         */
         if (!this.props.manageUserRoles.roleMapping) {
-            this.setupManageUserRolesStore();
+            this.setupRoles();
+            this.setupManager();
         }
     }
 
-    setupManageUserRolesStore() {
-        /*
-			This method will initialize the store of the 
-			Manage User Roles page.
-		*/
+    setupRoles() {
+        // Setup the role mapping and the manager roles on the redux store.
         const allContexts = PermissionsStore.getAllContexts();
         restClient(GET_LIST, 'roles', {})
             .then(response => {
@@ -77,7 +80,11 @@ class ManageUserRoles extends Component {
             .catch(error => {
                 this.handleAPIError(error);
             });
+    }
+
+    setupManager() {
         // Set the manager places (ie Domains and Sites)
+        const allContexts = PermissionsStore.getAllContexts();
         const ids = Object.keys(allContexts).reduce(
             (accumulator, place) => {
                 const [placeLetter, placeID] = place.split(':');
@@ -121,7 +128,7 @@ class ManageUserRoles extends Component {
             localStorage.removeItem('permissions');
             this.props.invalidToken();
         }
-        throw new Error(error);
+        console.error(error);
     }
 
     render() {

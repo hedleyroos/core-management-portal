@@ -62,12 +62,17 @@ class AssignRoleCard extends Component {
             userResults,
             rolesToAssign
         } = this.props.manageUserRoles;
+
         let successCount = amountSelectedToAssign;
         if (successCount) {
             this.setState({ assigning: true });
             const [placeType, placeID] = assignmentLocation.split(':');
             const place = placeType === 'd' ? 'domain' : 'site';
             let count = 0;
+            /**
+             * This map with fire off creating user roles for each role that was selected
+             * on the given domain or site.
+             */
             Object.values(rolesToAssign).map((role, index) => {
                 if (role.checked) {
                     count += 1;
@@ -122,7 +127,7 @@ class AssignRoleCard extends Component {
             localStorage.removeItem('permissions');
             this.props.invalidToken();
         }
-        throw new Error(error);
+        console.error(error);
     }
 
     render() {

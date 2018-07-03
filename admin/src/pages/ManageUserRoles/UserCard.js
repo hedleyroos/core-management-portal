@@ -32,7 +32,7 @@ class UserCard extends Component {
             open: false
         };
         this.handleCheck = this.handleCheck.bind(this);
-        this.triggerDeleteDialog = this.triggerDeleteDialog.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
@@ -42,7 +42,7 @@ class UserCard extends Component {
         this.props.checkRoleForDelete(key);
     }
 
-    triggerDeleteDialog() {
+    handleOpen() {
         this.setState({ open: true });
     }
 
@@ -93,7 +93,7 @@ class UserCard extends Component {
             localStorage.removeItem('permissions');
             this.props.invalidToken();
         }
-        throw new Error(error);
+        console.error(error);
     }
 
     render() {
@@ -150,7 +150,7 @@ class UserCard extends Component {
                                 <RaisedButton
                                     label="Remove Roles"
                                     secondary={true}
-                                    onClick={this.triggerDeleteDialog}
+                                    onClick={this.handleOpen}
                                 />
                             </CardActions>
                         </CardText>

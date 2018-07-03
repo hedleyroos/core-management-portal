@@ -18,7 +18,7 @@ import {
 import restClient, { OPERATIONAL } from '../swaggerRestServer';
 import { styles } from '../Theme';
 
-const GenerateTable = ({ data, props }) => {
+const CustomTable = ({ data, props }) => {
     const {
         label,
         limit,
@@ -29,6 +29,7 @@ const GenerateTable = ({ data, props }) => {
         selected,
         useCard
     } = props;
+    const headers = Object.keys(data[0]);
     return (
         <React.Fragment>
             {useCard ? (
@@ -43,30 +44,28 @@ const GenerateTable = ({ data, props }) => {
             <Table selectable={selectable} onRowSelection={onRowSelection}>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={selectable}>
                     <TableRow>
-                        {Object.keys(data[0]).map(header => (
+                        {headers.map(header => (
                             <TableHeaderColumn key={header} style={styles.customTableHeader}>
                                 {header.toUpperCase()}
                             </TableHeaderColumn>
                         ))}
                     </TableRow>
                 </TableHeader>
-                <TableBody displayRowCheckbox={selectable} showRowHover={true}>
+                <TableBody displayRowCheckbox={selectable} showRowHover>
                     {data.map((entry, index) => {
-                        const isSelected = onRowSelection ? selected === index : null;
+                        const isSelected = onRowSelection && selected === index;
                         return (
                             <TableRow key={index} selected={isSelected}>
                                 {Object.keys(entry).map((header, index) => (
                                     <TableRowColumn key={index}>
-                                        {entry[header] instanceof Array ? (
+                                        {Array.isArray(entry[header]) ? (
                                             <div style={styles.wrapper}>
                                                 {entry[header].map(
                                                     (str, index) =>
-                                                        str ? (
+                                                        str && (
                                                             <Chip key={index} style={styles.chip}>
                                                                 {str}
                                                             </Chip>
-                                                        ) : (
-                                                            ''
                                                         )
                                                 )}
                                             </div>
@@ -122,7 +121,7 @@ class TableField extends Component {
                 }
             })
             .catch(error => {
-                throw new Error(error);
+                console.error(error);
             });
     };
 
@@ -131,11 +130,11 @@ class TableField extends Component {
         return data.length ? (
             this.props.useCard ? (
                 <Card style={styles.customTableDiv}>
-                    <GenerateTable data={data} props={this.props} />
+                    <CustomTable data={data} props={this.props} />
                 </Card>
             ) : (
                 <div style={styles.customTableDiv}>
-                    <GenerateTable data={data} props={this.props} />
+                    <CustomTable data={data} props={this.props} />
                 </div>
             )
         ) : (
