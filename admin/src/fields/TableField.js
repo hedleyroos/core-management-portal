@@ -163,6 +163,7 @@ TableField.propTypes = {
 
 TableField.defaultProps = {
     data: [],
+    limit: 20,
     selectable: false,
     useCard: false
 };
