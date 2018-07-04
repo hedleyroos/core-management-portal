@@ -14,6 +14,7 @@ import PermissionsStore from './auth/PermissionsStore';
 import restClient from './swaggerRestServer';
 import { muiTheme } from './Theme';
 import contextReducer from './reducers/contextReducer';
+import manageUserRolesReducer from './reducers/manageUserRolesReducer';
 
 import {
     DomainList,
@@ -154,7 +155,7 @@ const App = () => (
         catchAll={catchAll}
 	    loginPage={AuthLoginPage}
         customRoutes={customRoutes}
-        customReducers={{ context: contextReducer }}
+        customReducers={{ context: contextReducer, manageUserRoles: manageUserRolesReducer }}
     >
         {permissions => [
             PermissionsStore.getResourcePermission('domains', 'list')

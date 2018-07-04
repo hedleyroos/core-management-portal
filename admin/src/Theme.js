@@ -32,16 +32,19 @@ export const styles = {
         position: 'relative',
         backgroundColor: 'transparent',
         fontFamily: 'Roboto, sans-serif',
-        cursor: 'auto',
-        paddingTop: '2em'
+        cursor: 'auto'
     },
     customTableHeader: {
         fontSize: '14px',
         color: 'rgba(0, 0, 0, 1)'
     },
     customTableLabel: {
+        padding: '15px 0 0 0',
         fontSize: '13px',
         color: 'rgba(0, 0, 0, 0.35)'
+    },
+    customTableBottom: {
+        backgroundColor: '#e6e6e6'
     },
     chip: {
         margin: 4
@@ -56,7 +59,7 @@ export const styles = {
     waitIcon: {
         width: '20rem',
         height: '20rem',
-        color: 'white' 
+        color: 'white'
     },
     linearProgress: {
         width: '50%'

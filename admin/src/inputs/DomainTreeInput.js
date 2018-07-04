@@ -53,12 +53,12 @@ class DomainTreeInput extends Component {
                             this.setState({ treeData: createTreeData(places, 'domain_id', 's') });
                         })
                         .catch(error => {
-                            throw new Error(error);
+                            console.error(error);
                         });
                 }
             })
             .catch(error => {
-                throw new Error(error);
+                console.error(error);
             });
     }
 

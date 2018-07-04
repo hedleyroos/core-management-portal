@@ -132,7 +132,7 @@ class ContextChanger extends Component {
             localStorage.removeItem('permissions');
             this.setState({ validToken: false });
         }
-        throw new Error(error);
+        console.error(error);
     }
 
     render() {

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Card from 'material-ui/Card/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
@@ -7,64 +8,184 @@ import CardTitle from 'material-ui/Card/CardTitle';
 import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { notEmptyObject } from '../../utils';
+import {
+    invalidToken,
+    setAssignmentLocation,
+    checkRoleForAssign,
+    assignRole,
+    allAssigned
+} from '../../actions/manageUserRoles';
+import { errorNotificationAnt, notEmptyObject, successNotificationAnt } from '../../utils';
 import DomainTreeInput from '../../inputs/DomainTreeInput';
+import restClient, { CREATE } from '../../swaggerRestServer';
 
-const AssignRoleCard = props => {
-    const {
-        assigning,
-        treeData,
-        selectedDomainSite,
-        handleDomainSiteChange,
-        handleRoleSelection,
-        roleSelections,
-        handleAssign,
-        hasRolesToAssign
-    } = props;
-    return (
-        <Card style={{ marginTop: 20 }}>
-            <CardTitle title="Assign Role" />
-            <CardText>
-                <CardHeader subtitle="Select a Domain or Site:" />
-                <DomainTreeInput
-                    label="Select Domain/Site"
-                    source="place"
-                    treeData={treeData}
-                    value={selectedDomainSite}
-                    onChange={handleDomainSiteChange}
-                    onlyDomains={false}
-                    useReduxFormField={false}
-                />
-                {selectedDomainSite && (
-                    <div>
-                        <CardHeader subtitle="Please choose the roles to add:" />
-                        <CardText>
-                            {notEmptyObject(roleSelections)
-                                ? Object.values(roleSelections).map(roleSelection => (
-                                      <Checkbox
-                                          key={roleSelection.id}
-                                          label={roleSelection.label}
-                                          checked={roleSelection.selected}
-                                          onCheck={() => handleRoleSelection(roleSelection.id)}
-                                      />
-                                  ))
-                                : 'No roles to Select on this domain/site.'}
-                        </CardText>
-                    </div>
-                )}
-                {hasRolesToAssign > 0 && (
-                    <CardActions>
-                        <RaisedButton
-                            label="Assign Roles"
-                            secondary={true}
-                            onClick={handleAssign}
-                            disabled={assigning}
-                        />
-                    </CardActions>
-                )}
-            </CardText>
-        </Card>
-    );
-};
+const mapStateToProps = state => ({
+    manageUserRoles: state.manageUserRoles
+});
 
-export default AssignRoleCard;
+const mapDispatchToProps = dispatch => ({
+    invalidToken: () => dispatch(invalidToken()),
+    setAssignmentLocation: key => dispatch(setAssignmentLocation(key)),
+    checkRoleForAssign: key => dispatch(checkRoleForAssign(key)),
+    assignRole: (key, userRole) => dispatch(assignRole(key, userRole)),
+    allAssigned: () => dispatch(allAssigned())
+});
+
+class AssignRoleCard extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            assigning: false
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
+        this.handleAssign = this.handleAssign.bind(this);
+        this.handleAPIError = this.handleAPIError.bind(this);
+    }
+
+    handleChange(key) {
+        this.props.setAssignmentLocation(key);
+    }
+
+    handleSelect(key) {
+        this.props.checkRoleForAssign(key);
+    }
+
+    handleAssign() {
+        const {
+            amountSelectedToAssign,
+            assignmentLocation,
+            managerDomains,
+            managerSites,
+            roleMapping,
+            selectedUser,
+            userResults,
+            rolesToAssign
+        } = this.props.manageUserRoles;
+
+        let successCount = amountSelectedToAssign;
+        if (successCount) {
+            this.setState({ assigning: true });
+            const [placeType, placeID] = assignmentLocation.split(':');
+            const place = placeType === 'd' ? 'domain' : 'site';
+            let count = 0;
+            /**
+             * This map with fire off creating user roles for each role that was selected
+             * on the given domain or site.
+             */
+            Object.values(rolesToAssign).map((role, index) => {
+                if (role.checked) {
+                    count += 1;
+                    restClient(CREATE, `user${place}roles`, {
+                        data: {
+                            user_id: userResults[selectedUser].id,
+                            [`${place}_id`]: parseInt(placeID, 10),
+                            role_id: role.id
+                        }
+                    })
+                        .then(response => {
+                            successCount -= 1;
+                            const placeObject =
+                                place === 'domain'
+                                    ? managerDomains[`d:${placeID}`]
+                                    : managerSites[`s:${placeID}`];
+                            this.props.assignRole(`${placeType}:${placeID}:${role.id}`, {
+                                [place]: placeObject,
+                                role: roleMapping[role.id],
+                                checked: false
+                            });
+                            successNotificationAnt(
+                                `Role '${role.label}' assigned on ${place} '${placeObject.name}'`,
+                                3
+                            );
+                            if (!successCount) {
+                                successNotificationAnt('Assignment Action Complete', 4);
+                                this.setState({ assigning: false });
+                                this.props.allAssigned();
+                            } else {
+                                this.setState({ assigning: count !== amountSelectedToAssign });
+                            }
+                        })
+                        .catch(error => {
+                            errorNotificationAnt(
+                                `Role '${
+                                    role.label
+                                }' either exists for the user or the required ${place} role does not exist.`
+                            );
+                            this.setState({ assigning: count !== amountSelectedToAssign });
+                            this.handleAPIError(error);
+                        });
+                }
+                return null;
+            });
+        }
+    }
+
+    handleAPIError(error) {
+        if (error.message === 'Token expired') {
+            localStorage.removeItem('id_token');
+            localStorage.removeItem('permissions');
+            this.props.invalidToken();
+        }
+        console.error(error);
+    }
+
+    render() {
+        const { assigning } = this.state;
+        const {
+            amountSelectedToAssign,
+            assignmentLocation,
+            rolesToAssign,
+            treeData
+        } = this.props.manageUserRoles;
+        return (
+            <Card style={{ marginTop: 20 }}>
+                <CardTitle title="Assign Role" />
+                <CardText>
+                    <CardHeader subtitle="Select a Domain or Site:" />
+                    <DomainTreeInput
+                        label="Select Domain/Site"
+                        source="place"
+                        treeData={treeData}
+                        value={assignmentLocation}
+                        onChange={this.handleChange}
+                        onlyDomains={false}
+                        useReduxFormField={false}
+                    />
+                    {assignmentLocation && (
+                        <div>
+                            <CardHeader subtitle="Please choose the roles to add:" />
+                            <CardText>
+                                {notEmptyObject(rolesToAssign)
+                                    ? Object.values(rolesToAssign).map(role => (
+                                          <Checkbox
+                                              key={role.id}
+                                              label={role.label}
+                                              checked={role.checked}
+                                              onCheck={() => this.handleSelect(role.id)}
+                                          />
+                                      ))
+                                    : 'No roles to Select on this domain/site.'}
+                            </CardText>
+                        </div>
+                    )}
+                    {amountSelectedToAssign > 0 && (
+                        <CardActions>
+                            <RaisedButton
+                                label="Assign Roles"
+                                secondary={true}
+                                onClick={this.handleAssign}
+                                disabled={assigning}
+                            />
+                        </CardActions>
+                    )}
+                </CardText>
+            </Card>
+        );
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AssignRoleCard);
