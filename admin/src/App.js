@@ -134,9 +134,9 @@ import {
 } from './resources/Country';
 
 import {
-    OrganisationalunitList,
-    OrganisationalunitShow,
-} from './resources/Organisationalunit';
+    OrganisationList,
+    OrganisationShow,
+} from './resources/Organisation';
 
 import {
     UserList,
@@ -309,11 +309,11 @@ const App = () => (
                       list={ CountryList }
                       show={ CountryShow }
                 /> : null,
-            PermissionsStore.getResourcePermission('organisationalunits', 'list')
+            PermissionsStore.getResourcePermission('organisations', 'list')
                 ? <Resource
-                      name="organisationalunits"
-                      list={ OrganisationalunitList }
-                      show={ OrganisationalunitShow }
+                      name="organisations"
+                      list={ OrganisationList }
+                      show={ OrganisationShow }
                 /> : null,
             PermissionsStore.getResourcePermission('users', 'list')
                 ? <Resource

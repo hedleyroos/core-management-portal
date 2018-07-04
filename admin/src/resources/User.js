@@ -63,8 +63,8 @@ export const UserList = props => (
             ) : (
                 <EmptyField />
             )}
-            {PermissionsStore.getResourcePermission('organisationalunits', 'list') ? (
-                <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
+            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                <ReferenceField label="Organisation" source="organisation_id" reference="organisations" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
@@ -103,8 +103,8 @@ export const UserShow = props => (
             ) : (
                 <EmptyField />
             )}
-            {PermissionsStore.getResourcePermission('organisationalunits', 'list') ? (
-                <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
+            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                <ReferenceField label="Organisation" source="organisation_id" reference="organisations" linkType="show" allowEmpty>
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (

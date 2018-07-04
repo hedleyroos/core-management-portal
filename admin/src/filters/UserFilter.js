@@ -1,7 +1,7 @@
-/**
+/** 
  * Generated Filters.js code. Edit at own risk.
  * When regenerated the changes will be lost.
- **/
+**/
 import React from 'react';
 import {
     SelectInput,
@@ -37,11 +37,11 @@ const UserFilter = props => (
         <TextInput label="Msisdn" source="msisdn" />
         <BooleanInput label="Msisdn Verified" source="msisdn_verified" />
         <TextInput label="Nickname" source="nickname" />
-        <NumberInput label="Organisational Unit ID" source="organisational_unit_id" />
+        <NumberInput label="Organisation Id" source="organisation_id" />
         <DateRangeInput label="Updated At" source="updated_at" time />
         <TextInput label="Username" source="username" />
         <BooleanInput label="Two factor Auth Enabled" source="tfa_enabled" />
-        <BooleanInput label="Has Organisational Unit" source="has_organisational_unit" />
+        <BooleanInput label="Has Organisation" source="has_organisation" />
         <TextInput label="User Ids" source="user_ids" parse={parseUserIds} />
         {moreThanOneID(PermissionsStore.getSiteIDs()) ? (
             <UnlimitedDropdownInput

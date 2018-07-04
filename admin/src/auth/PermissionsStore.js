@@ -106,7 +106,7 @@ class PermissionsStore {
                 countries: {
                     list: []
                 },
-                organisationalunits: {
+                organisations: {
                     list: []
                 },
                 users: {

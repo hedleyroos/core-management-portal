@@ -1,7 +1,7 @@
 /**
  * Generated Menu.js code. Edit at own risk.
  * When regenerated the changes will be lost.
- **/
+**/
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
@@ -46,7 +46,7 @@ const ICONS = {
     sitedataschemas: <ListIcon />,
     clients: <DeviceIcon />,
     countries: <TerrainIcon />,
-    organisationalunits: <CategoryIcon />,
+    organisations: <CategoryIcon />,
     users: <PeopleIcon />
 };
 
