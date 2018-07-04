@@ -3897,14 +3897,14 @@ paths:
       - $ref: '#/parameters/user_id'
     get:
       deprecated: true
-       description: "Activate the user account."
-       responses:
-         200:
-           description: Acccount successfully activated
-         403:
-           description: Forbidden
-         404:
-           description: User not found
+      description: "Activate the user account."
+      responses:
+        200:
+          description: Acccount successfully activated
+        403:
+          description: Forbidden
+        404:
+          description: User not found
 
   '/users/{user_id}/deactivate':
     parameters:
@@ -3912,14 +3912,14 @@ paths:
       - $ref: '#/parameters/user_id'
     get:
       deprecated: true
-       description: "Deactivate the user account."
-       responses:
-         200:
-           description: Acccount successfully deactivated
-         403:
-           description: Forbidden
-         404:
-           description: User not found
+      description: "Deactivate the user account."
+      responses:
+        200:
+          description: Acccount successfully deactivated
+        403:
+          description: Forbidden
+        404:
+          description: User not found
 
   '/sites/{site_id}/activate':
     parameters:
@@ -3927,14 +3927,14 @@ paths:
       - $ref: '#/parameters/site_id'
     get:
       deprecated: true
-       description: Activate the site so that users can log in to it.
-       responses:
-         200:
-           description: Site successfully activated
-         403:
-           description: Forbidden
-         404:
-           description: Site not found
+      description: Activate the site so that users can log in to it.
+      responses:
+        200:
+          description: Site successfully activated
+        403:
+          description: Forbidden
+        404:
+          description: Site not found
 
   '/sites/{site_id}/deactivate':
     parameters:
@@ -3942,14 +3942,14 @@ paths:
       - $ref: '#/parameters/site_id'
     get:
       deprecated: true
-       description: Deactivate the site so that users cannot log in to it.
-       responses:
-         200:
-           description: Site successfully deactivated
-         403:
-           description: Forbidden
-         404:
-           description: Site not found
+      description: Deactivate the site so that users cannot log in to it.
+      responses:
+        200:
+          description: Site successfully deactivated
+        403:
+          description: Forbidden
+        404:
+          description: Site not found
 
 x-detail-page-definitions:
   domain:
