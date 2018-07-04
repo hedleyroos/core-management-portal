@@ -1,97 +1,92 @@
 import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { ViewTitle } from 'admin-on-rest/lib/mui';
 import Card from 'material-ui/Card/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardText from 'material-ui/Card/CardText';
 import CircularProgress from 'material-ui/CircularProgress';
-import DropDownMenu from 'material-ui/DropDownMenu/DropDownMenu';
 import FlatButton from 'material-ui/FlatButton';
-import MenuItem from 'material-ui/MenuItem/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { pink500 } from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { muiTheme, styles } from '../Theme';
-import { contextChangeAll } from '../actions/context';
 import PermissionsStore from '../auth/PermissionsStore';
 import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
-import { makeIDMapping, getUntilDone, getSitesForContext } from '../utils';
-
-const mapStateToProps = state => {
-    return {
-        domainsAndSites: state.context.domainsAndSites,
-        GMPContext: state.context.GMPContext
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-    contextChangeAll: payload => dispatch(contextChangeAll(payload))
-});
+import {
+    makeIDMapping,
+    getUntilDone,
+    getSitesForContext,
+    getDomainAndSiteIds,
+    createTreeData
+} from '../utils';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 
 class ContextChanger extends Component {
     constructor(props) {
         super(props);
-        let currentContext = null,
-            contexts = null;
-        if (this.props.GMPContext) {
-            currentContext = this.props.GMPContext;
-            contexts = this.props.domainsAndSites
-        } else {
-            currentContext = PermissionsStore.getCurrentContext();
-            contexts = PermissionsStore.getAllContexts();
-            let siteIDs = PermissionsStore.getSiteIDs();
-            this.props.contextChangeAll({
-                domainsAndSites: contexts,
-                GMPContext: currentContext,
-                siteIDs
-            })
-        }
+        this.currentContext = PermissionsStore.getCurrentContext();
+        this.contexts = PermissionsStore.getAllContexts();
         this.state = {
             changing: false,
-            value: currentContext.key,
-            redirect: false,
+            value: this.currentContext.key,
+            redirect: !(this.currentContext && this.contexts),
             validToken: true,
-            domains: null,
-            sites: null
+            treeData: null
         };
         this.getPlaces = this.getPlaces.bind(this);
-        this.getPlaces('domain', contexts);
-        this.getPlaces('site', contexts);
         this.handleChange = this.handleChange.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
     }
 
-    async getPlaces(placeName, domainsAndSites) {
-        const ids = Object.keys(domainsAndSites).reduce((array, place) => {
-            if (place.indexOf(placeName[0]) >= 0) {
-                array.push(parseInt(place.split(':')[1], 10));
-            }
-            return array;
-        }, []);
-        if (ids.length > 0) {
-            try {
-                const queryArg = ids.join(',');
-                let allPlaces = await getUntilDone(`${placeName}s`, {
-                    [`${placeName}_ids`]: queryArg
-                });
-                this.setState({ [`${placeName}s`]: makeIDMapping(allPlaces) });
-            } catch (error) {
-                this.handleAPIError(error);
-            }
+    componentDidMount() {
+        if (!this.state.places) {
+            this.getPlaces();
         }
     }
 
-    handleChange(event, index, value) {
+    getPlaces() {
+        const ids = getDomainAndSiteIds();
+        const resource = ids.domains.length > 0 ? 'domain' : 'site';
+        getUntilDone(`${resource}s`, {
+            [`${resource}_ids`]: ids[`${resource}s`].join(',')
+        })
+            .then(data => {
+                if (resource === 'domain') {
+                    const domains = makeIDMapping(data, 'd:');
+                    getUntilDone('sites', {
+                        site_ids: ids.sites.join(',')
+                    })
+                        .then(data => {
+                            const sites = makeIDMapping(data, 's:');
+                            this.setState({
+                                treeData: createTreeData({ ...domains, ...sites }, 'domain_id', 's')
+                            });
+                        })
+                        .catch(error => {
+                            this.handleAPIError(error);
+                        });
+                } else {
+                    const sites = makeIDMapping(data, 's:');
+                    this.setState({
+                        treeData: createTreeData({ ...sites }, 'domain_id', 's')
+                    });
+                }
+            })
+            .catch(error => {
+                this.handleAPIError(error);
+            });
+    }
+
+    handleChange(value) {
         this.setState({ value });
     }
 
     async handleSelection() {
         this.setState({ changing: true });
-        if (this.state.value !== this.props.GMPContext.key) {
+        if (this.state.value !== this.currentContext.key) {
             const { value } = this.state;
             const [contextType, contextID] = value.split(':');
             const place = await restClient(GET_ONE, contextType === 'd' ? 'domains' : 'sites', {
@@ -108,14 +103,9 @@ class ContextChanger extends Component {
                     }
                 );
                 const siteIDs = await getSitesForContext(newContext);
-                this.props.contextChangeAll({
-                    domainsAndSites: this.props.domainsAndSites,
-                    GMPContext: newContext,
-                    siteIDs
-                });
                 PermissionsStore.loadPermissions(
                     permissions.data,
-                    this.props.domainsAndSites,
+                    this.contexts,
                     newContext,
                     siteIDs
                 );
@@ -136,8 +126,7 @@ class ContextChanger extends Component {
     }
 
     render() {
-        const { domainsAndSites } = this.props;
-        const { changing, redirect, value, domains, sites } = this.state;
+        const { changing, redirect, value, treeData } = this.state;
         return redirect ? (
             <Redirect push to="/" />
         ) : (
@@ -153,32 +142,15 @@ class ContextChanger extends Component {
                                 <ViewTitle title="Context Changer" />
                                 <CardText>Select the Domain or Site.</CardText>
                                 <CardText>
-                                    {domains && sites ? (
-                                        <DropDownMenu value={value} onChange={this.handleChange}>
-                                            {domainsAndSites &&
-                                                Object.keys(domainsAndSites).map(place => {
-                                                    const [contextType, contextID] = place.split(
-                                                        ':'
-                                                    );
-                                                    const text =
-                                                        contextType === 'd'
-                                                            ? domains
-                                                                ? domains[parseInt(contextID, 10)]
-                                                                      .name
-                                                                : place
-                                                            : sites
-                                                                ? sites[parseInt(contextID, 10)]
-                                                                      .name
-                                                                : place;
-                                                    return (
-                                                        <MenuItem
-                                                            key={place}
-                                                            value={place}
-                                                            primaryText={text}
-                                                        />
-                                                    );
-                                                })}
-                                        </DropDownMenu>
+                                    {treeData ? (
+                                        <DomainTreeInput
+                                            source="context"
+                                            treeData={treeData}
+                                            value={value}
+                                            onChange={this.handleChange}
+                                            onlyDomains={false}
+                                            useReduxFormField={false}
+                                        />
                                     ) : (
                                         <CircularProgress />
                                     )}
@@ -203,7 +175,4 @@ class ContextChanger extends Component {
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ContextChanger);
+export default ContextChanger;

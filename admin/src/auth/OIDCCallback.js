@@ -1,17 +1,11 @@
 import jwtDecode from 'jwt-decode';
 import queryString from 'query-string';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
 import PermissionsStore from '../auth/PermissionsStore';
 import { base64urlDecode } from '../utils';
-import { contextChangeAll } from '../actions/context';
 import WaitingPage from '../pages/WaitingPage';
-
-const mapDispatchToProps = dispatch => ({
-    contextChangeAll: payload => dispatch(contextChangeAll(payload))
-});
 
 class OIDCCallback extends Component {
     constructor(props) {
@@ -25,7 +19,7 @@ class OIDCCallback extends Component {
     componentWillMount() {
         this.getTokenAndPermissions();
     }
-    async getTokenAndPermissions() {
+    getTokenAndPermissions() {
         const parsedQuery = queryString.parse(this.props.location.search);
         // Quick check if a token is retrieved.
         if (!parsedQuery.id_token) {
@@ -58,22 +52,14 @@ class OIDCCallback extends Component {
             // Everything checked out. Store the id token.
             localStorage.setItem('id_token', parsedQuery.id_token);
             const userID = jwtDecode(parsedQuery.id_token).sub;
-            try {
-                const {
-                    contexts,
-                    currentContext,
-                    siteIDs
-                } = await PermissionsStore.getAndLoadPermissions(userID);
-                this.props.contextChangeAll({
-                    domainsAndSites: contexts,
-                    GMPContext: currentContext,
-                    siteIDs
+            PermissionsStore.getAndLoadPermissions(userID)
+                .then(values => {
+                    this.setState({ loginComplete: true });
+                })
+                .catch(error => {
+                    console.error(error);
+                    this.setState({ failure: true });
                 });
-                this.setState({ loginComplete: true });
-            } catch (error) {
-                console.error(error);
-                this.setState({ failure: true });
-            }
         }
     }
     render() {
@@ -89,7 +75,4 @@ class OIDCCallback extends Component {
     }
 }
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(OIDCCallback);
+export default OIDCCallback;

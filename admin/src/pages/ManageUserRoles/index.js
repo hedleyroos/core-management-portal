@@ -19,7 +19,7 @@ import PermissionsStore from '../../auth/PermissionsStore';
 import restClient, { GET_LIST } from '../../swaggerRestServer';
 import UserCard from './UserCard';
 import UserSearch from './UserSearch';
-import { makeIDMapping, getUntilDone } from '../../utils';
+import { makeIDMapping, getUntilDone, getDomainAndSiteIds } from '../../utils';
 
 const mapStateToProps = state => ({
     manageUserRoles: state.manageUserRoles
@@ -84,17 +84,7 @@ class ManageUserRoles extends Component {
 
     setupManager() {
         // Set the manager places (ie Domains and Sites)
-        const allContexts = PermissionsStore.getAllContexts();
-        const ids = Object.keys(allContexts).reduce(
-            (accumulator, place) => {
-                const [placeLetter, placeID] = place.split(':');
-                placeLetter === 'd'
-                    ? accumulator.domains.push(placeID)
-                    : accumulator.sites.push(placeID);
-                return accumulator;
-            },
-            { domains: [], sites: [] }
-        );
+        const ids = getDomainAndSiteIds();
         const resource = ids.domains.length > 0 ? 'domain' : 'site';
         getUntilDone(`${resource}s`, {
             [`${resource}_ids`]: ids[`${resource}s`].join(',')
@@ -110,7 +100,7 @@ class ManageUserRoles extends Component {
                             this.props.setManagerPlaces(domains, sites);
                         })
                         .catch(error => {
-                            this.handleAPIError();
+                            this.handleAPIError(error);
                         });
                 } else {
                     const sites = makeIDMapping(data, 's:');

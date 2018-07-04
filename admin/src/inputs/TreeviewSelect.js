@@ -7,7 +7,7 @@ class TreeviewSelect extends Component {
         super(props);
         this.state = {
             // Ant Design TreeSelect does not show the placeholder unless undefined.
-            value: props.input.value || undefined
+            value: (props.input.onChange ? props.input.value : props.value) || undefined
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -29,6 +29,7 @@ class TreeviewSelect extends Component {
     render() {
         const { label, treeData, showSearch } = this.props;
         const { value } = this.state;
+        console.log(value);
         return (
             <TreeSelect
                 showSearch={showSearch}

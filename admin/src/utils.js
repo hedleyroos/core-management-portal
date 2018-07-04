@@ -1,11 +1,26 @@
 import { notification } from 'antd';
 
+import PermissionsStore from './auth/PermissionsStore';
 import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
 
 /**
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
+
+export const getDomainAndSiteIds = () => {
+    const allContexts = PermissionsStore.getAllContexts();
+    return Object.keys(allContexts).reduce(
+        (accumulator, place) => {
+            const [placeLetter, placeID] = place.split(':');
+            placeLetter === 'd'
+                ? accumulator.domains.push(placeID)
+                : accumulator.sites.push(placeID);
+            return accumulator;
+        },
+        { domains: [], sites: [] }
+    );
+};
 
 export const toBool = thing => !!thing;
 

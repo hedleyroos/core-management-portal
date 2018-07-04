@@ -220,15 +220,15 @@ class PermissionsStore {
     }
     getAllContexts() {
         const permissions = this.getPermissionFlags();
-        return permissions ? this.getPermissionFlags().contexts : {};
+        return permissions ? permissions.contexts : {};
     }
     getCurrentContext() {
         const permissions = this.getPermissionFlags();
-        return permissions ? this.getPermissionFlags().currentContext : {};
+        return permissions ? permissions.currentContext : {};
     }
     getSiteIDs() {
         const permissions = this.getPermissionFlags();
-        return permissions ? this.getPermissionFlags().siteIDs : '';
+        return permissions ? permissions.siteIDs : '';
     }
 }
 
