@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
 import PermissionsStore from '../auth/PermissionsStore';
-import { base64urlDecode } from '../utils';
+import { base64urlDecode, errorNotificationAnt } from '../utils';
 import WaitingPage from '../pages/WaitingPage';
 
 class OIDCCallback extends Component {
@@ -15,6 +15,7 @@ class OIDCCallback extends Component {
             failure: false
         };
         this.getTokenAndPermissions = this.getTokenAndPermissions.bind(this);
+        this.handleAPIError = this.handleAPIError.bind(this);
     }
     componentWillMount() {
         this.getTokenAndPermissions();
@@ -52,15 +53,32 @@ class OIDCCallback extends Component {
             // Everything checked out. Store the id token.
             localStorage.setItem('id_token', parsedQuery.id_token);
             const userID = jwtDecode(parsedQuery.id_token).sub;
-            PermissionsStore.getAndLoadPermissions(userID)
-                .then(values => {
-                    this.setState({ loginComplete: true });
+            PermissionsStore.getAllUserRoles(userID)
+                .then(contexts => {
+                    PermissionsStore.getAndLoadPermissions(
+                        userID,
+                        Object.keys(contexts)[0],
+                        contexts
+                    )
+                        .then(result => {
+                            this.setState({ loginComplete: true });
+                        })
+                        .catch(error => {
+                            this.handleAPIError(error);
+                        });
                 })
                 .catch(error => {
-                    console.error(error);
-                    this.setState({ failure: true });
+                    this.handleAPIError(error);
                 });
         }
+    }
+    handleAPIError(error) {
+        console.error(error);
+        localStorage.clear();
+        this.setState({ failure: true });
+        errorNotificationAnt(
+            'Something went wrong with your login, please notify us of this issue.'
+        );
     }
     render() {
         return !this.state.failure ? (

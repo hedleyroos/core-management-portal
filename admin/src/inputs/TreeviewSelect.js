@@ -29,7 +29,6 @@ class TreeviewSelect extends Component {
     render() {
         const { label, treeData, showSearch } = this.props;
         const { value } = this.state;
-        console.log(value);
         return (
             <TreeSelect
                 showSearch={showSearch}

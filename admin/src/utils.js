@@ -22,6 +22,18 @@ export const getDomainAndSiteIds = () => {
     );
 };
 
+export const getDomainsAndSites = ids => {
+    const resources = ['domain', 'site'];
+    const promises = resources.map(resource => {
+        return ids[`${resource}s`].length > 0
+            ? getUntilDone(`${resource}s`, {
+                  [`${resource}_ids`]: ids[`${resource}s`].join(',')
+              })
+            : Promise.resolve({});
+    });
+    return Promise.all(promises);
+};
+
 export const toBool = thing => !!thing;
 
 export const successNotificationAnt = (description, duration = 3) => {
@@ -152,7 +164,7 @@ export const moreThanOneID = idsInString => idsInString.split(',').length > 1;
 
 export const getSitesForContext = async currentContext => {
     if (currentContext) {
-        const [contextType, contextID] = currentContext.key.split(':');
+        const [contextType, contextID] = currentContext.split(':');
         if (contextType === 's') {
             return contextID;
         }

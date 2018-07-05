@@ -123,8 +123,7 @@ class AssignRoleCard extends Component {
 
     handleAPIError(error) {
         if (error.message === 'Token expired') {
-            localStorage.removeItem('id_token');
-            localStorage.removeItem('permissions');
+            localStorage.clear();
             this.props.invalidToken();
         }
         console.error(error);

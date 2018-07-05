@@ -19,7 +19,7 @@ import PermissionsStore from '../../auth/PermissionsStore';
 import restClient, { GET_LIST } from '../../swaggerRestServer';
 import UserCard from './UserCard';
 import UserSearch from './UserSearch';
-import { makeIDMapping, getUntilDone, getDomainAndSiteIds } from '../../utils';
+import { makeIDMapping, getDomainAndSiteIds, getDomainsAndSites } from '../../utils';
 
 const mapStateToProps = state => ({
     manageUserRoles: state.manageUserRoles
@@ -85,27 +85,12 @@ class ManageUserRoles extends Component {
     setupManager() {
         // Set the manager places (ie Domains and Sites)
         const ids = getDomainAndSiteIds();
-        const resource = ids.domains.length > 0 ? 'domain' : 'site';
-        getUntilDone(`${resource}s`, {
-            [`${resource}_ids`]: ids[`${resource}s`].join(',')
-        })
-            .then(data => {
-                if (resource === 'domain') {
-                    const domains = makeIDMapping(data, 'd:');
-                    getUntilDone('sites', {
-                        site_ids: ids.sites.join(',')
-                    })
-                        .then(data => {
-                            const sites = makeIDMapping(data, 's:');
-                            this.props.setManagerPlaces(domains, sites);
-                        })
-                        .catch(error => {
-                            this.handleAPIError(error);
-                        });
-                } else {
-                    const sites = makeIDMapping(data, 's:');
-                    this.props.setManagerPlaces({}, sites);
-                }
+        getDomainsAndSites(ids)
+            .then(([domains, sites]) => {
+                this.props.setManagerPlaces(
+                    makeIDMapping(domains, 'd:'),
+                    makeIDMapping(sites, 's:')
+                );
             })
             .catch(error => {
                 this.handleAPIError(error);
@@ -114,8 +99,7 @@ class ManageUserRoles extends Component {
 
     handleAPIError(error) {
         if (error.message === 'Token expired') {
-            localStorage.removeItem('id_token');
-            localStorage.removeItem('permissions');
+            localStorage.clear();
             this.props.invalidToken();
         }
         console.error(error);
