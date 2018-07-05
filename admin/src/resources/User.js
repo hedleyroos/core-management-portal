@@ -25,6 +25,9 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import Card from 'material-ui/Card/Card';
+import CardText from 'material-ui/Card/CardText';
+import CardTitle from 'material-ui/Card/CardTitle';
 
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 import PermissionsStore from '../auth/PermissionsStore';
@@ -38,6 +41,15 @@ const validationEditUser = values => {
 }
 
 const hiddenFields = ['created_at', 'updated_at', 'avatar', 'country_code'];
+
+export const UserListNoSites = props => (
+    <Card>
+        <CardTitle title="User List" />
+        <CardText>
+            There are no sites linked to the current context. Users Page not available.
+        </CardText>
+    </Card>
+);
 
 export const UserList = props => (
     <List {...props} title="User List" filters={<UserFilter />} >

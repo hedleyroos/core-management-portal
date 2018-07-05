@@ -138,6 +138,7 @@ import {
 } from './resources/Organisation';
 
 import {
+    UserListNoSites,
     UserList,
     UserShow,
     UserEdit,
@@ -317,7 +318,7 @@ const App = () => (
             PermissionsStore.getResourcePermission('users', 'list')
                 ? <Resource
                       name="users"
-                      list={ UserList }
+                      list={ PermissionsStore.getSiteIDs() ? UserList : UserListNoSites }
                       remove={PermissionsStore.getResourcePermission('users', 'remove') ? Delete : null}
                       show={ UserShow }
                       edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
