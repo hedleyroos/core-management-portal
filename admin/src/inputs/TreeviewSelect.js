@@ -13,7 +13,7 @@ class TreeviewSelect extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value !== this.state.value) {
+        if (!nextProps.input.value && nextProps.value !== this.state.value) {
             // Ant Design TreeSelect does not show the placeholder unless undefined.
             this.setState({ value: nextProps.value || undefined });
         }
