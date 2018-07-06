@@ -1,11 +1,37 @@
 import { notification } from 'antd';
 
+import PermissionsStore from './auth/PermissionsStore';
 import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
+import { PLACE_MAPPING } from './constants';
 
 /**
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
+
+export const getDomainAndSiteIds = () => {
+    const allContexts = PermissionsStore.getAllContexts();
+    return Object.keys(allContexts).reduce(
+        (accumulator, place) => {
+            const [placeLetter, placeID] = place.split(':');
+            accumulator[`${PLACE_MAPPING[placeLetter]}s`].push(placeID);
+            return accumulator;
+        },
+        { domains: [], sites: [] }
+    );
+};
+
+export const getDomainsAndSites = ids => {
+    const resources = ['domain', 'site'];
+    const promises = resources.map(resource => {
+        return ids[`${resource}s`].length > 0
+            ? getUntilDone(`${resource}s`, {
+                  [`${resource}_ids`]: ids[`${resource}s`].join(',')
+              })
+            : Promise.resolve({});
+    });
+    return Promise.all(promises);
+};
 
 export const toBool = thing => !!thing;
 
@@ -137,7 +163,7 @@ export const moreThanOneID = idsInString => idsInString.split(',').length > 1;
 
 export const getSitesForContext = async currentContext => {
     if (currentContext) {
-        const [contextType, contextID] = currentContext.key.split(':');
+        const [contextType, contextID] = currentContext.split(':');
         if (contextType === 's') {
             return contextID;
         }

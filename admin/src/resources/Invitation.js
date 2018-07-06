@@ -8,16 +8,16 @@ import {
     Datagrid,
     TextField,
     ReferenceField,
+    NumberField,
     DateField,
     SimpleForm,
     Create,
+    TextInput,
     ReferenceInput,
     SelectInput,
-    TextInput,
     Show,
     SimpleShowLayout,
     ReferenceManyField,
-    NumberField,
     Edit,
     DeleteButton,
     EditButton,
@@ -30,9 +30,6 @@ import InvitationFilter from '../filters/InvitationFilter';
 
 const validationCreateInvitation = values => {
     const errors = {};
-    if (!values.invitor_id) {
-        errors.invitor_id = ["invitor_id is required"];
-    }
     if (!values.first_name) {
         errors.first_name = ["first_name is required"];
     }
@@ -41,6 +38,9 @@ const validationCreateInvitation = values => {
     }
     if (!values.email) {
         errors.email = ["email is required"];
+    }
+    if (!values.organisation_id) {
+        errors.organisation_id = ["organisation_id is required"];
     }
     return errors;
 }
@@ -64,6 +64,13 @@ export const InvitationList = props => (
             <TextField source="first_name" />
             <TextField source="last_name" />
             <TextField source="email" />
+            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                <ReferenceField label="Organisation" source="organisation_id" reference="organisations" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="expires_at" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -77,12 +84,12 @@ export const InvitationList = props => (
 export const InvitationCreate = props => (
     <Create {...props} title="Invitation Create">
         <SimpleForm validate={validationCreateInvitation}>
-            <ReferenceInput label="User" source="invitor_id" reference="users" perPage={0} allowEmpty>
-                <SelectInput optionText="username" />
-            </ReferenceInput>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
+            <ReferenceInput label="Organisation" source="organisation_id" reference="organisations" perPage={0} allowEmpty>
+                <SelectInput optionText="name" />
+            </ReferenceInput>
             <DateTimeInput source="expires_at" />
         </SimpleForm>
     </Create>
@@ -102,6 +109,13 @@ export const InvitationShow = props => (
             <TextField source="first_name" />
             <TextField source="last_name" />
             <TextField source="email" />
+            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                <ReferenceField label="Organisation" source="organisation_id" reference="organisations" linkType="show" allowEmpty>
+                    <NumberField source="name" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="expires_at" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
@@ -147,6 +161,9 @@ export const InvitationEdit = props => (
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
+            <ReferenceInput label="Organisation" source="organisation_id" reference="organisations" perPage={0} allowEmpty>
+                <SelectInput optionText="name" />
+            </ReferenceInput>
             <DateTimeInput source="expires_at" />
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">

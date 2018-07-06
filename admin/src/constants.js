@@ -30,3 +30,8 @@ export const PERMISSIONS = {
 };
 
 export const TECH_ADMIN = 'tech_admin';
+
+export const PLACE_MAPPING = {
+    d: 'domain',
+    s: 'site'
+};

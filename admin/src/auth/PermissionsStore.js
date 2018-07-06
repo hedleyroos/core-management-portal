@@ -3,7 +3,8 @@
  * When regenerated the changes will be lost.
  **/
 import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
-import { notEmptyObject, getSitesForContext } from '../utils';
+import { getSitesForContext } from '../utils';
+import { PLACE_MAPPING } from '../constants';
 
 class PermissionsStore {
     constructor() {
@@ -106,7 +107,7 @@ class PermissionsStore {
                 countries: {
                     list: []
                 },
-                organisationalunits: {
+                organisations: {
                     list: []
                 },
                 users: {
@@ -116,50 +117,52 @@ class PermissionsStore {
                 }
             };
             this.permissionFlags = null;
+            this.getAllUserRoles = this.getAllUserRoles.bind(this);
             this.getAndLoadPermissions = this.getAndLoadPermissions.bind(this);
             this.loadPermissions = this.loadPermissions.bind(this);
             this.getResourcePermission = this.getResourcePermission.bind(this);
             this.manyResourcePermissions = this.manyResourcePermissions.bind(this);
             this.getPermissionFlags = this.getPermissionFlags.bind(this);
+            this.getAllContexts = this.getAllContexts.bind(this);
+            this.getCurrentContext = this.getCurrentContext.bind(this);
+            this.getSiteIDs = this.getSiteIDs.bind(this);
             PermissionsStore.instance = this;
         }
         return PermissionsStore.instance;
     }
-    async getAndLoadPermissions(userID) {
-        const response = await restClient(OPERATIONAL, 'all_user_roles', {
+    getAllUserRoles(userID) {
+        return restClient(OPERATIONAL, 'all_user_roles', {
             pathParameters: [userID]
-        });
-        const contexts = Object.entries(response.data.roles_map).reduce((result, [key, value]) => {
-            if (value.length > 0) {
-                result[key] = value;
-            }
-            return result;
-        }, {});
-        if (notEmptyObject(contexts)) {
-            let currentContext = Object.keys(contexts)[0];
-            const [contextType, contextID] = currentContext.split(':');
-            const currentContextObject = await restClient(
-                GET_ONE,
-                contextType === 'd' ? 'domains' : 'sites',
-                { id: contextID }
-            );
-            currentContext = {
-                key: currentContext,
-                obj: currentContextObject.data
-            };
-
-            const permissions = await restClient(
-                OPERATIONAL,
-                contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
-                {
-                    pathParameters: [userID, contextID]
+        }).then(response => {
+            return Object.entries(response.data.roles_map).reduce((result, [key, value]) => {
+                if (value.length > 0) {
+                    result[key] = value;
                 }
+                return result;
+            }, {});
+        });
+    }
+    getAndLoadPermissions(userID, currentContext, contexts = null) {
+        contexts = !contexts ? this.getAllContexts() : contexts;
+        const [contextType, contextID] = currentContext.split(':');
+        // All calls wrapped in a Promise.all() for all to be done before carrying on.
+        return Promise.all([
+            restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
+                pathParameters: [userID, contextID]
+            }),
+            restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
+            getSitesForContext(currentContext)
+        ]).then(([permissions, currentContextObject, siteIDs]) => {
+            this.loadPermissions(
+                permissions.data,
+                contexts,
+                {
+                    key: currentContext,
+                    obj: currentContextObject.data
+                },
+                siteIDs
             );
-            const siteIDs = await getSitesForContext(currentContext);
-            this.loadPermissions(permissions.data, contexts, currentContext, siteIDs);
-            return Promise.resolve({ contexts, currentContext, siteIDs });
-        }
-        return Promise.resolve({ contexts: {}, currentContext: {} });
+        });
     }
     loadPermissions(userPermissions, contexts, currentContext, siteIDs) {
         this.permissionFlags = {};
@@ -220,15 +223,15 @@ class PermissionsStore {
     }
     getAllContexts() {
         const permissions = this.getPermissionFlags();
-        return permissions ? this.getPermissionFlags().contexts : {};
+        return permissions ? permissions.contexts : {};
     }
     getCurrentContext() {
         const permissions = this.getPermissionFlags();
-        return permissions ? this.getPermissionFlags().currentContext : {};
+        return permissions ? permissions.currentContext : {};
     }
     getSiteIDs() {
         const permissions = this.getPermissionFlags();
-        return permissions ? this.getPermissionFlags().siteIDs : '';
+        return permissions ? permissions.siteIDs : '';
     }
 }
 

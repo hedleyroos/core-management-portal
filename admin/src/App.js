@@ -13,7 +13,6 @@ import Menu from './Menu';
 import PermissionsStore from './auth/PermissionsStore';
 import restClient from './swaggerRestServer';
 import { muiTheme } from './Theme';
-import contextReducer from './reducers/contextReducer';
 import manageUserRolesReducer from './reducers/manageUserRolesReducer';
 
 import {
@@ -134,11 +133,12 @@ import {
 } from './resources/Country';
 
 import {
-    OrganisationalunitList,
-    OrganisationalunitShow,
-} from './resources/Organisationalunit';
+    OrganisationList,
+    OrganisationShow,
+} from './resources/Organisation';
 
 import {
+    UserListNoSites,
     UserList,
     UserShow,
     UserEdit,
@@ -155,7 +155,7 @@ const App = () => (
         catchAll={catchAll}
 	    loginPage={AuthLoginPage}
         customRoutes={customRoutes}
-        customReducers={{ context: contextReducer, manageUserRoles: manageUserRolesReducer }}
+        customReducers={{ manageUserRoles: manageUserRolesReducer }}
     >
         {permissions => [
             PermissionsStore.getResourcePermission('domains', 'list')
@@ -309,16 +309,16 @@ const App = () => (
                       list={ CountryList }
                       show={ CountryShow }
                 /> : null,
-            PermissionsStore.getResourcePermission('organisationalunits', 'list')
+            PermissionsStore.getResourcePermission('organisations', 'list')
                 ? <Resource
-                      name="organisationalunits"
-                      list={ OrganisationalunitList }
-                      show={ OrganisationalunitShow }
+                      name="organisations"
+                      list={ OrganisationList }
+                      show={ OrganisationShow }
                 /> : null,
             PermissionsStore.getResourcePermission('users', 'list')
                 ? <Resource
                       name="users"
-                      list={ UserList }
+                      list={ PermissionsStore.getSiteIDs() ? UserList : UserListNoSites }
                       remove={PermissionsStore.getResourcePermission('users', 'remove') ? Delete : null}
                       show={ UserShow }
                       edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}

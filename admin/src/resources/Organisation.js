@@ -1,5 +1,5 @@
 /**
- * Generated Organisationalunit.js code. Edit at own risk.
+ * Generated Organisation.js code. Edit at own risk.
  * When regenerated the changes will be lost.
 **/
 import React from 'react';
@@ -13,10 +13,10 @@ import {
     SimpleShowLayout,
     ShowButton
 } from 'admin-on-rest';
-import OrganisationalunitFilter from '../filters/OrganisationalunitFilter';
+import OrganisationFilter from '../filters/OrganisationFilter';
 
-export const OrganisationalunitList = props => (
-    <List {...props} title="Organisationalunit List" filters={<OrganisationalunitFilter />}>
+export const OrganisationList = props => (
+    <List {...props} title="Organisation List" filters={<OrganisationFilter />}>
         <Datagrid bodyOptions={ { showRowHover: true } }>
             <NumberField source="id" />
             <TextField source="name" />
@@ -28,8 +28,8 @@ export const OrganisationalunitList = props => (
     </List>
 )
 
-export const OrganisationalunitShow = props => (
-    <Show {...props} title="Organisationalunit Show">
+export const OrganisationShow = props => (
+    <Show {...props} title="Organisation Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="name" />

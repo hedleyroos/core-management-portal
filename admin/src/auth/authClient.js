@@ -8,9 +8,7 @@ export default (type, params) => {
                 id_token_hint: localStorage.getItem('id_token'),
                 post_logout_redirect_uri: process.env.REACT_APP_PORTAL_URL
             });
-            localStorage.removeItem('id_token');
-            localStorage.removeItem('auth_state');
-            localStorage.removeItem('permissions');
+            localStorage.clear();
             let logoutURL = `${process.env.REACT_APP_LOGOUT_URL}?${logoutQueryString}`;
             window.location.href = logoutURL;
         }
