@@ -55,11 +55,8 @@ class OIDCCallback extends Component {
             const userID = jwtDecode(parsedQuery.id_token).sub;
             PermissionsStore.getAllUserRoles(userID)
                 .then(contexts => {
-                    PermissionsStore.getAndLoadPermissions(
-                        userID,
-                        Object.keys(contexts)[0],
-                        contexts
-                    )
+                    const currentContext = Object.keys(contexts)[0];
+                    PermissionsStore.getAndLoadPermissions(userID, currentContext, contexts)
                         .then(result => {
                             this.setState({ loginComplete: true });
                         })

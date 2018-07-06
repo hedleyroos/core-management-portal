@@ -2,6 +2,7 @@ import { notification } from 'antd';
 
 import PermissionsStore from './auth/PermissionsStore';
 import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
+import { PLACE_MAPPING } from './constants';
 
 /**
  * Generated utils.js code. Edit at own risk.
@@ -13,9 +14,7 @@ export const getDomainAndSiteIds = () => {
     return Object.keys(allContexts).reduce(
         (accumulator, place) => {
             const [placeLetter, placeID] = place.split(':');
-            placeLetter === 'd'
-                ? accumulator.domains.push(placeID)
-                : accumulator.sites.push(placeID);
+            accumulator[`${PLACE_MAPPING[placeLetter]}s`].push(placeID);
             return accumulator;
         },
         { domains: [], sites: [] }

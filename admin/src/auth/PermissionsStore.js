@@ -4,6 +4,7 @@
  **/
 import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
 import { getSitesForContext } from '../utils';
+import { PLACE_MAPPING } from '../constants';
 
 class PermissionsStore {
     constructor() {
@@ -146,14 +147,10 @@ class PermissionsStore {
         const [contextType, contextID] = currentContext.split(':');
         // All calls wrapped in a Promise.all() for all to be done before carrying on.
         return Promise.all([
-            restClient(
-                OPERATIONAL,
-                contextType === 'd' ? 'user_domain_permissions' : 'user_site_permissions',
-                {
-                    pathParameters: [userID, contextID]
-                }
-            ),
-            restClient(GET_ONE, contextType === 'd' ? 'domains' : 'sites', { id: contextID }),
+            restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
+                pathParameters: [userID, contextID]
+            }),
+            restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
             getSitesForContext(currentContext)
         ]).then(([permissions, currentContextObject, siteIDs]) => {
             this.loadPermissions(

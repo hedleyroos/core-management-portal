@@ -18,6 +18,7 @@ import {
 import { errorNotificationAnt, notEmptyObject, successNotificationAnt } from '../../utils';
 import DomainTreeInput from '../../inputs/DomainTreeInput';
 import restClient, { CREATE } from '../../swaggerRestServer';
+import { PLACE_MAPPING } from '../../constants';
 
 const mapStateToProps = state => ({
     manageUserRoles: state.manageUserRoles
@@ -67,7 +68,7 @@ class AssignRoleCard extends Component {
         if (successCount) {
             this.setState({ assigning: true });
             const [placeType, placeID] = assignmentLocation.split(':');
-            const place = placeType === 'd' ? 'domain' : 'site';
+            const place = PLACE_MAPPING[placeType];
             let count = 0;
             /**
              * This map with fire off creating user roles for each role that was selected
