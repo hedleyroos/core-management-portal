@@ -15,7 +15,7 @@ class OIDCCallback extends Component {
             failure: false
         };
         this.getTokenAndPermissions = this.getTokenAndPermissions.bind(this);
-        this.handleAPIError = this.handleAPIError.bind(this);
+        this.handleLoginError = this.handleLoginError.bind(this);
     }
     componentWillMount() {
         this.getTokenAndPermissions();
@@ -24,7 +24,7 @@ class OIDCCallback extends Component {
         const parsedQuery = queryString.parse(this.props.location.search);
         // Quick check if a token is retrieved.
         if (!parsedQuery.id_token) {
-            this.setState({ failure: true });
+            this.handleLoginError('No token received.')
             return null;
         }
         // Check that the state returned in the URL matches the one stored.
@@ -41,14 +41,12 @@ class OIDCCallback extends Component {
         const incorrectNonce = authNonce !== payload.nonce;
         // Check if none of all the above checks failed.
         if (incorrectState || incorrectSegmentAmount || incorrectNonce) {
-            console.error(
-                incorrectSegmentAmount
-                    ? `Token contains ${segments.length} segments, but it should have 3.`
-                    : incorrectNonce
-                        ? `Nonce mismatch: ${authNonce} ${payload.nonce}`
-                        : `State mismatch: ${authState} ${parsedQuery.state}`
-            );
-            this.setState({ failure: true });
+            const error = incorrectSegmentAmount
+                ? `Token contains ${segments.length} segments, but it should have 3.`
+                : incorrectNonce
+                    ? `Nonce mismatch: ${authNonce} ${payload.nonce}`
+                    : `State mismatch: ${authState} ${parsedQuery.state}`;
+            this.handleLoginError(error);
         } else {
             // Everything checked out. Store the id token.
             localStorage.setItem('id_token', parsedQuery.id_token);
@@ -61,24 +59,18 @@ class OIDCCallback extends Component {
                             this.setState({ loginComplete: true });
                         })
                         .catch(error => {
-                            this.handleAPIError(error);
+                            this.handleLoginError(error);
                         });
                 })
                 .catch(error => {
-                    this.handleAPIError(error);
+                    this.handleLoginError(error);
                 });
         }
     }
-    handleAPIError(error) {
+    handleLoginError(error) {
         console.error(error);
         localStorage.clear();
         this.setState({ failure: true });
-        const logoutQueryString = generateQueryString({
-            id_token_hint: localStorage.getItem('id_token'),
-            post_logout_redirect_uri: process.env.REACT_APP_PORTAL_URL
-        });
-        let logoutURL = `${process.env.REACT_APP_LOGOUT_URL}?${logoutQueryString}`;
-        window.location.href = logoutURL;
         errorNotificationAnt(
             'Something went wrong with your login, please notify us of this issue.'
         );
