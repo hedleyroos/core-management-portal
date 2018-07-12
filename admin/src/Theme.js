@@ -70,5 +70,11 @@ export const styles = {
     },
     wideDropDown: {
         width: '500px'
+    },
+    permissionMessage: {
+        textAlign: 'center',
+        fontFamily: 'Roboto, sans-serif',
+        opacity: 0.5,
+        margin: '0 1em',
     }
 };

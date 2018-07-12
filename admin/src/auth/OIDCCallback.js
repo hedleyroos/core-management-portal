@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
 import PermissionsStore from '../auth/PermissionsStore';
-import { base64urlDecode, errorNotificationAnt } from '../utils';
+import { base64urlDecode, errorNotificationAnt, generateQueryString } from '../utils';
 import WaitingPage from '../pages/WaitingPage';
 
 class OIDCCallback extends Component {
@@ -73,6 +73,12 @@ class OIDCCallback extends Component {
         console.error(error);
         localStorage.clear();
         this.setState({ failure: true });
+        const logoutQueryString = generateQueryString({
+            id_token_hint: localStorage.getItem('id_token'),
+            post_logout_redirect_uri: process.env.REACT_APP_PORTAL_URL
+        });
+        let logoutURL = `${process.env.REACT_APP_LOGOUT_URL}?${logoutQueryString}`;
+        window.location.href = logoutURL;
         errorNotificationAnt(
             'Something went wrong with your login, please notify us of this issue.'
         );

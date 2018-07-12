@@ -143,26 +143,29 @@ class PermissionsStore {
         });
     }
     getAndLoadPermissions(userID, currentContext, contexts = null) {
-        contexts = !contexts ? this.getAllContexts() : contexts;
-        const [contextType, contextID] = currentContext.split(':');
-        // All calls wrapped in a Promise.all() for all to be done before carrying on.
-        return Promise.all([
-            restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
-                pathParameters: [userID, contextID]
-            }),
-            restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
-            getSitesForContext(currentContext)
-        ]).then(([permissions, currentContextObject, siteIDs]) => {
-            this.loadPermissions(
-                permissions.data,
-                contexts,
-                {
-                    key: currentContext,
-                    obj: currentContextObject.data
-                },
-                siteIDs
-            );
-        });
+        if (currentContext) {
+            contexts = !contexts ? this.getAllContexts() : contexts;
+            const [contextType, contextID] = currentContext.split(':');
+            // All calls wrapped in a Promise.all() for all to be done before carrying on.
+            return Promise.all([
+                restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
+                    pathParameters: [userID, contextID]
+                }),
+                restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
+                getSitesForContext(currentContext)
+            ]).then(([permissions, currentContextObject, siteIDs]) => {
+                this.loadPermissions(
+                    permissions.data,
+                    contexts,
+                    {
+                        key: currentContext,
+                        obj: currentContextObject.data
+                    },
+                    siteIDs
+                );
+            });
+        }
+        return Promise.resolve()
     }
     loadPermissions(userPermissions, contexts, currentContext, siteIDs) {
         this.permissionFlags = {};

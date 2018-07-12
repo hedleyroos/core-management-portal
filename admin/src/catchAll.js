@@ -6,10 +6,16 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { NotFound } from 'admin-on-rest';
 
+import NoPermissions from './pages/NoPermissions';
+
 class catchAll extends Component {
     render() {
         return localStorage.getItem('id_token') ? (
-            <NotFound />
+            localStorage.getItem('permissions') ? (
+                <NotFound />
+            ) : (
+                <NoPermissions />
+            )
         ) : (
             <Redirect push to="/login" />
         );

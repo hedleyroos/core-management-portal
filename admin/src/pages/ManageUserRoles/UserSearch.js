@@ -66,7 +66,7 @@ class UserSearch extends Component {
         });
         if (value.length > 2) {
             restClient(GET_LIST, 'users', {
-                filter: { q: value, has_organisation: true, site_ids: '' }
+                filter: { q: value, site_ids: '' }
             })
                 .then(response => {
                     const userResults = response.data.map(obj => ({

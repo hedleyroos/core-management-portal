@@ -221,7 +221,7 @@ export const getUniqueIDs = (list, key) => {
 
 export const notEmptyObject = obj => Object.keys(obj).length > 0;
 
-export const GenerateQueryString = parameters => {
+export const generateQueryString = parameters => {
     return Object.entries(parameters)
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         .join('&');
