@@ -134,7 +134,9 @@ import {
 
 import {
     OrganisationList,
+    OrganisationCreate,
     OrganisationShow,
+    OrganisationEdit,
 } from './resources/Organisation';
 
 import {
@@ -313,7 +315,10 @@ const App = () => (
                 ? <Resource
                       name="organisations"
                       list={ OrganisationList }
+                      create={PermissionsStore.getResourcePermission('organisations', 'create') ? OrganisationCreate : null}
+                      remove={PermissionsStore.getResourcePermission('organisations', 'remove') ? Delete : null}
                       show={ OrganisationShow }
+                      edit={PermissionsStore.getResourcePermission('organisations', 'edit') ? OrganisationEdit : null}
                 /> : null,
             PermissionsStore.getResourcePermission('users', 'list')
                 ? <Resource

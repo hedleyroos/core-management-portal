@@ -37,7 +37,7 @@ const FILTER_LENGTHS = {
     users: {
         country: {
             min: 2,
-            max: 2,
+            max: 2
         },
         email: {
             min: 3,

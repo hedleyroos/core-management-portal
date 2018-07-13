@@ -129,6 +129,22 @@ parameters:
     type: string
     format: uuid
 
+  optional_cutoff_date:
+    description: An optional cutoff date to purge invites before this date
+    in: query
+    name: cutoff_date
+    required: false
+    type: string
+    format: date
+
+  synchronous_mode:
+    description: Change the mode of the call to synchronous.
+    in: query
+    name: synchronous_mode
+    required: false
+    type: boolean
+    default: false
+
   domain_id:
     description: A unique integer value identifying the domain.
     in: path
@@ -1320,6 +1336,25 @@ definitions:
       - created_at
       - updated_at
 
+  organisation_create:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+    required:
+      - name
+
+  organisation_update:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+    minProperties: 1
+
   user:
     type: object
     properties:
@@ -1528,6 +1563,16 @@ definitions:
     - access_control_health
     - user_data_store_health
     - authentication_service_health
+
+  purged_invitations:
+    type: object
+    properties:
+      mode:
+        type: string
+      amount:
+        type: integer
+    required:
+      - mode
 
 paths:
   /healthcheck:
@@ -3613,11 +3658,53 @@ paths:
       tags:
         - authentication
 
+  /invitations/{invitation_id}/send:
+    parameters:
+      - name: invitation_id
+        type: string
+        format: uuid
+        in: path
+        required: true
+      - name: language
+        type: string
+        in: query
+        required: false
+        default: "en"
+    get:
+      operationId: invitation_send
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: 'An invitation email was successfully queued for sending.'
+      tags:
+        - authentication
+
+  /invitations/purge/expired:
+    get:
+      operationId: purge_expired_invitations
+      parameters:
+        - $ref: '#/parameters/synchronous_mode'
+        - $ref: '#/parameters/optional_cutoff_date'
+      produces:
+        - application/json
+      responses:
+        200:
+          description: 'Expired Invitations Purged'
+          schema:
+            $ref: '#/definitions/purged_invitations'
+        403:
+          description: 'Forbidden'
+      tags:
+        - operational
+
   /organisations:
     parameters:
       - $ref: '#/parameters/optional_portal_context_header'
     get:
       operationId: organisation_list
+      x-aor-permissions:
+        - 'urn:ge:identity_provider:organisation:read'
       parameters:
         - $ref: '#/parameters/optional_offset'
         - $ref: '#/parameters/optional_limit'
@@ -3644,7 +3731,26 @@ paths:
             X-Total-Count:
               type: integer
               description: The total number of results matching the query
-
+      tags:
+        - authentication
+    post:
+      consumes:
+        - application/json
+      operationId: organisation_create
+      x-aor-permissions:
+        - 'urn:ge:identity_provider:organisation:create'
+      parameters:
+        - in: body
+          name: data
+          schema:
+            $ref: '#/definitions/organisation_create'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/organisation'
       tags:
         - authentication
 
@@ -3652,8 +3758,39 @@ paths:
     parameters:
       - $ref: '#/parameters/optional_portal_context_header'
       - $ref: '#/parameters/organisation_id'
+    delete:
+      operationId: organisation_delete
+      x-aor-permissions:
+        - 'urn:ge:identity_provider:organisation:delete'
+      responses:
+        '204':
+          description: ''
+      tags:
+        - authentication
     get:
       operationId: organisation_read
+      x-aor-permissions:
+        - 'urn:ge:identity_provider:organisation:read'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/organisation'
+      tags:
+        - authentication
+    put:
+      consumes:
+        - application/json
+      operationId: organisation_update
+      x-aor-permissions:
+        - 'urn:ge:identity_provider:organisation:update'
+      parameters:
+        - in: body
+          name: data
+          schema:
+            $ref: '#/definitions/organisation_update'
       produces:
         - application/json
       responses:
