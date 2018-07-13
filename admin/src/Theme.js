@@ -20,6 +20,11 @@ export const styles = {
     card: {
         minWidth: 300
     },
+    cardAction: {
+        zIndex: 2,
+        display: 'inline-block',
+        float: 'right',
+    },
     avatar: {
         margin: '1em',
         textAlign: 'center '

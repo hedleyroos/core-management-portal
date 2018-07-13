@@ -27,6 +27,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
+import InvitationEditActions from '../customActions/Invitation';
 
 const validationCreateInvitation = values => {
     const errors = {};
@@ -156,7 +157,7 @@ export const InvitationShow = props => (
 )
 
 export const InvitationEdit = props => (
-    <Edit {...props} title="Invitation Edit">
+    <Edit {...props} actions={<InvitationEditActions/>} title="Invitation Edit">
         <SimpleForm validate={validationEditInvitation}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
