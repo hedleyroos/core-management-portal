@@ -97,11 +97,16 @@ const CustomTable = ({ data, props }) => {
 class TableField extends Component {
     constructor(props) {
         super(props);
-        this.state = { data: props.data };
+        this.state = {
+            page: 0,
+            pages: {
+                0: props.data
+            } 
+        };
     }
 
     componentDidMount() {
-        this.state.data.length === 0 && this.getRelatedData();
+        this.props.data.length === 0 && this.getRelatedData();
     }
 
     getRelatedData = () => {
@@ -114,7 +119,14 @@ class TableField extends Component {
                 let data = response.data;
                 if (data.length > 0) {
                     this.setState({
-                        data: limit ? data.slice(0, limit) : data
+                        page: 0,
+                        pages: data.reduce((accumulator, piece, index) => {
+                            let page = Math.floor(index / 20);
+                            accumulator[page] = accumulator[page]
+                                ? [...accumulator[page], piece]
+                                : [piece];
+                            return accumulator;
+                        }, {})
                     });
                 }
             })
