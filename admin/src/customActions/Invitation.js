@@ -4,9 +4,10 @@ import FlatButton from 'material-ui/FlatButton';
 import SendIcon from 'material-ui/svg-icons/content/send';
 import { DeleteButton, ListButton, RefreshButton, ShowButton } from 'admin-on-rest';
 
-import restClient, { OPERATIONAL } from '../swaggerRestServer';
 import { styles } from '../Theme';
 import { successNotificationAnt, errorNotificationAnt } from '../utils';
+
+const timezoneOffset = new Date().getTimezoneOffset();
 
 class InvitationEditActions extends Component {
     constructor(props) {
@@ -14,24 +15,29 @@ class InvitationEditActions extends Component {
         this.inviteNotExpired = this.inviteNotExpired.bind(this);
         this.sendInvite = this.sendInvite.bind(this);
     }
+
     inviteNotExpired() {
         if (this.props.data) {
             const expiryDate = new Date(this.props.data.expires_at);
-            return expiryDate < new Date();
+            let now = new Date();
+            now = new Date(now.valueOf() - timezoneOffset * 60000);
+            return expiryDate > now;
         }
         return false;
     }
+
     sendInvite() {
         const data = this.props.data;
-        restClient(OPERATIONAL, `/invitations/${data.id}/send`, {})
+        fetch(`/invitations/${data.id}/send`, { method: 'GET' })
             .then(response => {
-                successNotificationAnt('Invite Sent!');
+                successNotificationAnt('An invitation email was successfully queued for sending.');
             })
             .catch(error => {
                 console.error(error);
                 errorNotificationAnt('Invite not sent.');
             });
     }
+
     render() {
         const { basePath, data } = this.props;
         return (

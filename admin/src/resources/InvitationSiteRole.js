@@ -35,7 +35,7 @@ const validationCreateInvitationSiteRole = values => {
         errors.role_id = ["role_id is required"];
     }
     return errors;
-}
+};
 
 export const InvitationSiteRoleList = props => (
     <List {...props} title="InvitationSiteRole List" filters={<InvitationSiteRoleFilter />}>
@@ -67,7 +67,7 @@ export const InvitationSiteRoleList = props => (
             {PermissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const InvitationSiteRoleCreate = props => (
     <Create {...props} title="InvitationSiteRole Create">
@@ -83,7 +83,7 @@ export const InvitationSiteRoleCreate = props => (
             </ReferenceInput>
         </SimpleForm>
     </Create>
-)
+);
 
 export const InvitationSiteRoleShow = props => (
     <Show {...props} title="InvitationSiteRole Show">
@@ -113,6 +113,6 @@ export const InvitationSiteRoleShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 /** End of Generated Code **/

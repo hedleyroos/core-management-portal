@@ -35,12 +35,12 @@ const validationCreateSiteDataSchema = values => {
         errors.schema = ["schema is required"];
     }
     return errors;
-}
+};
 
 const validationEditSiteDataSchema = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const SiteDataSchemaList = props => (
     <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
@@ -60,7 +60,7 @@ export const SiteDataSchemaList = props => (
             {PermissionsStore.getResourcePermission('sitedataschemas', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const SiteDataSchemaCreate = props => (
     <Create {...props} title="SiteDataSchema Create">
@@ -71,7 +71,7 @@ export const SiteDataSchemaCreate = props => (
             <LongTextInput source="schema" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
         </SimpleForm>
     </Create>
-)
+);
 
 export const SiteDataSchemaShow = props => (
     <Show {...props} title="SiteDataSchema Show">
@@ -88,7 +88,7 @@ export const SiteDataSchemaShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const SiteDataSchemaEdit = props => (
     <Edit {...props} title="SiteDataSchema Edit">
@@ -96,6 +96,6 @@ export const SiteDataSchemaEdit = props => (
             <LongTextInput source="schema" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

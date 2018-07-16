@@ -33,7 +33,7 @@ export const ClientList = props => (
             <ShowButton />
         </Datagrid>
     </List>
-)
+);
 
 export const ClientShow = props => (
     <Show {...props} title="Client Show">
@@ -52,6 +52,6 @@ export const ClientShow = props => (
             <TextField source="website_url" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 /** End of Generated Code **/

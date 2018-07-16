@@ -36,7 +36,7 @@ const validationCreateInvitationDomainRole = values => {
         errors.role_id = ["role_id is required"];
     }
     return errors;
-}
+};
 
 export const InvitationDomainRoleList = props => (
     <List {...props} title="InvitationDomainRole List" filters={<InvitationDomainRoleFilter />}>
@@ -68,7 +68,7 @@ export const InvitationDomainRoleList = props => (
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const InvitationDomainRoleCreate = props => (
     <Create {...props} title="InvitationDomainRole Create">
@@ -82,7 +82,7 @@ export const InvitationDomainRoleCreate = props => (
             </ReferenceInput>
         </SimpleForm>
     </Create>
-)
+);
 
 export const InvitationDomainRoleShow = props => (
     <Show {...props} title="InvitationDomainRole Show">
@@ -112,6 +112,6 @@ export const InvitationDomainRoleShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 /** End of Generated Code **/

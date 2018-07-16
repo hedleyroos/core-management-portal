@@ -29,6 +29,25 @@ import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
 import InvitationEditActions from '../customActions/Invitation';
 
+const timezoneOffset = new Date().getTimezoneOffset();
+
+const dateTimeFormatter = value => {
+    // Value received is a date object in the DateTimeInput.
+    if (timezoneOffset !== 0 && value) {
+        value = new Date(value);
+        value = new Date(value.valueOf() + timezoneOffset * 60000);
+    }
+    return value;
+};
+
+const dateTimeParser = value => {
+    // Value received is a date object in the DateTimeInput.
+    if (timezoneOffset !== 0 && value) {
+        value = new Date(value.valueOf() - timezoneOffset * 60000);
+    }
+    return value;
+};
+
 const validationCreateInvitation = values => {
     const errors = {};
     if (!values.first_name) {
@@ -44,12 +63,12 @@ const validationCreateInvitation = values => {
         errors.organisation_id = ["organisation_id is required"];
     }
     return errors;
-}
+};
 
 const validationEditInvitation = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const InvitationList = props => (
     <List {...props} title="Invitation List" filters={<InvitationFilter />}>
@@ -80,7 +99,7 @@ export const InvitationList = props => (
             {PermissionsStore.getResourcePermission('invitations', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const InvitationCreate = props => (
     <Create {...props} title="Invitation Create">
@@ -91,10 +110,10 @@ export const InvitationCreate = props => (
             <ReferenceInput label="Organisation" source="organisation_id" reference="organisations" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <DateTimeInput source="expires_at" />
+            <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
         </SimpleForm>
     </Create>
-)
+);
 
 export const InvitationShow = props => (
     <Show {...props} title="Invitation Show">
@@ -154,7 +173,7 @@ export const InvitationShow = props => (
             )}
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const InvitationEdit = props => (
     <Edit {...props} actions={<InvitationEditActions/>} title="Invitation Edit">
@@ -165,7 +184,7 @@ export const InvitationEdit = props => (
             <ReferenceInput label="Organisation" source="organisation_id" reference="organisations" perPage={0} allowEmpty>
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <DateTimeInput source="expires_at" />
+            <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField label="Domain Roles" reference="invitationdomainroles" target="invitation_id">
                     <Datagrid bodyOptions={ { showRowHover: true } }>
@@ -200,6 +219,6 @@ export const InvitationEdit = props => (
             )}
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

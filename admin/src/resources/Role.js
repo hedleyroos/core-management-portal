@@ -33,12 +33,12 @@ const validationCreateRole = values => {
         errors.label = ["label is required"];
     }
     return errors;
-}
+};
 
 const validationEditRole = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const RoleList = props => (
     <List {...props} title="Role List" filters={<RoleFilter />}>
@@ -54,7 +54,7 @@ export const RoleList = props => (
             {PermissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const RoleCreate = props => (
     <Create {...props} title="Role Create">
@@ -64,7 +64,7 @@ export const RoleCreate = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const RoleShow = props => (
     <Show {...props} title="Role Show">
@@ -93,7 +93,7 @@ export const RoleShow = props => (
             )}
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const RoleEdit = props => (
     <Edit {...props} title="Role Edit">
@@ -119,6 +119,6 @@ export const RoleEdit = props => (
             )}
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

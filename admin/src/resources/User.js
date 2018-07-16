@@ -38,7 +38,7 @@ import UserFilter from '../filters/UserFilter';
 const validationEditUser = values => {
     const errors = {};
     return errors;
-}
+};
 
 const hiddenFields = ['created_at', 'updated_at', 'avatar', 'country_code'];
 
@@ -89,7 +89,7 @@ export const UserList = props => (
             {PermissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton />: null}
         </FieldSelectDatagrid>
     </List>
-)
+);
 
 export const UserShow = props => (
     <Show {...props} title="User Show">
@@ -172,7 +172,7 @@ export const UserShow = props => (
             )}
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const UserEdit = props => (
     <Edit {...props} title="User Edit">
@@ -238,6 +238,6 @@ export const UserEdit = props => (
             )}
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

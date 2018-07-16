@@ -40,12 +40,12 @@ const validationCreateUserSiteData = values => {
         errors.data = ["data is required"];
     }
     return errors;
-}
+};
 
 const validationEditUserSiteData = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const UserSiteDataList = props => (
     <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
@@ -72,7 +72,7 @@ export const UserSiteDataList = props => (
             {PermissionsStore.getResourcePermission('usersitedata', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
@@ -90,7 +90,7 @@ export const UserSiteDataCreate = props => (
             <LongTextInput source="data" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
         </SimpleForm>
     </Create>
-)
+);
 
 export const UserSiteDataShow = props => (
     <Show {...props} title="UserSiteData Show">
@@ -114,7 +114,7 @@ export const UserSiteDataShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const UserSiteDataEdit = props => (
     <Edit {...props} title="UserSiteData Edit">
@@ -122,6 +122,6 @@ export const UserSiteDataEdit = props => (
             <LongTextInput source="data" format={value => value instanceof Object ? JSON.stringify(value) : value} parse={value => { try { return JSON.parse(value); } catch (e) { return value; } }} />
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

@@ -28,12 +28,12 @@ const validationCreateOrganisation = values => {
         errors.name = ["name is required"];
     }
     return errors;
-}
+};
 
 const validationEditOrganisation = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const OrganisationList = props => (
     <List {...props} title="Organisation List" filters={<OrganisationFilter />}>
@@ -48,7 +48,7 @@ export const OrganisationList = props => (
             {PermissionsStore.getResourcePermission('organisations', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const OrganisationCreate = props => (
     <Create {...props} title="Organisation Create">
@@ -57,7 +57,7 @@ export const OrganisationCreate = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const OrganisationShow = props => (
     <Show {...props} title="Organisation Show">
@@ -69,7 +69,7 @@ export const OrganisationShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const OrganisationEdit = props => (
     <Edit {...props} title="Organisation Edit">
@@ -78,6 +78,6 @@ export const OrganisationEdit = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

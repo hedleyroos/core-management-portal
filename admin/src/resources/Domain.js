@@ -34,12 +34,12 @@ const validationCreateDomain = values => {
         errors.name = ["name is required"];
     }
     return errors;
-}
+};
 
 const validationEditDomain = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const DomainList = props => (
     <List {...props} title="Domain List" filters={<DomainFilter />}>
@@ -61,7 +61,7 @@ export const DomainList = props => (
             {PermissionsStore.getResourcePermission('domains', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const DomainCreate = props => (
     <Create {...props} title="Domain Create">
@@ -73,7 +73,7 @@ export const DomainCreate = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const DomainShow = props => (
     <Show {...props} title="Domain Show">
@@ -118,7 +118,7 @@ export const DomainShow = props => (
             )}
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const DomainEdit = props => (
     <Edit {...props} title="Domain Edit">
@@ -156,6 +156,6 @@ export const DomainEdit = props => (
             )}
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

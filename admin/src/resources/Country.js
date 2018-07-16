@@ -21,7 +21,7 @@ export const CountryList = props => (
             <ShowButton />
         </Datagrid>
     </List>
-)
+);
 
 export const CountryShow = props => (
     <Show {...props} title="Country Show">
@@ -30,6 +30,6 @@ export const CountryShow = props => (
             <TextField source="name" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 /** End of Generated Code **/

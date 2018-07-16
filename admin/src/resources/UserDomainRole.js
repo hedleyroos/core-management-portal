@@ -37,7 +37,7 @@ const validationCreateUserDomainRole = values => {
         errors.role_id = ["role_id is required"];
     }
     return errors;
-}
+};
 
 export const UserDomainRoleList = props => (
     <List {...props} title="UserDomainRole List" filters={<UserDomainRoleFilter />}>
@@ -69,7 +69,7 @@ export const UserDomainRoleList = props => (
             {PermissionsStore.getResourcePermission('userdomainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const UserDomainRoleCreate = props => (
     <Create {...props} title="UserDomainRole Create">
@@ -87,7 +87,7 @@ export const UserDomainRoleCreate = props => (
             </ReferenceInput>
         </SimpleForm>
     </Create>
-)
+);
 
 export const UserDomainRoleShow = props => (
     <Show {...props} title="UserDomainRole Show">
@@ -117,6 +117,6 @@ export const UserDomainRoleShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 /** End of Generated Code **/
