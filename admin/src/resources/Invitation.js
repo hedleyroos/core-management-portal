@@ -27,7 +27,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
-import InvitationEditActions from '../customActions/Invitation';
+import InvitationShowActions from '../customActions/Invitation';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -116,7 +116,7 @@ export const InvitationCreate = props => (
 );
 
 export const InvitationShow = props => (
-    <Show {...props} title="Invitation Show">
+    <Show {...props} actions={<InvitationShowActions />} title="Invitation Show">
         <SimpleShowLayout>
             <TextField source="id" />
             {PermissionsStore.getResourcePermission('users', 'list') ? (
@@ -176,7 +176,7 @@ export const InvitationShow = props => (
 );
 
 export const InvitationEdit = props => (
-    <Edit {...props} actions={<InvitationEditActions/>} title="Invitation Edit">
+    <Edit {...props} title="Invitation Edit">
         <SimpleForm validate={validationEditInvitation}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />

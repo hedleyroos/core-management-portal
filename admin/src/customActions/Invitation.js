@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { CardActions } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import SendIcon from 'material-ui/svg-icons/content/send';
-import { DeleteButton, ListButton, RefreshButton, ShowButton } from 'admin-on-rest';
+import { DeleteButton, ListButton, RefreshButton, EditButton } from 'admin-on-rest';
 
 import { styles } from '../Theme';
 import { successNotificationAnt, errorNotificationAnt } from '../utils';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
-class InvitationEditActions extends Component {
+class InvitationShowActions extends Component {
     constructor(props) {
         super(props);
         this.inviteNotExpired = this.inviteNotExpired.bind(this);
@@ -42,7 +42,7 @@ class InvitationEditActions extends Component {
         const { basePath, data } = this.props;
         return (
             <CardActions style={styles.cardAction}>
-                <ShowButton basePath={basePath} record={data} />
+                <EditButton basePath={basePath} record={data} />
                 <ListButton basePath={basePath} />
                 <DeleteButton basePath={basePath} record={data} />
                 <RefreshButton />
@@ -60,4 +60,4 @@ class InvitationEditActions extends Component {
     }
 }
 
-export default InvitationEditActions;
+export default InvitationShowActions;
