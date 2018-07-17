@@ -34,7 +34,7 @@ const validationCreateRoleResourcePermission = values => {
         errors.permission_id = ["permission_id is required"];
     }
     return errors;
-}
+};
 
 export const RoleResourcePermissionList = props => (
     <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
@@ -66,7 +66,7 @@ export const RoleResourcePermissionList = props => (
             {PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const RoleResourcePermissionCreate = props => (
     <Create {...props} title="RoleResourcePermission Create">
@@ -82,7 +82,7 @@ export const RoleResourcePermissionCreate = props => (
             </ReferenceInput>
         </SimpleForm>
     </Create>
-)
+);
 
 export const RoleResourcePermissionShow = props => (
     <Show {...props} title="RoleResourcePermission Show">
@@ -112,6 +112,6 @@ export const RoleResourcePermissionShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 /** End of Generated Code **/

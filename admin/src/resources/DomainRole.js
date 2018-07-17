@@ -36,12 +36,12 @@ const validationCreateDomainRole = values => {
         errors.role_id = ["role_id is required"];
     }
     return errors;
-}
+};
 
 const validationEditDomainRole = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const DomainRoleList = props => (
     <List {...props} title="DomainRole List" filters={<DomainRoleFilter />}>
@@ -68,7 +68,7 @@ export const DomainRoleList = props => (
             {PermissionsStore.getResourcePermission('domainroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const DomainRoleCreate = props => (
     <Create {...props} title="DomainRole Create">
@@ -80,7 +80,7 @@ export const DomainRoleCreate = props => (
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const DomainRoleShow = props => (
     <Show {...props} title="DomainRole Show">
@@ -104,7 +104,7 @@ export const DomainRoleShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const DomainRoleEdit = props => (
     <Edit {...props} title="DomainRole Edit">
@@ -112,6 +112,6 @@ export const DomainRoleEdit = props => (
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

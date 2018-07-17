@@ -35,12 +35,12 @@ const validationCreateSiteRole = values => {
         errors.role_id = ["role_id is required"];
     }
     return errors;
-}
+};
 
 const validationEditSiteRole = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const SiteRoleList = props => (
     <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
@@ -67,7 +67,7 @@ export const SiteRoleList = props => (
             {PermissionsStore.getResourcePermission('siteroles', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const SiteRoleCreate = props => (
     <Create {...props} title="SiteRole Create">
@@ -81,7 +81,7 @@ export const SiteRoleCreate = props => (
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const SiteRoleShow = props => (
     <Show {...props} title="SiteRole Show">
@@ -105,7 +105,7 @@ export const SiteRoleShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const SiteRoleEdit = props => (
     <Edit {...props} title="SiteRole Edit">
@@ -113,6 +113,6 @@ export const SiteRoleEdit = props => (
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

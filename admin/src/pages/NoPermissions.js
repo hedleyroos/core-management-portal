@@ -1,5 +1,4 @@
 import React from 'react';
-import { logout } from 'admin-on-rest';
 import NotAllowed from 'material-ui/svg-icons/av/not-interested';
 
 import { styles } from '../Theme';

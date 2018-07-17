@@ -39,12 +39,12 @@ const validationCreateSite = values => {
         errors.name = ["name is required"];
     }
     return errors;
-}
+};
 
 const validationEditSite = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const SiteList = props => (
     <List {...props} title="Site List" filters={<SiteFilter />}>
@@ -74,7 +74,7 @@ export const SiteList = props => (
             {PermissionsStore.getResourcePermission('sites', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const SiteCreate = props => (
     <Create {...props} title="Site Create">
@@ -90,7 +90,7 @@ export const SiteCreate = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const SiteShow = props => (
     <Show {...props} title="Site Show">
@@ -131,7 +131,7 @@ export const SiteShow = props => (
             )}
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const SiteEdit = props => (
     <Edit {...props} title="Site Edit">
@@ -161,6 +161,6 @@ export const SiteEdit = props => (
             )}
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

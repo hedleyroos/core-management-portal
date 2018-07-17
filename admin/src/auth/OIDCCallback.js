@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
 import PermissionsStore from '../auth/PermissionsStore';
-import { base64urlDecode, errorNotificationAnt, generateQueryString } from '../utils';
+import { base64urlDecode, errorNotificationAnt } from '../utils';
 import WaitingPage from '../pages/WaitingPage';
 
 class OIDCCallback extends Component {

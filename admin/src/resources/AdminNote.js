@@ -39,12 +39,12 @@ const validationCreateAdminNote = values => {
         errors.note = ["note is required"];
     }
     return errors;
-}
+};
 
 const validationEditAdminNote = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
@@ -72,7 +72,7 @@ export const AdminNoteList = props => (
             {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const AdminNoteCreate = props => (
     <Create {...props} title="AdminNote Create">
@@ -86,7 +86,7 @@ export const AdminNoteCreate = props => (
             <TextInput source="note" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const AdminNoteShow = props => (
     <Show {...props} title="AdminNote Show">
@@ -111,7 +111,7 @@ export const AdminNoteShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const AdminNoteEdit = props => (
     <Edit {...props} title="AdminNote Edit">
@@ -119,6 +119,6 @@ export const AdminNoteEdit = props => (
             <TextInput source="note" />
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

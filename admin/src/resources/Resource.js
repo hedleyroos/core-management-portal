@@ -28,12 +28,12 @@ const validationCreateResource = values => {
         errors.urn = ["urn is required"];
     }
     return errors;
-}
+};
 
 const validationEditResource = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const ResourceList = props => (
     <List {...props} title="Resource List" filters={<ResourceFilter />}>
@@ -48,7 +48,7 @@ export const ResourceList = props => (
             {PermissionsStore.getResourcePermission('resources', 'remove') ? <DeleteButton />: null}
         </Datagrid>
     </List>
-)
+);
 
 export const ResourceCreate = props => (
     <Create {...props} title="Resource Create">
@@ -57,7 +57,7 @@ export const ResourceCreate = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const ResourceShow = props => (
     <Show {...props} title="Resource Show">
@@ -69,7 +69,7 @@ export const ResourceShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const ResourceEdit = props => (
     <Edit {...props} title="Resource Edit">
@@ -78,6 +78,6 @@ export const ResourceEdit = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/
