@@ -111,7 +111,7 @@ class PermissionsStore {
                     list: ['urn:ge:identity_provider:organisation:read'],
                     create: ['urn:ge:identity_provider:organisation:create'],
                     remove: ['urn:ge:identity_provider:organisation:delete'],
-                    edit: ['urn:ge:identity_provider:organisation:update'],
+                    edit: ['urn:ge:identity_provider:organisation:update']
                 },
                 users: {
                     list: ['urn:ge:identity_provider:user:read'],

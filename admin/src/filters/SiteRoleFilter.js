@@ -1,13 +1,9 @@
-/** 
+/**
  * Generated Filters.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
-import {
-    SelectInput,
-    ReferenceInput,
-    Filter
-} from 'admin-on-rest';
+import { SelectInput, ReferenceInput, Filter } from 'admin-on-rest';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const SiteRoleFilter = props => (

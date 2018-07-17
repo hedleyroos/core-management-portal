@@ -1,7 +1,7 @@
 /**
  * Generated SiteRole.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import {
     List,
@@ -29,10 +29,10 @@ import SiteRoleFilter from '../filters/SiteRoleFilter';
 const validationCreateSiteRole = values => {
     const errors = {};
     if (!values.site_id) {
-        errors.site_id = ["site_id is required"];
+        errors.site_id = ['site_id is required'];
     }
     if (!values.role_id) {
-        errors.role_id = ["role_id is required"];
+        errors.role_id = ['role_id is required'];
     }
     return errors;
 };
@@ -44,16 +44,28 @@ const validationEditSiteRole = values => {
 
 export const SiteRoleList = props => (
     <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
-        <Datagrid bodyOptions={ { showRowHover: true } }>
+        <Datagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
-                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                <ReferenceField
+                    label="Site"
+                    source="site_id"
+                    reference="sites"
+                    linkType="show"
+                    allowEmpty
+                >
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
-                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                <ReferenceField
+                    label="Role"
+                    source="role_id"
+                    reference="roles"
+                    linkType="show"
+                    allowEmpty
+                >
                     <NumberField source="label" />
                 </ReferenceField>
             ) : (
@@ -64,7 +76,9 @@ export const SiteRoleList = props => (
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('siteroles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {PermissionsStore.getResourcePermission('siteroles', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('siteroles', 'remove') ? (
+                <DeleteButton />
+            ) : null}
         </Datagrid>
     </List>
 );
@@ -87,14 +101,26 @@ export const SiteRoleShow = props => (
     <Show {...props} title="SiteRole Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
-                <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                <ReferenceField
+                    label="Site"
+                    source="site_id"
+                    reference="sites"
+                    linkType="show"
+                    allowEmpty
+                >
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
-                <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                <ReferenceField
+                    label="Role"
+                    source="role_id"
+                    reference="roles"
+                    linkType="show"
+                    allowEmpty
+                >
                     <NumberField source="label" />
                 </ReferenceField>
             ) : (
