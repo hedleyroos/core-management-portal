@@ -40,27 +40,27 @@ const FILTER_LENGTHS = {
             max: 2
         },
         email: {
-            min: 3,
+            min: 3
         },
         first_name: {
-            min: 3,
+            min: 3
         },
         last_name: {
-            min: 3,
+            min: 3
         },
         msisdn: {
-            min: 3,
+            min: 3
         },
         nickname: {
-            min: 3,
+            min: 3
         },
         username: {
-            min: 3,
+            min: 3
         },
         q: {
-            min: 3,
-        },
-    },
+            min: 3
+        }
+    }
 };
 
 // These are default filters that were required for the

@@ -1,7 +1,7 @@
 /**
  * Generated Client.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import {
     List,
@@ -17,7 +17,7 @@ import ClientFilter from '../filters/ClientFilter';
 
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />}>
-        <Datagrid bodyOptions={ { showRowHover: true } }>
+        <Datagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" />
             <TextField source="_post_logout_redirect_uris" />
             <TextField source="_redirect_uris" />

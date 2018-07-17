@@ -1,7 +1,7 @@
 /**
  * Generated Resource.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import {
     List,
@@ -25,7 +25,7 @@ import ResourceFilter from '../filters/ResourceFilter';
 const validationCreateResource = values => {
     const errors = {};
     if (!values.urn) {
-        errors.urn = ["urn is required"];
+        errors.urn = ['urn is required'];
     }
     return errors;
 };
@@ -37,7 +37,7 @@ const validationEditResource = values => {
 
 export const ResourceList = props => (
     <List {...props} title="Resource List" filters={<ResourceFilter />}>
-        <Datagrid bodyOptions={ { showRowHover: true } }>
+        <Datagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" />
             <TextField source="urn" />
             <TextField source="description" />
@@ -45,7 +45,9 @@ export const ResourceList = props => (
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('resources', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {PermissionsStore.getResourcePermission('resources', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('resources', 'remove') ? (
+                <DeleteButton />
+            ) : null}
         </Datagrid>
     </List>
 );
