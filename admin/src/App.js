@@ -114,7 +114,7 @@ const App = () => (
         restClient={restClient}
         authClient={authClient}
         catchAll={catchAll}
-	    loginPage={AuthLoginPage}
+        loginPage={AuthLoginPage}
         customRoutes={customRoutes}
         customReducers={{ manageUserRoles: manageUserRolesReducer }}
     >
