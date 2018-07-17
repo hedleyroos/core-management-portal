@@ -28,7 +28,15 @@ class InvitationShowActions extends Component {
 
     sendInvite() {
         const data = this.props.data;
-        fetch(`/invitations/${data.id}/send`, { method: 'GET' })
+        const id_token = localStorage.getItem('id_token');
+        const permissions = JSON.parse(localStorage.getItem('permissions'));
+        fetch(`${process.env.REACT_APP_MANAGEMENT_LAYER}/invitations/${data.id}/send`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${id_token}`,
+                'X-GE-Portal-Context': permissions.currentContext.key
+            }
+        })
             .then(response => {
                 successNotificationAnt('An invitation email was successfully queued for sending.');
             })
