@@ -51,9 +51,6 @@ export const styles = {
     customTableBottom: {
         backgroundColor: '#e6e6e6'
     },
-    customTablePages: {
-        backgroundColor: '#e6e6e6'
-    },
     chip: {
         margin: 4
     },
