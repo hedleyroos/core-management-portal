@@ -66,8 +66,9 @@ docs-build:  $(VENV)
 
 generate-admin:
 	@echo "$(CYAN)Generating Management Portal code and running manual meld.$(CLEAR)"
-	mkdir -p generated
-	$(PYTHON) $(VENV)/src/swagger-aor-generator/swagger_aor_generator/generator.py swagger/management_layer.yml --output-dir=generated --module-name="Girl Effect Management Portal" --rest-server-url="//core-management-layer:8000" --permissions
-	meld admin/src generated
-	rm -rf generated
+	mkdir -p admin/generated
+	$(PYTHON) $(VENV)/src/swagger-aor-generator/swagger_aor_generator/generator.py swagger/management_layer.yml --output-dir=admin/generated --module-name="Girl Effect Management Portal" --rest-server-url="//core-management-layer:8000" --permissions
+	cd admin; ./prettier.sh
+	meld admin/src admin/generated
+	rm -rf admin/generated
 	@echo "$(GREEN)Generated code REMOVED and changes Melded$(CLEAR)"

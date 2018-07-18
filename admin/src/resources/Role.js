@@ -1,7 +1,7 @@
 /**
  * Generated Role.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import {
     List,
@@ -30,19 +30,19 @@ import RoleFilter from '../filters/RoleFilter';
 const validationCreateRole = values => {
     const errors = {};
     if (!values.label) {
-        errors.label = ["label is required"];
+        errors.label = ['label is required'];
     }
     return errors;
-}
+};
 
 const validationEditRole = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const RoleList = props => (
     <List {...props} title="Role List" filters={<RoleFilter />}>
-        <Datagrid bodyOptions={ { showRowHover: true } }>
+        <Datagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" />
             <TextField source="label" />
             <BooleanField source="requires_2fa" />
@@ -51,10 +51,10 @@ export const RoleList = props => (
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {PermissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton /> : null}
         </Datagrid>
     </List>
-)
+);
 
 export const RoleCreate = props => (
     <Create {...props} title="Role Create">
@@ -64,7 +64,7 @@ export const RoleCreate = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const RoleShow = props => (
     <Show {...props} title="Role Show">
@@ -76,12 +76,28 @@ export const RoleShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('roleresourcepermissions', 'list') ? (
-                <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
-                    <Datagrid bodyOptions={ { showRowHover: true } }>
-                        <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
+                <ReferenceManyField
+                    label="Resource Permissions"
+                    reference="roleresourcepermissions"
+                    target="role_id"
+                >
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Resource"
+                            source="resource_id"
+                            reference="resources"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="urn" />
                         </ReferenceField>
-                        <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
+                        <ReferenceField
+                            label="Permission"
+                            source="permission_id"
+                            reference="permissions"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="name" />
                         </ReferenceField>
                         <DateField source="created_at" />
@@ -93,7 +109,7 @@ export const RoleShow = props => (
             )}
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const RoleEdit = props => (
     <Edit {...props} title="Role Edit">
@@ -102,12 +118,28 @@ export const RoleEdit = props => (
             <BooleanInput source="requires_2fa" />
             <TextInput source="description" />
             {PermissionsStore.getResourcePermission('roleresourcepermissions', 'list') ? (
-                <ReferenceManyField label="Resource Permissions" reference="roleresourcepermissions" target="role_id">
-                    <Datagrid bodyOptions={ { showRowHover: true } }>
-                        <ReferenceField label="Resource" source="resource_id" reference="resources" linkType="show" allowEmpty>
+                <ReferenceManyField
+                    label="Resource Permissions"
+                    reference="roleresourcepermissions"
+                    target="role_id"
+                >
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Resource"
+                            source="resource_id"
+                            reference="resources"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="urn" />
                         </ReferenceField>
-                        <ReferenceField label="Permission" source="permission_id" reference="permissions" linkType="show" allowEmpty>
+                        <ReferenceField
+                            label="Permission"
+                            source="permission_id"
+                            reference="permissions"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="name" />
                         </ReferenceField>
                         <DateField source="created_at" />
@@ -119,6 +151,6 @@ export const RoleEdit = props => (
             )}
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/
