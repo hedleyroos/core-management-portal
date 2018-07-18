@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 
 import { reset, setSearchResults, selectUser, invalidToken } from '../../actions/manageUserRoles';
 import restClient, { GET_LIST } from '../../restClient';
-import TableField from '../../fields/TableField';
+import InlineTable from '../../fields/InlineTable';
 import { makeIDMapping, getUntilDone, getUniqueIDs } from '../../utils';
 
 const mapStateToProps = state => ({
@@ -126,7 +126,7 @@ class UserSearch extends Component {
                 </CardText>
                 <CardText>
                     {userResults && userResults.length > 0 ? (
-                        <TableField
+                        <InlineTable
                             label="Users Found"
                             data={userResults}
                             limit={5}

@@ -25,7 +25,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import TableField from '../fields/TableField';
+import InlineTable from '../fields/InlineTable';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import SiteFilter from '../filters/SiteFilter';
@@ -151,7 +151,7 @@ export const SiteShow = props => (
             <BooleanField source="is_active" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <TableField
+            <InlineTable
                 label="Users"
                 url="users_with_roles_for_site"
                 linkField="username"
@@ -205,7 +205,7 @@ export const SiteEdit = props => (
             <TextInput source="name" />
             <TextInput source="description" />
             <BooleanInput source="is_active" />
-            <TableField
+            <InlineTable
                 label="Users"
                 url="users_with_roles_for_site"
                 linkField="username"

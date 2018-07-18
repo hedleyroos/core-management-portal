@@ -95,56 +95,28 @@ const CustomTable = ({ data, props }) => {
     );
 };
 
-class TableField extends Component {
+class InlineTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
             page: null,
             pages: null,
+            data: null,
             total: 0
         };
-        this.perPage = 5;
-        this.paginateData = this.paginateData.bind(this);
-        this.singlePageData = this.singlePageData.bind(this);
+        this.perPage = this.props.perPage;
         this.getRelatedData = this.getRelatedData.bind(this);
+        this.setupPageData = this.setupPageData.bind(this);
         this.handlePageSelect = this.handlePageSelect.bind(this);
     }
 
     componentDidMount() {
-        const { data, paginate } = this.props;
-        data.length === 0
-            ? this.getRelatedData()
-            : paginate
-                ? this.paginateData(data)
-                : this.singlePageData(data);
-    }
-
-    paginateData(data) {
-        let total = 0;
-        const pages = data.reduce((accumulator, piece, index) => {
-            total++;
-            let page = Math.floor(index / this.perPage);
-            accumulator[page] = accumulator[page] ? [...accumulator[page], piece] : [piece];
-            return accumulator;
-        }, {});
-        this.setState({
-            page: 0,
-            pages,
-            total
-        });
-    }
-
-    singlePageData(data) {
-        this.setState({
-            page: 0,
-            pages: {
-                0: data.slice(0, this.props.limit)
-            }
-        });
+        const { data } = this.props;
+        data.length === 0 ? this.getRelatedData() : this.setupPageData(data);
     }
 
     getRelatedData() {
-        const { record, url, customPathParameters, paginate } = this.props;
+        const { record, url, customPathParameters } = this.props;
         restClient(OPERATIONAL, `${url}`, {
             pathParameters: customPathParameters ? customPathParameters : [record.id],
             method: 'GET'
@@ -152,12 +124,21 @@ class TableField extends Component {
             .then(response => {
                 let data = response.data;
                 if (data.length > 0) {
-                    paginate ? this.paginateData(data) : this.singlePageData(data);
+                    this.setupPageData(data);
                 }
             })
             .catch(error => {
                 console.error(error);
             });
+    }
+
+    setupPageData(data) {
+        this.setState({
+            page: 0,
+            pages: this.props.pagniate ? Math.ceil(data.length / this.perPage) : data.length,
+            data: this.props.paginate ? data : data.slice(0, this.props.limit),
+            total: data.length
+        });
     }
 
     handlePageSelect(pageNo) {
@@ -168,13 +149,15 @@ class TableField extends Component {
 
     render() {
         const { paginate } = this.props;
-        const { page, pages, total } = this.state;
-        const data = pages && pages[page] ? pages[page] : null;
-        const pageArray = pages ? new Array(Object.keys(pages).length).fill(0) : null;
+        const { page, pages, data, total } = this.state;
+        const slicedData = paginate && data
+            ? data.slice(page * this.perPage, this.perPage * (page + 1))
+            : data;
+        const pageArray = pages ? new Array(pages).fill(0) : null;
         return data ? (
             this.props.useCard ? (
                 <Card style={styles.customTableDiv}>
-                    <CustomTable data={data} props={this.props} />
+                    <CustomTable data={slicedData} props={this.props} />
                     {paginate &&
                         pageArray.length > 1 && (
                             <Pagination
@@ -187,7 +170,7 @@ class TableField extends Component {
                 </Card>
             ) : (
                 <div style={styles.customTableDiv}>
-                    <CustomTable data={data} props={this.props} />
+                    <CustomTable data={slicedData} props={this.props} />
                     {paginate &&
                         pageArray.length > 1 && (
                             <Pagination
@@ -205,7 +188,7 @@ class TableField extends Component {
     }
 }
 
-TableField.propTypes = {
+InlineTable.propTypes = {
     label: PropTypes.string,
     record: PropTypes.object,
     limit: PropTypes.number,
@@ -218,15 +201,17 @@ TableField.propTypes = {
     selectable: PropTypes.bool,
     selected: PropTypes.number,
     paginate: PropTypes.bool,
+    perPage: PropTypes.number,
     useCard: PropTypes.bool
 };
 
-TableField.defaultProps = {
+InlineTable.defaultProps = {
     data: [],
     limit: 20,
     selectable: false,
     paginate: false,
+    perPage: 5,
     useCard: false
 };
 
-export default TableField;
+export default InlineTable;
