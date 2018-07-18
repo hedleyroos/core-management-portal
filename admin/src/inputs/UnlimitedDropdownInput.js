@@ -5,7 +5,7 @@ import { SelectInput } from 'admin-on-rest';
 import CircularProgress from 'material-ui/CircularProgress';
 
 import { getUntilDone } from '../utils';
-import restClient, { GET_LIST } from '../swaggerRestServer';
+import restClient, { GET_LIST } from '../restClient';
 
 class UnlimitedDropdownInput extends Component {
     constructor(props) {

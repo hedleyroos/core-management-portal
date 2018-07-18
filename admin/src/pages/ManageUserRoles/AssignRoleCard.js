@@ -17,7 +17,7 @@ import {
 } from '../../actions/manageUserRoles';
 import { errorNotificationAnt, notEmptyObject, successNotificationAnt } from '../../utils';
 import DomainTreeInput from '../../inputs/DomainTreeInput';
-import restClient, { CREATE } from '../../swaggerRestServer';
+import restClient, { CREATE } from '../../restClient';
 import { PLACE_MAPPING } from '../../constants';
 
 const mapStateToProps = state => ({

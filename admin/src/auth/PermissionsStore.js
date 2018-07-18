@@ -2,7 +2,7 @@
  * Generated authPermissions.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
-import restClient, { OPERATIONAL, GET_ONE } from '../swaggerRestServer';
+import restClient, { OPERATIONAL, GET_ONE } from '../restClient';
 import { getSitesForContext } from '../utils';
 import { PLACE_MAPPING } from '../constants';
 

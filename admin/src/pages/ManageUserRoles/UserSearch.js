@@ -4,7 +4,7 @@ import CardText from 'material-ui/Card/CardText';
 import TextField from 'material-ui/TextField';
 
 import { reset, setSearchResults, selectUser, invalidToken } from '../../actions/manageUserRoles';
-import restClient, { GET_LIST } from '../../swaggerRestServer';
+import restClient, { GET_LIST } from '../../restClient';
 import TableField from '../../fields/TableField';
 import { makeIDMapping, getUntilDone, getUniqueIDs } from '../../utils';
 

@@ -1,5 +1,5 @@
 /**
- * Generated swaggerRestServer.js code. Edit at own risk.
+ * Generated restClient.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
 import { stringify } from 'query-string';
@@ -249,7 +249,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
  * CREATE       => POST http://my.api.url/users/
  * DELETE       => DELETE http://my.api.url/users/123/ or DELETE http://my.api.url/users/123/321/ in the case of a composite key
  */
-const swaggerRestServer = (apiUrl, httpClient = fetchUtils.fetchJson) => {
+const restClient = (apiUrl, httpClient = fetchUtils.fetchJson) => {
     /**
      * @param {string} type Request type, e.g GET_LIST
      * @param {string} resource Resource name, e.g. "users"
@@ -289,5 +289,5 @@ const httpClient = (url, options = {}) => {
     return fetchUtils.fetchJson(url, options);
 };
 
-export default swaggerRestServer(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
+export default restClient(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
 /** End of Generated Code **/

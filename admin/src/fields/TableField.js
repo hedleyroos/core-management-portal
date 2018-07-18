@@ -16,7 +16,7 @@ import {
     TableRowColumn
 } from 'material-ui/Table';
 
-import restClient, { OPERATIONAL } from '../swaggerRestServer';
+import restClient, { OPERATIONAL } from '../restClient';
 import { styles } from '../Theme';
 
 const CustomTable = ({ data, props }) => {

@@ -11,7 +11,7 @@ import catchAll from './catchAll';
 import customRoutes from './customRoutes';
 import Menu from './Menu';
 import PermissionsStore from './auth/PermissionsStore';
-import restClient from './swaggerRestServer';
+import restClient from './restClient';
 import { muiTheme } from './Theme';
 import manageUserRolesReducer from './reducers/manageUserRolesReducer';
 

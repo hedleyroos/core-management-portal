@@ -1,7 +1,7 @@
 import { notification } from 'antd';
 
 import PermissionsStore from './auth/PermissionsStore';
-import restClient, { GET_LIST, OPERATIONAL } from './swaggerRestServer';
+import restClient, { GET_LIST, OPERATIONAL } from './restClient';
 import { PLACE_MAPPING } from './constants';
 
 /**

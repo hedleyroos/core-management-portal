@@ -12,7 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { styles } from '../../Theme';
 import { errorNotificationAnt, successNotificationAnt } from '../../utils';
 import { checkRoleForDelete, deleteRole, invalidToken } from '../../actions/manageUserRoles';
-import restClient, { DELETE } from '../../swaggerRestServer';
+import restClient, { DELETE } from '../../restClient';
 import ConfirmDialog from './ConfirmDialog';
 
 const mapStateToProps = state => ({
