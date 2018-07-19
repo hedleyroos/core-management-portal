@@ -149,11 +149,10 @@ class InlineTable extends Component {
 
     render() {
         const { paginate, perPage } = this.props;
-        const { page, pages, data, total } = this.state;
+        const { page, data, total } = this.state;
         const slicedData =
             data && data.slice(page * perPage, paginate ? perPage * (page + 1) : perPage);
-        const pageArray = pages && new Array(pages).fill(0);
-        return slicedData && pageArray ? (
+        return slicedData && slicedData.length ? (
             this.props.useCard ? (
                 <Card style={styles.customTableDiv}>
                     <CustomTable
@@ -163,15 +162,14 @@ class InlineTable extends Component {
                         paginate={paginate}
                         props={this.props}
                     />
-                    {paginate &&
-                        pageArray.length > 1 && (
-                            <Pagination
-                                total={total}
-                                page={page + 1}
-                                perPage={perPage}
-                                setPage={this.handlePageSelect}
-                            />
-                        )}
+                    {paginate && (
+                        <Pagination
+                            total={total}
+                            page={page + 1}
+                            perPage={perPage}
+                            setPage={this.handlePageSelect}
+                        />
+                    )}
                 </Card>
             ) : (
                 <div style={styles.customTableDiv}>
@@ -182,15 +180,14 @@ class InlineTable extends Component {
                         paginate={paginate}
                         props={this.props}
                     />
-                    {paginate &&
-                        pageArray.length > 1 && (
-                            <Pagination
-                                total={total}
-                                page={page + 1}
-                                perPage={perPage}
-                                setPage={this.handlePageSelect}
-                            />
-                        )}
+                    {paginate && (
+                        <Pagination
+                            total={total}
+                            page={page + 1}
+                            perPage={perPage}
+                            setPage={this.handlePageSelect}
+                        />
+                    )}
                 </div>
             )
         ) : (
