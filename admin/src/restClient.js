@@ -74,6 +74,20 @@ const DEFAULT_FILTERS = () => ({
     }
 });
 
+const GET_MANY_FILTER = {
+    adminnotes: 'admin_note_ids',
+    clients: 'client_ids',
+    countries: 'country_codes',
+    domains: 'domain_ids',
+    invitations: 'invitation_ids',
+    organisations: 'organisation_ids',
+    permissions: 'permission_ids',
+    resources: 'resource_ids',
+    roles: 'role_ids',
+    sites: 'site_ids',
+    users: 'user_ids'
+};
+
 /**
  * @param {String} apiUrl The base API url
  * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
@@ -143,9 +157,10 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
             url = `${apiUrl}/${resource}/${params.id}`;
             break;
         case GET_MANY: {
-            const query = {
-                filter: JSON.stringify({ id: params.ids })
-            };
+            const filterName = GET_MANY_FILTER[resource];
+            const query = filterName
+                ? { [filterName]: params.ids.join(',') }
+                : { ids: params.ids.join(',') };
             url = `${apiUrl}/${resource}?${stringify(query)}`;
             break;
         }
