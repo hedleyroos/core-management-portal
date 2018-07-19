@@ -4,8 +4,8 @@ import CardText from 'material-ui/Card/CardText';
 import TextField from 'material-ui/TextField';
 
 import { reset, setSearchResults, selectUser, invalidToken } from '../../actions/manageUserRoles';
-import restClient, { GET_LIST } from '../../swaggerRestServer';
-import TableField from '../../fields/TableField';
+import restClient, { GET_LIST } from '../../restClient';
+import InlineTable from '../../fields/InlineTable';
 import { makeIDMapping, getUntilDone, getUniqueIDs } from '../../utils';
 
 const mapStateToProps = state => ({
@@ -126,10 +126,10 @@ class UserSearch extends Component {
                 </CardText>
                 <CardText>
                     {userResults && userResults.length > 0 ? (
-                        <TableField
+                        <InlineTable
                             label="Users Found"
                             data={userResults}
-                            limit={5}
+                            perPage={5}
                             selected={selectedUser}
                             onRowSelection={this.handleSelect}
                             selectable

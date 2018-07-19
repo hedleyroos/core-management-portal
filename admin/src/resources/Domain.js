@@ -23,7 +23,7 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
-import TableField from '../fields/TableField';
+import InlineTable from '../fields/InlineTable';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DomainFilter from '../filters/DomainFilter';
@@ -108,7 +108,13 @@ export const DomainShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <TableField label="Users" url="users_with_roles_for_domain" linkField="username" linkedResource="users" />
+            <InlineTable
+                label="Users"
+                url="users_with_roles_for_domain"
+                linkField="username"
+                linkedResource="users"
+                paginate
+            />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
@@ -158,7 +164,13 @@ export const DomainEdit = props => (
             </ReferenceInput>
             <TextInput source="name" />
             <TextInput source="description" />
-            <TableField label="Users" url="users_with_roles_for_domain" linkField="username" linkedResource="users" />
+            <InlineTable
+                label="Users"
+                url="users_with_roles_for_domain"
+                linkField="username"
+                linkedResource="users"
+                paginate
+            />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>

@@ -16,7 +16,7 @@ import {
     setRoleMapping
 } from '../../actions/manageUserRoles';
 import PermissionsStore from '../../auth/PermissionsStore';
-import restClient, { GET_LIST } from '../../swaggerRestServer';
+import restClient, { GET_LIST } from '../../restClient';
 import UserCard from './UserCard';
 import UserSearch from './UserSearch';
 import { makeIDMapping, getDomainAndSiteIds, getDomainsAndSites } from '../../utils';
