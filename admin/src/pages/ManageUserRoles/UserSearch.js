@@ -129,7 +129,7 @@ class UserSearch extends Component {
                         <InlineTable
                             label="Users Found"
                             data={userResults}
-                            limit={5}
+                            perPage={5}
                             selected={selectedUser}
                             onRowSelection={this.handleSelect}
                             selectable

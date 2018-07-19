@@ -19,10 +19,9 @@ import {
 import restClient, { OPERATIONAL } from '../restClient';
 import { styles } from '../Theme';
 
-const CustomTable = ({ data, total, props }) => {
+const CustomTable = ({ data, total, perPage, paginate, props }) => {
     const {
         label,
-        limit,
         linkField,
         linkedResource,
         onRowSelection,
@@ -84,11 +83,12 @@ const CustomTable = ({ data, total, props }) => {
                     })}
                 </TableBody>
             </Table>
-            {limit &&
-                total > limit && (
+            {perPage &&
+                !paginate &&
+                total > perPage && (
                     <CardHeader
                         style={styles.customTableBottom}
-                        subtitle={`${total - limit} more found...`}
+                        subtitle={`${total - perPage} more found...`}
                     />
                 )}
         </React.Fragment>
@@ -104,7 +104,6 @@ class InlineTable extends Component {
             data: this.props.data,
             total: 0
         };
-        this.perPage = this.props.perPage;
         this.getRelatedData = this.getRelatedData.bind(this);
         this.setupPageData = this.setupPageData.bind(this);
         this.handlePageSelect = this.handlePageSelect.bind(this);
@@ -133,9 +132,10 @@ class InlineTable extends Component {
     }
 
     setupPageData(data) {
+        const { paginate, perPage } = this.props.perPage;
         this.setState({
             page: 0,
-            pages: this.props.pagniate ? Math.ceil(data.length / this.perPage) : 1,
+            pages: paginate ? Math.ceil(data.length / perPage) : 1,
             data,
             total: data.length
         });
@@ -148,34 +148,46 @@ class InlineTable extends Component {
     }
 
     render() {
-        const { limit, paginate } = this.props;
+        const { paginate, perPage } = this.props;
         const { page, pages, data, total } = this.state;
         const slicedData =
-            data && data.slice(page * this.perPage, paginate ? this.perPage * (page + 1) : limit);
+            data && data.slice(page * perPage, paginate ? perPage * (page + 1) : perPage);
         const pageArray = pages && new Array(pages).fill(0);
         return slicedData && pageArray ? (
             this.props.useCard ? (
                 <Card style={styles.customTableDiv}>
-                    <CustomTable data={slicedData} total={total} props={this.props} />
+                    <CustomTable
+                        data={slicedData}
+                        total={total}
+                        perPage={perPage}
+                        paginate={paginate}
+                        props={this.props}
+                    />
                     {paginate &&
                         pageArray.length > 1 && (
                             <Pagination
                                 total={total}
                                 page={page + 1}
-                                perPage={this.perPage}
+                                perPage={perPage}
                                 setPage={this.handlePageSelect}
                             />
                         )}
                 </Card>
             ) : (
                 <div style={styles.customTableDiv}>
-                    <CustomTable data={slicedData} total={total} props={this.props} />
+                    <CustomTable
+                        data={slicedData}
+                        total={total}
+                        perPage={perPage}
+                        paginate={paginate}
+                        props={this.props}
+                    />
                     {paginate &&
                         pageArray.length > 1 && (
                             <Pagination
                                 total={total}
                                 page={page + 1}
-                                perPage={this.perPage}
+                                perPage={perPage}
                                 setPage={this.handlePageSelect}
                             />
                         )}
@@ -190,7 +202,6 @@ class InlineTable extends Component {
 InlineTable.propTypes = {
     label: PropTypes.string,
     record: PropTypes.object,
-    limit: PropTypes.number,
     linkField: PropTypes.string,
     linkedResource: PropTypes.string,
     url: PropTypes.string,
@@ -206,10 +217,9 @@ InlineTable.propTypes = {
 
 InlineTable.defaultProps = {
     data: [],
-    limit: 20,
     selectable: false,
     paginate: false,
-    perPage: 5,
+    perPage: 10,
     useCard: false
 };
 
