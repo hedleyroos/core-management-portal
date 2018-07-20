@@ -94,17 +94,29 @@ export const UserDomainRoleList = props => (
 export const UserDomainRoleCreate = props => (
     <Create {...props} title="UserDomainRole Create">
         <SimpleForm validate={validationCreateUserDomainRole}>
-            <UnlimitedDropdownInput
-                label="User"
-                source="user_id"
-                reference="users"
-                optionText="username"
-                filter={{ site_ids: '' }}
-            />
-            <DomainTreeInput label="Domain" source="domain_id" />
-            <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
-                <SelectInput optionText="label" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('users', 'list') && (
+                <UnlimitedDropdownInput
+                    label="User"
+                    source="user_id"
+                    reference="users"
+                    optionText="username"
+                    filter={{ site_ids: '' }}
+                />
+            )}
+            {PermissionsStore.getResourcePermission('domains', 'list') && (
+                <DomainTreeInput label="Domain" source="domain_id" />
+            )}
+            {PermissionsStore.getResourcePermission('roles', 'list') && (
+                <ReferenceInput
+                    label="Role"
+                    source="role_id"
+                    reference="roles"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="label" />
+                </ReferenceInput>
+            )}
         </SimpleForm>
     </Create>
 );

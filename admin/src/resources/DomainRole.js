@@ -87,10 +87,18 @@ export const DomainRoleList = props => (
 export const DomainRoleCreate = props => (
     <Create {...props} title="DomainRole Create">
         <SimpleForm validate={validationCreateDomainRole}>
-            <DomainTreeInput label="Domain" source="domain_id" />
-            <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
-                <SelectInput optionText="label" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('domains', 'list') && <DomainTreeInput label="Domain" source="domain_id" />}
+            {PermissionsStore.getResourcePermission('roles', 'list') && (
+                <ReferenceInput
+                    label="Role"
+                    source="role_id"
+                    reference="roles"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="label" />
+                </ReferenceInput>
+            )}
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Create>

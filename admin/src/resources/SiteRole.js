@@ -86,12 +86,28 @@ export const SiteRoleList = props => (
 export const SiteRoleCreate = props => (
     <Create {...props} title="SiteRole Create">
         <SimpleForm validate={validationCreateSiteRole}>
-            <ReferenceInput label="Site" source="site_id" reference="sites" perPage={0} allowEmpty>
-                <SelectInput optionText="name" />
-            </ReferenceInput>
-            <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
-                <SelectInput optionText="label" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('sites', 'list') && (
+                <ReferenceInput
+                    label="Site"
+                    source="site_id"
+                    reference="sites"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
+            {PermissionsStore.getResourcePermission('roles', 'list') && (
+                <ReferenceInput
+                    label="Role"
+                    source="role_id"
+                    reference="roles"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="label" />
+                </ReferenceInput>
+            )}
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Create>

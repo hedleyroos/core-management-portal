@@ -53,7 +53,10 @@ export const UserListNoSites = props => (
 
 export const UserList = props => (
     <List {...props} title="User List" filters={<UserFilter />}>
-        <FieldSelectDatagrid defaultHiddenFields={hiddenFields} bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid
+            defaultHiddenFields={hiddenFields}
+            bodyOptions={{ showRowHover: true }}
+        >
             <TextField source="id" />
             <TextField source="username" />
             <TextField source="first_name" />
@@ -245,15 +248,17 @@ export const UserEdit = props => (
             <TextInput source="gender" />
             <DateInput source="birth_date" />
             <TextInput source="avatar" />
-            <ReferenceInput
-                label="Country"
-                source="country_code"
-                reference="countries"
-                perPage={0}
-                allowEmpty
-            >
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('countries', 'list') && (
+                <ReferenceInput
+                    label="Country"
+                    source="country_code"
+                    reference="countries"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
             {PermissionsStore.getResourcePermission('userdomainroles', 'list') ? (
                 <ReferenceManyField
                     label="Domain Roles"

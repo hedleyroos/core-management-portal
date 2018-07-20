@@ -91,24 +91,28 @@ export const SiteList = props => (
 export const SiteCreate = props => (
     <Create {...props} title="Site Create">
         <SimpleForm validate={validationCreateSite}>
-            <ReferenceInput
-                label="Client"
-                source="client_id"
-                reference="clients"
-                perPage={0}
-                allowEmpty
-            >
-                <SelectInput optionText="name" />
-            </ReferenceInput>
-            <ReferenceInput
-                label="Domain"
-                source="domain_id"
-                reference="domains"
-                perPage={0}
-                allowEmpty
-            >
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('clients', 'list') && (
+                <ReferenceInput
+                    label="Client"
+                    source="client_id"
+                    reference="clients"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
+            {PermissionsStore.getResourcePermission('domains', 'list') && (
+                <ReferenceInput
+                    label="Domain"
+                    source="domain_id"
+                    reference="domains"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
             <TextInput source="name" />
             <BooleanInput source="is_active" />
             <TextInput source="description" />
@@ -184,24 +188,28 @@ export const SiteShow = props => (
 export const SiteEdit = props => (
     <Edit {...props} title="Site Edit">
         <SimpleForm validate={validationEditSite}>
-            <ReferenceInput
-                label="Client"
-                source="client_id"
-                reference="clients"
-                perPage={0}
-                allowEmpty
-            >
-                <SelectInput optionText="name" />
-            </ReferenceInput>
-            <ReferenceInput
-                label="Domain"
-                source="domain_id"
-                reference="domains"
-                perPage={0}
-                allowEmpty
-            >
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('clients', 'list') && (
+                <ReferenceInput
+                    label="Client"
+                    source="client_id"
+                    reference="clients"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
+            {PermissionsStore.getResourcePermission('domains', 'list') && (
+                <ReferenceInput
+                    label="Domain"
+                    source="domain_id"
+                    reference="domains"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
             <TextInput source="name" />
             <TextInput source="description" />
             <BooleanInput source="is_active" />

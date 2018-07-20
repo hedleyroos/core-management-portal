@@ -93,19 +93,37 @@ export const UserSiteRoleList = props => (
 export const UserSiteRoleCreate = props => (
     <Create {...props} title="UserSiteRole Create">
         <SimpleForm validate={validationCreateUserSiteRole}>
-            <UnlimitedDropdownInput
-                label="User"
-                source="user_id"
-                reference="users"
-                optionText="username"
-                filter={{ site_ids: '' }}
-            />
-            <ReferenceInput label="Site" source="site_id" reference="sites" perPage={0} allowEmpty>
-                <SelectInput optionText="name" />
-            </ReferenceInput>
-            <ReferenceInput label="Role" source="role_id" reference="roles" perPage={0} allowEmpty>
-                <SelectInput optionText="label" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('users', 'list') && (
+                <UnlimitedDropdownInput
+                    label="User"
+                    source="user_id"
+                    reference="users"
+                    optionText="username"
+                    filter={{ site_ids: '' }}
+                />
+            )}
+            {PermissionsStore.getResourcePermission('sites', 'list') && (
+                <ReferenceInput
+                    label="Site"
+                    source="site_id"
+                    reference="sites"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
+            {PermissionsStore.getResourcePermission('roles', 'list') && (
+                <ReferenceInput
+                    label="Role"
+                    source="role_id"
+                    reference="roles"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="label" />
+                </ReferenceInput>
+            )}
         </SimpleForm>
     </Create>
 );

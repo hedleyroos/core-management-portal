@@ -121,15 +121,17 @@ export const InvitationCreate = props => (
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
-            <ReferenceInput
-                label="Organisation"
-                source="organisation_id"
-                reference="organisations"
-                perPage={0}
-                allowEmpty
-            >
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('organisations', 'list') && (
+                <ReferenceInput
+                    label="Organisation"
+                    source="organisation_id"
+                    reference="organisations"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
             <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
         </SimpleForm>
     </Create>
@@ -245,15 +247,17 @@ export const InvitationEdit = props => (
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
-            <ReferenceInput
-                label="Organisation"
-                source="organisation_id"
-                reference="organisations"
-                perPage={0}
-                allowEmpty
-            >
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('organisations', 'list') && (
+                <ReferenceInput
+                    label="Organisation"
+                    source="organisation_id"
+                    reference="organisations"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
             <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField

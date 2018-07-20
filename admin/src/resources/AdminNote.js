@@ -14,7 +14,6 @@ import {
     Create,
     ReferenceInput,
     SelectInput,
-    DisabledInput,
     TextInput,
     Show,
     SimpleShowLayout,
@@ -91,9 +90,17 @@ export const AdminNoteList = props => (
 export const AdminNoteCreate = props => (
     <Create {...props} title="AdminNote Create">
         <SimpleForm validate={validationCreateAdminNote}>
-            <ReferenceInput label="User" source="user_id" reference="users" perPage={0} allowEmpty>
-                <SelectInput optionText="username" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('users', 'list') && (
+                <ReferenceInput
+                    label="User"
+                    source="user_id"
+                    reference="users"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="username" />
+                </ReferenceInput>
+            )}
             <TextInput source="note" />
         </SimpleForm>
     </Create>

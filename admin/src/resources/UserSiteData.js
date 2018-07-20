@@ -91,16 +91,26 @@ export const UserSiteDataList = props => (
 export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
         <SimpleForm validate={validationCreateUserSiteData}>
-            <UnlimitedDropdownInput
-                label="User"
-                source="user_id"
-                reference="users"
-                optionText="username"
-                filter={{ site_ids: '' }}
-            />
-            <ReferenceInput label="Site" source="site_id" reference="sites" perPage={0} allowEmpty>
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('users', 'list') && (
+                <UnlimitedDropdownInput
+                    label="User"
+                    source="user_id"
+                    reference="users"
+                    optionText="username"
+                    filter={{ site_ids: '' }}
+                />
+            )}
+            {PermissionsStore.getResourcePermission('sites', 'list') && (
+                <ReferenceInput
+                    label="Site"
+                    source="site_id"
+                    reference="sites"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
             <LongTextInput
                 source="data"
                 format={value => (value instanceof Object ? JSON.stringify(value) : value)}
