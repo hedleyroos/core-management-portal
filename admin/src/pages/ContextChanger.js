@@ -64,9 +64,9 @@ class ContextChanger extends Component {
         this.setState({ value });
     }
 
-    handleSelection() {
+    handleSelection(back) {
         this.setState({ changing: true });
-        if (this.state.value !== this.currentContext.key) {
+        if (!back && this.state.value !== this.currentContext.key) {
             const { value } = this.state;
             const userID = jwtDecode(localStorage.getItem('id_token')).sub;
             PermissionsStore.getAndLoadPermissions(userID, value)
@@ -122,7 +122,7 @@ class ContextChanger extends Component {
                                 <CardActions>
                                     <FlatButton
                                         label="Back"
-                                        onClick={() => this.handleSelection()}
+                                        onClick={() => this.handleSelection(true)}
                                     />
                                     <RaisedButton
                                         label="Confirm"
