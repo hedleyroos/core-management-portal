@@ -28,7 +28,7 @@ export const getDomainsAndSites = ids => {
             ? getUntilDone(`${resource}s`, {
                   [`${resource}_ids`]: ids[`${resource}s`].join(',')
               })
-            : Promise.resolve({});
+            : Promise.resolve([]);
     });
     return Promise.all(promises);
 };
