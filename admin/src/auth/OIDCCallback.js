@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
 import PermissionsStore from '../auth/PermissionsStore';
-import { base64urlDecode, errorNotificationAnt } from '../utils';
+import { base64urlDecode, errorNotificationAnt, apiErrorHandler } from '../utils';
 import WaitingPage from '../pages/WaitingPage';
 
 class OIDCCallback extends Component {
@@ -68,9 +68,9 @@ class OIDCCallback extends Component {
         }
     }
     handleLoginError(error) {
-        console.error(error);
         localStorage.clear();
         this.setState({ failure: true });
+        apiErrorHandler(error);
         errorNotificationAnt(
             'Something went wrong with your login, please notify us of this issue.'
         );

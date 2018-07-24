@@ -19,7 +19,12 @@ import PermissionsStore from '../../auth/PermissionsStore';
 import restClient, { GET_LIST } from '../../restClient';
 import UserCard from './UserCard';
 import UserSearch from './UserSearch';
-import { makeIDMapping, getDomainAndSiteIds, getDomainsAndSites } from '../../utils';
+import {
+    makeIDMapping,
+    getDomainAndSiteIds,
+    getDomainsAndSites,
+    apiErrorHandler
+} from '../../utils';
 
 const mapStateToProps = state => ({
     manageUserRoles: state.manageUserRoles
@@ -98,11 +103,8 @@ class ManageUserRoles extends Component {
     }
 
     handleAPIError(error) {
-        if (error.message === 'Token expired') {
-            localStorage.clear();
-            this.props.invalidToken();
-        }
-        console.error(error);
+        const invalidToken = apiErrorHandler(error);
+        invalidToken && this.props.invalidToken();
     }
 
     render() {

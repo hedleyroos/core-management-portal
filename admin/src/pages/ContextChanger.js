@@ -13,7 +13,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import { muiTheme, styles } from '../Theme';
 import PermissionsStore from '../auth/PermissionsStore';
-import { makeIDMapping, getDomainAndSiteIds, createTreeData, getDomainsAndSites } from '../utils';
+import {
+    makeIDMapping,
+    getDomainAndSiteIds,
+    createTreeData,
+    getDomainsAndSites,
+    apiErrorHandler
+} from '../utils';
 import DomainTreeInput from '../inputs/DomainTreeInput';
 
 class ContextChanger extends Component {
@@ -82,11 +88,8 @@ class ContextChanger extends Component {
     }
 
     handleAPIError(error) {
-        if (error.message === 'Token expired') {
-            localStorage.clear();
-            this.setState({ validToken: false });
-        }
-        console.error(error);
+        let validToken = apiErrorHandler(error);
+        this.setState({ validToken });
     }
 
     render() {

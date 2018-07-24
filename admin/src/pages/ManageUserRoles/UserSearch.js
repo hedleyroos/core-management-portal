@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import { reset, setSearchResults, selectUser, invalidToken } from '../../actions/manageUserRoles';
 import restClient, { GET_LIST } from '../../restClient';
 import InlineTable from '../../fields/InlineTable';
-import { makeIDMapping, getUntilDone, getUniqueIDs } from '../../utils';
+import { makeIDMapping, getUntilDone, getUniqueIDs, apiErrorHandler } from '../../utils';
 
 const mapStateToProps = state => ({
     manageUserRoles: state.manageUserRoles
@@ -94,7 +94,7 @@ class UserSearch extends Component {
                             this.props.selectUser(rows[0], { ...domainRoles, ...siteRoles });
                         })
                         .catch(error => {
-                            this.handleAPIError();
+                            this.handleAPIError(error);
                         });
                 })
                 .catch(error => {
@@ -104,11 +104,8 @@ class UserSearch extends Component {
     }
 
     handleAPIError(error) {
-        if (error.message === 'Token expired') {
-            localStorage.clear();
-            this.props.invalidToken();
-        }
-        console.error(error);
+        const invalidToken = apiErrorHandler(error);
+        invalidToken && this.props.invalidToken();
     }
 
     render() {

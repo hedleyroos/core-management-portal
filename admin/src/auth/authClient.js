@@ -1,5 +1,5 @@
 import { AUTH_LOGOUT, AUTH_CHECK, AUTH_ERROR } from 'admin-on-rest';
-import { generateQueryString } from '../utils';
+import { generateQueryString, apiErrorHandler } from '../utils';
 
 export default (type, params) => {
     if (type === AUTH_LOGOUT) {
@@ -14,7 +14,8 @@ export default (type, params) => {
         }
     }
     if (type === AUTH_ERROR) {
-        if (params.message === 'Token expired') {
+        const invalidToken = apiErrorHandler(params);
+        if (invalidToken) {
             localStorage.removeItem('id_token');
             return Promise.reject();
         }

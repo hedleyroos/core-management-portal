@@ -15,7 +15,12 @@ import {
     assignRole,
     allAssigned
 } from '../../actions/manageUserRoles';
-import { errorNotificationAnt, notEmptyObject, successNotificationAnt } from '../../utils';
+import {
+    errorNotificationAnt,
+    notEmptyObject,
+    successNotificationAnt,
+    apiErrorHandler
+} from '../../utils';
 import DomainTreeInput from '../../inputs/DomainTreeInput';
 import restClient, { CREATE } from '../../restClient';
 import { PLACE_MAPPING } from '../../constants';
@@ -41,7 +46,6 @@ class AssignRoleCard extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleAssign = this.handleAssign.bind(this);
-        this.handleAPIError = this.handleAPIError.bind(this);
     }
 
     handleChange(key) {
@@ -114,20 +118,13 @@ class AssignRoleCard extends Component {
                                 }' either exists for the user or the required ${place} role does not exist.`
                             );
                             this.setState({ assigning: count !== amountSelectedToAssign });
-                            this.handleAPIError(error);
+                            const invalidToken = apiErrorHandler(error);
+                            invalidToken && this.props.invalidToken();
                         });
                 }
                 return null;
             });
         }
-    }
-
-    handleAPIError(error) {
-        if (error.message === 'Token expired') {
-            localStorage.clear();
-            this.props.invalidToken();
-        }
-        console.error(error);
     }
 
     render() {
