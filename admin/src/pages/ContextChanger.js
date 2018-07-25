@@ -88,7 +88,7 @@ class ContextChanger extends Component {
     }
 
     handleAPIError(error) {
-        let validToken = apiErrorHandler(error);
+        const validToken = apiErrorHandler(error);
         this.setState({ validToken });
     }
 
