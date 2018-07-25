@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.0.1
+-----
 #. Added `context_switcher`,
 #. Added default filter for user search based on current context.
 #. Manage user role page fixes.
