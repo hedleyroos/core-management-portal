@@ -101,10 +101,11 @@ class AssignRoleCard extends Component {
                             });
                             successNotificationAnt(
                                 `Role '${role.label}' assigned on ${place} '${placeObject.name}'`,
+                                null,
                                 3
                             );
                             if (!successCount) {
-                                successNotificationAnt('Assignment Action Complete', 4);
+                                successNotificationAnt('Assignment Action Complete', 'Done', 4);
                                 this.setState({ assigning: false });
                                 this.props.allAssigned();
                             } else {
@@ -112,11 +113,7 @@ class AssignRoleCard extends Component {
                             }
                         })
                         .catch(error => {
-                            errorNotificationAnt(
-                                `Role '${
-                                    role.label
-                                }' either exists for the user or the required ${place} role does not exist.`
-                            );
+                            errorNotificationAnt(`Role '${role.label}' cannot be assigned.`);
                             this.setState({ assigning: count !== amountSelectedToAssign });
                             const invalidToken = apiErrorHandler(error);
                             invalidToken && this.props.invalidToken();

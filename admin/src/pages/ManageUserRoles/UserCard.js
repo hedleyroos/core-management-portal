@@ -69,15 +69,11 @@ class UserCard extends Component {
                             );
                         })
                         .catch(error => {
-                            let description =
-                                error.status === 403
-                                    ? `You do not have permission to remove role '${
-                                          userRole.role.label
-                                      }' from '${userRole[resource].name}'.`
-                                    : `Something went wrong. Cannot delete role '${
-                                          userRole.role.label
-                                      }' from '${userRole[resource].name}' for user`;
-                            errorNotificationAnt(description);
+                            errorNotificationAnt(
+                                `Something went wrong. Cannot delete role '${
+                                    userRole.role.label
+                                }' from '${userRole[resource].name}' for user`
+                            );
                             const invalidToken = apiErrorHandler(error);
                             invalidToken && this.props.invalidToken();
                         });
