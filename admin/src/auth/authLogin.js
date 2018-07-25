@@ -11,7 +11,7 @@ import {pink300, pink500} from 'material-ui/styles/colors';
 import {userLogin} from 'admin-on-rest';
 
 import {muiTheme, styles} from '../Theme'
-import {generateNonce, GenerateQueryString} from '../utils';
+import {generateNonce, generateQueryString} from '../utils';
 
 const OIDC_PROVIDER_URL = process.env.REACT_APP_AUTHORIZATION_ENDPOINT;
 const OIDC_PROVIDER_SCOPE = 'openid profile roles';
@@ -48,7 +48,7 @@ class AuthLoginPage extends Component {
         localStorage.setItem('auth_state', queryArguments.state);
         localStorage.setItem("auth_nonce", queryArguments.nonce);
 
-        const queryString = GenerateQueryString(queryArguments);
+        const queryString = generateQueryString(queryArguments);
         const loginUrl = `${OIDC_PROVIDER_URL}?${queryString}`;
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
@@ -65,7 +65,7 @@ class AuthLoginPage extends Component {
                         <p>Login with Girl Effect OIDC Provider</p>
                             <RaisedButton
                                 type='button'
-                                href={ loginUrl}
+                                href={loginUrl}
                                 primary
                                 label='Login'
                                 fullWidth

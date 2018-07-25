@@ -1,23 +1,21 @@
 import jwtDecode from 'jwt-decode';
-import { Card } from 'material-ui/Card';
-import CircularProgress from 'material-ui/CircularProgress';
 import queryString from 'query-string';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
-import permissionsStore from './PermissionsStore';
-import restClient, { OPERATIONAL } from '../swaggerRestServer';
-import { styles } from '../Theme';
-import { base64urlDecode } from '../utils';
+import PermissionsStore from '../auth/PermissionsStore';
+import { base64urlDecode, errorNotificationAnt } from '../utils';
+import WaitingPage from '../pages/WaitingPage';
 
 class OIDCCallback extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            failure: false,
-            loginComplete: false
+            loginComplete: false,
+            failure: false
         };
         this.getTokenAndPermissions = this.getTokenAndPermissions.bind(this);
+        this.handleLoginError = this.handleLoginError.bind(this);
     }
     componentWillMount() {
         this.getTokenAndPermissions();
@@ -26,7 +24,7 @@ class OIDCCallback extends Component {
         const parsedQuery = queryString.parse(this.props.location.search);
         // Quick check if a token is retrieved.
         if (!parsedQuery.id_token) {
-            this.setState({ failure: true });
+            this.handleLoginError('No token received.')
             return null;
         }
         // Check that the state returned in the URL matches the one stored.
@@ -43,45 +41,47 @@ class OIDCCallback extends Component {
         const incorrectNonce = authNonce !== payload.nonce;
         // Check if none of all the above checks failed.
         if (incorrectState || incorrectSegmentAmount || incorrectNonce) {
-            console.error(
-                incorrectSegmentAmount
-                    ? 'Token contains ' +
-                      segments.length +
-                      ' segments, but it should have 3.'
-                    : incorrectNonce
-                        ? 'Nonce mismatch: ' + authNonce + ' ' + payload.nonce
-                        : 'State mismatch: ' +
-                          authState +
-                          ' ' +
-                          parsedQuery.state
-            );
-            this.setState({ failure: true });
+            const error = incorrectSegmentAmount
+                ? `Token contains ${segments.length} segments, but it should have 3.`
+                : incorrectNonce
+                    ? `Nonce mismatch: ${authNonce} ${payload.nonce}`
+                    : `State mismatch: ${authState} ${parsedQuery.state}`;
+            this.handleLoginError(error);
         } else {
             // Everything checked out. Store the id token.
             localStorage.setItem('id_token', parsedQuery.id_token);
-
-            restClient(OPERATIONAL, 'user_management_portal_permissions', {
-                pathParameters: [jwtDecode(parsedQuery.id_token).sub]
-            })
-                .then(response => {
-                    permissionsStore.loadPermissions(response.data);
-                    this.setState({ loginComplete: true });
+            const userID = jwtDecode(parsedQuery.id_token).sub;
+            PermissionsStore.getAllUserRoles(userID)
+                .then(contexts => {
+                    const currentContext = Object.keys(contexts)[0];
+                    PermissionsStore.getAndLoadPermissions(userID, currentContext, contexts)
+                        .then(result => {
+                            this.setState({ loginComplete: true });
+                        })
+                        .catch(error => {
+                            this.handleLoginError(error);
+                        });
                 })
                 .catch(error => {
-                    console.error(error);
-                    this.setState({ failure: true });
+                    this.handleLoginError(error);
                 });
         }
     }
+    handleLoginError(error) {
+        console.error(error);
+        localStorage.clear();
+        this.setState({ failure: true });
+        errorNotificationAnt(
+            'Something went wrong with your login, please notify us of this issue.'
+        );
+    }
     render() {
-        // // Reload page after login id_token and permissions are loaded.
-        if (this.state.loginComplete) {
-            window.location.href = process.env.REACT_APP_PORTAL_URL;
-        }
         return !this.state.failure ? (
-            <Card style={styles.cardCentered}>
-                <CircularProgress style={styles.circularProgress} size={500} thickness={50} />
-            </Card>
+            this.state.loginComplete ? (
+                <Redirect push to="/" />
+            ) : (
+                <WaitingPage />
+            )
         ) : (
             <Redirect push to="/login" />
         );

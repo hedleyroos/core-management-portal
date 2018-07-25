@@ -1,7 +1,7 @@
 /**
  * Generated Menu.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
@@ -20,8 +20,11 @@ import ShoppingBasketIcon from 'material-ui/svg-icons/action/shopping-basket';
 import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
 import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
 import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
+import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
+import { pink300 } from 'material-ui/styles/colors';
+
 import PermissionsStore from './auth/PermissionsStore';
-import { titleCase } from './utils';
+import { titleCase, notEmptyObject } from './utils';
 import { TITLES, PERMISSIONS } from './constants';
 
 const ICONS = {
@@ -43,12 +46,24 @@ const ICONS = {
     sitedataschemas: <ListIcon />,
     clients: <DeviceIcon />,
     countries: <TerrainIcon />,
-    organisationalunits: <CategoryIcon />,
+    organisations: <CategoryIcon />,
     users: <PeopleIcon />
 };
 
 const Menu = ({ resources, onMenuTap, logout }) => (
     <div>
+        {notEmptyObject(PermissionsStore.getAllContexts()) ? (
+            <MenuItemLink
+                to="/contextchanger"
+                primaryText={`Context: ${titleCase(
+                    PermissionsStore.getCurrentContext()
+                        .obj.name.split('_')
+                        .join(' ')
+                )}`}
+                onClick={onMenuTap}
+                leftIcon={<ContextSwitchIcon color={pink300} />}
+            />
+        ) : null}
         {resources
             ? resources.map(resource => (
                   <MenuItemLink

@@ -1,29 +1,34 @@
-/** 
+/**
  * Generated Filters.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
-import {
-    NumberInput,
-    TextInput,
-    Filter
-} from 'admin-on-rest';
+import { TextInput, Filter } from 'admin-on-rest';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 
 const parseDomainIds = value => value.replace(/[^\w]/gi, ',');
 
 const validateDomainIds = value => {
     if (value) {
-        const valid = value.replace(/[^\w]/gi, ',').split(',').every(item => !isNaN(item))
+        const valid = value
+            .replace(/[^\w]/gi, ',')
+            .split(',')
+            .every(item => !isNaN(item));
         if (!valid) {
-            return "Domain Ids are not all numbers.";
+            return 'Domain Ids are not all numbers.';
         }
     }
 };
 
 const DomainFilter = props => (
     <Filter {...props}>
-        <NumberInput label="Parent Id" source="parent_id" />
-        <TextInput label="Domain Ids" source="domain_ids" parse={parseDomainIds} validate={validateDomainIds} />
+        <DomainTreeInput label="Parent Domain" source="parent_id" />
+        <TextInput
+            label="Domain Ids"
+            source="domain_ids"
+            parse={parseDomainIds}
+            validate={validateDomainIds}
+        />
     </Filter>
 );
 

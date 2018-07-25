@@ -6,6 +6,7 @@ export const TITLES = {
     siteroles: 'Site Roles',
     userdomainroles: 'User Domain Roles',
     usersiteroles: 'User Site Roles',
+    usersitedata: 'User Site Data',
     adminnotes: 'Admin Notes',
     sitedataschemas: 'Site Data Schemas',
     organisationalunits: 'Organisations'
@@ -13,6 +14,7 @@ export const TITLES = {
 
 export const PERMISSIONS = {
     manageuserroles: [
+        ['roles', 'list'],
         ['users', 'list'],
         ['sites', 'list'],
         ['siteroles', 'list'],
@@ -25,4 +27,11 @@ export const PERMISSIONS = {
         ['userdomainroles', 'create'],
         ['userdomainroles', 'remove']
     ]
+};
+
+export const TECH_ADMIN = 'tech_admin';
+
+export const PLACE_MAPPING = {
+    d: 'domain',
+    s: 'site'
 };

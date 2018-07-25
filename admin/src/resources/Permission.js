@@ -1,7 +1,7 @@
 /**
  * Generated Permission.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import {
     List,
@@ -25,19 +25,19 @@ import PermissionFilter from '../filters/PermissionFilter';
 const validationCreatePermission = values => {
     const errors = {};
     if (!values.name) {
-        errors.name = ["name is required"];
+        errors.name = ['name is required'];
     }
     return errors;
-}
+};
 
 const validationEditPermission = values => {
     const errors = {};
     return errors;
-}
+};
 
 export const PermissionList = props => (
     <List {...props} title="Permission List" filters={<PermissionFilter />}>
-        <Datagrid bodyOptions={ { showRowHover: true } }>
+        <Datagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" />
             <TextField source="name" />
             <TextField source="description" />
@@ -45,10 +45,12 @@ export const PermissionList = props => (
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('permissions', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {PermissionsStore.getResourcePermission('permissions', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('permissions', 'remove') ? (
+                <DeleteButton />
+            ) : null}
         </Datagrid>
     </List>
-)
+);
 
 export const PermissionCreate = props => (
     <Create {...props} title="Permission Create">
@@ -57,7 +59,7 @@ export const PermissionCreate = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Create>
-)
+);
 
 export const PermissionShow = props => (
     <Show {...props} title="Permission Show">
@@ -69,7 +71,7 @@ export const PermissionShow = props => (
             <DateField source="updated_at" />
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const PermissionEdit = props => (
     <Edit {...props} title="Permission Edit">
@@ -78,6 +80,6 @@ export const PermissionEdit = props => (
             <TextInput source="description" />
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/

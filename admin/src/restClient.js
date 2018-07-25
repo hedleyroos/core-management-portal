@@ -1,9 +1,11 @@
 /**
- * Generated swaggerRestServer.js code. Edit at own risk.
+ * Generated restClient.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
 import { stringify } from 'query-string';
 import { fetchUtils } from 'admin-on-rest';
+
+import PermissionsStore from './auth/PermissionsStore';
 
 export const GET_LIST = 'GET_LIST';
 export const GET_ONE = 'GET_ONE';
@@ -25,6 +27,7 @@ const COMPOSITE_KEY_RESOURSES = {
     usersitedata: ['user_id', 'site_id']
 };
 
+// For models with different Primary Key fields rather than 'id'.
 const PK_MAPPING = {
     sitedataschemas: 'site_id',
     countries: 'code'
@@ -37,27 +40,52 @@ const FILTER_LENGTHS = {
             max: 2
         },
         email: {
-            min: 3,
+            min: 3
         },
         first_name: {
-            min: 3,
+            min: 3
         },
         last_name: {
-            min: 3,
+            min: 3
         },
         msisdn: {
-            min: 3,
+            min: 3
         },
         nickname: {
-            min: 3,
+            min: 3
         },
         username: {
-            min: 3,
+            min: 3
         },
         q: {
-            min: 3,
-        },
-    },
+            min: 3
+        }
+    }
+};
+
+// These are default filters that were required for the
+// context implied filter. Permanent filter props on listings were not
+// used as they could not be overridden. To override the default provide
+// the same filter in your restClient call. eg. `{ site_ids: '' }`
+// NOTE: Must be a function as the PermissionsStore can change.
+const DEFAULT_FILTERS = () => ({
+    users: {
+        site_ids: PermissionsStore.getSiteIDs()
+    }
+});
+
+const GET_MANY_FILTER = {
+    adminnotes: 'admin_note_ids',
+    clients: 'client_ids',
+    countries: 'country_codes',
+    domains: 'domain_ids',
+    invitations: 'invitation_ids',
+    organisations: 'organisation_ids',
+    permissions: 'permission_ids',
+    resources: 'resource_ids',
+    roles: 'role_ids',
+    sites: 'site_ids',
+    users: 'user_ids'
 };
 
 /**
@@ -67,15 +95,10 @@ const FILTER_LENGTHS = {
  * @param {Object} params The REST request params, depending on the type
  * @returns {Object} { url, options } The HTTP request parameters
  */
-export const convertRESTRequestToHTTP = ({
-    apiUrl,
-    type,
-    resource,
-    params
-}) => {
+export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => {
     let url = '';
     const options = {};
-    const query = {};
+    let query = {};
 
     switch (type) {
         case GET_MANY_REFERENCE: {
@@ -85,9 +108,9 @@ export const convertRESTRequestToHTTP = ({
         }
         case GET_LIST: {
             if (params.pagination) {
-                const { page, perPage } = params.pagination;
-                query['limit'] = perPage > 0 ? perPage : 100; // Maximum limit if perPage = 0.
-                query['offset'] = perPage > 0 ? (page - 1) * perPage : 0;
+                let { page, perPage } = params.pagination;
+                query['limit'] = perPage || 100; // Maximum limit if perPage = 0.
+                query['offset'] = page ? (page - 1) * query['limit'] : 0;
             }
 
             if (params.sort) {
@@ -97,6 +120,13 @@ export const convertRESTRequestToHTTP = ({
 
             if (params.filter) {
                 let filterLengths = FILTER_LENGTHS[resource];
+                const defaultFilters = DEFAULT_FILTERS()[resource];
+                if (defaultFilters) {
+                    query = {
+                        ...query,
+                        ...defaultFilters
+                    };
+                }
                 Object.keys(params.filter).forEach(key => {
                     let filter =
                         params.filter[key] instanceof Object
@@ -115,9 +145,11 @@ export const convertRESTRequestToHTTP = ({
                     } else {
                         query[key] = filter;
                     }
+                    if (query[key].length === 0) {
+                        delete query[key];
+                    }
                 });
             }
-
             url = `${apiUrl}/${resource}?${stringify(query)}`;
             break;
         }
@@ -125,9 +157,10 @@ export const convertRESTRequestToHTTP = ({
             url = `${apiUrl}/${resource}/${params.id}`;
             break;
         case GET_MANY: {
-            const query = {
-                filter: JSON.stringify({ id: params.ids })
-            };
+            const filterName = GET_MANY_FILTER[resource];
+            const query = filterName
+                ? { [filterName]: params.ids.join(',') }
+                : { ids: params.ids.join(',') };
             url = `${apiUrl}/${resource}?${stringify(query)}`;
             break;
         }
@@ -143,10 +176,7 @@ export const convertRESTRequestToHTTP = ({
             break;
         case OPERATIONAL:
             const pathParameters = params.pathParameters
-                ? params.pathParameters.reduce(
-                      (pathString, value) => pathString + `/${value}`,
-                      ''
-                  )
+                ? params.pathParameters.reduce((pathString, value) => pathString + `/${value}`, '')
                 : '';
             url = `${apiUrl}/ops/${resource}` + pathParameters;
             options.method = params.method;
@@ -188,12 +218,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                       id: `${keys.map(key => res[key]).join('/')}`
                   }))
                 : pk
-                    ? json.map(
-                          res =>
-                              res.hasOwnProperty('id')
-                                  ? res
-                                  : { ...res, id: res[pk] }
-                      )
+                    ? json.map(res => (res.hasOwnProperty('id') ? res : { ...res, id: res[pk] }))
                     : json;
             return {
                 data: data,
@@ -211,19 +236,19 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                       id: `${keys.map(key => res[key]).join('/')}`
                   }))
                 : pk
-                    ? json.map(
-                          res =>
-                              res.hasOwnProperty('id')
-                                  ? res
-                                  : { ...res, id: res[pk] }
-                      )
+                    ? json.map(res => (res.hasOwnProperty('id') ? res : { ...res, id: res[pk] }))
                     : json;
             return {
                 data: data,
                 total: parseInt(headers.get('x-total-count'), 10)
             };
         case CREATE:
-            return { data: { ...params.data, id: pk ? json[pk] : json.id } };
+            return {
+                data: {
+                    ...params.data,
+                    id: keys ? keys.map(key => json[key]).join('/') : pk ? json[pk] : json.id
+                }
+            };
         default:
             return { data: json ? json : {} };
     }
@@ -239,7 +264,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
  * CREATE       => POST http://my.api.url/users/
  * DELETE       => DELETE http://my.api.url/users/123/ or DELETE http://my.api.url/users/123/321/ in the case of a composite key
  */
-const swaggerRestServer = (apiUrl, httpClient = fetchUtils.fetchJson) => {
+const restClient = (apiUrl, httpClient = fetchUtils.fetchJson) => {
     /**
      * @param {string} type Request type, e.g GET_LIST
      * @param {string} resource Resource name, e.g. "users"
@@ -271,12 +296,13 @@ const httpClient = (url, options = {}) => {
         options.headers = new Headers({ Accept: 'application/json' });
     }
     const id_token = localStorage.getItem('id_token');
+    const permissions = JSON.parse(localStorage.getItem('permissions'));
     options.headers.set('Authorization', `Bearer ${id_token}`);
+    if (permissions) {
+        options.headers.set('X-GE-Portal-Context', permissions.currentContext.key);
+    }
     return fetchUtils.fetchJson(url, options);
 };
 
-export default swaggerRestServer(
-    process.env.REACT_APP_MANAGEMENT_LAYER,
-    httpClient
-);
+export default restClient(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
 /** End of Generated Code **/

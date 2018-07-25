@@ -1,7 +1,7 @@
 /**
  * Generated User.js code. Edit at own risk.
  * When regenerated the changes will be lost.
-**/
+ **/
 import React from 'react';
 import {
     List,
@@ -25,6 +25,10 @@ import {
     EditButton,
     ShowButton
 } from 'admin-on-rest';
+import Card from 'material-ui/Card/Card';
+import CardText from 'material-ui/Card/CardText';
+import CardTitle from 'material-ui/Card/CardTitle';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
@@ -34,13 +38,25 @@ import UserFilter from '../filters/UserFilter';
 const validationEditUser = values => {
     const errors = {};
     return errors;
-}
+};
 
 const hiddenFields = ['created_at', 'updated_at', 'avatar', 'country_code'];
 
+export const UserListNoSites = props => (
+    <Card>
+        <CardTitle title="User List" />
+        <CardText>
+            There are no sites linked to the current context. Users Page not available.
+        </CardText>
+    </Card>
+);
+
 export const UserList = props => (
     <List {...props} title="User List" filters={<UserFilter />}>
-        <FieldSelectDatagrid defaultHiddenFields={hiddenFields} bodyOptions={ { showRowHover: true } }>
+        <FieldSelectDatagrid
+            defaultHiddenFields={hiddenFields}
+            bodyOptions={{ showRowHover: true }}
+        >
             <TextField source="id" />
             <TextField source="username" />
             <TextField source="first_name" />
@@ -56,14 +72,26 @@ export const UserList = props => (
             <DateField source="birth_date" />
             <TextField source="avatar" />
             {PermissionsStore.getResourcePermission('countries', 'list') ? (
-                <ReferenceField label="Country" source="country_code" reference="countries" linkType="show" allowEmpty>
+                <ReferenceField
+                    label="Country"
+                    source="country_code"
+                    reference="countries"
+                    linkType="show"
+                    allowEmpty
+                >
                     <TextField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {PermissionsStore.getResourcePermission('organisationalunits', 'list') ? (
-                <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
+            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                <ReferenceField
+                    label="Organisation"
+                    source="organisation_id"
+                    reference="organisations"
+                    linkType="show"
+                    allowEmpty
+                >
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
@@ -73,10 +101,10 @@ export const UserList = props => (
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {PermissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton />: null}
+            {PermissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton /> : null}
         </FieldSelectDatagrid>
     </List>
-)
+);
 
 export const UserShow = props => (
     <Show {...props} title="User Show">
@@ -96,14 +124,26 @@ export const UserShow = props => (
             <DateField source="birth_date" />
             <TextField source="avatar" />
             {PermissionsStore.getResourcePermission('countries', 'list') ? (
-                <ReferenceField label="Country" source="country_code" reference="countries" linkType="show" allowEmpty>
+                <ReferenceField
+                    label="Country"
+                    source="country_code"
+                    reference="countries"
+                    linkType="show"
+                    allowEmpty
+                >
                     <TextField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
             )}
-            {PermissionsStore.getResourcePermission('organisationalunits', 'list') ? (
-                <ReferenceField label="Organisationalunit" source="organisational_unit_id" reference="organisationalunits" linkType="show" allowEmpty>
+            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                <ReferenceField
+                    label="Organisation"
+                    source="organisation_id"
+                    reference="organisations"
+                    linkType="show"
+                    allowEmpty
+                >
                     <NumberField source="name" />
                 </ReferenceField>
             ) : (
@@ -112,12 +152,56 @@ export const UserShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('userdomainroles', 'list') ? (
-                <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
-                    <Datagrid bodyOptions={ { showRowHover: true } }>
-                        <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                <ReferenceManyField
+                    label="Domain Roles"
+                    reference="userdomainroles"
+                    target="user_id"
+                >
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Domain"
+                            source="domain_id"
+                            reference="domains"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="name" />
                         </ReferenceField>
-                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                        <ReferenceField
+                            label="Role"
+                            source="role_id"
+                            reference="roles"
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
+            {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
+                <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Site"
+                            source="site_id"
+                            reference="sites"
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField
+                            label="Role"
+                            source="role_id"
+                            reference="roles"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="label" />
                         </ReferenceField>
                         <DateField source="created_at" />
@@ -129,8 +213,14 @@ export const UserShow = props => (
             )}
             {PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
                 <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
-                    <Datagrid bodyOptions={ { showRowHover: true } }>
-                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Site"
+                            source="site_id"
+                            reference="sites"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="name" />
                         </ReferenceField>
                         <ObjectField source="data" addLabel />
@@ -141,25 +231,9 @@ export const UserShow = props => (
             ) : (
                 <EmptyField />
             )}
-            {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
-                <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
-                    <Datagrid bodyOptions={ { showRowHover: true } }>
-                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                            <NumberField source="label" />
-                        </ReferenceField>
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
-                    </Datagrid>
-                </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
         </SimpleShowLayout>
     </Show>
-)
+);
 
 export const UserEdit = props => (
     <Edit {...props} title="User Edit">
@@ -174,16 +248,68 @@ export const UserEdit = props => (
             <TextInput source="gender" />
             <DateInput source="birth_date" />
             <TextInput source="avatar" />
-            <ReferenceInput label="Country" source="country_code" reference="countries" perPage={0} allowEmpty>
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            {PermissionsStore.getResourcePermission('countries', 'list') && (
+                <ReferenceInput
+                    label="Country"
+                    source="country_code"
+                    reference="countries"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
             {PermissionsStore.getResourcePermission('userdomainroles', 'list') ? (
-                <ReferenceManyField label="Domain Roles" reference="userdomainroles" target="user_id">
-                    <Datagrid bodyOptions={ { showRowHover: true } }>
-                        <ReferenceField label="Domain" source="domain_id" reference="domains" linkType="show" allowEmpty>
+                <ReferenceManyField
+                    label="Domain Roles"
+                    reference="userdomainroles"
+                    target="user_id"
+                >
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Domain"
+                            source="domain_id"
+                            reference="domains"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="name" />
                         </ReferenceField>
-                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
+                        <ReferenceField
+                            label="Role"
+                            source="role_id"
+                            reference="roles"
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="label" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
+            {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
+                <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Site"
+                            source="site_id"
+                            reference="sites"
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <ReferenceField
+                            label="Role"
+                            source="role_id"
+                            reference="roles"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="label" />
                         </ReferenceField>
                         <DateField source="created_at" />
@@ -195,8 +321,14 @@ export const UserEdit = props => (
             )}
             {PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
                 <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
-                    <Datagrid bodyOptions={ { showRowHover: true } }>
-                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Site"
+                            source="site_id"
+                            reference="sites"
+                            linkType="show"
+                            allowEmpty
+                        >
                             <NumberField source="name" />
                         </ReferenceField>
                         <ObjectField source="data" addLabel />
@@ -207,24 +339,8 @@ export const UserEdit = props => (
             ) : (
                 <EmptyField />
             )}
-            {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
-                <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
-                    <Datagrid bodyOptions={ { showRowHover: true } }>
-                        <ReferenceField label="Site" source="site_id" reference="sites" linkType="show" allowEmpty>
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField label="Role" source="role_id" reference="roles" linkType="show" allowEmpty>
-                            <NumberField source="label" />
-                        </ReferenceField>
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
-                    </Datagrid>
-                </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
         </SimpleForm>
     </Edit>
-)
+);
 
 /** End of Generated Code **/
