@@ -35,9 +35,19 @@ export const getDomainsAndSites = ids => {
 
 export const toBool = thing => !!thing;
 
-export const successNotificationAnt = (description, duration = 3) => {
+export const apiErrorHandler = error => {
+    const message = error.body.message || error.body.error;
+    errorNotificationAnt(message, 'Error');
+    if (error.message === 'Token expired') {
+        localStorage.clear();
+        return true;
+    }
+    return false;
+};
+
+export const successNotificationAnt = (description, heading = null, duration = 3) => {
     notification.success({
-        message: 'Success!',
+        message: heading || 'Success!',
         description,
         duration,
         style: {
@@ -48,9 +58,9 @@ export const successNotificationAnt = (description, duration = 3) => {
     });
 };
 
-export const errorNotificationAnt = (description, duration = 0) => {
+export const errorNotificationAnt = (description, heading = null, duration = 0) => {
     notification.error({
-        message: 'Oh No!',
+        message: heading || 'Oh No!',
         description,
         duration,
         style: {

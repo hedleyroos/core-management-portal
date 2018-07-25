@@ -10,7 +10,7 @@ import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { styles } from '../../Theme';
-import { errorNotificationAnt, successNotificationAnt } from '../../utils';
+import { errorNotificationAnt, successNotificationAnt, apiErrorHandler } from '../../utils';
 import { checkRoleForDelete, deleteRole, invalidToken } from '../../actions/manageUserRoles';
 import restClient, { DELETE } from '../../restClient';
 import ConfirmDialog from './ConfirmDialog';
@@ -35,7 +35,6 @@ class UserCard extends Component {
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
-        this.handleAPIError = this.handleAPIError.bind(this);
     }
 
     handleCheck(key) {
@@ -70,29 +69,18 @@ class UserCard extends Component {
                             );
                         })
                         .catch(error => {
-                            let description =
-                                error.status === 403
-                                    ? `You do not have permission to remove role '${
-                                          userRole.role.label
-                                      }' from '${userRole[resource].name}'.`
-                                    : `Something went wrong. Cannot delete role '${
-                                          userRole.role.label
-                                      }' from '${userRole[resource].name}' for user`;
-                            errorNotificationAnt(description);
-                            this.handleAPIError(error);
+                            errorNotificationAnt(
+                                `Something went wrong. Cannot delete role '${
+                                    userRole.role.label
+                                }' from '${userRole[resource].name}' for user`
+                            );
+                            const invalidToken = apiErrorHandler(error);
+                            invalidToken && this.props.invalidToken();
                         });
                 }
                 return null;
             });
         }
-    }
-
-    handleAPIError(error) {
-        if (error.message === 'Token expired') {
-            localStorage.clear();
-            this.props.invalidToken();
-        }
-        console.error(error);
     }
 
     render() {
