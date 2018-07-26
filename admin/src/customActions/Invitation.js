@@ -50,7 +50,6 @@ export class InvitationListActions extends Component {
                     })}
                 <CreateButton basePath={basePath} />
                 <RefreshButton />
-                {/* Add your custom actions */}
                 <FlatButton
                     primary
                     icon={<PurgeIcon />}
@@ -99,7 +98,6 @@ export class InvitationShowActions extends Component {
                 <ListButton basePath={basePath} />
                 <DeleteButton basePath={basePath} record={data} />
                 <RefreshButton />
-                {/* Custom Actions */}
                 {this.inviteNotExpired() && (
                     <FlatButton
                         primary
