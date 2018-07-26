@@ -46,6 +46,7 @@ export const UserSiteRoleList = props => (
                     label="User"
                     source="user_id"
                     reference="users"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -59,6 +60,7 @@ export const UserSiteRoleList = props => (
                     label="Site"
                     source="site_id"
                     reference="sites"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -72,6 +74,7 @@ export const UserSiteRoleList = props => (
                     label="Role"
                     source="role_id"
                     reference="roles"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -80,8 +83,8 @@ export const UserSiteRoleList = props => (
             ) : (
                 <EmptyField />
             )}
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             <ShowButton />
             {PermissionsStore.getResourcePermission('usersiteroles', 'remove') ? (
                 <DeleteButton />

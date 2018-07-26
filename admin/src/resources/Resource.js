@@ -7,6 +7,7 @@ import {
     List,
     Datagrid,
     NumberField,
+    UrlField,
     TextField,
     DateField,
     SimpleForm,
@@ -38,11 +39,11 @@ const validationEditResource = values => {
 export const ResourceList = props => (
     <List {...props} title="Resource List" filters={<ResourceFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" />
-            <TextField source="urn" />
-            <TextField source="description" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <NumberField source="id" sortable={false} />
+            <UrlField source="urn" sortable={false} />
+            <TextField source="description" sortable={false} />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('resources', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('resources', 'remove') ? (
@@ -65,7 +66,7 @@ export const ResourceShow = props => (
     <Show {...props} title="Resource Show">
         <SimpleShowLayout>
             <NumberField source="id" />
-            <TextField source="urn" />
+            <UrlField source="urn" />
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />

@@ -73,12 +73,13 @@ const validationEditInvitation = values => {
 export const InvitationList = props => (
     <List {...props} title="Invitation List" filters={<InvitationFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            <TextField source="id" />
+            <TextField source="id" sortable={false} />
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
                     source="invitor_id"
                     reference="users"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -87,14 +88,15 @@ export const InvitationList = props => (
             ) : (
                 <EmptyField />
             )}
-            <TextField source="first_name" />
-            <TextField source="last_name" />
-            <TextField source="email" />
+            <TextField source="first_name" sortable={false} />
+            <TextField source="last_name" sortable={false} />
+            <TextField source="email" sortable={false} />
             {PermissionsStore.getResourcePermission('organisations', 'list') ? (
                 <ReferenceField
                     label="Organisation"
                     source="organisation_id"
                     reference="organisations"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -103,9 +105,9 @@ export const InvitationList = props => (
             ) : (
                 <EmptyField />
             )}
-            <DateField source="expires_at" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <DateField source="expires_at" sortable={false} />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('invitations', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('invitations', 'remove') ? (

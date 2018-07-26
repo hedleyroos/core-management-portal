@@ -9,6 +9,7 @@ import {
     TextField,
     BooleanField,
     DateField,
+    UrlField,
     ReferenceField,
     NumberField,
     Show,
@@ -58,24 +59,25 @@ export const UserList = props => (
             bodyOptions={{ showRowHover: true }}
         >
             <TextField source="id" />
-            <TextField source="username" />
-            <TextField source="first_name" />
-            <TextField source="last_name" />
-            <TextField source="email" />
-            <BooleanField source="is_active" />
-            <DateField source="date_joined" />
-            <DateField source="last_login" />
-            <BooleanField source="email_verified" />
-            <BooleanField source="msisdn_verified" />
-            <TextField source="msisdn" />
-            <TextField source="gender" />
-            <DateField source="birth_date" />
-            <TextField source="avatar" />
+            <TextField source="username" sortable={false} />
+            <TextField source="first_name" sortable={false} />
+            <TextField source="last_name" sortable={false} />
+            <TextField source="email" sortable={false} />
+            <BooleanField source="is_active" sortable={false} />
+            <DateField source="date_joined" sortable={false} />
+            <DateField source="last_login" sortable={false} />
+            <BooleanField source="email_verified" sortable={false} />
+            <BooleanField source="msisdn_verified" sortable={false} />
+            <TextField source="msisdn" sortable={false} />
+            <TextField source="gender" sortable={false} />
+            <DateField source="birth_date" sortable={false} />
+            <UrlField source="avatar" sortable={false} />
             {PermissionsStore.getResourcePermission('countries', 'list') ? (
                 <ReferenceField
                     label="Country"
                     source="country_code"
                     reference="countries"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -89,6 +91,7 @@ export const UserList = props => (
                     label="Organisation"
                     source="organisation_id"
                     reference="organisations"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -97,8 +100,8 @@ export const UserList = props => (
             ) : (
                 <EmptyField />
             )}
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton /> : null}
@@ -122,7 +125,7 @@ export const UserShow = props => (
             <TextField source="msisdn" />
             <TextField source="gender" />
             <DateField source="birth_date" />
-            <TextField source="avatar" />
+            <UrlField source="avatar" />
             {PermissionsStore.getResourcePermission('countries', 'list') ? (
                 <ReferenceField
                     label="Country"

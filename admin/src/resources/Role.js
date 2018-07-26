@@ -43,12 +43,12 @@ const validationEditRole = values => {
 export const RoleList = props => (
     <List {...props} title="Role List" filters={<RoleFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" />
-            <TextField source="label" />
-            <BooleanField source="requires_2fa" />
-            <TextField source="description" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <NumberField source="id" sortable={false} />
+            <TextField source="label" sortable={false} />
+            <BooleanField source="requires_2fa" sortable={false} />
+            <TextField source="description" sortable={false} />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton /> : null}

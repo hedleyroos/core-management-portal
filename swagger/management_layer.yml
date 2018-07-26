@@ -1141,20 +1141,10 @@ definitions:
         format: uuid
         x-related-info:
           label: username
-      creator_id:
-        type: string
-        format: uuid
-        readOnly: true
-        description: The user making the request will be considered the creator and thus this field is not available
-          when creating admin note.
-        x-related-info:
-          model: user
-          label: username
       note:
         type: string
     required:
       - user_id
-      - creator_id
       - note
 
   admin_note_update:
@@ -1304,9 +1294,11 @@ definitions:
       terms_url:
         description: External reference to the privacy policy of the client.
         type: string
+        format: uri
       website_url:
         description: ''
         type: string
+        format: uri
     required:
       - id
       - client_id
@@ -1569,6 +1561,9 @@ definitions:
     properties:
       mode:
         type: string
+        enum:
+          - asynchronous
+          - synchronous
       amount:
         type: integer
     required:
@@ -2219,7 +2214,7 @@ paths:
           in: query
           type: array
           items:
-            type: integer
+            type: string
             format: uuid
           required: false
           minItems: 1
@@ -3348,7 +3343,6 @@ paths:
           minItems: 1
           collectionFormat: csv
           uniqueItems: true
-
       produces:
         - application/json
       responses:
@@ -4170,3 +4164,5 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    sortable_fields:
+      - id

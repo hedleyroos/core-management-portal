@@ -115,7 +115,7 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
 
             if (params.sort) {
                 const { field, order } = params.sort;
-                query['ordering'] = `${order === 'DESC' ? '-' : ''}` + field;
+                query['order_by'] = `${order === 'DESC' ? '-' : ''}` + field;
             }
 
             if (params.filter) {
