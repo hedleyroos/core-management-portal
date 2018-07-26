@@ -291,7 +291,7 @@ const restClient = (apiUrl, httpClient = fetchUtils.fetchJson) => {
     };
 };
 
-const httpClient = (url, options = {}) => {
+export const httpClient = (url, options = {}) => {
     if (!options.headers) {
         options.headers = new Headers({ Accept: 'application/json' });
     }

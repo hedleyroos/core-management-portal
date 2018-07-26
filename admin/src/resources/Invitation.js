@@ -27,7 +27,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
-import InvitationShowActions from '../customActions/Invitation';
+import { InvitationListActions, InvitationShowActions } from '../customActions/Invitation';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -71,7 +71,12 @@ const validationEditInvitation = values => {
 };
 
 export const InvitationList = props => (
-    <List {...props} title="Invitation List" filters={<InvitationFilter />}>
+    <List
+        {...props}
+        title="Invitation List"
+        actions={<InvitationListActions />}
+        filters={<InvitationFilter />}
+    >
         <Datagrid bodyOptions={{ showRowHover: true }}>
             <TextField source="id" sortable={false} />
             {PermissionsStore.getResourcePermission('users', 'list') ? (

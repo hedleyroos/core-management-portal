@@ -2,14 +2,67 @@ import React, { Component } from 'react';
 import { CardActions } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import SendIcon from 'material-ui/svg-icons/content/send';
-import { DeleteButton, ListButton, RefreshButton, EditButton } from 'admin-on-rest';
+import PurgeIcon from 'material-ui/svg-icons/social/whatshot';
+import { CreateButton, DeleteButton, ListButton, RefreshButton, EditButton } from 'admin-on-rest';
 
 import { styles } from '../Theme';
-import { successNotificationAnt, errorNotificationAnt } from '../utils';
+import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
+import { httpClient } from '../restClient';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
-class InvitationShowActions extends Component {
+export class InvitationListActions extends Component {
+    purgeExpiredInvitations() {
+        httpClient(
+            `${
+                process.env.REACT_APP_MANAGEMENT_LAYER
+            }/invitations/purge/expired?synchronous_mode=true`
+        )
+            .then(response => {
+                successNotificationAnt(
+                    'Expired Invitations are being purged. Refresh to see any changes that have occured.'
+                );
+            })
+            .catch(error => {
+                errorNotificationAnt('Purging of invites was not initialized.');
+                apiErrorHandler(error);
+            });
+    }
+
+    render() {
+        const {
+            resource,
+            filters,
+            displayedFilters,
+            filterValues,
+            basePath,
+            showFilter
+        } = this.props;
+        return (
+            <CardActions style={styles.cardAction}>
+                {filters &&
+                    React.cloneElement(filters, {
+                        resource,
+                        showFilter,
+                        displayedFilters,
+                        filterValues,
+                        context: 'button'
+                    })}
+                <CreateButton basePath={basePath} />
+                <RefreshButton />
+                {/* Add your custom actions */}
+                <FlatButton
+                    primary
+                    icon={<PurgeIcon />}
+                    label="Purge Expired Invites"
+                    onClick={this.purgeExpiredInvitations}
+                />
+            </CardActions>
+        );
+    }
+}
+
+export class InvitationShowActions extends Component {
     constructor(props) {
         super(props);
         this.inviteNotExpired = this.inviteNotExpired.bind(this);
@@ -28,21 +81,13 @@ class InvitationShowActions extends Component {
 
     sendInvite() {
         const data = this.props.data;
-        const id_token = localStorage.getItem('id_token');
-        const permissions = JSON.parse(localStorage.getItem('permissions'));
-        fetch(`${process.env.REACT_APP_MANAGEMENT_LAYER}/invitations/${data.id}/send`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${id_token}`,
-                'X-GE-Portal-Context': permissions.currentContext.key
-            }
-        })
+        httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/invitations/${data.id}/send`)
             .then(response => {
                 successNotificationAnt('An invitation email was successfully queued for sending.');
             })
             .catch(error => {
-                console.error(error);
                 errorNotificationAnt('Invite not sent.');
+                apiErrorHandler(error);
             });
     }
 
@@ -67,5 +112,3 @@ class InvitationShowActions extends Component {
         );
     }
 }
-
-export default InvitationShowActions;
