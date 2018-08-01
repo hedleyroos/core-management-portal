@@ -34,7 +34,6 @@ class UserShowActions extends Component {
                 successNotificationAnt('Request to delete user sent.');
             })
             .catch(error => {
-                this.props.push('/users');
                 errorNotificationAnt('Request to delete user not sent.');
                 apiErrorHandler(error);
             });
