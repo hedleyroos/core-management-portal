@@ -7,6 +7,8 @@ export const TITLES = {
     userdomainroles: 'User Domain Roles',
     usersiteroles: 'User Site Roles',
     usersitedata: 'User Site Data',
+    deletedusers: 'Deleted Users',
+    deletedusersites: 'Deleted User Sites',
     adminnotes: 'Admin Notes',
     sitedataschemas: 'Site Data Schemas',
     organisationalunits: 'Organisations'
@@ -26,6 +28,11 @@ export const PERMISSIONS = {
         ['userdomainroles', 'list'],
         ['userdomainroles', 'create'],
         ['userdomainroles', 'remove']
+    ],
+    purgeexpiredinvitations: [
+        ['invitations', 'remove'],
+        ['invitationsiterole', 'remove'],
+        ['invitationdomainrole', 'remove']
     ]
 };
 

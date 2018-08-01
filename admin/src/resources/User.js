@@ -35,6 +35,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import UserFilter from '../filters/UserFilter';
+import UserShowActions from '../customActions/User';
 
 const validationEditUser = values => {
     const errors = {};
@@ -104,13 +105,12 @@ export const UserList = props => (
             <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {PermissionsStore.getResourcePermission('users', 'remove') ? <DeleteButton /> : null}
         </FieldSelectDatagrid>
     </List>
 );
 
 export const UserShow = props => (
-    <Show {...props} title="User Show">
+    <Show {...props} title="User Show" actions={<UserShowActions />}>
         <SimpleShowLayout>
             <TextField source="id" />
             <TextField source="username" />

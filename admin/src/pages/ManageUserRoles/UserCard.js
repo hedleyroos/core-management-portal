@@ -13,7 +13,7 @@ import { styles } from '../../Theme';
 import { errorNotificationAnt, successNotificationAnt, apiErrorHandler } from '../../utils';
 import { checkRoleForDelete, deleteRole, invalidToken } from '../../actions/manageUserRoles';
 import restClient, { DELETE } from '../../restClient';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../ConfirmDialog';
 
 const mapStateToProps = state => ({
     manageUserRoles: state.manageUserRoles

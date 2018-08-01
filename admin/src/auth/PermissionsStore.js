@@ -89,13 +89,13 @@ class PermissionsStore {
                     remove: ['urn:ge:user_data:usersitedata:delete'],
                     edit: ['urn:ge:user_data:usersitedata:update']
                 },
-                deleteduser: {
+                deletedusers: {
                     list: ['urn:ge:user_data:deleteduser:read'],
                     create: ['urn:ge:user_data:deleteduser:create'],
                     remove: ['urn:ge:user_data:deleteduser:delete'],
                     edit: ['urn:ge:user_data:deleteduser:update']
                 },
-                deletedusersite: {
+                deletedusersites: {
                     list: ['urn:ge:user_data:deletedusersite:read'],
                     create: ['urn:ge:user_data:deletedusersite:create'],
                     remove: ['urn:ge:user_data:deletedusersite:delete'],

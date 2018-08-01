@@ -14,7 +14,6 @@ import PermissionsStore from './auth/PermissionsStore';
 import restClient from './restClient';
 import { muiTheme } from './Theme';
 import manageUserRolesReducer from './reducers/manageUserRolesReducer';
-import SternDelete from './pages/SternDeletePage';
 
 import { DomainList, DomainCreate, DomainShow, DomainEdit } from './resources/Domain';
 
@@ -403,9 +402,9 @@ const App = () => (
                     }
                 />
             ) : null,
-            PermissionsStore.getResourcePermission('deleteduser', 'list') ? (
+            PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <Resource
-                    name="deleteduser"
+                    name="deletedusers"
                     list={DeletedUserList}
                     create={
                         PermissionsStore.getResourcePermission('deleteduser', 'create')
@@ -425,9 +424,9 @@ const App = () => (
                     }
                 />
             ) : null,
-            PermissionsStore.getResourcePermission('deletedusersite', 'list') ? (
+            PermissionsStore.getResourcePermission('deletedusersites', 'list') ? (
                 <Resource
-                    name="deletedusersite"
+                    name="deletedusersites"
                     list={DeletedUserSiteList}
                     create={
                         PermissionsStore.getResourcePermission('deletedusersite', 'create')
@@ -523,9 +522,6 @@ const App = () => (
                 <Resource
                     name="users"
                     list={PermissionsStore.getSiteIDs() ? UserList : UserListNoSites}
-                    remove={
-                        PermissionsStore.getResourcePermission('users', 'remove') ? SternDelete : null
-                    }
                     show={UserShow}
                     edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
                 />
