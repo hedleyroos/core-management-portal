@@ -80,6 +80,20 @@ import {
 } from './resources/UserSiteData';
 
 import {
+    DeletedUserList,
+    DeletedUserCreate,
+    DeletedUserShow,
+    DeletedUserEdit
+} from './resources/DeletedUser';
+
+import {
+    DeletedUserSiteList,
+    DeletedUserSiteCreate,
+    DeletedUserSiteShow,
+    DeletedUserSiteEdit
+} from './resources/DeletedUserSite';
+
+import {
     AdminNoteList,
     AdminNoteCreate,
     AdminNoteShow,
@@ -384,6 +398,50 @@ const App = () => (
                     edit={
                         PermissionsStore.getResourcePermission('usersitedata', 'edit')
                             ? UserSiteDataEdit
+                            : null
+                    }
+                />
+            ) : null,
+            PermissionsStore.getResourcePermission('deleteduser', 'list') ? (
+                <Resource
+                    name="deleteduser"
+                    list={DeletedUserList}
+                    create={
+                        PermissionsStore.getResourcePermission('deleteduser', 'create')
+                            ? DeletedUserCreate
+                            : null
+                    }
+                    remove={
+                        PermissionsStore.getResourcePermission('deleteduser', 'remove')
+                            ? Delete
+                            : null
+                    }
+                    show={DeletedUserShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('deleteduser', 'edit')
+                            ? DeletedUserEdit
+                            : null
+                    }
+                />
+            ) : null,
+            PermissionsStore.getResourcePermission('deletedusersite', 'list') ? (
+                <Resource
+                    name="deletedusersite"
+                    list={DeletedUserSiteList}
+                    create={
+                        PermissionsStore.getResourcePermission('deletedusersite', 'create')
+                            ? DeletedUserSiteCreate
+                            : null
+                    }
+                    remove={
+                        PermissionsStore.getResourcePermission('deletedusersite', 'remove')
+                            ? Delete
+                            : null
+                    }
+                    show={DeletedUserSiteShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('deletedusersite', 'edit')
+                            ? DeletedUserSiteEdit
                             : null
                     }
                 />
