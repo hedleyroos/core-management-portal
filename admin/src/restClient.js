@@ -145,7 +145,7 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
                     } else {
                         query[key] = filter;
                     }
-                    if (query[key] && query[key].length === 0) {
+                    if (!query[key] || (query[key] && query[key].length === 0)) {
                         delete query[key];
                     }
                 });

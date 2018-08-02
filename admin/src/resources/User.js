@@ -22,7 +22,6 @@ import {
     DateInput,
     ReferenceInput,
     SelectInput,
-    DeleteButton,
     EditButton,
     ShowButton
 } from 'admin-on-rest';

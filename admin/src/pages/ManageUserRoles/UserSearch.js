@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CardText from 'material-ui/Card/CardText';
 import TextField from 'material-ui/TextField';
+import jwtDecode from 'jwt-decode';
 
 import { reset, setSearchResults, selectUser, invalidToken } from '../../actions/manageUserRoles';
 import restClient, { GET_LIST } from '../../restClient';
@@ -69,10 +70,13 @@ class UserSearch extends Component {
                 filter: { q: value, has_organisation: true, site_ids: '' }
             })
                 .then(response => {
-                    const userResults = response.data.map(obj => ({
+                    let userResults = response.data.map(obj => ({
                         id: obj.id,
                         username: obj.username
                     }));
+                    const idToken = localStorage.getItem('id_token');
+                    const userID = jwtDecode(idToken).sub;
+                    userResults = userResults.filter(obj => obj.id !== userID);
                     this.props.setSearchResults(value, userResults);
                 })
                 .catch(error => {
