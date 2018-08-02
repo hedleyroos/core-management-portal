@@ -21,6 +21,8 @@ import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
 import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
 import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
 import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
+import DeletedUserIcon from 'material-ui/svg-icons/av/recent-actors';
+import DeletedSiteIcon from 'material-ui/svg-icons/communication/location-off';
 import { pink300 } from 'material-ui/styles/colors';
 
 import PermissionsStore from './auth/PermissionsStore';
@@ -42,6 +44,8 @@ const ICONS = {
     userdomainroles: <ListIcon />,
     usersiteroles: <ListIcon />,
     usersitedata: <ListIcon />,
+    deletedusers: <DeletedUserIcon />,
+    deletedusersites: <DeletedSiteIcon />,
     adminnotes: <SpeakerNoteIcon />,
     sitedataschemas: <ListIcon />,
     clients: <DeviceIcon />,

@@ -89,6 +89,18 @@ class PermissionsStore {
                     remove: ['urn:ge:user_data:usersitedata:delete'],
                     edit: ['urn:ge:user_data:usersitedata:update']
                 },
+                deletedusers: {
+                    list: ['urn:ge:user_data:deleteduser:read'],
+                    create: ['urn:ge:user_data:deleteduser:create'],
+                    remove: ['urn:ge:user_data:deleteduser:delete'],
+                    edit: ['urn:ge:user_data:deleteduser:update']
+                },
+                deletedusersites: {
+                    list: ['urn:ge:user_data:deletedusersite:read'],
+                    create: ['urn:ge:user_data:deletedusersite:create'],
+                    remove: ['urn:ge:user_data:deletedusersite:delete'],
+                    edit: ['urn:ge:user_data:deletedusersite:update']
+                },
                 adminnotes: {
                     list: ['urn:ge:user_data:adminnote:read'],
                     create: ['urn:ge:user_data:adminnote:create'],
@@ -168,7 +180,7 @@ class PermissionsStore {
                 );
             });
         }
-        return Promise.resolve()
+        return Promise.resolve();
     }
     loadPermissions(userPermissions, contexts, currentContext, siteIDs) {
         this.permissionFlags = {};
@@ -202,7 +214,7 @@ class PermissionsStore {
     }
     getResourcePermission(resource, permission) {
         if (this.permissionFlags) {
-            return this.permissionFlags[resource][permission];
+            return this.permissionFlags[resource] && this.permissionFlags[resource][permission];
         } else {
             let userPermissions = localStorage.getItem('permissions');
             if (userPermissions) {

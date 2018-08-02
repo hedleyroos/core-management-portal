@@ -80,6 +80,20 @@ import {
 } from './resources/UserSiteData';
 
 import {
+    DeletedUserList,
+    DeletedUserCreate,
+    DeletedUserShow,
+    DeletedUserEdit
+} from './resources/DeletedUser';
+
+import {
+    DeletedUserSiteList,
+    DeletedUserSiteCreate,
+    DeletedUserSiteShow,
+    DeletedUserSiteEdit
+} from './resources/DeletedUserSite';
+
+import {
     AdminNoteList,
     AdminNoteCreate,
     AdminNoteShow,
@@ -388,6 +402,50 @@ const App = () => (
                     }
                 />
             ) : null,
+            PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
+                <Resource
+                    name="deletedusers"
+                    list={DeletedUserList}
+                    create={
+                        PermissionsStore.getResourcePermission('deleteduser', 'create')
+                            ? DeletedUserCreate
+                            : null
+                    }
+                    remove={
+                        PermissionsStore.getResourcePermission('deleteduser', 'remove')
+                            ? Delete
+                            : null
+                    }
+                    show={DeletedUserShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('deleteduser', 'edit')
+                            ? DeletedUserEdit
+                            : null
+                    }
+                />
+            ) : null,
+            PermissionsStore.getResourcePermission('deletedusersites', 'list') ? (
+                <Resource
+                    name="deletedusersites"
+                    list={DeletedUserSiteList}
+                    create={
+                        PermissionsStore.getResourcePermission('deletedusersite', 'create')
+                            ? DeletedUserSiteCreate
+                            : null
+                    }
+                    remove={
+                        PermissionsStore.getResourcePermission('deletedusersite', 'remove')
+                            ? Delete
+                            : null
+                    }
+                    show={DeletedUserSiteShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('deletedusersite', 'edit')
+                            ? DeletedUserSiteEdit
+                            : null
+                    }
+                />
+            ) : null,
             PermissionsStore.getResourcePermission('adminnotes', 'list') ? (
                 <Resource
                     name="adminnotes"
@@ -464,9 +522,6 @@ const App = () => (
                 <Resource
                     name="users"
                     list={PermissionsStore.getSiteIDs() ? UserList : UserListNoSites}
-                    remove={
-                        PermissionsStore.getResourcePermission('users', 'remove') ? Delete : null
-                    }
                     show={UserShow}
                     edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
                 />
