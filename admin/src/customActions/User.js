@@ -28,7 +28,16 @@ class UserShowActions extends Component {
     }
 
     handleDelete() {
-        httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/request_user_deletion`)
+        const { basePath, data } = this.props;
+        httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/request_user_deletion`,
+                   {
+                       method: "POST",
+                       headers: new Headers({"Content-Type": "application/json"}),
+                       body: JSON.stringify({
+                           "user_id": data.id,
+                           "reason": "Management Portal"  // @TODO Get proper reason from a textbox
+                       })
+                   })
             .then(response => {
                 this.props.push('/users');
                 successNotificationAnt('Request to delete user sent.');
