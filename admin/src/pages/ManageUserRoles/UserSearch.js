@@ -70,14 +70,16 @@ class UserSearch extends Component {
                 filter: { q: value, has_organisation: true, site_ids: '' }
             })
                 .then(response => {
-                    let userResults = response.data.map(obj => ({
-                        id: obj.id,
-                        username: obj.username
-                    }));
-                    const idToken = localStorage.getItem('id_token');
-                    const userID = jwtDecode(idToken).sub;
-                    userResults = userResults.filter(obj => obj.id !== userID);
-                    this.props.setSearchResults(value, userResults);
+                    if (this.state.value.length > 2) {
+                        let userResults = response.data.map(obj => ({
+                            id: obj.id,
+                            username: obj.username
+                        }));
+                        const idToken = localStorage.getItem('id_token');
+                        const userID = jwtDecode(idToken).sub;
+                        userResults = userResults.filter(obj => obj.id !== userID);
+                        this.props.setSearchResults(value, userResults);
+                    }
                 })
                 .catch(error => {
                     this.handleAPIError(error);
