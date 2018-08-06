@@ -54,46 +54,50 @@ const ICONS = {
     users: <PeopleIcon />
 };
 
-const Menu = ({ resources, onMenuTap, logout }) => (
-    <div>
-        {notEmptyObject(PermissionsStore.getAllContexts()) ? (
-            <MenuItemLink
-                to="/contextchanger"
-                primaryText={`Context: ${titleCase(
-                    PermissionsStore.getCurrentContext()
-                        .obj.name.split('_')
-                        .join(' ')
-                )}`}
-                onClick={onMenuTap}
-                leftIcon={<ContextSwitchIcon color={pink300} />}
-            />
-        ) : null}
-        {resources
-            ? resources.map(resource => (
-                  <MenuItemLink
-                      key={resource.name}
-                      to={`/${resource.name}`}
-                      primaryText={
-                          TITLES[resource.name]
-                              ? TITLES[resource.name]
-                              : `${titleCase(resource.name)}`
-                      }
-                      onClick={onMenuTap}
-                      leftIcon={ICONS[resource.name]}
-                  />
-              ))
-            : ''}
-        {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) ? (
-            <MenuItemLink
-                to="/manageuserroles"
-                primaryText="Manage User Roles"
-                onClick={onMenuTap}
-                leftIcon={<ManageIcon />}
-            />
-        ) : null}
-        {logout}
-    </div>
-);
+const Menu = ({ resources, onMenuTap, logout }) => {
+    const contexts = PermissionsStore.getAllContexts();
+    const showContextSwitcher = Object.keys(contexts).length > 1;
+    return (
+        <div>
+            {notEmptyObject(contexts) && showContextSwitcher ? (
+                <MenuItemLink
+                    to="/contextchanger"
+                    primaryText={`Context: ${titleCase(
+                        PermissionsStore.getCurrentContext()
+                            .obj.name.split('_')
+                            .join(' ')
+                    )}`}
+                    onClick={onMenuTap}
+                    leftIcon={<ContextSwitchIcon color={pink300} />}
+                />
+            ) : null}
+            {resources
+                ? resources.map(resource => (
+                      <MenuItemLink
+                          key={resource.name}
+                          to={`/${resource.name}`}
+                          primaryText={
+                              TITLES[resource.name]
+                                  ? TITLES[resource.name]
+                                  : `${titleCase(resource.name)}`
+                          }
+                          onClick={onMenuTap}
+                          leftIcon={ICONS[resource.name]}
+                      />
+                  ))
+                : ''}
+            {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) ? (
+                <MenuItemLink
+                    to="/manageuserroles"
+                    primaryText="Manage User Roles"
+                    onClick={onMenuTap}
+                    leftIcon={<ManageIcon />}
+                />
+            ) : null}
+            {logout}
+        </div>
+    );
+};
 
 const mapStateToProps = state => ({
     resources: getResources(state)
