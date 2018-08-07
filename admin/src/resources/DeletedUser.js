@@ -14,6 +14,8 @@ import {
     TextInput,
     Show,
     SimpleShowLayout,
+    ReferenceManyField,
+    NumberField,
     Edit,
     DeleteButton,
     EditButton,
@@ -86,9 +88,9 @@ export const DeletedUserList = props => (
             ) : (
                 <EmptyField />
             )}
-            {PermissionsStore.getResourcePermission('deleteduser', 'edit') ? <EditButton /> : null}
+            {PermissionsStore.getResourcePermission('deletedusers', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            {PermissionsStore.getResourcePermission('deleteduser', 'remove') ? (
+            {PermissionsStore.getResourcePermission('deletedusers', 'remove') ? (
                 <DeleteButton />
             ) : null}
         </Datagrid>
@@ -131,6 +133,33 @@ export const DeletedUserShow = props => (
             ) : (
                 <EmptyField />
             )}
+            {PermissionsStore.getResourcePermission('deletedusersites', 'list') ? (
+                <ReferenceManyField
+                    label="Sites which the user visited"
+                    reference="deletedusersites"
+                    target="deleted_user_id"
+                >
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Site"
+                            source="site_id"
+                            reference="sites"
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                        <DateField source="deletion_requested_at" />
+                        <TextField source="deletion_requested_via" />
+                        <DateField source="deletion_confirmed_at" />
+                        <TextField source="deletion_confirmed_via" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
         </SimpleShowLayout>
     </Show>
 );
@@ -143,6 +172,33 @@ export const DeletedUserEdit = props => (
             <TextInput source="msisdn" />
             <TextInput source="reason" />
             <DateTimeInput source="deleted_at" format={dateTimeFormatter} parse={dateTimeParser} />
+            {PermissionsStore.getResourcePermission('deletedusersites', 'list') ? (
+                <ReferenceManyField
+                    label="Sites which the user visited"
+                    reference="deletedusersites"
+                    target="deleted_user_id"
+                >
+                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                        <ReferenceField
+                            label="Site"
+                            source="site_id"
+                            reference="sites"
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                        <DateField source="created_at" />
+                        <DateField source="updated_at" />
+                        <DateField source="deletion_requested_at" />
+                        <TextField source="deletion_requested_via" />
+                        <DateField source="deletion_confirmed_at" />
+                        <TextField source="deletion_confirmed_via" />
+                    </Datagrid>
+                </ReferenceManyField>
+            ) : (
+                <EmptyField />
+            )}
         </SimpleForm>
     </Edit>
 );
