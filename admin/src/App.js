@@ -407,18 +407,18 @@ const App = () => (
                     name="deletedusers"
                     list={DeletedUserList}
                     create={
-                        PermissionsStore.getResourcePermission('deleteduser', 'create')
+                        PermissionsStore.getResourcePermission('deletedusers', 'create')
                             ? DeletedUserCreate
                             : null
                     }
                     remove={
-                        PermissionsStore.getResourcePermission('deleteduser', 'remove')
+                        PermissionsStore.getResourcePermission('deletedusers', 'remove')
                             ? Delete
                             : null
                     }
                     show={DeletedUserShow}
                     edit={
-                        PermissionsStore.getResourcePermission('deleteduser', 'edit')
+                        PermissionsStore.getResourcePermission('deletedusers', 'edit')
                             ? DeletedUserEdit
                             : null
                     }
@@ -429,18 +429,18 @@ const App = () => (
                     name="deletedusersites"
                     list={DeletedUserSiteList}
                     create={
-                        PermissionsStore.getResourcePermission('deletedusersite', 'create')
+                        PermissionsStore.getResourcePermission('deletedusersites', 'create')
                             ? DeletedUserSiteCreate
                             : null
                     }
                     remove={
-                        PermissionsStore.getResourcePermission('deletedusersite', 'remove')
+                        PermissionsStore.getResourcePermission('deletedusersites', 'remove')
                             ? Delete
                             : null
                     }
                     show={DeletedUserSiteShow}
                     edit={
-                        PermissionsStore.getResourcePermission('deletedusersite', 'edit')
+                        PermissionsStore.getResourcePermission('deletedusersites', 'edit')
                             ? DeletedUserSiteEdit
                             : null
                     }

@@ -6,7 +6,7 @@ import { Card, CardActions } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import RaisedButton from 'material-ui/RaisedButton';
 import LockIcon from 'material-ui/svg-icons/action/lock-outline';
-import { pink300, pink500 } from 'material-ui/styles/colors';
+import { teal500, teal800 } from 'material-ui/styles/colors';
 
 import { userLogin } from 'admin-on-rest';
 
@@ -53,10 +53,10 @@ class AuthLoginPage extends Component {
         const loginUrl = `${OIDC_PROVIDER_URL}?${queryString}`;
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                <div style={{ ...styles.main, backgroundColor: pink500 }}>
+                <div style={{ ...styles.main, backgroundColor: teal800 }}>
                     <Card style={styles.card}>
                         <div style={styles.avatar}>
-                            <Avatar backgroundColor={pink300} icon={<LockIcon />} size={60} />
+                            <Avatar backgroundColor={teal500} icon={<LockIcon />} size={60} />
                         </div>
                         <CardActions>
                             <p style={styles.avatar}>Login with Girl Effect OIDC Provider</p>

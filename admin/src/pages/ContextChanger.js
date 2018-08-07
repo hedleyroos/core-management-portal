@@ -8,7 +8,7 @@ import CardText from 'material-ui/Card/CardText';
 import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { pink500 } from 'material-ui/styles/colors';
+import { teal800 } from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { muiTheme, styles } from '../Theme';
@@ -98,7 +98,7 @@ class ContextChanger extends Component {
             <Redirect push to="/" />
         ) : (
             <MuiThemeProvider muiTheme={muiTheme}>
-                <div style={{ ...styles.main, backgroundColor: pink500 }}>
+                <div style={{ ...styles.main, backgroundColor: teal800 }}>
                     <Card style={styles.cardCentered}>
                         {changing ? (
                             <CardText>

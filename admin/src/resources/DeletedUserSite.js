@@ -23,8 +23,8 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
-import DateTimeInput from 'aor-datetime-input';
 import EmptyField from '../fields/EmptyField';
+import DateTimeInput from 'aor-datetime-input';
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -64,16 +64,16 @@ const validationEditDeletedUserSite = values => {
 export const DeletedUserSiteList = props => (
     <List {...props} title="DeletedUserSite List" filters={<DeletedUserSiteFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            {PermissionsStore.getResourcePermission('deleted_users', 'list') ? (
+            {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField
-                    label="Deleted_User"
+                    label="Deleted User"
                     source="deleted_user_id"
-                    reference="deleted_users"
+                    reference="deletedusers"
                     sortable={false}
                     linkType="show"
                     allowEmpty
                 >
-                    <TextField source="" />
+                    <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
@@ -87,7 +87,7 @@ export const DeletedUserSiteList = props => (
                     linkType="show"
                     allowEmpty
                 >
-                    <NumberField source="" />
+                    <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
@@ -98,11 +98,11 @@ export const DeletedUserSiteList = props => (
             <TextField source="deletion_requested_via" sortable={false} />
             <DateField source="deletion_confirmed_at" sortable={false} />
             <TextField source="deletion_confirmed_via" sortable={false} />
-            {PermissionsStore.getResourcePermission('deletedusersite', 'edit') ? (
+            {PermissionsStore.getResourcePermission('deletedusersites', 'edit') ? (
                 <EditButton />
             ) : null}
             <ShowButton />
-            {PermissionsStore.getResourcePermission('deletedusersite', 'remove') ? (
+            {PermissionsStore.getResourcePermission('deletedusersites', 'remove') ? (
                 <DeleteButton />
             ) : null}
         </Datagrid>
@@ -112,15 +112,15 @@ export const DeletedUserSiteList = props => (
 export const DeletedUserSiteCreate = props => (
     <Create {...props} title="DeletedUserSite Create">
         <SimpleForm validate={validationCreateDeletedUserSite}>
-            {PermissionsStore.getResourcePermission('deleted_users', 'list') && (
+            {PermissionsStore.getResourcePermission('deletedusers', 'list') && (
                 <ReferenceInput
-                    label="Deleted_User"
+                    label="Deleted User"
                     source="deleted_user_id"
-                    reference="deleted_users"
+                    reference="deletedusers"
                     perPage={0}
                     allowEmpty
                 >
-                    <SelectInput optionText="" />
+                    <SelectInput optionText="username" />
                 </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('sites', 'list') && (
@@ -131,7 +131,7 @@ export const DeletedUserSiteCreate = props => (
                     perPage={0}
                     allowEmpty
                 >
-                    <SelectInput optionText="" />
+                    <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
             <DateTimeInput
@@ -153,15 +153,15 @@ export const DeletedUserSiteCreate = props => (
 export const DeletedUserSiteShow = props => (
     <Show {...props} title="DeletedUserSite Show">
         <SimpleShowLayout>
-            {PermissionsStore.getResourcePermission('deleted_users', 'list') ? (
+            {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField
-                    label="Deleted_User"
+                    label="Deleted User"
                     source="deleted_user_id"
-                    reference="deleted_users"
+                    reference="deletedusers"
                     linkType="show"
                     allowEmpty
                 >
-                    <TextField source="" />
+                    <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
@@ -174,7 +174,7 @@ export const DeletedUserSiteShow = props => (
                     linkType="show"
                     allowEmpty
                 >
-                    <NumberField source="" />
+                    <NumberField source="name" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
