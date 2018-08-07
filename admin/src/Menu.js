@@ -23,7 +23,7 @@ import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
 import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
 import DeletedUserIcon from 'material-ui/svg-icons/av/recent-actors';
 import DeletedSiteIcon from 'material-ui/svg-icons/communication/location-off';
-import { pink300 } from 'material-ui/styles/colors';
+import { green300 } from 'material-ui/styles/colors';
 
 import PermissionsStore from './auth/PermissionsStore';
 import { titleCase, notEmptyObject } from './utils';
@@ -68,7 +68,7 @@ const Menu = ({ resources, onMenuTap, logout }) => {
                             .join(' ')
                     )}`}
                     onClick={onMenuTap}
-                    leftIcon={<ContextSwitchIcon color={pink300} />}
+                    leftIcon={<ContextSwitchIcon color={green300} />}
                 />
             ) : null}
             {resources
