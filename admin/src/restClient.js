@@ -18,6 +18,7 @@ export const DELETE = 'DELETE';
 
 const COMPOSITE_KEY_RESOURSES = {
     domainroles: ['domain_id', 'role_id'],
+    deletedusersites: ['deleted_user_id', 'site_id'],
     invitationdomainroles: ['invitation_id', 'domain_id', 'role_id'],
     invitationsiteroles: ['invitation_id', 'site_id', 'role_id'],
     roleresourcepermissions: ['role_id', 'resource_id', 'permission_id'],
