@@ -1378,8 +1378,14 @@ definitions:
       deleted_user_id:
         type: string
         format: uuid
+        x-related-info:
+          model: deleted_user
+          label: username
       site_id:
         type: integer
+        x-related-info:
+          model: site
+          label: name
       deletion_requested_at:
         type: string
         format: date-time

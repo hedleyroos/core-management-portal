@@ -23,8 +23,8 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
-import DateTimeInput from 'aor-datetime-input';
 import EmptyField from '../fields/EmptyField';
+import DateTimeInput from 'aor-datetime-input';
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -114,13 +114,13 @@ export const DeletedUserSiteCreate = props => (
         <SimpleForm validate={validationCreateDeletedUserSite}>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') && (
                 <ReferenceInput
-                    label="Deleted_User"
+                    label="Deleted User"
                     source="deleted_user_id"
                     reference="deletedusers"
                     perPage={0}
                     allowEmpty
                 >
-                    <SelectInput optionText="" />
+                    <SelectInput optionText="username" />
                 </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('sites', 'list') && (
@@ -131,7 +131,7 @@ export const DeletedUserSiteCreate = props => (
                     perPage={0}
                     allowEmpty
                 >
-                    <SelectInput optionText="" />
+                    <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
             <DateTimeInput
