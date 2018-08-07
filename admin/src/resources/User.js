@@ -160,24 +160,32 @@ export const UserShow = props => (
                     target="user_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Domain"
-                            source="domain_id"
-                            reference="domains"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('domains', 'list') ? (
+                            <ReferenceField
+                                label="Domain"
+                                source="domain_id"
+                                reference="domains"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -188,24 +196,32 @@ export const UserShow = props => (
             {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
                 <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Site"
-                            source="site_id"
-                            reference="sites"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('sites', 'list') ? (
+                            <ReferenceField
+                                label="Site"
+                                source="site_id"
+                                reference="sites"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -216,15 +232,19 @@ export const UserShow = props => (
             {PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
                 <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Site"
-                            source="site_id"
-                            reference="sites"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('sites', 'list') ? (
+                            <ReferenceField
+                                label="Site"
+                                source="site_id"
+                                reference="sites"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <ObjectField source="data" addLabel />
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
@@ -268,24 +288,32 @@ export const UserEdit = props => (
                     target="user_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Domain"
-                            source="domain_id"
-                            reference="domains"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('domains', 'list') ? (
+                            <ReferenceField
+                                label="Domain"
+                                source="domain_id"
+                                reference="domains"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -296,24 +324,32 @@ export const UserEdit = props => (
             {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
                 <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Site"
-                            source="site_id"
-                            reference="sites"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('sites', 'list') ? (
+                            <ReferenceField
+                                label="Site"
+                                source="site_id"
+                                reference="sites"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -324,15 +360,19 @@ export const UserEdit = props => (
             {PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
                 <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Site"
-                            source="site_id"
-                            reference="sites"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('sites', 'list') ? (
+                            <ReferenceField
+                                label="Site"
+                                source="site_id"
+                                reference="sites"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <ObjectField source="data" addLabel />
                         <DateField source="created_at" />
                         <DateField source="updated_at" />

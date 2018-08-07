@@ -140,15 +140,19 @@ export const DeletedUserShow = props => (
                     target="deleted_user_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Site"
-                            source="site_id"
-                            reference="sites"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('sites', 'list') ? (
+                            <ReferenceField
+                                label="Site"
+                                source="site_id"
+                                reference="sites"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                         <DateField source="deletion_requested_at" />
@@ -179,15 +183,19 @@ export const DeletedUserEdit = props => (
                     target="deleted_user_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Site"
-                            source="site_id"
-                            reference="sites"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('sites', 'list') ? (
+                            <ReferenceField
+                                label="Site"
+                                source="site_id"
+                                reference="sites"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                         <DateField source="deletion_requested_at" />

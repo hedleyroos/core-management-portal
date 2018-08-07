@@ -82,24 +82,32 @@ export const RoleShow = props => (
                     target="role_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Resource"
-                            source="resource_id"
-                            reference="resources"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="urn" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Permission"
-                            source="permission_id"
-                            reference="permissions"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('resources', 'list') ? (
+                            <ReferenceField
+                                label="Resource"
+                                source="resource_id"
+                                reference="resources"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="urn" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('permissions', 'list') ? (
+                            <ReferenceField
+                                label="Permission"
+                                source="permission_id"
+                                reference="permissions"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -124,24 +132,32 @@ export const RoleEdit = props => (
                     target="role_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Resource"
-                            source="resource_id"
-                            reference="resources"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="urn" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Permission"
-                            source="permission_id"
-                            reference="permissions"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('resources', 'list') ? (
+                            <ReferenceField
+                                label="Resource"
+                                source="resource_id"
+                                reference="resources"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="urn" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('permissions', 'list') ? (
+                            <ReferenceField
+                                label="Permission"
+                                source="permission_id"
+                                reference="permissions"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
