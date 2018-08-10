@@ -13,7 +13,6 @@ import {
     MANAGE_USER_ROLES_SET_ROLE_MAPPING,
     MANAGE_USER_ROLES_SET_MANAGER_ROLES
 } from '../actionTypes';
-import { createTreeData } from '../utils';
 
 export default (state = { validToken: true }, { type, payload }) => {
     switch (type) {
@@ -31,12 +30,7 @@ export default (state = { validToken: true }, { type, payload }) => {
             return {
                 ...state,
                 managerDomains: payload.managerDomains,
-                managerSites: payload.managerSites,
-                treeData: createTreeData(
-                    { ...payload.managerDomains, ...payload.managerSites },
-                    'domain_id',
-                    's'
-                )
+                managerSites: payload.managerSites
             };
         case MANAGE_USER_ROLES_SET_SEARCH_RESULTS:
             return {

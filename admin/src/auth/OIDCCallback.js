@@ -4,7 +4,12 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
 import PermissionsStore from '../auth/PermissionsStore';
-import { base64urlDecode, errorNotificationAnt, apiErrorHandler } from '../utils';
+import {
+    base64urlDecode,
+    errorNotificationAnt,
+    apiErrorHandler,
+    createTreeFromContexts
+} from '../utils';
 import WaitingPage from '../pages/WaitingPage';
 
 class OIDCCallback extends Component {
@@ -24,7 +29,7 @@ class OIDCCallback extends Component {
         const parsedQuery = queryString.parse(this.props.location.search);
         // Quick check if a token is retrieved.
         if (!parsedQuery.id_token) {
-            this.handleLoginError('No token received.')
+            this.handleLoginError('No token received.');
             return null;
         }
         // Check that the state returned in the URL matches the one stored.
@@ -53,10 +58,15 @@ class OIDCCallback extends Component {
             const userID = jwtDecode(parsedQuery.id_token).sub;
             PermissionsStore.getAllUserRoles(userID)
                 .then(contexts => {
-                    const currentContext = Object.keys(contexts)[0];
-                    PermissionsStore.getAndLoadPermissions(userID, currentContext, contexts)
-                        .then(result => {
-                            this.setState({ loginComplete: true });
+                    createTreeFromContexts(contexts)
+                        .then(treeData => {
+                            PermissionsStore.getAndLoadPermissions({ userID, contexts, treeData })
+                                .then(result => {
+                                    this.setState({ loginComplete: true });
+                                })
+                                .catch(error => {
+                                    this.handleLoginError(error);
+                                });
                         })
                         .catch(error => {
                             this.handleLoginError(error);

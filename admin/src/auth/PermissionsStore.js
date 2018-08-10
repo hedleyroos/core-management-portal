@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import restClient, { OPERATIONAL, GET_ONE } from '../restClient';
-import { getSitesForContext } from '../utils';
+import { getContextAlphabeticallyFirst, getSitesForContext } from '../utils';
 import { PLACE_MAPPING } from '../constants';
 
 class PermissionsStore {
@@ -141,6 +141,7 @@ class PermissionsStore {
             this.getAllContexts = this.getAllContexts.bind(this);
             this.getCurrentContext = this.getCurrentContext.bind(this);
             this.getSiteIDs = this.getSiteIDs.bind(this);
+            this.getTreeData = this.getTreeData.bind(this);
             PermissionsStore.instance = this;
         }
         return PermissionsStore.instance;
@@ -157,32 +158,38 @@ class PermissionsStore {
             }, {});
         });
     }
-    getAndLoadPermissions(userID, currentContext, contexts = null) {
-        if (currentContext) {
-            contexts = !contexts ? this.getAllContexts() : contexts;
-            const [contextType, contextID] = currentContext.split(':');
-            // All calls wrapped in a Promise.all() for all to be done before carrying on.
-            return Promise.all([
-                restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
-                    pathParameters: [userID, contextID]
-                }),
-                restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
-                getSitesForContext(currentContext)
-            ]).then(([permissions, currentContextObject, siteIDs]) => {
-                this.loadPermissions(
-                    permissions.data,
-                    contexts,
-                    {
-                        key: currentContext,
-                        obj: currentContextObject.data
-                    },
-                    siteIDs
-                );
-            });
+    getAndLoadPermissions({ userID, currentContext = null, contexts = null, treeData = null }) {
+        let contextType = null,
+            contextID = null;
+        treeData = this.getTreeData() || treeData;
+        contexts = !contexts ? this.getAllContexts() : contexts;
+        if (!currentContext) {
+            currentContext =
+                treeData.length > 1 ? getContextAlphabeticallyFirst(treeData) : treeData[0].key;
         }
-        return Promise.resolve();
+        [contextType, contextID] = currentContext.split(':');
+
+        // All calls wrapped in a Promise.all() for all to be done before carrying on.
+        return Promise.all([
+            restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
+                pathParameters: [userID, contextID]
+            }),
+            restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
+            getSitesForContext(currentContext)
+        ]).then(([permissions, currentContextObject, siteIDs]) => {
+            this.loadPermissions(
+                permissions.data,
+                contexts,
+                {
+                    key: currentContext,
+                    obj: currentContextObject.data
+                },
+                siteIDs,
+                treeData
+            );
+        });
     }
-    loadPermissions(userPermissions, contexts, currentContext, siteIDs) {
+    loadPermissions(userPermissions, contexts, currentContext, siteIDs, treeData) {
         this.permissionFlags = {};
         const allowAccess = (userPermissions, requiredPermissions) => {
             if (requiredPermissions.length > 0) {
@@ -208,7 +215,8 @@ class PermissionsStore {
             ...this.permissionFlags,
             contexts,
             currentContext,
-            siteIDs
+            siteIDs,
+            treeData
         };
         localStorage.setItem('permissions', JSON.stringify(this.permissionFlags));
     }
@@ -250,6 +258,10 @@ class PermissionsStore {
     getSiteIDs() {
         const permissions = this.getPermissionFlags();
         return permissions ? permissions.siteIDs : '';
+    }
+    getTreeData() {
+        const permissions = this.getPermissionFlags();
+        return permissions ? permissions.treeData : null;
     }
 }
 

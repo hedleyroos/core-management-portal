@@ -24,6 +24,7 @@ import {
 import DomainTreeInput from '../../inputs/DomainTreeInput';
 import restClient, { CREATE } from '../../restClient';
 import { PLACE_MAPPING } from '../../constants';
+import PermissionsStore from '../../auth/PermissionsStore';
 
 const mapStateToProps = state => ({
     manageUserRoles: state.manageUserRoles
@@ -129,9 +130,9 @@ class AssignRoleCard extends Component {
         const {
             amountSelectedToAssign,
             assignmentLocation,
-            rolesToAssign,
-            treeData
+            rolesToAssign
         } = this.props.manageUserRoles;
+        const treeData = PermissionsStore.getTreeData();
         return (
             <Card style={{ marginTop: 20 }}>
                 <CardTitle title="Assign Role" />
