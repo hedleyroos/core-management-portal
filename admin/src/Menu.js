@@ -28,6 +28,7 @@ import { teal500 } from 'material-ui/styles/colors';
 import PermissionsStore from './auth/PermissionsStore';
 import { titleCase, notEmptyObject } from './utils';
 import { TITLES, PERMISSIONS } from './constants';
+import Logout from './customActions/Logout';
 
 const ICONS = {
     domains: <DomainIcon />,
@@ -54,7 +55,7 @@ const ICONS = {
     users: <PeopleIcon />
 };
 
-const Menu = ({ resources, onMenuTap, logout }) => {
+const Menu = ({ resources, onMenuTap }) => {
     const contexts = PermissionsStore.getAllContexts();
     const showContextSwitcher = Object.keys(contexts).length > 1;
     return (
@@ -94,7 +95,7 @@ const Menu = ({ resources, onMenuTap, logout }) => {
                     leftIcon={<ManageIcon />}
                 />
             ) : null}
-            {logout}
+            <Logout />
         </div>
     );
 };
