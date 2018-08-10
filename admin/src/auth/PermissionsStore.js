@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import restClient, { OPERATIONAL, GET_ONE } from '../restClient';
-import { getContextAlphabeticallyFirst, getSitesForContext } from '../utils';
+import { getContextAlphabeticallyFirst, getSitesForContext, notEmptyObject } from '../utils';
 import { PLACE_MAPPING } from '../constants';
 
 class PermissionsStore {
@@ -163,31 +163,34 @@ class PermissionsStore {
             contextID = null;
         treeData = this.getTreeData() || treeData;
         contexts = !contexts ? this.getAllContexts() : contexts;
-        if (!currentContext) {
-            currentContext =
-                treeData.length > 1 ? getContextAlphabeticallyFirst(treeData) : treeData[0].key;
-        }
-        [contextType, contextID] = currentContext.split(':');
+        if (notEmptyObject(contexts)) {
+            if (!currentContext) {
+                currentContext =
+                    treeData.length > 1 ? getContextAlphabeticallyFirst(treeData) : treeData[0].key;
+            }
+            [contextType, contextID] = currentContext.split(':');
 
-        // All calls wrapped in a Promise.all() for all to be done before carrying on.
-        return Promise.all([
-            restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
-                pathParameters: [userID, contextID]
-            }),
-            restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
-            getSitesForContext(currentContext)
-        ]).then(([permissions, currentContextObject, siteIDs]) => {
-            this.loadPermissions(
-                permissions.data,
-                contexts,
-                {
-                    key: currentContext,
-                    obj: currentContextObject.data
-                },
-                siteIDs,
-                treeData
-            );
-        });
+            // All calls wrapped in a Promise.all() for all to be done before carrying on.
+            return Promise.all([
+                restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
+                    pathParameters: [userID, contextID]
+                }),
+                restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
+                getSitesForContext(currentContext)
+            ]).then(([permissions, currentContextObject, siteIDs]) => {
+                this.loadPermissions(
+                    permissions.data,
+                    contexts,
+                    {
+                        key: currentContext,
+                        obj: currentContextObject.data
+                    },
+                    siteIDs,
+                    treeData
+                );
+            });
+        }
+        return Promise.resolve();
     }
     loadPermissions(userPermissions, contexts, currentContext, siteIDs, treeData) {
         this.permissionFlags = {};
