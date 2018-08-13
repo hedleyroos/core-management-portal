@@ -1,18 +1,7 @@
-import { AUTH_LOGOUT, AUTH_CHECK, AUTH_ERROR } from 'admin-on-rest';
-import { generateQueryString, apiErrorHandler } from '../utils';
+import { AUTH_CHECK, AUTH_ERROR } from 'admin-on-rest';
+import { apiErrorHandler } from '../utils';
 
 export default (type, params) => {
-    if (type === AUTH_LOGOUT) {
-        if (localStorage.getItem('id_token')) {
-            const logoutQueryString = generateQueryString({
-                id_token_hint: localStorage.getItem('id_token'),
-                post_logout_redirect_uri: process.env.REACT_APP_PORTAL_URL
-            });
-            localStorage.clear();
-            let logoutURL = `${process.env.REACT_APP_LOGOUT_URL}?${logoutQueryString}`;
-            window.location.href = logoutURL;
-        }
-    }
     if (type === AUTH_ERROR) {
         const invalidToken = apiErrorHandler(params);
         if (invalidToken) {

@@ -6,13 +6,16 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { muiTheme, styles } from '../Theme';
 
-const WaitingPage = () => (
-    <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={{ ...styles.main, backgroundColor: teal800 }}>
-            <WaitIcon style={styles.waitIcon} />
-            <LinearProgress mode="indeterminate" style={styles.linearProgress} />
-        </div>
-    </MuiThemeProvider>
-);
+const WaitingPage = ({ icon }) => {
+    const PageIcon = icon || WaitIcon;
+    return (
+        <MuiThemeProvider muiTheme={muiTheme}>
+            <div style={{ ...styles.main, backgroundColor: teal800 }}>
+                <PageIcon style={styles.waitIcon} />
+                <LinearProgress mode="indeterminate" style={styles.linearProgress} />
+            </div>
+        </MuiThemeProvider>
+    );
+};
 
 export default WaitingPage;
