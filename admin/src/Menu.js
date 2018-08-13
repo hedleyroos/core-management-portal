@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
 import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
-import ManageIcon from 'material-ui/svg-icons/action/build';
 import InviteIcon from 'material-ui/svg-icons/editor/insert-invitation';
 import FingerprintIcon from 'material-ui/svg-icons/action/fingerprint';
 import ListIcon from 'material-ui/svg-icons/action/view-list';
@@ -27,7 +26,7 @@ import { teal500 } from 'material-ui/styles/colors';
 
 import PermissionsStore from './auth/PermissionsStore';
 import { titleCase, notEmptyObject } from './utils';
-import { TITLES, PERMISSIONS } from './constants';
+import { TITLES } from './constants';
 import Logout from './customActions/Logout';
 
 const ICONS = {
@@ -87,14 +86,6 @@ const Menu = ({ resources, onMenuTap }) => {
                       />
                   ))
                 : ''}
-            {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) ? (
-                <MenuItemLink
-                    to="/manageuserroles"
-                    primaryText="Manage User Roles"
-                    onClick={onMenuTap}
-                    leftIcon={<ManageIcon />}
-                />
-            ) : null}
             <Logout />
         </div>
     );

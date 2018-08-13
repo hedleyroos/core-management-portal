@@ -13,7 +13,9 @@ import Menu from './Menu';
 import PermissionsStore from './auth/PermissionsStore';
 import restClient from './restClient';
 import { muiTheme } from './Theme';
+import manageInvitationRolesReducer from './reducers/manageInvitationRolesReducer';
 import manageUserRolesReducer from './reducers/manageUserRolesReducer';
+import sharedResourcesReducer from './reducers/sharedResourcesReducer';
 
 import { DomainList, DomainCreate, DomainShow, DomainEdit } from './resources/Domain';
 
@@ -130,7 +132,11 @@ const App = () => (
         catchAll={catchAll}
         loginPage={AuthLoginPage}
         customRoutes={customRoutes}
-        customReducers={{ manageUserRoles: manageUserRolesReducer }}
+        customReducers={{
+            manageInvitationRoles: manageInvitationRolesReducer,
+            manageUserRoles: manageUserRolesReducer,
+            sharedResources: sharedResourcesReducer
+        }}
     >
         {permissions => [
             PermissionsStore.getResourcePermission('domains', 'list') ? (

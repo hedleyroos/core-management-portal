@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { deleteRoles } from '../../manageUtils';
-import { checkRoleForDelete, deleteRole } from '../../actions/manageUserRoles';
+import { checkRoleForDelete, deleteRole } from '../../actions/manageInvitationRoles';
 import { invalidToken } from '../../actions/sharedResources';
 import RoleCard from '../../cards/RoleCard';
+import { deleteRoles } from '../../manageUtils';
 
 const mapStateToProps = state => ({
-    manageUserRoles: state.manageUserRoles
+    manageInvitationRoles: state.manageInvitationRoles
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => ({
     invalidToken: () => dispatch(invalidToken())
 });
 
-class UserCard extends Component {
+class InvitationCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,11 +42,11 @@ class UserCard extends Component {
     }
 
     handleDelete() {
-        const { selectedUser, userRoles } = this.props.manageUserRoles;
+        const { selectedInvitation, invitationRoles } = this.props.manageInvitationRoles;
         deleteRoles(
-            'user',
-            userRoles,
-            selectedUser,
+            'invitation',
+            invitationRoles,
+            selectedInvitation,
             this.props.deleteRole,
             this.props.invalidToken
         );
@@ -54,18 +54,21 @@ class UserCard extends Component {
 
     render() {
         const { open } = this.state;
-        const { amountSelectedToDelete, selectedUser, userRoles } = this.props.manageUserRoles;
-        const domainRoles = Object.entries(userRoles).filter(([key, userRole]) =>
+        const {
+            amountSelectedToDelete,
+            selectedInvitation,
+            invitationRoles
+        } = this.props.manageInvitationRoles;
+        const domainRoles = Object.entries(invitationRoles).filter(([key, role]) =>
             key.startsWith('d')
         );
-        const siteRoles = Object.entries(userRoles).filter(([key, userRole]) =>
+        const siteRoles = Object.entries(invitationRoles).filter(([key, role]) =>
             key.startsWith('s')
         );
         return (
             <RoleCard
-                type="User"
-                object={selectedUser}
-                title={selectedUser.username}
+                type="Invitation"
+                object={selectedInvitation}
                 domainRoles={domainRoles}
                 siteRoles={siteRoles}
                 handleCheck={this.handleCheck}
@@ -81,4 +84,4 @@ class UserCard extends Component {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(UserCard);
+)(InvitationCard);

@@ -34,7 +34,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import UserFilter from '../filters/UserFilter';
-import UserShowActions from '../customActions/User';
+import UserShowActions from '../customActions/UserShow';
 
 const validationEditUser = values => {
     const errors = {};

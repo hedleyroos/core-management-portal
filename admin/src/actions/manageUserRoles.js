@@ -1,47 +1,17 @@
 import {
-    MANAGE_USER_ROLES_SET_ROLE_MAPPING,
-    MANAGE_USER_ROLES_SET_MANAGER_ROLES,
-    MANAGE_USER_ROLES_SET_MANAGER_PLACES,
-    MANAGE_USER_ROLES_SET_SEARCH_RESULTS,
-    MANAGE_USER_ROLES_SELECT_USER,
+    MANAGE_USER_ROLES_SET_USER,
     MANAGE_USER_ROLES_CHECK_ROLE_FOR_DELETE,
     MANAGE_USER_ROLES_DELETE_ROLE,
     MANAGE_USER_ROLES_SET_ASSIGNMENT_LOCATION,
     MANAGE_USER_ROLES_CHECK_ROLE_FOR_ASSIGN,
+    MANAGE_USER_ROLES_ASSIGNING,
     MANAGE_USER_ROLES_ASSIGN_ROLE,
     MANAGE_USER_ROLES_ALL_ASSIGNED,
-    MANAGE_USER_ROLES_RESET,
-    MANAGE_USER_ROLES_INVALID_TOKEN
+    MANAGE_USER_ROLES_RESET
 } from '../actionTypes';
 
-export const setRoleMapping = roleMapping => ({
-    type: MANAGE_USER_ROLES_SET_ROLE_MAPPING,
-    payload: roleMapping
-});
-
-export const setManagerRoles = managerRoles => ({
-    type: MANAGE_USER_ROLES_SET_MANAGER_ROLES,
-    payload: managerRoles
-});
-
-export const setManagerPlaces = (managerDomains, managerSites) => ({
-    type: MANAGE_USER_ROLES_SET_MANAGER_PLACES,
-    payload: {
-        managerDomains,
-        managerSites
-    }
-});
-
-export const setSearchResults = (search, userResults) => ({
-    type: MANAGE_USER_ROLES_SET_SEARCH_RESULTS,
-    payload: {
-        search,
-        userResults
-    }
-});
-
-export const selectUser = (selectedUser, userRoles) => ({
-    type: MANAGE_USER_ROLES_SELECT_USER,
+export const setUser = (selectedUser, userRoles) => ({
+    type: MANAGE_USER_ROLES_SET_USER,
     payload: {
         selectedUser,
         userRoles
@@ -58,14 +28,22 @@ export const deleteRole = key => ({
     payload: key
 });
 
-export const setAssignmentLocation = key => ({
+export const setAssignmentLocation = (managerRoles, key) => ({
     type: MANAGE_USER_ROLES_SET_ASSIGNMENT_LOCATION,
-    payload: key
+    payload: {
+        managerRoles,
+        key
+    }
 });
 
 export const checkRoleForAssign = key => ({
     type: MANAGE_USER_ROLES_CHECK_ROLE_FOR_ASSIGN,
     payload: key
+});
+
+export const assigningRoles = assigning => ({
+    type: MANAGE_USER_ROLES_ASSIGNING,
+    payload: assigning
 });
 
 export const assignRole = (key, userRole) => ({
@@ -82,8 +60,4 @@ export const allAssigned = () => ({
 
 export const reset = () => ({
     type: MANAGE_USER_ROLES_RESET
-});
-
-export const invalidToken = () => ({
-    type: MANAGE_USER_ROLES_INVALID_TOKEN
 });

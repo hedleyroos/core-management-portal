@@ -7,36 +7,44 @@ import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 
-import { setUser } from '../../actions/manageUserRoles';
+import { setInvitation } from '../../actions/manageInvitationRoles';
 import { invalidToken, setupResources } from '../../actions/sharedResources';
 import { mountManager } from '../../manageUtils';
-import AssignUserRoleCard from './AssignUserRoleCard';
-import UserCard from './UserCard';
+import InvitationCard from './InvitationCard';
+import AssignInvitationRoleCard from './AssignInvitationRoleCard';
 
 const mapStateToProps = state => ({
-    manageUserRoles: state.manageUserRoles,
+    manageInvitationRoles: state.manageInvitationRoles,
     sharedResources: state.sharedResources
 });
 
 const mapDispatchToProps = dispatch => ({
     setupResources: setup => dispatch(setupResources(setup)),
     invalidToken: () => dispatch(invalidToken()),
-    setUser: (selectedUser, userRoles) => dispatch(setUser(selectedUser, userRoles))
+    setInvitation: (selectedInvitation, invitationRoles) =>
+        dispatch(setInvitation(selectedInvitation, invitationRoles))
 });
 
-class ManageUserRoles extends Component {
+class ManageInvitationRoles extends Component {
     componentDidMount() {
         /**
          * This method will initialize the store of the Shared Resources
          * if not setup already.
          */
-        const { selectedUser } = this.props.manageUserRoles;
-        const { user_id } = this.props.match.params;
-        mountManager(this.props, 'user', selectedUser, user_id, 'user_id', this.props.setUser);
+        const { selectedInvitation } = this.props.manageInvitationRoles;
+        const { invitation_id } = this.props.match.params;
+        mountManager(
+            this.props,
+            'invitation',
+            selectedInvitation,
+            invitation_id,
+            'invitation_id',
+            this.props.setInvitation
+        );
     }
 
     render() {
-        const { selectedUser } = this.props.manageUserRoles;
+        const { selectedInvitation } = this.props.manageInvitationRoles;
         const {
             managerDomains,
             managerRoles,
@@ -44,16 +52,17 @@ class ManageUserRoles extends Component {
             roleMapping,
             validToken
         } = this.props.sharedResources;
+        const { invitation_id } = this.props.match.params;
         const detailsLoaded =
-            selectedUser && managerDomains && managerRoles && managerSites && roleMapping;
+            selectedInvitation && managerDomains && managerRoles && managerSites && roleMapping;
         return validToken ? (
             detailsLoaded ? (
                 <Restricted location={this.props.location}>
                     <Card>
-                        <CardTitle title="Manage User Roles" />
+                        <CardTitle title={`Manage Invitation #${invitation_id} Roles`} />
                         <CardText>
-                            <UserCard />
-                            <AssignUserRoleCard />
+                            <InvitationCard />
+                            <AssignInvitationRoleCard />
                         </CardText>
                     </Card>
                 </Restricted>
@@ -69,4 +78,4 @@ class ManageUserRoles extends Component {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ManageUserRoles);
+)(ManageInvitationRoles);

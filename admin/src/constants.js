@@ -29,6 +29,20 @@ export const PERMISSIONS = {
         ['userdomainroles', 'create'],
         ['userdomainroles', 'remove']
     ],
+    manageinvitationroles: [
+        ['roles', 'list'],
+        ['users', 'list'],
+        ['sites', 'list'],
+        ['siteroles', 'list'],
+        ['invitationsiteroles', 'list'],
+        ['invitationsiteroles', 'create'],
+        ['invitationsiteroles', 'remove'],
+        ['domains', 'list'],
+        ['domainroles', 'list'],
+        ['invitationdomainroles', 'list'],
+        ['invitationdomainroles', 'create'],
+        ['invitationdomainroles', 'remove']
+    ],
     purgeexpiredinvitations: [
         ['invitations', 'remove'],
         ['invitationsiterole', 'remove'],

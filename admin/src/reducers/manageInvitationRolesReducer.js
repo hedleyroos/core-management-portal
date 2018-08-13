@@ -1,46 +1,46 @@
 import {
-    MANAGE_USER_ROLES_SET_USER,
-    MANAGE_USER_ROLES_CHECK_ROLE_FOR_DELETE,
-    MANAGE_USER_ROLES_DELETE_ROLE,
-    MANAGE_USER_ROLES_SET_ASSIGNMENT_LOCATION,
-    MANAGE_USER_ROLES_CHECK_ROLE_FOR_ASSIGN,
-    MANAGE_USER_ROLES_ASSIGNING,
-    MANAGE_USER_ROLES_ALL_ASSIGNED,
-    MANAGE_USER_ROLES_ASSIGN_ROLE,
-    MANAGE_USER_ROLES_RESET
+    MANAGE_INVITATION_ROLES_SET_INVITATION,
+    MANAGE_INVITATION_ROLES_CHECK_ROLE_FOR_DELETE,
+    MANAGE_INVITATION_ROLES_DELETE_ROLE,
+    MANAGE_INVITATION_ROLES_SET_ASSIGNMENT_LOCATION,
+    MANAGE_INVITATION_ROLES_CHECK_ROLE_FOR_ASSIGN,
+    MANAGE_INVITATION_ROLES_ASSIGNING,
+    MANAGE_INVITATION_ROLES_ALL_ASSIGNED,
+    MANAGE_INVITATION_ROLES_ASSIGN_ROLE,
+    MANAGE_INVITATION_ROLES_RESET
 } from '../actionTypes';
 
 export default (state = {}, { type, payload }) => {
     switch (type) {
-        case MANAGE_USER_ROLES_SET_USER:
+        case MANAGE_INVITATION_ROLES_SET_INVITATION:
             return {
                 ...state,
-                selectedUser: payload.selectedUser,
-                userRoles: payload.userRoles,
+                selectedInvitation: payload.selectedInvitation,
+                invitationRoles: payload.invitationRoles,
                 amountSelectedToDelete: 0
             };
-        case MANAGE_USER_ROLES_CHECK_ROLE_FOR_DELETE:
+        case MANAGE_INVITATION_ROLES_CHECK_ROLE_FOR_DELETE:
             return {
                 ...state,
-                userRoles: {
-                    ...state.userRoles,
+                invitationRoles: {
+                    ...state.invitationRoles,
                     [payload]: {
-                        ...state.userRoles[payload],
-                        checked: !state.userRoles[payload].checked
+                        ...state.invitationRoles[payload],
+                        checked: !state.invitationRoles[payload].checked
                     }
                 },
-                amountSelectedToDelete: !state.userRoles[payload].checked
+                amountSelectedToDelete: !state.invitationRoles[payload].checked
                     ? state.amountSelectedToDelete + 1
                     : state.amountSelectedToDelete - 1
             };
-        case MANAGE_USER_ROLES_DELETE_ROLE:
-            const { [payload]: value, ...userRoles } = state.userRoles;
+        case MANAGE_INVITATION_ROLES_DELETE_ROLE:
+            const { [payload]: value, ...invitationRoles } = state.invitationRoles;
             return {
                 ...state,
-                userRoles,
+                invitationRoles,
                 amountSelectedToDelete: state.amountSelectedToDelete - 1
             };
-        case MANAGE_USER_ROLES_SET_ASSIGNMENT_LOCATION:
+        case MANAGE_INVITATION_ROLES_SET_ASSIGNMENT_LOCATION:
             return {
                 ...state,
                 assignmentLocation: payload.key,
@@ -53,7 +53,7 @@ export default (state = {}, { type, payload }) => {
                 }, {}),
                 amountSelectedToAssign: 0
             };
-        case MANAGE_USER_ROLES_CHECK_ROLE_FOR_ASSIGN:
+        case MANAGE_INVITATION_ROLES_CHECK_ROLE_FOR_ASSIGN:
             return {
                 ...state,
                 rolesToAssign: {
@@ -67,36 +67,39 @@ export default (state = {}, { type, payload }) => {
                     ? state.amountSelectedToAssign + 1
                     : state.amountSelectedToAssign - 1
             };
-        case MANAGE_USER_ROLES_ASSIGNING:
+        case MANAGE_INVITATION_ROLES_ASSIGNING:
             return {
                 ...state,
                 assigning: payload
             };
-        case MANAGE_USER_ROLES_ASSIGN_ROLE:
+        case MANAGE_INVITATION_ROLES_ASSIGN_ROLE:
             return {
                 ...state,
-                userRoles: {
-                    ...state.userRoles,
-                    [payload.key]: payload.userRole
+                invitationRoles: {
+                    ...state.invitationRoles,
+                    [payload.key]: payload.invitationRole
                 },
                 rolesToAssign: {
                     ...state.rolesToAssign,
-                    [payload.userRole.role.id]: {
-                        ...state.rolesToAssign[payload.userRole.role.id],
+                    [payload.invitationRole.role.id]: {
+                        ...state.rolesToAssign[payload.invitationRole.role.id],
                         checked: false
                     }
                 },
                 amountSelectedToAssign: state.amountSelectedToAssign - 1
             };
-        case MANAGE_USER_ROLES_ALL_ASSIGNED:
+        case MANAGE_INVITATION_ROLES_ALL_ASSIGNED:
             const {
                 assignmentLocation,
                 rolesToAssign,
                 amountSelectedToAssign,
                 ...nextState
             } = state;
-            return nextState;
-        case MANAGE_USER_ROLES_RESET:
+            return {
+                ...nextState,
+                assigning: false
+            };
+        case MANAGE_INVITATION_ROLES_RESET:
             return {};
         default:
             return state;

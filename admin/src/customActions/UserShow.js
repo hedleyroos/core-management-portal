@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { push } from 'react-router-redux';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import ManageIcon from 'material-ui/svg-icons/action/build';
 import { connect } from 'react-redux';
 import { ListButton, RefreshButton, EditButton } from 'admin-on-rest';
 import { CardActions } from 'material-ui/Card';
@@ -11,6 +12,7 @@ import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '.
 import { httpClient } from '../restClient';
 import PermissionsStore from '../auth/PermissionsStore';
 import ConfirmDialog from '../pages/ConfirmDialog';
+import { PERMISSIONS } from '../constants';
 
 const mapDispatchToProps = dispatch => ({
     push: path => dispatch(push(path))
@@ -85,6 +87,14 @@ class UserShowActions extends Component {
                             text="Are you sure you want to permanently delete this user?"
                         />
                     </div>
+                )}
+                {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) && (
+                    <FlatButton
+                        primary
+                        icon={<ManageIcon />}
+                        label="Manage Roles"
+                        onClick={() => this.props.push(`/manageuserroles/${data.id}`)}
+                    />
                 )}
             </CardActions>
         );
