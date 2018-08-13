@@ -89,7 +89,8 @@ class ManageUserRoles extends Component {
 
     setupManager() {
         // Set the manager places (ie Domains and Sites)
-        const ids = getDomainAndSiteIds();
+        const contexts = PermissionsStore.getAllContexts();
+        const ids = getDomainAndSiteIds(contexts);
         getDomainsAndSites(ids)
             .then(([domains, sites]) => {
                 this.props.setManagerPlaces(
@@ -114,11 +115,10 @@ class ManageUserRoles extends Component {
             managerSites,
             roleMapping,
             selectedUser,
-            treeData,
             validToken
         } = this.props.manageUserRoles;
         const managerDetailsLoaded =
-            managerDomains && managerRoles && managerSites && roleMapping && treeData;
+            managerDomains && managerRoles && managerSites && roleMapping;
         return validToken ? (
             managerDetailsLoaded ? (
                 <Restricted location={this.props.location}>
