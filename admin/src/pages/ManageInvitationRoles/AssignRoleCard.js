@@ -10,7 +10,7 @@ import {
 } from '../../actions/manageInvitationRoles';
 import { invalidToken } from '../../actions/sharedResources';
 import PermissionsStore from '../../auth/PermissionsStore';
-import AssignRoleCard from '../../cards/AssignRoldCard';
+import AssignRoleCard from '../../cards/AssignRoleCard';
 import { assignRoles } from '../../manageUtils';
 
 const mapStateToProps = state => ({

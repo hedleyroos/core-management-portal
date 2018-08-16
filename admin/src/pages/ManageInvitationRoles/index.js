@@ -11,7 +11,7 @@ import { setInvitation } from '../../actions/manageInvitationRoles';
 import { invalidToken, setupResources } from '../../actions/sharedResources';
 import { mountManager } from '../../manageUtils';
 import InvitationCard from './InvitationCard';
-import AssignInvitationRoleCard from './AssignInvitationRoleCard';
+import AssignRoleCard from './AssignRoleCard';
 
 const mapStateToProps = state => ({
     manageInvitationRoles: state.manageInvitationRoles,
@@ -62,7 +62,7 @@ class ManageInvitationRoles extends Component {
                         <CardTitle title={`Manage Invitation #${invitation_id} Roles`} />
                         <CardText>
                             <InvitationCard />
-                            <AssignInvitationRoleCard />
+                            <AssignRoleCard />
                         </CardText>
                     </Card>
                 </Restricted>
