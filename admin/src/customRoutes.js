@@ -10,5 +10,5 @@ export default [
     <Route exact path="/oidc/callback" component={OIDCCallback} noLayout />,
     <Route exact path="/contextchanger" component={ContextChanger} noLayout />,
     <Route exact path="/leaving" component={LeavingPage} noLayout />,
-    <Route exact path="/manageuserroles" component={ManageUserRoles} />
+    <Route exact path="/manageuserroles/:user_id" component={ManageUserRoles} />
 ];

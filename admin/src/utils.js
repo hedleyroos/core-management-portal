@@ -58,6 +58,7 @@ export const toBool = thing => !!thing;
 
 export const apiErrorHandler = error => {
     const message = error.body ? error.body.message || error.body.error : error.toString();
+    console.error(error);
     errorNotificationAnt(message, 'Error');
     if (error.message === 'Token expired') {
         localStorage.clear();

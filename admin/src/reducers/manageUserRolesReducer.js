@@ -1,44 +1,18 @@
 import {
-    MANAGE_USER_ROLES_SET_MANAGER_PLACES,
-    MANAGE_USER_ROLES_SET_SEARCH_RESULTS,
-    MANAGE_USER_ROLES_SELECT_USER,
+    MANAGE_USER_ROLES_SET_USER,
     MANAGE_USER_ROLES_CHECK_ROLE_FOR_DELETE,
     MANAGE_USER_ROLES_DELETE_ROLE,
     MANAGE_USER_ROLES_SET_ASSIGNMENT_LOCATION,
     MANAGE_USER_ROLES_CHECK_ROLE_FOR_ASSIGN,
+    MANAGE_USER_ROLES_ASSIGNING,
     MANAGE_USER_ROLES_ALL_ASSIGNED,
     MANAGE_USER_ROLES_ASSIGN_ROLE,
-    MANAGE_USER_ROLES_RESET,
-    MANAGE_USER_ROLES_INVALID_TOKEN,
-    MANAGE_USER_ROLES_SET_ROLE_MAPPING,
-    MANAGE_USER_ROLES_SET_MANAGER_ROLES
+    MANAGE_USER_ROLES_RESET
 } from '../actionTypes';
 
-export default (state = { validToken: true }, { type, payload }) => {
+export default (state = {}, { type, payload }) => {
     switch (type) {
-        case MANAGE_USER_ROLES_SET_ROLE_MAPPING:
-            return {
-                ...state,
-                roleMapping: payload
-            };
-        case MANAGE_USER_ROLES_SET_MANAGER_ROLES:
-            return {
-                ...state,
-                managerRoles: payload
-            };
-        case MANAGE_USER_ROLES_SET_MANAGER_PLACES:
-            return {
-                ...state,
-                managerDomains: payload.managerDomains,
-                managerSites: payload.managerSites
-            };
-        case MANAGE_USER_ROLES_SET_SEARCH_RESULTS:
-            return {
-                ...state,
-                search: payload.search,
-                userResults: payload.userResults
-            };
-        case MANAGE_USER_ROLES_SELECT_USER:
+        case MANAGE_USER_ROLES_SET_USER:
             return {
                 ...state,
                 selectedUser: payload.selectedUser,
@@ -69,8 +43,8 @@ export default (state = { validToken: true }, { type, payload }) => {
         case MANAGE_USER_ROLES_SET_ASSIGNMENT_LOCATION:
             return {
                 ...state,
-                assignmentLocation: payload,
-                rolesToAssign: state.managerRoles[payload].reduce((accumulator, role) => {
+                assignmentLocation: payload.key,
+                rolesToAssign: payload.managerRoles[payload.key].reduce((accumulator, role) => {
                     accumulator[role.id] = {
                         ...role,
                         checked: false
@@ -92,6 +66,11 @@ export default (state = { validToken: true }, { type, payload }) => {
                 amountSelectedToAssign: !state.rolesToAssign[payload].checked
                     ? state.amountSelectedToAssign + 1
                     : state.amountSelectedToAssign - 1
+            };
+        case MANAGE_USER_ROLES_ASSIGNING:
+            return {
+                ...state,
+                assigning: payload
             };
         case MANAGE_USER_ROLES_ASSIGN_ROLE:
             return {
@@ -118,19 +97,7 @@ export default (state = { validToken: true }, { type, payload }) => {
             } = state;
             return nextState;
         case MANAGE_USER_ROLES_RESET:
-            return {
-                validToken: state.validToken,
-                managerDomains: state.managerDomains,
-                managerSites: state.managerSites,
-                managerRoles: state.managerRoles,
-                treeData: state.treeData,
-                roleMapping: state.roleMapping
-            };
-        case MANAGE_USER_ROLES_INVALID_TOKEN:
-            return {
-                ...state,
-                validToken: false
-            };
+            return {};
         default:
             return state;
     }
