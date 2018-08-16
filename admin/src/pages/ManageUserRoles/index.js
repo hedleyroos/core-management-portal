@@ -10,7 +10,7 @@ import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import { setUser } from '../../actions/manageUserRoles';
 import { invalidToken, setupResources } from '../../actions/sharedResources';
 import { mountManager } from '../../manageUtils';
-import AssignUserRoleCard from './AssignUserRoleCard';
+import AssignRoleCard from './AssignRoleCard';
 import UserCard from './UserCard';
 
 const mapStateToProps = state => ({
@@ -53,7 +53,7 @@ class ManageUserRoles extends Component {
                         <CardTitle title="Manage User Roles" />
                         <CardText>
                             <UserCard />
-                            <AssignUserRoleCard />
+                            <AssignRoleCard />
                         </CardText>
                     </Card>
                 </Restricted>
