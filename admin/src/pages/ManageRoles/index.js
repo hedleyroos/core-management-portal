@@ -7,52 +7,54 @@ import CardText from 'material-ui/Card/CardText';
 import CardTitle from 'material-ui/Card/CardTitle';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 
-import { setUser } from '../../actions/manageUserRoles';
-import { invalidToken, setupResources } from '../../actions/sharedResources';
+import { invalidToken, reset, setObject, setupResources } from '../../actions/manageRoles';
 import { mountManager } from '../../manageUtils';
 import AssignRoleCard from './AssignRoleCard';
-import UserCard from './UserCard';
+import ObjectCard from './ObjectCard';
+import { titleCase } from '../../utils';
+import { MANAGE_MAPPING } from '../../constants';
 
 const mapStateToProps = state => ({
-    manageUserRoles: state.manageUserRoles,
-    sharedResources: state.sharedResources
+    manageRoles: state.manageRoles
 });
 
 const mapDispatchToProps = dispatch => ({
-    setupResources: setup => dispatch(setupResources(setup)),
     invalidToken: () => dispatch(invalidToken()),
-    setUser: (selectedUser, userRoles) => dispatch(setUser(selectedUser, userRoles))
+    setObject: (resource, idLabel, selectedObject, objectRoles) =>
+        dispatch(setObject(resource, idLabel, selectedObject, objectRoles)),
+    setupResources: setup => dispatch(setupResources(setup)),
+    reset: () => dispatch(reset())
 });
 
-class ManageUserRoles extends Component {
+class ManageRoles extends Component {
     componentDidMount() {
         /**
          * This method will initialize the store of the Shared Resources
          * if not setup already.
          */
-        const { selectedUser } = this.props.manageUserRoles;
-        const { user_id } = this.props.match.params;
-        mountManager(this.props, 'user', selectedUser, user_id, 'user_id', this.props.setUser);
+        mountManager(this.props);
     }
 
     render() {
-        const { selectedUser } = this.props.manageUserRoles;
         const {
             managerDomains,
             managerRoles,
             managerSites,
+            path,
             roleMapping,
+            selectedObject,
             validToken
-        } = this.props.sharedResources;
+        } = this.props.manageRoles;
+        const { resource, label } = path ? MANAGE_MAPPING[path] : {};
         const detailsLoaded =
-            selectedUser && managerDomains && managerRoles && managerSites && roleMapping;
+            selectedObject && managerDomains && managerRoles && managerSites && roleMapping;
         return validToken ? (
             detailsLoaded ? (
                 <Restricted location={this.props.location}>
                     <Card>
-                        <CardTitle title="Manage User Roles" />
+                        <CardTitle title={`Manage ${titleCase(resource)} Roles`} />
                         <CardText>
-                            <UserCard />
+                            <ObjectCard />
                             <AssignRoleCard />
                         </CardText>
                     </Card>
@@ -69,4 +71,4 @@ class ManageUserRoles extends Component {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ManageUserRoles);
+)(ManageRoles);

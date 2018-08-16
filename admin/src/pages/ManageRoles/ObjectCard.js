@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { checkRoleForDelete, deleteRole } from '../../actions/manageInvitationRoles';
-import { invalidToken } from '../../actions/sharedResources';
-import RoleCard from '../../cards/RoleCard';
 import { deleteRoles } from '../../manageUtils';
+import { checkRoleForDelete, deleteRole, invalidToken } from '../../actions/manageRoles';
+import RoleCard from '../../cards/RoleCard';
+import { MANAGE_MAPPING } from '../../constants';
+import { titleCase } from '../../utils';
 
 const mapStateToProps = state => ({
-    manageInvitationRoles: state.manageInvitationRoles
+    manageRoles: state.manageRoles
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,7 +17,7 @@ const mapDispatchToProps = dispatch => ({
     invalidToken: () => dispatch(invalidToken())
 });
 
-class InvitationCard extends Component {
+class ObjectCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,7 +26,6 @@ class InvitationCard extends Component {
         this.handleCheck = this.handleCheck.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleCheck(key) {
@@ -37,38 +37,28 @@ class InvitationCard extends Component {
     }
 
     handleClose(action) {
-        action === 'submit' && this.handleDelete();
+        action === 'submit' && deleteRoles(this.props);
         this.setState({ open: false });
-    }
-
-    handleDelete() {
-        const { selectedInvitation, invitationRoles } = this.props.manageInvitationRoles;
-        deleteRoles(
-            'invitation',
-            invitationRoles,
-            selectedInvitation,
-            this.props.deleteRole,
-            this.props.invalidToken
-        );
     }
 
     render() {
         const { open } = this.state;
         const {
             amountSelectedToDelete,
-            selectedInvitation,
-            invitationRoles
-        } = this.props.manageInvitationRoles;
-        const domainRoles = Object.entries(invitationRoles).filter(([key, role]) =>
+            selectedObject,
+            objectRoles,
+            path
+        } = this.props.manageRoles;
+        const { resource, label } = MANAGE_MAPPING[path];
+        const domainRoles = Object.entries(objectRoles).filter(([key, role]) =>
             key.startsWith('d')
         );
-        const siteRoles = Object.entries(invitationRoles).filter(([key, role]) =>
-            key.startsWith('s')
-        );
+        const siteRoles = Object.entries(objectRoles).filter(([key, role]) => key.startsWith('s'));
         return (
             <RoleCard
-                type="Invitation"
-                object={selectedInvitation}
+                type={resource}
+                title={`${titleCase(label)}: ${selectedObject[label]}`}
+                object={selectedObject}
                 domainRoles={domainRoles}
                 siteRoles={siteRoles}
                 handleCheck={this.handleCheck}
@@ -84,4 +74,4 @@ class InvitationCard extends Component {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(InvitationCard);
+)(ObjectCard);

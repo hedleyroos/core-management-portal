@@ -56,3 +56,16 @@ export const PLACE_MAPPING = {
     d: 'domain',
     s: 'site'
 };
+
+export const MANAGE_MAPPING = {
+    manageinvitationroles: {
+        resource: 'invitation',
+        idLabel: 'invitation_id',
+        label: 'email'
+    },
+    manageuserroles: {
+        resource: 'user',
+        idLabel: 'user_id',
+        label: 'username'
+    }
+};

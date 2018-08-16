@@ -6,16 +6,15 @@ import {
     checkRoleForAssign,
     assigningRoles,
     assignRole,
-    allAssigned
-} from '../../actions/manageInvitationRoles';
-import { invalidToken } from '../../actions/sharedResources';
+    allAssigned,
+    invalidToken
+} from '../../actions/manageRoles';
 import PermissionsStore from '../../auth/PermissionsStore';
 import AssignRoleCard from '../../cards/AssignRoleCard';
 import { assignRoles } from '../../manageUtils';
 
 const mapStateToProps = state => ({
-    manageInvitationRoles: state.manageInvitationRoles,
-    sharedResources: state.sharedResources
+    manageRoles: state.manageRoles
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -24,11 +23,11 @@ const mapDispatchToProps = dispatch => ({
         dispatch(setAssignmentLocation(managerRoles, key)),
     checkRoleForAssign: key => dispatch(checkRoleForAssign(key)),
     assigningRoles: assigning => dispatch(assigningRoles(assigning)),
-    assignRole: (key, invitationRole) => dispatch(assignRole(key, invitationRole)),
+    assignRole: (key, objectRole) => dispatch(assignRole(key, objectRole)),
     allAssigned: () => dispatch(allAssigned())
 });
 
-class AssignInvitationRoleCard extends Component {
+class AssignUserRoleCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -40,7 +39,7 @@ class AssignInvitationRoleCard extends Component {
     }
 
     handleChange(key) {
-        this.props.setAssignmentLocation(this.props.sharedResources.managerRoles, key);
+        this.props.setAssignmentLocation(this.props.manageRoles.managerRoles, key);
     }
 
     handleSelect(key) {
@@ -48,22 +47,16 @@ class AssignInvitationRoleCard extends Component {
     }
 
     handleAssign() {
-        assignRoles(
-            this.props.manageInvitationRoles,
-            this.props,
-            'invitation_id',
-            this.props.manageInvitationRoles.selectedInvitation,
-            'invitation'
-        );
+        assignRoles(this.props);
     }
 
     render() {
         const {
+            assigning,
             amountSelectedToAssign,
             assignmentLocation,
-            rolesToAssign,
-            assigning
-        } = this.props.manageInvitationRoles;
+            rolesToAssign
+        } = this.props.manageRoles;
         const treeData = PermissionsStore.getTreeData();
         return (
             <AssignRoleCard
@@ -83,4 +76,4 @@ class AssignInvitationRoleCard extends Component {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(AssignInvitationRoleCard);
+)(AssignUserRoleCard);
