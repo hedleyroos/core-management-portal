@@ -35,7 +35,7 @@ const AssignRoleCard = ({
                 useReduxFormField={false}
             />
             {assignmentLocation && (
-                <div>
+                <React.Fragment>
                     <CardHeader subtitle="Please choose the roles to add:" />
                     <CardText>
                         {notEmptyObject(rolesToAssign)
@@ -49,7 +49,7 @@ const AssignRoleCard = ({
                               ))
                             : 'No roles to Select on this domain/site.'}
                     </CardText>
-                </div>
+                </React.Fragment>
             )}
             {amountSelectedToAssign > 0 && (
                 <CardActions>
