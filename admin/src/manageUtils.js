@@ -147,57 +147,56 @@ export const deleteRoles = (resource, roles, object, deleteRole, invalidToken) =
 
 export const assignRoles = (store, props, idLabel, object, resource) => {
     let successCount = store.amountSelectedToAssign;
-    if (successCount) {
-        props.assigningRoles(true);
-        const [placeType, placeID] = store.assignmentLocation.split(':');
-        const place = PLACE_MAPPING[placeType];
-        let count = 0;
-        /**
-         * This map with fire off creating resource roles for each role that was selected
-         * on the given domain or site.
-         */
-        Object.values(store.rolesToAssign).map(role => {
-            if (role.checked) {
-                count += 1;
-                restClient(CREATE, `${resource}${place}roles`, {
-                    data: {
-                        [idLabel]: object.id,
-                        [`${place}_id`]: parseInt(placeID, 10),
-                        role_id: role.id
-                    }
-                })
-                    .then(response => {
-                        successCount -= 1;
-                        const placeObject =
-                            place === 'domain'
-                                ? props.sharedResources.managerDomains[`d:${placeID}`]
-                                : props.sharedResources.managerSites[`s:${placeID}`];
-                        props.assignRole(`${placeType}:${placeID}:${role.id}`, {
-                            [place]: placeObject,
-                            role: props.sharedResources.roleMapping[role.id],
-                            checked: false
-                        });
-                        successNotificationAnt(
-                            `Role '${role.label}' assigned on ${place} '${placeObject.name}'`,
-                            null,
-                            3
-                        );
-                        if (!successCount) {
-                            successNotificationAnt('Assignment Action Complete', 'Done', 4);
-                            props.assigningRoles(false);
-                            props.allAssigned();
-                        } else {
-                            props.assigningRoles(count !== store.amountSelectedToAssign);
-                        }
-                    })
-                    .catch(error => {
-                        errorNotificationAnt(`Role '${role.label}' cannot be assigned.`);
-                        props.assigningRoles(count !== store.amountSelectedToAssign);
-                        const invalid = apiErrorHandler(error);
-                        invalid && props.invalidToken();
-                    });
+    if (!successCount) return;
+    props.assigningRoles(true);
+    const [placeType, placeID] = store.assignmentLocation.split(':');
+    const place = PLACE_MAPPING[placeType];
+    let count = 0;
+    /**
+     * This map with fire off creating resource roles for each role that was selected
+     * on the given domain or site.
+     */
+    Object.values(store.rolesToAssign).map(role => {
+        if (!role.checked) return null;
+        count += 1;
+        restClient(CREATE, `${resource}${place}roles`, {
+            data: {
+                [idLabel]: object.id,
+                [`${place}_id`]: parseInt(placeID, 10),
+                role_id: role.id
             }
-            return null;
-        });
-    }
+        })
+            .then(response => {
+                successCount -= 1;
+                const placeObject =
+                    place === 'domain'
+                        ? props.sharedResources.managerDomains[`d:${placeID}`]
+                        : props.sharedResources.managerSites[`s:${placeID}`];
+                props.assignRole(`${placeType}:${placeID}:${role.id}`, {
+                    [place]: placeObject,
+                    role: props.sharedResources.roleMapping[role.id],
+                    checked: false
+                });
+                successNotificationAnt(
+                    `Role '${role.label}' assigned on ${place} '${placeObject.name}'`,
+                    null,
+                    3
+                );
+                if (!successCount) {
+                    successNotificationAnt('Assignment Action Complete', 'Done', 4);
+                    props.assigningRoles(false);
+                    props.allAssigned();
+                } else {
+                    props.assigningRoles(count !== store.amountSelectedToAssign);
+                }
+            })
+            .catch(error => {
+                errorNotificationAnt(`Role '${role.label}' cannot be assigned.`);
+                props.assigningRoles(count !== store.amountSelectedToAssign);
+                const invalid = apiErrorHandler(error);
+                invalid && props.invalidToken();
+			});
+		// Return null added for compilation warnings.
+        return null;
+    });
 };
