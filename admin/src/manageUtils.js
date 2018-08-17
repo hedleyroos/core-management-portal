@@ -1,5 +1,5 @@
 /** Utils file for all manage pages */
-import { PLACE_MAPPING, TECH_ADMIN } from './constants';
+import { PLACE_MAPPING, TECH_ADMIN, MANAGE_MAPPING } from './constants';
 import PermissionsStore from './auth/PermissionsStore';
 import restClient, { CREATE, DELETE, GET_LIST, GET_ONE } from './restClient';
 import {
@@ -13,15 +13,22 @@ import {
     successNotificationAnt
 } from './utils';
 
-export const mountManager = (props, resource, object, id, idLabel, setData) => {
-    if (!props.sharedResources.roleMapping) {
+export const mountManager = props => {
+    let { path } = props.match,
+        reset = false;
+    path = path.split('/')[1];
+    if (props.manageRoles.path !== path) {
+        props.reset();
+        reset = true;
+    }
+    if (!props.manageRoles.roleMapping) {
         setupManager(props).then(roleMapping => {
-            if (!object) {
-                loadObject(props, resource, id, idLabel, setData, roleMapping);
+            if (!props.manageRoles.selectedObject || reset) {
+                loadObject(props, roleMapping);
             }
         });
-    } else if (!object) {
-        loadObject(props, resource, id, idLabel, setData, props.sharedResources.roleMapping);
+    } else if (!props.manageRoles.selectedObject || reset) {
+        loadObject(props, props.manageRoles.roleMapping);
     }
 };
 
@@ -37,14 +44,17 @@ export const setupManager = props => {
         });
 };
 
-export const loadObject = (props, resource, id, idLabel, setData, roleMapping) => {
+export const loadObject = (props, roleMapping) => {
+    let { path, params } = props.match;
+    path = path.split('/')[1];
+    const { resource, idLabel } = MANAGE_MAPPING[path];
     Promise.all([
-        restClient(GET_ONE, `${resource}s`, { id }),
-        getPlaceRoles(props.match.params[idLabel], idLabel, resource, 'domain', roleMapping),
-        getPlaceRoles(props.match.params[idLabel], idLabel, resource, 'site', roleMapping)
+        restClient(GET_ONE, `${resource}s`, { id: params[idLabel] }),
+        getPlaceRoles(params[idLabel], idLabel, resource, 'domain', roleMapping),
+        getPlaceRoles(params[idLabel], idLabel, resource, 'site', roleMapping)
     ])
         .then(([response, domainRoles, siteRoles]) => {
-            setData(response.data, {
+            props.setObject(path, response.data, {
                 ...domainRoles,
                 ...siteRoles
             });
@@ -118,34 +128,38 @@ export const getManagerSetup = () => {
     );
 };
 
-export const deleteRoles = (resource, roles, object, deleteRole, invalidToken) => {
-    Object.entries(roles).map(([key, role]) => {
-        if (role.checked) {
-            const place = key.startsWith('d') ? 'domain' : 'site';
-            restClient(DELETE, `${resource}${place}roles`, {
-                id: `${object.id}/${role[place].id}/${role.role.id}`
+export const deleteRoles = props => {
+    const object = props.manageRoles.selectedObject;
+    const { resource } = MANAGE_MAPPING[props.manageRoles.path];
+    if (!object || !resource) return;
+    Object.entries(props.manageRoles.objectRoles).map(([key, role]) => {
+        if (!role.checked) return null;
+        const place = key.startsWith('d') ? 'domain' : 'site';
+        restClient(DELETE, `${resource}${place}roles`, {
+            id: `${object.id}/${role[place].id}/${role.role.id}`
+        })
+            .then(response => {
+                props.deleteRole(key);
+                successNotificationAnt(
+                    `Removed role '${role.role.label}' from '${role[place].name}'!`
+                );
             })
-                .then(response => {
-                    deleteRole(key);
-                    successNotificationAnt(
-                        `Removed role '${role.role.label}' from '${role[place].name}'!`
-                    );
-                })
-                .catch(error => {
-                    errorNotificationAnt(
-                        `Something went wrong. Cannot delete role '${role.role.label}' from '${
-                            role[place].name
-                        }' for ${resource}`
-                    );
-                    const invalid = apiErrorHandler(error);
-                    invalid && invalidToken();
-                });
-        }
+            .catch(error => {
+                errorNotificationAnt(
+                    `Something went wrong. Cannot delete role '${role.role.label}' from '${
+                        role[place].name
+                    }' for ${resource}`
+                );
+                const invalid = apiErrorHandler(error);
+                invalid && props.invalidToken();
+            });
         return null;
     });
 };
 
-export const assignRoles = (store, props, idLabel, object, resource) => {
+export const assignRoles = props => {
+    const store = props.manageRoles;
+    const { resource, idLabel } = MANAGE_MAPPING[store.path]
     let successCount = store.amountSelectedToAssign;
     if (!successCount) return;
     props.assigningRoles(true);
@@ -161,7 +175,7 @@ export const assignRoles = (store, props, idLabel, object, resource) => {
         count += 1;
         restClient(CREATE, `${resource}${place}roles`, {
             data: {
-                [idLabel]: object.id,
+                [idLabel]: store.selectedObject.id,
                 [`${place}_id`]: parseInt(placeID, 10),
                 role_id: role.id
             }
@@ -170,11 +184,11 @@ export const assignRoles = (store, props, idLabel, object, resource) => {
                 successCount -= 1;
                 const placeObject =
                     place === 'domain'
-                        ? props.sharedResources.managerDomains[`d:${placeID}`]
-                        : props.sharedResources.managerSites[`s:${placeID}`];
+                        ? props.manageRoles.managerDomains[`d:${placeID}`]
+                        : props.manageRoles.managerSites[`s:${placeID}`];
                 props.assignRole(`${placeType}:${placeID}:${role.id}`, {
                     [place]: placeObject,
-                    role: props.sharedResources.roleMapping[role.id],
+                    role: props.manageRoles.roleMapping[role.id],
                     checked: false
                 });
                 successNotificationAnt(
@@ -195,8 +209,8 @@ export const assignRoles = (store, props, idLabel, object, resource) => {
                 props.assigningRoles(count !== store.amountSelectedToAssign);
                 const invalid = apiErrorHandler(error);
                 invalid && props.invalidToken();
-			});
-		// Return null added for compilation warnings.
+            });
+        // Return null added for compilation warnings.
         return null;
     });
 };

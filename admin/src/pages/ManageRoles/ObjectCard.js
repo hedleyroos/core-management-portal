@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { deleteRoles } from '../../manageUtils';
-import { checkRoleForDelete, deleteRole } from '../../actions/manageUserRoles';
-import { invalidToken } from '../../actions/sharedResources';
+import { checkRoleForDelete, deleteRole, invalidToken } from '../../actions/manageRoles';
 import RoleCard from '../../cards/RoleCard';
+import { MANAGE_MAPPING } from '../../constants';
+import { titleCase } from '../../utils';
 
 const mapStateToProps = state => ({
-    manageUserRoles: state.manageUserRoles
+    manageRoles: state.manageRoles
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,7 +17,7 @@ const mapDispatchToProps = dispatch => ({
     invalidToken: () => dispatch(invalidToken())
 });
 
-class UserCard extends Component {
+class ObjectCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,7 +26,6 @@ class UserCard extends Component {
         this.handleCheck = this.handleCheck.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleCheck(key) {
@@ -37,35 +37,28 @@ class UserCard extends Component {
     }
 
     handleClose(action) {
-        action === 'submit' && this.handleDelete();
+        action === 'submit' && deleteRoles(this.props);
         this.setState({ open: false });
-    }
-
-    handleDelete() {
-        const { selectedUser, userRoles } = this.props.manageUserRoles;
-        deleteRoles(
-            'user',
-            userRoles,
-            selectedUser,
-            this.props.deleteRole,
-            this.props.invalidToken
-        );
     }
 
     render() {
         const { open } = this.state;
-        const { amountSelectedToDelete, selectedUser, userRoles } = this.props.manageUserRoles;
-        const domainRoles = Object.entries(userRoles).filter(([key, userRole]) =>
+        const {
+            amountSelectedToDelete,
+            selectedObject,
+            objectRoles,
+            path
+        } = this.props.manageRoles;
+        const { resource, label } = MANAGE_MAPPING[path];
+        const domainRoles = Object.entries(objectRoles).filter(([key, role]) =>
             key.startsWith('d')
         );
-        const siteRoles = Object.entries(userRoles).filter(([key, userRole]) =>
-            key.startsWith('s')
-        );
+        const siteRoles = Object.entries(objectRoles).filter(([key, role]) => key.startsWith('s'));
         return (
             <RoleCard
-                type="User"
-                object={selectedUser}
-                title={selectedUser.username}
+                type={resource}
+                title={`${titleCase(label)}: ${selectedObject[label]}`}
+                object={selectedObject}
                 domainRoles={domainRoles}
                 siteRoles={siteRoles}
                 handleCheck={this.handleCheck}
@@ -81,4 +74,4 @@ class UserCard extends Component {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(UserCard);
+)(ObjectCard);

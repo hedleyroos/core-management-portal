@@ -25,7 +25,7 @@ const RoleCard = ({
     amountSelectedToDelete
 }) => (
     <Card>
-        {title && <CardTitle title={title} subtitle={`ID: ${object.id}`} />}
+        <CardTitle title={title} subtitle={`ID: ${object.id}`} />
         <Divider />
         <CardHeader title="Domain Roles" />
         <CardText style={styles.wrapper}>

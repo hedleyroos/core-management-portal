@@ -6,16 +6,15 @@ import {
     checkRoleForAssign,
     assigningRoles,
     assignRole,
-    allAssigned
-} from '../../actions/manageUserRoles';
-import { invalidToken } from '../../actions/sharedResources';
+    allAssigned,
+    invalidToken
+} from '../../actions/manageRoles';
 import PermissionsStore from '../../auth/PermissionsStore';
 import AssignRoleCard from '../../cards/AssignRoleCard';
 import { assignRoles } from '../../manageUtils';
 
 const mapStateToProps = state => ({
-    manageUserRoles: state.manageUserRoles,
-    sharedResources: state.sharedResources
+    manageRoles: state.manageRoles
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -24,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(setAssignmentLocation(managerRoles, key)),
     checkRoleForAssign: key => dispatch(checkRoleForAssign(key)),
     assigningRoles: assigning => dispatch(assigningRoles(assigning)),
-    assignRole: (key, userRole) => dispatch(assignRole(key, userRole)),
+    assignRole: (key, objectRole) => dispatch(assignRole(key, objectRole)),
     allAssigned: () => dispatch(allAssigned())
 });
 
@@ -40,7 +39,7 @@ class AssignUserRoleCard extends Component {
     }
 
     handleChange(key) {
-        this.props.setAssignmentLocation(this.props.sharedResources.managerRoles, key);
+        this.props.setAssignmentLocation(this.props.manageRoles.managerRoles, key);
     }
 
     handleSelect(key) {
@@ -48,22 +47,16 @@ class AssignUserRoleCard extends Component {
     }
 
     handleAssign() {
-        assignRoles(
-            this.props.manageUserRoles,
-            this.props,
-            'user_id',
-            this.props.manageUserRoles.selectedUser,
-            'user'
-        );
+        assignRoles(this.props);
     }
 
     render() {
-        const { assigning } = this.state;
         const {
+            assigning,
             amountSelectedToAssign,
             assignmentLocation,
             rolesToAssign
-        } = this.props.manageUserRoles;
+        } = this.props.manageRoles;
         const treeData = PermissionsStore.getTreeData();
         return (
             <AssignRoleCard

@@ -27,7 +27,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
-import { InvitationListActions, InvitationShowActions } from '../customActions/Invitation';
+import InvitationListActions from '../customActions/InvitationList'; 
+import InvitationShowActions from '../customActions/InvitationShow';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
