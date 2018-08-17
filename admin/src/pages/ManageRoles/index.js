@@ -45,7 +45,7 @@ class ManageRoles extends Component {
             selectedObject,
             validToken
         } = this.props.manageRoles;
-        const { resource, label } = path ? MANAGE_MAPPING[path] : {};
+        const { resource } = path ? MANAGE_MAPPING[path] : {};
         const detailsLoaded =
             selectedObject && managerDomains && managerRoles && managerSites && roleMapping;
         return validToken ? (
