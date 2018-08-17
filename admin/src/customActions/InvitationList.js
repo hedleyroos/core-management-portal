@@ -15,7 +15,7 @@ class InvitationListActions extends Component {
         httpClient(
             `${
                 process.env.REACT_APP_MANAGEMENT_LAYER
-            }/invitations/purge/expired?synchronous_mode=true`
+            }/invitations/purge/expired`
         )
             .then(response => {
                 successNotificationAnt(

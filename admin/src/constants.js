@@ -45,8 +45,8 @@ export const PERMISSIONS = {
     ],
     purgeexpiredinvitations: [
         ['invitations', 'remove'],
-        ['invitationsiterole', 'remove'],
-        ['invitationdomainrole', 'remove']
+        ['invitationsiteroles', 'remove'],
+        ['invitationdomainroles', 'remove']
     ]
 };
 

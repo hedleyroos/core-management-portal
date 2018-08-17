@@ -31,15 +31,14 @@ class UserShowActions extends Component {
 
     handleDelete() {
         const { data } = this.props;
-        httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/request_user_deletion`,
-                   {
-                       method: "POST",
-                       headers: new Headers({"Content-Type": "application/json"}),
-                       body: JSON.stringify({
-                           "user_id": data.id,
-                           "reason": "Management Portal"  // @TODO Get proper reason from a textbox
-                       })
-                   })
+        httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/request_user_deletion`, {
+            method: 'POST',
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({
+                user_id: data.id,
+                reason: 'Management Portal' // @TODO Get proper reason from a textbox
+            })
+        })
             .then(response => {
                 this.props.push('/users');
                 successNotificationAnt('Request to delete user sent.');
@@ -88,14 +87,15 @@ class UserShowActions extends Component {
                         />
                     </div>
                 )}
-                {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) && (
-                    <FlatButton
-                        primary
-                        icon={<ManageIcon />}
-                        label="Manage Roles"
-                        onClick={() => this.props.push(`/manageuserroles/${data.id}`)}
-                    />
-                )}
+                {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) &&
+                    data.organisation_id && (
+                        <FlatButton
+                            primary
+                            icon={<ManageIcon />}
+                            label="Manage Roles"
+                            onClick={() => this.props.push(`/manageuserroles/${data.id}`)}
+                        />
+                    )}
             </CardActions>
         );
     }
