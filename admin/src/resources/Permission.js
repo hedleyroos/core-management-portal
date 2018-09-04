@@ -38,11 +38,11 @@ const validationEditPermission = values => {
 export const PermissionList = props => (
     <List {...props} title="Permission List" filters={<PermissionFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" />
-            <TextField source="name" />
-            <TextField source="description" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <NumberField source="id" sortable={false} />
+            <TextField source="name" sortable={false} />
+            <TextField source="description" sortable={false} />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('permissions', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('permissions', 'remove') ? (

@@ -1,10 +1,10 @@
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { pink500, pink300 } from 'material-ui/styles/colors';
+import { teal800, teal500 } from 'material-ui/styles/colors';
 
 export const muiTheme = getMuiTheme({
     palette: {
-        primary1Color: pink500,
-        accent1Color: pink300
+        primary1Color: teal500,  // cobusc: I swapped primary and accent1 colours
+        accent1Color: teal800
     }
 });
 

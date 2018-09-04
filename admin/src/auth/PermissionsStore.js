@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import restClient, { OPERATIONAL, GET_ONE } from '../restClient';
-import { getSitesForContext } from '../utils';
+import { getContextAlphabeticallyFirst, getSitesForContext, notEmptyObject } from '../utils';
 import { PLACE_MAPPING } from '../constants';
 
 class PermissionsStore {
@@ -89,6 +89,18 @@ class PermissionsStore {
                     remove: ['urn:ge:user_data:usersitedata:delete'],
                     edit: ['urn:ge:user_data:usersitedata:update']
                 },
+                deletedusers: {
+                    list: ['urn:ge:user_data:deleteduser:read'],
+                    create: ['urn:ge:user_data:deleteduser:create'],
+                    remove: ['urn:ge:user_data:deleteduser:delete'],
+                    edit: ['urn:ge:user_data:deleteduser:update']
+                },
+                deletedusersites: {
+                    list: ['urn:ge:user_data:deletedusersite:read'],
+                    create: ['urn:ge:user_data:deletedusersite:create'],
+                    remove: ['urn:ge:user_data:deletedusersite:delete'],
+                    edit: ['urn:ge:user_data:deletedusersite:update']
+                },
                 adminnotes: {
                     list: ['urn:ge:user_data:adminnote:read'],
                     create: ['urn:ge:user_data:adminnote:create'],
@@ -129,6 +141,7 @@ class PermissionsStore {
             this.getAllContexts = this.getAllContexts.bind(this);
             this.getCurrentContext = this.getCurrentContext.bind(this);
             this.getSiteIDs = this.getSiteIDs.bind(this);
+            this.getTreeData = this.getTreeData.bind(this);
             PermissionsStore.instance = this;
         }
         return PermissionsStore.instance;
@@ -145,10 +158,18 @@ class PermissionsStore {
             }, {});
         });
     }
-    getAndLoadPermissions(userID, currentContext, contexts = null) {
-        if (currentContext) {
-            contexts = !contexts ? this.getAllContexts() : contexts;
-            const [contextType, contextID] = currentContext.split(':');
+    getAndLoadPermissions({ userID, currentContext = null, contexts = null, treeData = null }) {
+        let contextType = null,
+            contextID = null;
+        treeData = this.getTreeData() || treeData;
+        contexts = !contexts ? this.getAllContexts() : contexts;
+        if (notEmptyObject(contexts)) {
+            if (!currentContext) {
+                currentContext =
+                    treeData.length > 1 ? getContextAlphabeticallyFirst(treeData) : treeData[0].key;
+            }
+            [contextType, contextID] = currentContext.split(':');
+
             // All calls wrapped in a Promise.all() for all to be done before carrying on.
             return Promise.all([
                 restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
@@ -164,13 +185,14 @@ class PermissionsStore {
                         key: currentContext,
                         obj: currentContextObject.data
                     },
-                    siteIDs
+                    siteIDs,
+                    treeData
                 );
             });
         }
-        return Promise.resolve()
+        return Promise.resolve();
     }
-    loadPermissions(userPermissions, contexts, currentContext, siteIDs) {
+    loadPermissions(userPermissions, contexts, currentContext, siteIDs, treeData) {
         this.permissionFlags = {};
         const allowAccess = (userPermissions, requiredPermissions) => {
             if (requiredPermissions.length > 0) {
@@ -196,13 +218,14 @@ class PermissionsStore {
             ...this.permissionFlags,
             contexts,
             currentContext,
-            siteIDs
+            siteIDs,
+            treeData
         };
         localStorage.setItem('permissions', JSON.stringify(this.permissionFlags));
     }
     getResourcePermission(resource, permission) {
         if (this.permissionFlags) {
-            return this.permissionFlags[resource][permission];
+            return this.permissionFlags[resource] && this.permissionFlags[resource][permission];
         } else {
             let userPermissions = localStorage.getItem('permissions');
             if (userPermissions) {
@@ -238,6 +261,10 @@ class PermissionsStore {
     getSiteIDs() {
         const permissions = this.getPermissionFlags();
         return permissions ? permissions.siteIDs : '';
+    }
+    getTreeData() {
+        const permissions = this.getPermissionFlags();
+        return permissions ? permissions.treeData : null;
     }
 }
 

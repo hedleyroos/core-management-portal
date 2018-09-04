@@ -46,6 +46,7 @@ export const InvitationDomainRoleList = props => (
                     label="Invitation"
                     source="invitation_id"
                     reference="invitations"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -59,6 +60,7 @@ export const InvitationDomainRoleList = props => (
                     label="Domain"
                     source="domain_id"
                     reference="domains"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -72,6 +74,7 @@ export const InvitationDomainRoleList = props => (
                     label="Role"
                     source="role_id"
                     reference="roles"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -80,8 +83,8 @@ export const InvitationDomainRoleList = props => (
             ) : (
                 <EmptyField />
             )}
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             <ShowButton />
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'remove') ? (
                 <DeleteButton />

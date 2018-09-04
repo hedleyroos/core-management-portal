@@ -1,6 +1,5 @@
 import { notification } from 'antd';
 
-import PermissionsStore from './auth/PermissionsStore';
 import restClient, { GET_LIST, OPERATIONAL } from './restClient';
 import { PLACE_MAPPING } from './constants';
 
@@ -9,9 +8,31 @@ import { PLACE_MAPPING } from './constants';
  * When regenerated the changes will be lost.
  **/
 
-export const getDomainAndSiteIds = () => {
-    const allContexts = PermissionsStore.getAllContexts();
-    return Object.keys(allContexts).reduce(
+export const getContextAlphabeticallyFirst = treeData => {
+    let first = treeData[0];
+    treeData.map(item => {
+        first = item.name.toLowerCase() < first.name ? item : first;
+        return null;
+    });
+    return first.key;
+};
+
+export const createTreeFromContexts = contexts => {
+    const ids = getDomainAndSiteIds(contexts);
+    return getDomainsAndSites(ids).then(([domains, sites]) => {
+        return createTreeData(
+            {
+                ...makeIDMapping(domains, 'd:'),
+                ...makeIDMapping(sites, 's:')
+            },
+            'domain_id',
+            's'
+        );
+    });
+};
+
+export const getDomainAndSiteIds = contexts => {
+    return Object.keys(contexts).reduce(
         (accumulator, place) => {
             const [placeLetter, placeID] = place.split(':');
             accumulator[`${PLACE_MAPPING[placeLetter]}s`].push(placeID);
@@ -35,9 +56,20 @@ export const getDomainsAndSites = ids => {
 
 export const toBool = thing => !!thing;
 
-export const successNotificationAnt = (description, duration = 3) => {
+export const apiErrorHandler = error => {
+    const message = error.body ? error.body.message || error.body.error : error.toString();
+    console.error(error);
+    errorNotificationAnt(message, 'Error');
+    if (error.message === 'Token expired') {
+        localStorage.clear();
+        return true;
+    }
+    return false;
+};
+
+export const successNotificationAnt = (description, heading = null, duration = 3) => {
     notification.success({
-        message: 'Success!',
+        message: heading || 'Success!',
         description,
         duration,
         style: {
@@ -48,9 +80,9 @@ export const successNotificationAnt = (description, duration = 3) => {
     });
 };
 
-export const errorNotificationAnt = (description, duration = 0) => {
+export const errorNotificationAnt = (description, heading = null, duration = 0) => {
     notification.error({
-        message: 'Oh No!',
+        message: heading || 'Oh No!',
         description,
         duration,
         style: {

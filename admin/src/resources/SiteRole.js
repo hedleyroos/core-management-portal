@@ -50,6 +50,7 @@ export const SiteRoleList = props => (
                     label="Site"
                     source="site_id"
                     reference="sites"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -63,6 +64,7 @@ export const SiteRoleList = props => (
                     label="Role"
                     source="role_id"
                     reference="roles"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -71,9 +73,9 @@ export const SiteRoleList = props => (
             ) : (
                 <EmptyField />
             )}
-            <BooleanField source="grant_implicitly" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <BooleanField source="grant_implicitly" sortable={false} />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('siteroles', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('siteroles', 'remove') ? (

@@ -27,7 +27,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
-import InvitationShowActions from '../customActions/Invitation';
+import InvitationListActions from '../customActions/InvitationList'; 
+import InvitationShowActions from '../customActions/InvitationShow';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -71,14 +72,20 @@ const validationEditInvitation = values => {
 };
 
 export const InvitationList = props => (
-    <List {...props} title="Invitation List" filters={<InvitationFilter />}>
+    <List
+        {...props}
+        title="Invitation List"
+        actions={<InvitationListActions />}
+        filters={<InvitationFilter />}
+    >
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            <TextField source="id" />
+            <TextField source="id" sortable={false} />
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
                     source="invitor_id"
                     reference="users"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -87,14 +94,15 @@ export const InvitationList = props => (
             ) : (
                 <EmptyField />
             )}
-            <TextField source="first_name" />
-            <TextField source="last_name" />
-            <TextField source="email" />
+            <TextField source="first_name" sortable={false} />
+            <TextField source="last_name" sortable={false} />
+            <TextField source="email" sortable={false} />
             {PermissionsStore.getResourcePermission('organisations', 'list') ? (
                 <ReferenceField
                     label="Organisation"
                     source="organisation_id"
                     reference="organisations"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -103,9 +111,9 @@ export const InvitationList = props => (
             ) : (
                 <EmptyField />
             )}
-            <DateField source="expires_at" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <DateField source="expires_at" sortable={false} />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('invitations', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('invitations', 'remove') ? (
@@ -180,24 +188,32 @@ export const InvitationShow = props => (
                     target="invitation_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Domain"
-                            source="domain_id"
-                            reference="domains"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('domains', 'list') ? (
+                            <ReferenceField
+                                label="Domain"
+                                source="domain_id"
+                                reference="domains"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -212,24 +228,32 @@ export const InvitationShow = props => (
                     target="invitation_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Site"
-                            source="site_id"
-                            reference="sites"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('sites', 'list') ? (
+                            <ReferenceField
+                                label="Site"
+                                source="site_id"
+                                reference="sites"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -266,24 +290,32 @@ export const InvitationEdit = props => (
                     target="invitation_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Domain"
-                            source="domain_id"
-                            reference="domains"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('domains', 'list') ? (
+                            <ReferenceField
+                                label="Domain"
+                                source="domain_id"
+                                reference="domains"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -298,24 +330,32 @@ export const InvitationEdit = props => (
                     target="invitation_id"
                 >
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Site"
-                            source="site_id"
-                            reference="sites"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="name" />
-                        </ReferenceField>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('sites', 'list') ? (
+                            <ReferenceField
+                                label="Site"
+                                source="site_id"
+                                reference="sites"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="name" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>

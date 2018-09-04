@@ -26,7 +26,7 @@ const UserFilter = props => (
         <ReferenceInput label="Country" source="country" reference="countries" allowEmpty>
             <SelectInput optionText="code" />
         </ReferenceInput>
-        <DateRangeInput label="Date Joined" source="date_joined" />
+        <DateRangeInput label="Date Joined" source="date_joined" time />
         <TextInput label="Email" source="email" />
         <BooleanInput label="Email Verified" source="email_verified" />
         <TextInput label="First Name" source="first_name" />

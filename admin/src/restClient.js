@@ -18,6 +18,7 @@ export const DELETE = 'DELETE';
 
 const COMPOSITE_KEY_RESOURSES = {
     domainroles: ['domain_id', 'role_id'],
+    deletedusersites: ['deleted_user_id', 'site_id'],
     invitationdomainroles: ['invitation_id', 'domain_id', 'role_id'],
     invitationsiteroles: ['invitation_id', 'site_id', 'role_id'],
     roleresourcepermissions: ['role_id', 'resource_id', 'permission_id'],
@@ -115,7 +116,7 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
 
             if (params.sort) {
                 const { field, order } = params.sort;
-                query['ordering'] = `${order === 'DESC' ? '-' : ''}` + field;
+                query['order_by'] = `${order === 'DESC' ? '-' : ''}` + field;
             }
 
             if (params.filter) {
@@ -145,7 +146,7 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
                     } else {
                         query[key] = filter;
                     }
-                    if (query[key].length === 0) {
+                    if (!query[key] || (query[key] && query[key].length === 0)) {
                         delete query[key];
                     }
                 });
@@ -291,7 +292,7 @@ const restClient = (apiUrl, httpClient = fetchUtils.fetchJson) => {
     };
 };
 
-const httpClient = (url, options = {}) => {
+export const httpClient = (url, options = {}) => {
     if (!options.headers) {
         options.headers = new Headers({ Accept: 'application/json' });
     }

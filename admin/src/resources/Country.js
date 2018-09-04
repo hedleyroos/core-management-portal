@@ -9,8 +9,8 @@ import CountryFilter from '../filters/CountryFilter';
 export const CountryList = props => (
     <List {...props} title="Country List" filters={<CountryFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            <TextField source="code" />
-            <TextField source="name" />
+            <TextField source="code" sortable={false} />
+            <TextField source="name" sortable={false} />
             <ShowButton />
         </Datagrid>
     </List>

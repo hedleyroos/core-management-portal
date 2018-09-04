@@ -50,6 +50,7 @@ export const SiteDataSchemaList = props => (
                     label="Site"
                     source="site_id"
                     reference="sites"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -58,9 +59,9 @@ export const SiteDataSchemaList = props => (
             ) : (
                 <EmptyField />
             )}
-            <ObjectField source="schema" addLabel />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <ObjectField source="schema" sortable={false} addLabel />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('sitedataschemas', 'edit') ? (
                 <EditButton />
             ) : null}

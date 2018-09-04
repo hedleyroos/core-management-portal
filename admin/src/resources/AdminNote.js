@@ -31,9 +31,6 @@ const validationCreateAdminNote = values => {
     if (!values.user_id) {
         errors.user_id = ['user_id is required'];
     }
-    if (!values.creator_id) {
-        errors.creator_id = ['creator_id is required'];
-    }
     if (!values.note) {
         errors.note = ['note is required'];
     }
@@ -48,12 +45,13 @@ const validationEditAdminNote = values => {
 export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" />
+            <NumberField source="id" sortable={false} />
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
                     source="user_id"
                     reference="users"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -67,6 +65,7 @@ export const AdminNoteList = props => (
                     label="User"
                     source="creator_id"
                     reference="users"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -75,9 +74,9 @@ export const AdminNoteList = props => (
             ) : (
                 <EmptyField />
             )}
-            <TextField source="note" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <TextField source="note" sortable={false} />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('adminnotes', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? (

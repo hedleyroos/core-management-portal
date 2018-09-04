@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { MenuItemLink, getResources } from 'admin-on-rest';
 import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
-import ManageIcon from 'material-ui/svg-icons/action/build';
 import InviteIcon from 'material-ui/svg-icons/editor/insert-invitation';
 import FingerprintIcon from 'material-ui/svg-icons/action/fingerprint';
 import ListIcon from 'material-ui/svg-icons/action/view-list';
@@ -21,11 +20,14 @@ import SpeakerNoteIcon from 'material-ui/svg-icons/action/speaker-notes';
 import TerrainIcon from 'material-ui/svg-icons/maps/terrain';
 import CategoryIcon from 'material-ui/svg-icons/action/account-balance';
 import ContextSwitchIcon from 'material-ui/svg-icons/communication/swap-calls';
-import { pink300 } from 'material-ui/styles/colors';
+import DeletedUserIcon from 'material-ui/svg-icons/av/recent-actors';
+import DeletedSiteIcon from 'material-ui/svg-icons/communication/location-off';
+import { teal500 } from 'material-ui/styles/colors';
 
 import PermissionsStore from './auth/PermissionsStore';
 import { titleCase, notEmptyObject } from './utils';
-import { TITLES, PERMISSIONS } from './constants';
+import { TITLES } from './constants';
+import Logout from './customActions/Logout';
 
 const ICONS = {
     domains: <DomainIcon />,
@@ -42,6 +44,8 @@ const ICONS = {
     userdomainroles: <ListIcon />,
     usersiteroles: <ListIcon />,
     usersitedata: <ListIcon />,
+    deletedusers: <DeletedUserIcon />,
+    deletedusersites: <DeletedSiteIcon />,
     adminnotes: <SpeakerNoteIcon />,
     sitedataschemas: <ListIcon />,
     clients: <DeviceIcon />,
@@ -50,46 +54,42 @@ const ICONS = {
     users: <PeopleIcon />
 };
 
-const Menu = ({ resources, onMenuTap, logout }) => (
-    <div>
-        {notEmptyObject(PermissionsStore.getAllContexts()) ? (
-            <MenuItemLink
-                to="/contextchanger"
-                primaryText={`Context: ${titleCase(
-                    PermissionsStore.getCurrentContext()
-                        .obj.name.split('_')
-                        .join(' ')
-                )}`}
-                onClick={onMenuTap}
-                leftIcon={<ContextSwitchIcon color={pink300} />}
-            />
-        ) : null}
-        {resources
-            ? resources.map(resource => (
-                  <MenuItemLink
-                      key={resource.name}
-                      to={`/${resource.name}`}
-                      primaryText={
-                          TITLES[resource.name]
-                              ? TITLES[resource.name]
-                              : `${titleCase(resource.name)}`
-                      }
-                      onClick={onMenuTap}
-                      leftIcon={ICONS[resource.name]}
-                  />
-              ))
-            : ''}
-        {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) ? (
-            <MenuItemLink
-                to="/manageuserroles"
-                primaryText="Manage User Roles"
-                onClick={onMenuTap}
-                leftIcon={<ManageIcon />}
-            />
-        ) : null}
-        {logout}
-    </div>
-);
+const Menu = ({ resources, onMenuTap }) => {
+    const contexts = PermissionsStore.getAllContexts();
+    const showContextSwitcher = Object.keys(contexts).length > 1;
+    return (
+        <div>
+            {notEmptyObject(contexts) && showContextSwitcher ? (
+                <MenuItemLink
+                    to="/contextchanger"
+                    primaryText={`Context: ${titleCase(
+                        PermissionsStore.getCurrentContext()
+                            .obj.name.split('_')
+                            .join(' ')
+                    )}`}
+                    onClick={onMenuTap}
+                    leftIcon={<ContextSwitchIcon color={teal500} />}
+                />
+            ) : null}
+            {resources
+                ? resources.map(resource => (
+                      <MenuItemLink
+                          key={resource.name}
+                          to={`/${resource.name}`}
+                          primaryText={
+                              TITLES[resource.name]
+                                  ? TITLES[resource.name]
+                                  : `${titleCase(resource.name)}`
+                          }
+                          onClick={onMenuTap}
+                          leftIcon={ICONS[resource.name]}
+                      />
+                  ))
+                : ''}
+            <Logout />
+        </div>
+    );
+};
 
 const mapStateToProps = state => ({
     resources: getResources(state)

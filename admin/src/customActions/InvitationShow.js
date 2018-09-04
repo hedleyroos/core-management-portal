@@ -2,12 +2,22 @@ import React, { Component } from 'react';
 import { CardActions } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import SendIcon from 'material-ui/svg-icons/content/send';
+import ManageIcon from 'material-ui/svg-icons/action/build';
 import { DeleteButton, ListButton, RefreshButton, EditButton } from 'admin-on-rest';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
 
 import { styles } from '../Theme';
-import { successNotificationAnt, errorNotificationAnt } from '../utils';
+import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
+import { httpClient } from '../restClient';
+import PermissionsStore from '../auth/PermissionsStore';
+import { PERMISSIONS } from '../constants';
 
 const timezoneOffset = new Date().getTimezoneOffset();
+
+const mapDispatchToProps = dispatch => ({
+    push: path => dispatch(push(path))
+});
 
 class InvitationShowActions extends Component {
     constructor(props) {
@@ -28,21 +38,13 @@ class InvitationShowActions extends Component {
 
     sendInvite() {
         const data = this.props.data;
-        const id_token = localStorage.getItem('id_token');
-        const permissions = JSON.parse(localStorage.getItem('permissions'));
-        fetch(`${process.env.REACT_APP_MANAGEMENT_LAYER}/invitations/${data.id}/send`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${id_token}`,
-                'X-GE-Portal-Context': permissions.currentContext.key
-            }
-        })
+        httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/invitations/${data.id}/send`)
             .then(response => {
                 successNotificationAnt('An invitation email was successfully queued for sending.');
             })
             .catch(error => {
-                console.error(error);
                 errorNotificationAnt('Invite not sent.');
+                apiErrorHandler(error);
             });
     }
 
@@ -50,11 +52,14 @@ class InvitationShowActions extends Component {
         const { basePath, data } = this.props;
         return (
             <CardActions style={styles.cardAction}>
-                <EditButton basePath={basePath} record={data} />
+                {PermissionsStore.getResourcePermission('invitations', 'edit') && (
+                    <EditButton basePath={basePath} record={data} />
+                )}
                 <ListButton basePath={basePath} />
-                <DeleteButton basePath={basePath} record={data} />
+                {PermissionsStore.manyResourcePermissions(PERMISSIONS.purgeexpiredinvitations) && (
+                    <DeleteButton basePath={basePath} record={data} />
+                )}
                 <RefreshButton />
-                {/* Custom Actions */}
                 {this.inviteNotExpired() && (
                     <FlatButton
                         primary
@@ -63,9 +68,20 @@ class InvitationShowActions extends Component {
                         onClick={this.sendInvite}
                     />
                 )}
+                {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageinvitationroles) && (
+                    <FlatButton
+                        primary
+                        icon={<ManageIcon />}
+                        label="Manage Roles"
+                        onClick={() => this.props.push(`/manageinvitationroles/${data.id}`)}
+                    />
+                )}
             </CardActions>
         );
     }
 }
 
-export default InvitationShowActions;
+export default connect(
+    null,
+    mapDispatchToProps
+)(InvitationShowActions);

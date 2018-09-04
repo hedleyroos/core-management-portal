@@ -55,6 +55,7 @@ export const UserSiteDataList = props => (
                     label="User"
                     source="user_id"
                     reference="users"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -68,6 +69,7 @@ export const UserSiteDataList = props => (
                     label="Site"
                     source="site_id"
                     reference="sites"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -76,9 +78,9 @@ export const UserSiteDataList = props => (
             ) : (
                 <EmptyField />
             )}
-            <ObjectField source="data" addLabel />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <ObjectField source="data" sortable={false} addLabel />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('usersitedata', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('usersitedata', 'remove') ? (

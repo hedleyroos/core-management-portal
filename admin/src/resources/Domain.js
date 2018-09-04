@@ -44,12 +44,13 @@ const validationEditDomain = values => {
 export const DomainList = props => (
     <List {...props} title="Domain List" filters={<DomainFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" />
+            <NumberField source="id" sortable={false} />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField
                     label="Parent"
                     source="parent_id"
                     reference="domains"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -58,10 +59,10 @@ export const DomainList = props => (
             ) : (
                 <EmptyField />
             )}
-            <TextField source="name" />
-            <TextField source="description" />
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <TextField source="name" sortable={false} />
+            <TextField source="description" sortable={false} />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             {PermissionsStore.getResourcePermission('domains', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('domains', 'remove') ? <DeleteButton /> : null}
@@ -132,15 +133,19 @@ export const DomainShow = props => (
             {PermissionsStore.getResourcePermission('domainroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>
@@ -190,15 +195,19 @@ export const DomainEdit = props => (
             {PermissionsStore.getResourcePermission('domainroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
-                        <ReferenceField
-                            label="Role"
-                            source="role_id"
-                            reference="roles"
-                            linkType="show"
-                            allowEmpty
-                        >
-                            <NumberField source="label" />
-                        </ReferenceField>
+                        {PermissionsStore.getResourcePermission('roles', 'list') ? (
+                            <ReferenceField
+                                label="Role"
+                                source="role_id"
+                                reference="roles"
+                                linkType="show"
+                                allowEmpty
+                            >
+                                <NumberField source="label" />
+                            </ReferenceField>
+                        ) : (
+                            <EmptyField />
+                        )}
                         <DateField source="created_at" />
                         <DateField source="updated_at" />
                     </Datagrid>

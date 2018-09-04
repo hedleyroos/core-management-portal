@@ -8,12 +8,12 @@ import CardText from 'material-ui/Card/CardText';
 import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { pink500 } from 'material-ui/styles/colors';
+import { teal800 } from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { muiTheme, styles } from '../Theme';
 import PermissionsStore from '../auth/PermissionsStore';
-import { makeIDMapping, getDomainAndSiteIds, createTreeData, getDomainsAndSites } from '../utils';
+import { apiErrorHandler } from '../utils';
 import DomainTreeInput from '../inputs/DomainTreeInput';
 
 class ContextChanger extends Component {
@@ -25,39 +25,11 @@ class ContextChanger extends Component {
             changing: false,
             value: this.currentContext.key,
             redirect: !(this.currentContext && this.contexts),
-            validToken: true,
-            treeData: null
+            validToken: true
         };
-        this.getPlaces = this.getPlaces.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
         this.handleAPIError = this.handleAPIError.bind(this);
-    }
-
-    componentDidMount() {
-        if (!this.state.places) {
-            this.getPlaces();
-        }
-    }
-
-    getPlaces() {
-        const ids = getDomainAndSiteIds();
-        getDomainsAndSites(ids)
-            .then(([domains, sites]) => {
-                this.setState({
-                    treeData: createTreeData(
-                        {
-                            ...makeIDMapping(domains, 'd:'),
-                            ...makeIDMapping(sites, 's:')
-                        },
-                        'domain_id',
-                        's'
-                    )
-                });
-            })
-            .catch(error => {
-                this.handleAPIError(error);
-            });
     }
 
     handleChange(value) {
@@ -69,7 +41,7 @@ class ContextChanger extends Component {
         if (!back && this.state.value !== this.currentContext.key) {
             const { value } = this.state;
             const userID = jwtDecode(localStorage.getItem('id_token')).sub;
-            PermissionsStore.getAndLoadPermissions(userID, value)
+            PermissionsStore.getAndLoadPermissions({ userID, currentContext: value })
                 .then(result => {
                     this.setState({ redirect: true });
                 })
@@ -82,20 +54,18 @@ class ContextChanger extends Component {
     }
 
     handleAPIError(error) {
-        if (error.message === 'Token expired') {
-            localStorage.clear();
-            this.setState({ validToken: false });
-        }
-        console.error(error);
+        const validToken = apiErrorHandler(error);
+        this.setState({ validToken });
     }
 
     render() {
-        const { changing, redirect, value, treeData } = this.state;
+        const { changing, redirect, value } = this.state;
+        const treeData = PermissionsStore.getTreeData();
         return redirect ? (
             <Redirect push to="/" />
         ) : (
             <MuiThemeProvider muiTheme={muiTheme}>
-                <div style={{ ...styles.main, backgroundColor: pink500 }}>
+                <div style={{ ...styles.main, backgroundColor: teal800 }}>
                     <Card style={styles.cardCentered}>
                         {changing ? (
                             <CardText>

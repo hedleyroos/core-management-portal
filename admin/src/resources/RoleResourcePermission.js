@@ -44,6 +44,7 @@ export const RoleResourcePermissionList = props => (
                     label="Role"
                     source="role_id"
                     reference="roles"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -57,6 +58,7 @@ export const RoleResourcePermissionList = props => (
                     label="Resource"
                     source="resource_id"
                     reference="resources"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -70,6 +72,7 @@ export const RoleResourcePermissionList = props => (
                     label="Permission"
                     source="permission_id"
                     reference="permissions"
+                    sortable={false}
                     linkType="show"
                     allowEmpty
                 >
@@ -78,8 +81,8 @@ export const RoleResourcePermissionList = props => (
             ) : (
                 <EmptyField />
             )}
-            <DateField source="created_at" />
-            <DateField source="updated_at" />
+            <DateField source="created_at" sortable={false} />
+            <DateField source="updated_at" sortable={false} />
             <ShowButton />
             {PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? (
                 <DeleteButton />
