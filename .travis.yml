@@ -18,5 +18,6 @@ deploy:
     branch: develop
 - provider: script
   script: bash ./scripts/docker_push.sh
-  all_branches: true
-  condition: "${TRAVIS_BRANCH} =~ ^release.*$"
+  on:
+    all_branches: true
+    condition: "${TRAVIS_BRANCH} =~ ^release.*$"
