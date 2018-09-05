@@ -5,14 +5,15 @@
 import React from 'react';
 import { List, Datagrid, TextField, Show, SimpleShowLayout, ShowButton } from 'admin-on-rest';
 import CountryFilter from '../filters/CountryFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 export const CountryList = props => (
     <List {...props} title="Country List" filters={<CountryFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             <TextField source="code" sortable={false} />
             <TextField source="name" sortable={false} />
             <ShowButton />
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

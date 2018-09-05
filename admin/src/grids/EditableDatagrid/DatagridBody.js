@@ -1,3 +1,9 @@
+/**
+ * NOTE! This components is basically a carbon copy of `DatagridBody.js`
+ * in Admin on Rest. The `DatagridBody.js` is not exported and
+ * therefore not accessable.
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import shouldUpdate from 'recompose/shouldUpdate';

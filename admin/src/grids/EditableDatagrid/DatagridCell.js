@@ -1,3 +1,9 @@
+/**
+ * NOTE! This components is basically a carbon copy of `DatagridCell.js`
+ * in Admin on Rest. The `DatagridCell.js` is not exported and
+ * therefore not accessable.
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import defaultsDeep from 'lodash.defaultsdeep';

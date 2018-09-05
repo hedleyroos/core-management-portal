@@ -1,3 +1,9 @@
+/**
+ * NOTE! This components is basically a carbon copy of `DatagridHeaderCell.js`
+ * in Admin on Rest. The `DatagridHeaderCell.js` is not exported and
+ * therefore not accessable.
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import defaultsDeep from 'lodash.defaultsdeep';
@@ -7,21 +13,8 @@ import ContentSort from 'material-ui/svg-icons/content/sort';
 import { FieldTitle } from 'admin-on-rest';
 import { Draggable } from 'react-beautiful-dnd';
 
-const styles = {
-    sortButton: {
-        minWidth: 40
-    },
-    nonSortableLabel: {
-        position: 'relative',
-        paddingLeft: 16,
-        paddingRight: 16,
-        verticalAlign: 'middle',
-        letterSpacing: 0,
-        textTransform: 'uppercase',
-        fontWeight: 500,
-        fontSize: 14
-    }
-};
+import { styles } from '../../Theme';
+
 
 export const DatagridHeaderCell = ({
     field,

@@ -82,6 +82,7 @@ export const styles = {
         opacity: 0.5,
         margin: '0 1em'
     },
+    // Theme styling added for EditableDatagrid AOR copied components.
     table: {
         tableLayout: 'auto'
     },
@@ -121,5 +122,18 @@ export const styles = {
             padding: '0 12px 0 16px',
             whiteSpace: 'normal'
         }
+    },
+    sortButton: {
+        minWidth: 40
+    },
+    nonSortableLabel: {
+        position: 'relative',
+        paddingLeft: 16,
+        paddingRight: 16,
+        verticalAlign: 'middle',
+        letterSpacing: 0,
+        textTransform: 'uppercase',
+        fontWeight: 500,
+        fontSize: 14
     }
 };

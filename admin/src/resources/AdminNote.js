@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     NumberField,
     ReferenceField,
     TextField,
@@ -25,6 +24,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import AdminNoteFilter from '../filters/AdminNoteFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateAdminNote = values => {
     const errors = {};
@@ -44,7 +44,7 @@ const validationEditAdminNote = values => {
 
 export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" sortable={false} />
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
@@ -82,7 +82,7 @@ export const AdminNoteList = props => (
             {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 
