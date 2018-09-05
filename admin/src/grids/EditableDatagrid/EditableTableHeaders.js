@@ -1,9 +1,7 @@
 import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
 import { TableHeader, TableRow } from 'material-ui/Table';
 
 import DatagridHeaderCell from './DatagridHeaderCell';
-
 
 export const EditableTableHeaders = ({
     currentSort,
@@ -20,24 +18,18 @@ export const EditableTableHeaders = ({
                 children,
                 (field, index) =>
                     field ? (
-                        <Draggable draggableId={`draggable-${index}`} index={index} type="TABLE">
-                            {(provided, snapshot) => (
-                                <DatagridHeaderCell
-                                    key={field.props.source || index}
-                                    field={field}
-                                    defaultStyle={
-                                        index === 0
-                                            ? styles.header['th:first-child']
-                                            : styles.header.th
-                                    }
-                                    currentSort={currentSort}
-                                    isSorting={field.props.source === currentSort.field}
-                                    updateSort={updateSort}
-                                    resource={resource}
-                                    provided={provided}
-                                />
-                            )}
-                        </Draggable>
+                        <DatagridHeaderCell
+                            key={field.props.source || index}
+                            index={index}
+                            field={field}
+                            defaultStyle={
+                                index === 0 ? styles.header['th:first-child'] : styles.header.th
+                            }
+                            currentSort={currentSort}
+                            isSorting={field.props.source === currentSort.field}
+                            updateSort={updateSort}
+                            resource={resource}
+                        />
                     ) : null
             )}
         </TableRow>

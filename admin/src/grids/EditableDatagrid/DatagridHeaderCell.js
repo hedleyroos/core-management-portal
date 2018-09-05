@@ -5,6 +5,7 @@ import shouldUpdate from 'recompose/shouldUpdate';
 import FlatButton from 'material-ui/FlatButton';
 import ContentSort from 'material-ui/svg-icons/content/sort';
 import { FieldTitle } from 'admin-on-rest';
+import { Draggable } from 'react-beautiful-dnd';
 
 const styles = {
     sortButton: {
@@ -24,12 +25,11 @@ const styles = {
 
 export const DatagridHeaderCell = ({
     field,
+    index,
     defaultStyle,
     currentSort,
     updateSort,
-    resource,
-    provided,
-    ...other
+    resource
 }) => {
     const style = defaultsDeep(
         {},
@@ -38,50 +38,61 @@ export const DatagridHeaderCell = ({
         defaultStyle
     );
     return (
-        <th
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-        >
-            {field.props.sortable !== false && field.props.source ? (
-                <FlatButton
-                    labelPosition="before"
-                    onClick={updateSort}
-                    data-sort={field.props.source}
-                    label={
-                        <FieldTitle
-                            label={field.props.label}
-                            source={field.props.source}
-                            resource={resource}
-                        />
-                    }
-                    icon={
-                        field.props.source === currentSort.field ? (
-                            <ContentSort
-                                style={
-                                    currentSort.order === 'ASC'
-                                        ? { transform: 'rotate(180deg)' }
-                                        : {}
+        <Draggable draggableId={`draggable-${index}`} index={index} type="TABLE">
+            {(provided, snapshot) => {
+                const thStyle = {
+                    ...style,
+                    ...provided.draggableProps.style
+                }
+                return (
+                    <th
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        style={thStyle}
+                        {...provided.dragHandleProps}
+                    >
+                        {field.props.sortable !== false && field.props.source ? (
+                            <FlatButton
+                                labelPosition="before"
+                                onClick={updateSort}
+                                data-sort={field.props.source}
+                                label={
+                                    <FieldTitle
+                                        label={field.props.label}
+                                        source={field.props.source}
+                                        resource={resource}
+                                    />
                                 }
+                                icon={
+                                    field.props.source === currentSort.field ? (
+                                        <ContentSort
+                                            style={
+                                                currentSort.order === 'ASC'
+                                                    ? { transform: 'rotate(180deg)' }
+                                                    : {}
+                                            }
+                                        />
+                                    ) : (
+                                        false
+                                    )
+                                }
+                                style={styles.sortButton}
                             />
                         ) : (
-                            false
-                        )
-                    }
-                    style={styles.sortButton}
-                />
-            ) : (
-                <span style={styles.nonSortableLabel}>
-                    {
-                        <FieldTitle
-                            label={field.props.label}
-                            source={field.props.source}
-                            resource={resource}
-                        />
-                    }
-                </span>
-            )}
-        </th>
+                            <span style={styles.nonSortableLabel}>
+                                {
+                                    <FieldTitle
+                                        label={field.props.label}
+                                        source={field.props.source}
+                                        resource={resource}
+                                    />
+                                }
+                            </span>
+                        )}
+                    </th>
+                );
+            }}
+        </Draggable>
     );
 };
 

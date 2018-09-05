@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Card from 'material-ui/Card/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
+import CircularProgress from 'material-ui/CircularProgress';
 import Checkbox from 'material-ui/Checkbox';
 import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
@@ -14,11 +15,13 @@ class FieldSelectDatagrid extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            children: props.children
+            children: props.children,
+            loading: true
         };
+        this.onDragEnd = this.onDragEnd.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         // Here we setup the state of all checkboxes for showing/hiding each fields.
         const { children, defaultHiddenFields } = this.props;
         const hiddenSet = new Set(defaultHiddenFields);
@@ -44,7 +47,8 @@ class FieldSelectDatagrid extends Component {
                             : null
                         : child;
                 }),
-                allHidden: allHidden
+                allHidden: allHidden,
+                loading: false
             });
         }
     }
@@ -71,9 +75,20 @@ class FieldSelectDatagrid extends Component {
         });
     }
 
+    onDragEnd({ destination, source }) {
+        let children = Array.from(this.state.children);
+        const [removed] = children.splice(source.index, 1);
+        children.splice(destination.index, 0, removed);
+        this.setState({
+            children
+        });
+    }
+
     render() {
         // Render the Hide/Show field card unless allhidden is true.
-        return (
+        return this.state.loading ? (
+            <CircularProgress />
+        ) : (
             <div>
                 <Card style={styles.fieldOptionsCard}>
                     <CardHeader
@@ -95,7 +110,11 @@ class FieldSelectDatagrid extends Component {
                     </CardText>
                 </Card>
                 {!this.state.allHidden ? (
-                    <EditableDatagrid {...this.props}>{this.state.children}</EditableDatagrid>
+                    <EditableDatagrid
+                        onDragEnd={this.onDragEnd}
+                        managedChildren={this.state.children}
+                        {...this.props}
+                    />
                 ) : (
                     <CardText>Please select at least one field to show.</CardText>
                 )}

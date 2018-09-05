@@ -3,7 +3,7 @@ import { teal800, teal500 } from 'material-ui/styles/colors';
 
 export const muiTheme = getMuiTheme({
     palette: {
-        primary1Color: teal500,  // cobusc: I swapped primary and accent1 colours
+        primary1Color: teal500, // cobusc: I swapped primary and accent1 colours
         accent1Color: teal800
     }
 });
@@ -23,7 +23,7 @@ export const styles = {
     cardAction: {
         zIndex: 2,
         display: 'inline-block',
-        float: 'right',
+        float: 'right'
     },
     avatar: {
         margin: '1em',
@@ -80,6 +80,46 @@ export const styles = {
         textAlign: 'center',
         fontFamily: 'Roboto, sans-serif',
         opacity: 0.5,
-        margin: '0 1em',
+        margin: '0 1em'
+    },
+    table: {
+        tableLayout: 'auto'
+    },
+    tbody: {
+        height: 'inherit'
+    },
+    header: {
+        th: {
+            fontWeight: 'normal',
+            fontSize: 12,
+            padding: 0,
+            height: 56,
+            textAlign: 'left',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            color: 'rgb(158, 158, 158)',
+            position: 'relative'
+        },
+        'th:first-child': {
+            fontWeight: 'normal',
+            fontSize: 12,
+            padding: '0 0 0 12px',
+            height: 56,
+            textAlign: 'left',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            color: 'rgb(158, 158, 158)',
+            position: 'relative'
+        }
+    },
+    cell: {
+        td: {
+            padding: '0 12px',
+            whiteSpace: 'normal'
+        },
+        'td:first-child': {
+            padding: '0 12px 0 16px',
+            whiteSpace: 'normal'
+        }
     }
 };

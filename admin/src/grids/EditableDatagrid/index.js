@@ -4,44 +4,15 @@ import { Table } from 'material-ui/Table';
 
 import DatagridBody from './DatagridBody';
 import { EditableTableHeaders } from './EditableTableHeaders';
-import { muiTheme } from '../../Theme';
-
-const defaultStyles = {
-    table: {
-        tableLayout: 'auto'
-    },
-    tbody: {
-        height: 'inherit'
-    },
-    header: {
-        th: {
-            padding: 0
-        },
-        'th:first-child': {
-            padding: '0 0 0 12px'
-        }
-    },
-    cell: {
-        td: {
-            padding: '0 12px',
-            whiteSpace: 'normal'
-        },
-        'td:first-child': {
-            padding: '0 12px 0 16px',
-            whiteSpace: 'normal'
-        }
-    }
-};
+import { muiTheme, styles } from '../../Theme';
 
 class EditableDatagrid extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            children: this.props.children
+            children: !props.onDragEnd ? props.children : null
         };
         this.updateSort = this.updateSort.bind(this);
-        this.onDragStart = this.onDragStart.bind(this);
-        this.onDragUpdate = this.onDragUpdate.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
@@ -50,40 +21,18 @@ class EditableDatagrid extends Component {
         this.props.setSort(event.currentTarget.dataset.sort);
     }
 
-    onDragStart = () => {
-        console.log('Drag Start');
-    };
-
-    onDragUpdate = () => {
-        console.log('Drag Update');
-    };
-
     onDragEnd = ({ destination, source }) => {
         if (!destination || !source || destination.index === source.index) return;
-        let children = this.state.children;
-        const newIndex =
-            destination.index > children.length ? children.length - 1 : destination.index;
-        let back = [],
-            front = [];
-        const direction = destination.index > source.index;
-        children.map((value, index) => {
-            if (index !== source.index) {
-                if (value.props && value.props.source) {
-                    if (direction ? index <= newIndex : index < newIndex) {
-                        back.push(value);
-                    } else if (direction ? index > newIndex : index >= newIndex) {
-                        front.push(value);
-                    }
-                } else {
-                    front.push(value);
-                }
-            }
-            return null;
-        });
-        children = [...back, children[source.index], ...front];
-        this.setState({
-            children
-        });
+        if (this.props.onDragEnd) {
+            this.props.onDragEnd({ destination, source });
+        } else {
+            let children = Array.from(this.state.children);
+            const [removed] = children.splice(source.index, 1);
+            children.splice(destination.index, 0, removed);
+            this.setState({
+                children
+            });
+        }
     };
 
     render() {
@@ -93,20 +42,16 @@ class EditableDatagrid extends Component {
             data,
             currentSort,
             basePath,
-            styles = defaultStyles,
             options,
             headerOptions,
             bodyOptions,
             rowOptions,
             rowStyle,
-            isLoading
+            isLoading,
+            managedChildren
         } = this.props;
         return (
-            <DragDropContext
-                onDragStart={this.onDragStart}
-                onDragUpdate={this.onDragUpdate}
-                onDragEnd={this.onDragEnd}
-            >
+            <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId="droppable-1" type="TABLE" direction="horizontal">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -123,7 +68,7 @@ class EditableDatagrid extends Component {
                                     headerOptions={headerOptions}
                                     styles={styles}
                                 >
-                                    {this.state.children}
+                                    {this.state.children || managedChildren}
                                     {provided.placeholder}
                                 </EditableTableHeaders>
                                 <DatagridBody
@@ -137,7 +82,7 @@ class EditableDatagrid extends Component {
                                     options={bodyOptions}
                                     rowOptions={rowOptions}
                                 >
-                                    {this.state.children}
+                                    {this.state.children || managedChildren}
                                 </DatagridBody>
                             </Table>
                         </div>
