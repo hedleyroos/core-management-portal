@@ -6,6 +6,7 @@ next
 - React Beautiful DND package added.
 - `EditableDatagrid` component added and replaced all List instances of `Datagrid` with new grid component.
 - `FieldSelectDatagrid` component now uses `EditableDatagrid`.
+- Fixed bug where `manageRoles` redux store is not reset on a different object being managed.
 
 1.1.0
 -----
