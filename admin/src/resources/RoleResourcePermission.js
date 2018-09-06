@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     ReferenceField,
     NumberField,
     DateField,
@@ -21,6 +20,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};
@@ -38,7 +38,7 @@ const validationCreateRoleResourcePermission = values => {
 
 export const RoleResourcePermissionList = props => (
     <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField
                     label="Role"
@@ -87,7 +87,7 @@ export const RoleResourcePermissionList = props => (
             {PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

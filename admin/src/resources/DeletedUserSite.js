@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     ReferenceField,
     TextField,
     NumberField,
@@ -26,6 +25,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
+
 const timezoneOffset = new Date().getTimezoneOffset();
 
 const dateTimeFormatter = value => {
@@ -63,7 +64,7 @@ const validationEditDeletedUserSite = values => {
 
 export const DeletedUserSiteList = props => (
     <List {...props} title="DeletedUserSite List" filters={<DeletedUserSiteFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField
                     label="Deleted User"
@@ -105,7 +106,7 @@ export const DeletedUserSiteList = props => (
             {PermissionsStore.getResourcePermission('deletedusersites', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

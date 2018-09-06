@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     ReferenceField,
     NumberField,
     DateField,
@@ -25,6 +24,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};
@@ -44,7 +44,7 @@ const validationEditSiteDataSchema = values => {
 
 export const SiteDataSchemaList = props => (
     <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -69,7 +69,7 @@ export const SiteDataSchemaList = props => (
             {PermissionsStore.getResourcePermission('sitedataschemas', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

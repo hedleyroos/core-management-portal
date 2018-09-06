@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     ReferenceField,
     TextField,
     NumberField,
@@ -22,6 +21,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import InvitationSiteRoleFilter from '../filters/InvitationSiteRoleFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateInvitationSiteRole = values => {
     const errors = {};
@@ -39,7 +39,7 @@ const validationCreateInvitationSiteRole = values => {
 
 export const InvitationSiteRoleList = props => (
     <List {...props} title="InvitationSiteRole List" filters={<InvitationSiteRoleFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField
                     label="Invitation"
@@ -88,7 +88,7 @@ export const InvitationSiteRoleList = props => (
             {PermissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

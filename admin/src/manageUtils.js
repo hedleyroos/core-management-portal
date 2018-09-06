@@ -14,10 +14,14 @@ import {
 } from './utils';
 
 export const mountManager = props => {
-    let { path } = props.match,
+    let { path, params } = props.match,
         reset = false;
     path = path.split('/')[1];
-    if (props.manageRoles.path !== path) {
+    const { idLabel } = MANAGE_MAPPING[path];
+    const hasSameID = props.manageRoles.selectedObject
+        ? params[idLabel] === props.manageRoles.selectedObject.id
+        : true;
+    if (props.manageRoles.path !== path || !hasSameID) {
         props.reset();
         reset = true;
     }
@@ -159,7 +163,7 @@ export const deleteRoles = props => {
 
 export const assignRoles = props => {
     const store = props.manageRoles;
-    const { resource, idLabel } = MANAGE_MAPPING[store.path]
+    const { resource, idLabel } = MANAGE_MAPPING[store.path];
     let successCount = store.amountSelectedToAssign;
     if (!successCount) return;
     props.assigningRoles(true);

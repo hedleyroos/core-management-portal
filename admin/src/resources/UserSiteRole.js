@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     ReferenceField,
     TextField,
     NumberField,
@@ -23,6 +22,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateUserSiteRole = values => {
     const errors = {};
@@ -40,7 +40,7 @@ const validationCreateUserSiteRole = values => {
 
 export const UserSiteRoleList = props => (
     <List {...props} title="UserSiteRole List" filters={<UserSiteRoleFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -89,7 +89,7 @@ export const UserSiteRoleList = props => (
             {PermissionsStore.getResourcePermission('usersiteroles', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

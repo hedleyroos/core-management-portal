@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     ReferenceField,
     TextField,
     NumberField,
@@ -27,6 +26,7 @@ import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateUserSiteData = values => {
     const errors = {};
@@ -49,7 +49,7 @@ const validationEditUserSiteData = values => {
 
 export const UserSiteDataList = props => (
     <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -86,7 +86,7 @@ export const UserSiteDataList = props => (
             {PermissionsStore.getResourcePermission('usersitedata', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 
