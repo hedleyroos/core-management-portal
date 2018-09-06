@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { List, Datagrid, TextField, Show, SimpleShowLayout, ShowButton } from 'admin-on-rest';
+import { List, TextField, Show, SimpleShowLayout, ShowButton } from 'admin-on-rest';
 import CountryFilter from '../filters/CountryFilter';
 import EditableDatagrid from '../grids/EditableDatagrid';
 

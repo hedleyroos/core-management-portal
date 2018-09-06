@@ -32,6 +32,7 @@ import CardTitle from 'material-ui/Card/CardTitle';
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import IdenticonField from '../fields/IndeticonField';
 import ObjectField from '../fields/ObjectField';
 import UserFilter from '../filters/UserFilter';
 import UserShowActions from '../customActions/UserShow';
@@ -58,7 +59,7 @@ export const UserList = props => (
             defaultHiddenFields={hiddenFields}
             bodyOptions={{ showRowHover: true }}
         >
-            <TextField source="id" />
+            <IdenticonField source="id" />
             <TextField source="username" sortable={false} />
             <TextField source="first_name" sortable={false} />
             <TextField source="last_name" sortable={false} />
