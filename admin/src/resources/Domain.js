@@ -27,6 +27,7 @@ import InlineTable from '../fields/InlineTable';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DomainFilter from '../filters/DomainFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateDomain = values => {
     const errors = {};
@@ -43,7 +44,7 @@ const validationEditDomain = values => {
 
 export const DomainList = props => (
     <List {...props} title="Domain List" filters={<DomainFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" sortable={false} />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField
@@ -66,7 +67,7 @@ export const DomainList = props => (
             {PermissionsStore.getResourcePermission('domains', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('domains', 'remove') ? <DeleteButton /> : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

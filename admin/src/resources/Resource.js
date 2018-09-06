@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     NumberField,
     UrlField,
     TextField,
@@ -22,6 +21,7 @@ import {
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
 import ResourceFilter from '../filters/ResourceFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateResource = values => {
     const errors = {};
@@ -38,7 +38,7 @@ const validationEditResource = values => {
 
 export const ResourceList = props => (
     <List {...props} title="Resource List" filters={<ResourceFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" sortable={false} />
             <UrlField source="urn" sortable={false} />
             <TextField source="description" sortable={false} />
@@ -49,7 +49,7 @@ export const ResourceList = props => (
             {PermissionsStore.getResourcePermission('resources', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

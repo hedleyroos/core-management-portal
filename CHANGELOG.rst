@@ -1,6 +1,12 @@
 Changelog
 =========
 
+next
+----
+- React Beautiful DND package added.
+- `EditableDatagrid` component added and replaced all List instances of `Datagrid` with new grid component.
+- `FieldSelectDatagrid` component now uses `EditableDatagrid`.
+
 1.1.0
 -----
 -  Some documentation added.

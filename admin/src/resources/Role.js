@@ -26,6 +26,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import RoleFilter from '../filters/RoleFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateRole = values => {
     const errors = {};
@@ -42,7 +43,7 @@ const validationEditRole = values => {
 
 export const RoleList = props => (
     <List {...props} title="Role List" filters={<RoleFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" sortable={false} />
             <TextField source="label" sortable={false} />
             <BooleanField source="requires_2fa" sortable={false} />
@@ -52,7 +53,7 @@ export const RoleList = props => (
             {PermissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
             <ShowButton />
             {PermissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton /> : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

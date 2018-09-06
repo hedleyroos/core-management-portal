@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     ReferenceField,
     NumberField,
     BooleanField,
@@ -26,6 +25,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DomainRoleFilter from '../filters/DomainRoleFilter';
 import DomainTreeInput from '../inputs/DomainTreeInput';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 const validationCreateDomainRole = values => {
     const errors = {};
@@ -45,7 +45,7 @@ const validationEditDomainRole = values => {
 
 export const DomainRoleList = props => (
     <List {...props} title="DomainRole List" filters={<DomainRoleFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField
                     label="Domain"
@@ -82,7 +82,7 @@ export const DomainRoleList = props => (
             {PermissionsStore.getResourcePermission('domainroles', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

@@ -1,0 +1,100 @@
+import React, { Component } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Table } from 'material-ui/Table';
+
+import DatagridBody from './DatagridBody';
+import { EditableTableHeaders } from './EditableTableHeaders';
+import { muiTheme, styles } from '../../Theme';
+
+class EditableDatagrid extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            children: !props.onDragEnd ? props.children : null
+        };
+        this.updateSort = this.updateSort.bind(this);
+        this.onDragEnd = this.onDragEnd.bind(this);
+    }
+
+    updateSort(event) {
+        event.stopPropagation();
+        this.props.setSort(event.currentTarget.dataset.sort);
+    }
+
+    onDragEnd = ({ destination, source }) => {
+        if (!destination || !source || destination.index === source.index) return;
+        if (this.props.onDragEnd) {
+            this.props.onDragEnd({ destination, source });
+        } else {
+            let children = Array.from(this.state.children);
+            const [removed] = children.splice(source.index, 1);
+            children.splice(destination.index, 0, removed);
+            this.setState({
+                children
+            });
+        }
+    };
+
+    render() {
+        const {
+            resource,
+            ids,
+            data,
+            currentSort,
+            basePath,
+            options,
+            headerOptions,
+            bodyOptions,
+            rowOptions,
+            rowStyle,
+            isLoading,
+            managedChildren
+        } = this.props;
+        return (
+            <DragDropContext onDragEnd={this.onDragEnd}>
+                <Droppable droppableId="droppable-1" type="TABLE" direction="horizontal">
+                    {(provided, snapshot) => (
+                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                            <Table
+                                style={options && options.fixedHeader ? null : styles.table}
+                                fixedHeader={false}
+                                {...options}
+                            >
+                                <EditableTableHeaders
+                                    resource={resource}
+                                    currentSort={currentSort}
+                                    updateSort={this.updateSort}
+                                    muiTheme={muiTheme}
+                                    headerOptions={headerOptions}
+                                    styles={styles}
+                                >
+                                    {this.state.children || managedChildren}
+                                    {provided.placeholder}
+                                </EditableTableHeaders>
+                                <DatagridBody
+                                    resource={resource}
+                                    ids={ids}
+                                    data={data}
+                                    basePath={basePath}
+                                    styles={styles}
+                                    rowStyle={rowStyle}
+                                    isLoading={isLoading}
+                                    options={bodyOptions}
+                                    rowOptions={rowOptions}
+                                >
+                                    {this.state.children || managedChildren}
+                                </DatagridBody>
+                            </Table>
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        );
+    }
+}
+EditableDatagrid.defaultProps = {
+    data: {},
+    ids: []
+};
+
+export default EditableDatagrid;

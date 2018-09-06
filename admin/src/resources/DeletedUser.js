@@ -25,6 +25,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import DeletedUserFilter from '../filters/DeletedUserFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
+
 const timezoneOffset = new Date().getTimezoneOffset();
 
 const dateTimeFormatter = value => {
@@ -65,7 +67,7 @@ const validationEditDeletedUser = values => {
 
 export const DeletedUserList = props => (
     <List {...props} title="DeletedUser List" filters={<DeletedUserFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             <TextField source="id" sortable={false} />
             <TextField source="username" sortable={false} />
             <TextField source="email" sortable={false} />
@@ -93,7 +95,7 @@ export const DeletedUserList = props => (
             {PermissionsStore.getResourcePermission('deletedusers', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 

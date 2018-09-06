@@ -5,7 +5,6 @@
 import React from 'react';
 import {
     List,
-    Datagrid,
     NumberField,
     TextField,
     UrlField,
@@ -15,10 +14,11 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import ClientFilter from '../filters/ClientFilter';
+import EditableDatagrid from '../grids/EditableDatagrid';
 
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" sortable={false} />
             <TextField source="_post_logout_redirect_uris" sortable={false} />
             <TextField source="_redirect_uris" sortable={false} />
@@ -32,7 +32,7 @@ export const ClientList = props => (
             <UrlField source="terms_url" sortable={false} />
             <UrlField source="website_url" sortable={false} />
             <ShowButton />
-        </Datagrid>
+        </EditableDatagrid>
     </List>
 );
 
