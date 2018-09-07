@@ -10,6 +10,8 @@ import {
     ReferenceField,
     NumberField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     TextInput,
@@ -25,6 +27,7 @@ import {
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import IdenticonField from '../fields/IndeticonField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
 import InvitationListActions from '../customActions/InvitationList'; 
@@ -79,48 +82,60 @@ export const InvitationList = props => (
         actions={<InvitationListActions />}
         filters={<InvitationFilter />}
     >
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <TextField source="id" sortable={false} />
-            {PermissionsStore.getResourcePermission('users', 'list') ? (
-                <ReferenceField
-                    label="User"
-                    source="invitor_id"
-                    reference="users"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="username" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <TextField source="first_name" sortable={false} />
-            <TextField source="last_name" sortable={false} />
-            <TextField source="email" sortable={false} />
-            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
-                <ReferenceField
-                    label="Organisation"
-                    source="organisation_id"
-                    reference="organisations"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <NumberField source="name" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <DateField source="expires_at" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('invitations', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('invitations', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </EditableDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `First Name: ${record.first_name}`}
+                    secondaryText={record => `Email: ${record.email}`}
+                />
+            }
+            medium={
+                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                    <IdenticonField source="id" sortable={false} />
+                    {PermissionsStore.getResourcePermission('users', 'list') ? (
+                        <ReferenceField
+                            label="User"
+                            source="invitor_id"
+                            reference="users"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="username" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <TextField source="first_name" sortable={false} />
+                    <TextField source="last_name" sortable={false} />
+                    <TextField source="email" sortable={false} />
+                    {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                        <ReferenceField
+                            label="Organisation"
+                            source="organisation_id"
+                            reference="organisations"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <DateField source="expires_at" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('invitations', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('invitations', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </EditableDatagrid>
+            }
+        />
     </List>
 );
 

@@ -10,6 +10,8 @@ import {
     ReferenceField,
     TextField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     ReferenceInput,
@@ -44,30 +46,44 @@ const validationEditDomain = values => {
 
 export const DomainList = props => (
     <List {...props} title="Domain List" filters={<DomainFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" sortable={false} />
-            {PermissionsStore.getResourcePermission('domains', 'list') ? (
-                <ReferenceField
-                    label="Parent"
-                    source="parent_id"
-                    reference="domains"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <NumberField source="name" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <TextField source="name" sortable={false} />
-            <TextField source="description" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('domains', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('domains', 'remove') ? <DeleteButton /> : null}
-        </EditableDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `Name: ${record.name}`}
+                    secondaryText={record => `Description: ${record.description}`}
+                />
+            }
+            medium={
+                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                    <NumberField source="id" sortable={false} />
+                    {PermissionsStore.getResourcePermission('domains', 'list') ? (
+                        <ReferenceField
+                            label="Parent"
+                            source="parent_id"
+                            reference="domains"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <TextField source="name" sortable={false} />
+                    <TextField source="description" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('domains', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('domains', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </EditableDatagrid>
+            }
+        />
     </List>
 );
 

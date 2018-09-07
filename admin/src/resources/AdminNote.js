@@ -9,6 +9,8 @@ import {
     ReferenceField,
     TextField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     ReferenceInput,
@@ -44,45 +46,52 @@ const validationEditAdminNote = values => {
 
 export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" sortable={false} />
-            {PermissionsStore.getResourcePermission('users', 'list') ? (
-                <ReferenceField
-                    label="User"
-                    source="user_id"
-                    reference="users"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="username" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            {PermissionsStore.getResourcePermission('users', 'list') ? (
-                <ReferenceField
-                    label="User"
-                    source="creator_id"
-                    reference="users"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="username" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <TextField source="note" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('adminnotes', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </EditableDatagrid>
+        <Responsive
+            small={<SimpleList primaryText={record => `Note: ${record.note}`} />}
+            medium={
+                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                    <NumberField source="id" sortable={false} />
+                    {PermissionsStore.getResourcePermission('users', 'list') ? (
+                        <ReferenceField
+                            label="User"
+                            source="user_id"
+                            reference="users"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="username" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    {PermissionsStore.getResourcePermission('users', 'list') ? (
+                        <ReferenceField
+                            label="User"
+                            source="creator_id"
+                            reference="users"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="username" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <TextField source="note" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('adminnotes', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </EditableDatagrid>
+            }
+        />
     </List>
 );
 

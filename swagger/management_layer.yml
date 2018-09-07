@@ -4417,6 +4417,9 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: name
+      secondary: description
   invitation:
     inlines:
     - model: invitation_domain_role
@@ -4435,6 +4438,17 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: first_name
+      secondary: email
+  permission:
+    responsive_fields:
+      primary: name
+      secondary: description
+  resource:
+    responsive_fields:
+      primary: urn
+      secondary: description
   role:
     inlines:
     - model: role_resource_permission
@@ -4445,6 +4459,8 @@ x-detail-page-definitions:
         - permission_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: label
   site:
     inlines:
     - model: site_role
@@ -4454,6 +4470,20 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: name
+      secondary: description
+  adminnote:
+    responsive_fields:
+      primary: note
+  country:
+    responsive_fields:
+      primary: code
+      secondary: name
+  organisation:
+    responsive_fields:
+      primary: name
+      secondary: description
   user:
     inlines:
     - model: user_domain_role
@@ -4481,6 +4511,9 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: username
+      secondary: email
     sortable_fields:
       - id
   deleteduser:
@@ -4496,4 +4529,7 @@ x-detail-page-definitions:
       - deletion_confirmed_via
       - created_at
       - updated_at
+    responsive_fields:
+      primary: username
+      secondary: email
 
