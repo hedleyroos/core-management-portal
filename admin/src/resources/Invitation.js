@@ -27,6 +27,7 @@ import {
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import IdenticonField from '../fields/IndeticonField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
 import InvitationListActions from '../customActions/InvitationList'; 
@@ -90,7 +91,7 @@ export const InvitationList = props => (
             }
             medium={
                 <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-                    <TextField source="id" sortable={false} />
+                    <IdenticonField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('users', 'list') ? (
                         <ReferenceField
                             label="User"
