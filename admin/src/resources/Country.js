@@ -3,17 +3,35 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { List, TextField, Show, SimpleShowLayout, ShowButton } from 'admin-on-rest';
+import {
+    List,
+    TextField,
+    Responsive,
+    SimpleList,
+    Show,
+    SimpleShowLayout,
+    ShowButton
+} from 'admin-on-rest';
 import CountryFilter from '../filters/CountryFilter';
 import EditableDatagrid from '../grids/EditableDatagrid';
 
 export const CountryList = props => (
     <List {...props} title="Country List" filters={<CountryFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <TextField source="code" sortable={false} />
-            <TextField source="name" sortable={false} />
-            <ShowButton />
-        </EditableDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `Code: ${record.code}`}
+                    secondaryText={record => `Name: ${record.name}`}
+                />
+            }
+            medium={
+                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                    <TextField source="code" sortable={false} />
+                    <TextField source="name" sortable={false} />
+                    <ShowButton />
+                </EditableDatagrid>
+            }
+        />
     </List>
 );
 

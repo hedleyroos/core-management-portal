@@ -10,6 +10,8 @@ import {
     TextField,
     BooleanField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     TextInput,
@@ -43,17 +45,26 @@ const validationEditRole = values => {
 
 export const RoleList = props => (
     <List {...props} title="Role List" filters={<RoleFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" sortable={false} />
-            <TextField source="label" sortable={false} />
-            <BooleanField source="requires_2fa" sortable={false} />
-            <TextField source="description" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton /> : null}
-        </EditableDatagrid>
+        <Responsive
+            small={<SimpleList primaryText={record => `Label: ${record.label}`} />}
+            medium={
+                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                    <NumberField source="id" sortable={false} />
+                    <TextField source="label" sortable={false} />
+                    <BooleanField source="requires_2fa" sortable={false} />
+                    <TextField source="description" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('roles', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('roles', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </EditableDatagrid>
+            }
+        />
     </List>
 );
 

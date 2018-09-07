@@ -11,6 +11,8 @@ import {
     TextField,
     BooleanField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     ReferenceInput,
@@ -49,45 +51,59 @@ const validationEditSite = values => {
 
 export const SiteList = props => (
     <List {...props} title="Site List" filters={<SiteFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" sortable={false} />
-            {PermissionsStore.getResourcePermission('clients', 'list') ? (
-                <ReferenceField
-                    label="Client"
-                    source="client_id"
-                    reference="clients"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <NumberField source="name" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            {PermissionsStore.getResourcePermission('domains', 'list') ? (
-                <ReferenceField
-                    label="Domain"
-                    source="domain_id"
-                    reference="domains"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <NumberField source="name" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <TextField source="name" sortable={false} />
-            <TextField source="description" sortable={false} />
-            <BooleanField source="is_active" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('sites', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('sites', 'remove') ? <DeleteButton /> : null}
-        </EditableDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `Name: ${record.name}`}
+                    secondaryText={record => `Description: ${record.description}`}
+                />
+            }
+            medium={
+                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                    <NumberField source="id" sortable={false} />
+                    {PermissionsStore.getResourcePermission('clients', 'list') ? (
+                        <ReferenceField
+                            label="Client"
+                            source="client_id"
+                            reference="clients"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    {PermissionsStore.getResourcePermission('domains', 'list') ? (
+                        <ReferenceField
+                            label="Domain"
+                            source="domain_id"
+                            reference="domains"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <TextField source="name" sortable={false} />
+                    <TextField source="description" sortable={false} />
+                    <BooleanField source="is_active" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('sites', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('sites', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </EditableDatagrid>
+            }
+        />
     </List>
 );
 

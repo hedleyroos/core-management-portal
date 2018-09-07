@@ -9,6 +9,8 @@ import {
     TextField,
     DateField,
     ReferenceField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     TextInput,
@@ -67,35 +69,47 @@ const validationEditDeletedUser = values => {
 
 export const DeletedUserList = props => (
     <List {...props} title="DeletedUser List" filters={<DeletedUserFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <TextField source="id" sortable={false} />
-            <TextField source="username" sortable={false} />
-            <TextField source="email" sortable={false} />
-            <TextField source="msisdn" sortable={false} />
-            <TextField source="reason" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            <DateField source="deleted_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('deleters', 'list') ? (
-                <ReferenceField
-                    label="Deleter"
-                    source="deleter_id"
-                    reference="deleters"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            {PermissionsStore.getResourcePermission('deletedusers', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('deletedusers', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </EditableDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `Username: ${record.username}`}
+                    secondaryText={record => `Email: ${record.email}`}
+                />
+            }
+            medium={
+                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                    <TextField source="id" sortable={false} />
+                    <TextField source="username" sortable={false} />
+                    <TextField source="email" sortable={false} />
+                    <TextField source="msisdn" sortable={false} />
+                    <TextField source="reason" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    <DateField source="deleted_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('deleters', 'list') ? (
+                        <ReferenceField
+                            label="Deleter"
+                            source="deleter_id"
+                            reference="deleters"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    {PermissionsStore.getResourcePermission('deletedusers', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('deletedusers', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </EditableDatagrid>
+            }
+        />
     </List>
 );
 
