@@ -21,9 +21,8 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
-import EmptyField from '../fields/EmptyField';
 import OrganisationFilter from '../filters/OrganisationFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateOrganisation = values => {
     const errors = {};
@@ -48,7 +47,7 @@ export const OrganisationList = props => (
                 />
             }
             medium={
-                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
                     <NumberField source="id" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <TextField source="description" sortable={false} />
@@ -61,7 +60,7 @@ export const OrganisationList = props => (
                     {PermissionsStore.getResourcePermission('organisations', 'remove') ? (
                         <DeleteButton />
                     ) : null}
-                </EditableDatagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

@@ -22,7 +22,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserSiteRole = values => {
     const errors = {};
@@ -40,7 +40,7 @@ const validationCreateUserSiteRole = values => {
 
 export const UserSiteRoleList = props => (
     <List {...props} title="UserSiteRole List" filters={<UserSiteRoleFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -89,7 +89,7 @@ export const UserSiteRoleList = props => (
             {PermissionsStore.getResourcePermission('usersiteroles', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

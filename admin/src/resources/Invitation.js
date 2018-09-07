@@ -32,7 +32,7 @@ import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
 import InvitationListActions from '../customActions/InvitationList'; 
 import InvitationShowActions from '../customActions/InvitationShow';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -90,7 +90,7 @@ export const InvitationList = props => (
                 />
             }
             medium={
-                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
                     <IdenticonField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('users', 'list') ? (
                         <ReferenceField
@@ -133,7 +133,7 @@ export const InvitationList = props => (
                     {PermissionsStore.getResourcePermission('invitations', 'remove') ? (
                         <DeleteButton />
                     ) : null}
-                </EditableDatagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

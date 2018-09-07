@@ -21,9 +21,8 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
-import EmptyField from '../fields/EmptyField';
 import PermissionFilter from '../filters/PermissionFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreatePermission = values => {
     const errors = {};
@@ -48,7 +47,7 @@ export const PermissionList = props => (
                 />
             }
             medium={
-                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
                     <NumberField source="id" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <TextField source="description" sortable={false} />
@@ -61,7 +60,7 @@ export const PermissionList = props => (
                     {PermissionsStore.getResourcePermission('permissions', 'remove') ? (
                         <DeleteButton />
                     ) : null}
-                </EditableDatagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

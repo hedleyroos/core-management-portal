@@ -28,7 +28,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import RoleFilter from '../filters/RoleFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateRole = values => {
     const errors = {};
@@ -48,7 +48,7 @@ export const RoleList = props => (
         <Responsive
             small={<SimpleList primaryText={record => `Label: ${record.label}`} />}
             medium={
-                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
                     <NumberField source="id" sortable={false} />
                     <TextField source="label" sortable={false} />
                     <BooleanField source="requires_2fa" sortable={false} />
@@ -62,7 +62,7 @@ export const RoleList = props => (
                     {PermissionsStore.getResourcePermission('roles', 'remove') ? (
                         <DeleteButton />
                     ) : null}
-                </EditableDatagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>
