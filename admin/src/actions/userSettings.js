@@ -1,14 +1,14 @@
-import { USER_SETTINGS_LOAD, USER_SETTINGS_UPDATE } from '../actionTypes';
+import { USER_SETTINGS_LOAD, USER_SETTINGS_HIDDEN_FIELDS_UPDATE } from '../actionTypes';
 
-export const user_settings_load = settings => ({
+export const userSettingsLoad = (data, site_id) => ({
     type: USER_SETTINGS_LOAD,
-    payload: settings
+    payload: {
+        data,
+        site_id
+    }
 });
 
-export const user_settings_update = (resource, fields) => ({
-    type: USER_SETTINGS_UPDATE,
-    payload: {
-        resource,
-        fields
-    }
+export const userSettingsHiddenFieldsUpdate = newSettings => ({
+    type: USER_SETTINGS_HIDDEN_FIELDS_UPDATE,
+    payload: newSettings
 });

@@ -1,7 +1,9 @@
 import { notification } from 'antd';
+import jwtDecode from 'jwt-decode';
 
-import restClient, { GET_LIST, OPERATIONAL } from './restClient';
+import restClient, { GET_LIST, OPERATIONAL, CREATE, UPDATE } from './restClient';
 import { PLACE_MAPPING } from './constants';
+import { handleAPIError } from './manageUtils';
 
 /**
  * Generated utils.js code. Edit at own risk.
@@ -15,6 +17,71 @@ export const getContextAlphabeticallyFirst = treeData => {
         return null;
     });
     return first.key;
+};
+
+export const getOrCreateGMPUserSiteData = userSettings => {
+    const idToken = jwtDecode(localStorage.getItem('id_token'));
+    const userID = idToken.sub;
+    const clientTokenID = idToken.aud;
+    if (!notEmptyObject(userSettings)) {
+        return restClient(OPERATIONAL, 'get_site_from_client_token_id', {
+            pathParameters: [clientTokenID]
+        }).then(async response => {
+            const site = response.data;
+            let userSiteData = await restClient(GET_LIST, 'usersitedata', {
+                filter: { user_id: userID, site_id: site.id }
+            });
+            userSiteData = userSiteData.data.length && userSiteData.data[0];
+            // Create user site data if nothing found.
+            if (!userSiteData) {
+                userSiteData = await restClient(CREATE, 'usersitedata', {
+                    data: {
+                        user_id: userID,
+                        site_id: site.id,
+                        data: {}
+                    }
+                });
+                userSiteData = userSiteData.data;
+            }
+            return {
+                data: userSiteData.data || {},
+                site_id: site.id
+            };
+        });
+    }
+    return Promise.resolve(userSettings);
+};
+
+export const updateGMPUserSiteData = (props, resource, field) => {
+    const { settingsHiddenFieldsUpdate, userSettings } = props;
+    // Generate new settings here so both API call and store can be updated correctly.
+    let settings = userSettings.data ? userSettings.data.settings || {} : {};
+    let hiddenFields = new Set(settings[resource] && settings[resource].hiddenFields);
+    hiddenFields.has(field) ? hiddenFields.delete(field) : hiddenFields.add(field);
+    const newSettings = {
+        ...userSettings,
+        data: {
+            ...userSettings.data,
+            settings: {
+                ...settings,
+                [resource]: {
+                    hiddenFields: Array.from(hiddenFields)
+                }
+            }
+        }
+    };
+    // Update redux store.
+    settingsHiddenFieldsUpdate(newSettings);
+
+    // Update backend
+    const idToken = jwtDecode(localStorage.getItem('id_token'));
+    const userID = idToken.sub;
+    return restClient(UPDATE, 'usersitedata', {
+        id: `${userID}/${userSettings.site_id}`,
+        data: {
+            data: newSettings.data
+        }
+    }).catch(error => handleAPIError(error));
 };
 
 export const createTreeFromContexts = contexts => {

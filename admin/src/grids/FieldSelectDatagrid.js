@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Card from 'material-ui/Card/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
@@ -8,8 +9,20 @@ import Checkbox from 'material-ui/Checkbox';
 import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 
+import { userSettingsLoad, userSettingsHiddenFieldsUpdate } from '../actions/userSettings';
 import EditableDatagrid from './EditableDatagrid';
 import { styles } from '../Theme';
+import { getOrCreateGMPUserSiteData, updateGMPUserSiteData } from '../utils';
+import { handleAPIError } from '../manageUtils';
+
+const mapStateToProps = state => ({
+    userSettings: state.userSettings
+});
+
+const mapDispatchToProps = dispatch => ({
+    settingsLoad: (data, site_id) => dispatch(userSettingsLoad(data, site_id)),
+    settingsHiddenFieldsUpdate: newSettings => dispatch(userSettingsHiddenFieldsUpdate(newSettings))
+});
 
 class FieldSelectDatagrid extends Component {
     constructor(props) {
@@ -18,13 +31,27 @@ class FieldSelectDatagrid extends Component {
             children: props.children,
             loading: true
         };
+        this.loadFields = this.loadFields.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
     componentDidMount() {
+        const { userSettings } = this.props;
+        getOrCreateGMPUserSiteData(userSettings)
+            .then(({ data, site_id }) => {
+                this.props.settingsLoad(data, site_id);
+                this.loadFields();
+            })
+            .catch(error => handleAPIError(error));
+    }
+
+    loadFields() {
         // Here we setup the state of all checkboxes for showing/hiding each fields.
-        const { children, defaultHiddenFields } = this.props;
-        const hiddenSet = new Set(defaultHiddenFields);
+        const { children, resource, userSettings } = this.props;
+        const settings = userSettings.data && userSettings.data.settings;
+        const hiddenSet = new Set(
+            settings && settings[resource] && settings[resource].hiddenFields
+        );
         if (children && !this.state.checkboxes) {
             // Create all checkboxes in state with their default value if given in props.
             let checkboxes = {};
@@ -55,6 +82,8 @@ class FieldSelectDatagrid extends Component {
 
     updateCheckbox(name) {
         // Toggle the given checkbox state value.
+        const { resource } = this.props;
+        updateGMPUserSiteData(this.props, resource, name);
         const nextCheckboxState = {
             ...this.state.checkboxes,
             [name]: !this.state.checkboxes[name]
@@ -129,4 +158,7 @@ FieldSelectDatagrid.defaultProps = {
     defaultHiddenFields: []
 };
 
-export default FieldSelectDatagrid;
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FieldSelectDatagrid);
