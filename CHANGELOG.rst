@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+- All resources use `FieldSelectDatagrid`.
+- User Settings are now obtained on login and stored locally.
+
 1.2.0
 -----
 - React Beautiful DND package added.
