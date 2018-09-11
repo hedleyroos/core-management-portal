@@ -20,7 +20,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    settingsLoad: (data, site_id) => dispatch(userSettingsLoad(data, site_id)),
+    settingsLoad: data => dispatch(userSettingsLoad(data)),
     settingsHiddenFieldsUpdate: newSettings => dispatch(userSettingsHiddenFieldsUpdate(newSettings))
 });
 
@@ -38,8 +38,8 @@ class FieldSelectDatagrid extends Component {
     componentDidMount() {
         const { userSettings } = this.props;
         getOrCreateGMPUserSiteData(userSettings)
-            .then(({ data, site_id }) => {
-                this.props.settingsLoad(data, site_id);
+            .then(data => {
+                this.props.settingsLoad(data);
                 this.loadFields();
             })
             .catch(error => handleAPIError(error));
@@ -48,7 +48,7 @@ class FieldSelectDatagrid extends Component {
     loadFields() {
         // Here we setup the state of all checkboxes for showing/hiding each fields.
         const { children, resource, userSettings } = this.props;
-        const settings = userSettings.data && userSettings.data.settings;
+        const settings = userSettings.settings;
         const hiddenSet = new Set(
             settings && settings[resource] && settings[resource].hiddenFields
         );

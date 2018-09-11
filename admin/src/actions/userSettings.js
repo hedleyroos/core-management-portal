@@ -1,11 +1,8 @@
 import { USER_SETTINGS_LOAD, USER_SETTINGS_HIDDEN_FIELDS_UPDATE } from '../actionTypes';
 
-export const userSettingsLoad = (data, site_id) => ({
+export const userSettingsLoad = data => ({
     type: USER_SETTINGS_LOAD,
-    payload: {
-        data,
-        site_id
-    }
+    payload: data
 });
 
 export const userSettingsHiddenFieldsUpdate = newSettings => ({

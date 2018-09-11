@@ -24,16 +24,14 @@ export const getOrCreateGMPUserSiteData = userSettings => {
     const userID = idToken.sub;
     const clientTokenID = idToken.aud;
     if (!notEmptyObject(userSettings)) {
-        return restClient(OPERATIONAL, 'get_site_from_client_token_id', {
-            pathParameters: [clientTokenID]
-        }).then(async response => {
-            const site = response.data;
-            let userSiteData = await restClient(GET_LIST, 'usersitedata', {
-                filter: { user_id: userID, site_id: site.id }
-            });
-            userSiteData = userSiteData.data.length && userSiteData.data[0];
+        return restClient(OPERATIONAL, 'usersitedata', {}).then(async response => {
+            let userSiteData = response.data;
             // Create user site data if nothing found.
             if (!userSiteData) {
+                let site = await restClient(OPERATIONAL, 'get_site_from_client_token_id', {
+                    pathParameters: [clientTokenID]
+                });
+                site = site.data;
                 userSiteData = await restClient(CREATE, 'usersitedata', {
                     data: {
                         user_id: userID,
@@ -41,12 +39,8 @@ export const getOrCreateGMPUserSiteData = userSettings => {
                         data: {}
                     }
                 });
-                userSiteData = userSiteData.data;
             }
-            return {
-                data: userSiteData.data || {},
-                site_id: site.id
-            };
+            return userSiteData.data || {};
         });
     }
     return Promise.resolve(userSettings);
@@ -55,18 +49,17 @@ export const getOrCreateGMPUserSiteData = userSettings => {
 export const updateGMPUserSiteData = (props, resource, field) => {
     const { settingsHiddenFieldsUpdate, userSettings } = props;
     // Generate new settings here so both API call and store can be updated correctly.
-    let settings = userSettings.data ? userSettings.data.settings || {} : {};
+    let settings = userSettings.settings || {};
     let hiddenFields = new Set(settings[resource] && settings[resource].hiddenFields);
     hiddenFields.has(field) ? hiddenFields.delete(field) : hiddenFields.add(field);
+    // Create the new state mutation here rather than in the reducer.
+    // This prevents a difference in local store and backend.
     const newSettings = {
-        ...userSettings,
-        data: {
-            ...userSettings.data,
-            settings: {
-                ...settings,
-                [resource]: {
-                    hiddenFields: Array.from(hiddenFields)
-                }
+        ...userSettings.data,
+        settings: {
+            ...settings,
+            [resource]: {
+                hiddenFields: Array.from(hiddenFields)
             }
         }
     };
@@ -76,10 +69,10 @@ export const updateGMPUserSiteData = (props, resource, field) => {
     // Update backend
     const idToken = jwtDecode(localStorage.getItem('id_token'));
     const userID = idToken.sub;
-    return restClient(UPDATE, 'usersitedata', {
-        id: `${userID}/${userSettings.site_id}`,
+    return restClient(OPERATIONAL, 'usersitedata', {
+        method: 'PUT',
         data: {
-            data: newSettings.data
+            data: newSettings
         }
     }).catch(error => handleAPIError(error));
 };
