@@ -8,10 +8,11 @@ import {
     base64urlDecode,
     errorNotificationAnt,
     apiErrorHandler,
-    createTreeFromContexts
+    createTreeFromContexts,
+    loadGMPUserSettings
 } from '../utils';
 import WaitingPage from '../pages/WaitingPage';
-import restClient, { OPERATIONAL } from '../restClient';
+
 
 class OIDCCallback extends Component {
     constructor(props) {
@@ -62,28 +63,11 @@ class OIDCCallback extends Component {
                     createTreeFromContexts(contexts)
                         .then(treeData => {
                             PermissionsStore.getAndLoadPermissions({ userID, contexts, treeData })
-                                .then(result => {
+                                .then(() => {
                                     // Load user settings. This may fail and login can continue.
-                                    restClient(OPERATIONAL, 'usersitedata', {})
-                                        .then(response => {
-                                            localStorage.setItem(
-                                                'userSiteData',
-                                                JSON.stringify(response.data.data)
-                                            );
-                                            this.setState({ loginComplete: true });
-                                        })
-                                        .catch(error => {
-                                            localStorage.setItem(
-                                                'userSiteData',
-                                                JSON.stringify({})
-                                            );
-                                            errorNotificationAnt(
-                                                'User Settings could not be loaded. Changes may not be saved.',
-                                                'Oh no',
-                                                2
-                                            );
-                                            this.setState({ loginComplete: true });
-                                        });
+                                    loadGMPUserSettings(parsedQuery.access_token).then(() => {
+                                        this.setState({ loginComplete: true });
+                                    });
                                 })
                                 .catch(error => {
                                     this.handleLoginError(error);

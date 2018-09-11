@@ -1,9 +1,11 @@
 import { notification } from 'antd';
+import { fetchUtils } from 'admin-on-rest';
 
 import restClient, { GET_LIST, OPERATIONAL } from './restClient';
 import { PLACE_MAPPING } from './constants';
 import { handleAPIError } from './manageUtils';
 
+const OIDC_USER_URL = process.env.REACT_APP_AUTHORIZATION_USER_ENDPOINT;
 /**
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
@@ -16,6 +18,33 @@ export const getContextAlphabeticallyFirst = treeData => {
         return null;
     });
     return first.key;
+};
+
+export const loadGMPUserSettings = access_token => {
+    const options = {
+        headers: new Headers({
+            Accept: 'application/json',
+            Authorization: `Bearer ${access_token}`
+        })
+    };
+    const promises = [restClient(OPERATIONAL, 'usersitedata', {}), fetchUtils.fetchJson(OIDC_USER_URL, options)];
+    // Map all promises catch -> undefined.
+    // This allows the Promise.all to resolve regardless of api failures.
+    return Promise.all(promises.map(p => p.catch(() => undefined))).then(([userSiteData, userInfo]) => {
+        userSiteData = userSiteData ? userSiteData.data.data : {};
+        localStorage.setItem('userSiteData', JSON.stringify(userSiteData));
+        if (!userInfo) {
+            userInfo = {};
+            errorNotificationAnt(
+                'User Info could not be loaded. Changes may not be saved.',
+                'Oh no',
+                2
+            );
+        } else {
+            userInfo = userInfo.json;
+        }
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    });
 };
 
 export const updateGMPUserSiteData = (resource, field) => {
