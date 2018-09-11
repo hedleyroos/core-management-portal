@@ -53,8 +53,6 @@ export const updateGMPUserSiteData = (resource, field) => {
     let settings = (userSiteData && userSiteData.settings) || {};
     let hiddenFields = new Set(settings[resource] && settings[resource].hiddenFields);
     hiddenFields.has(field) ? hiddenFields.delete(field) : hiddenFields.add(field);
-    // Create the new state mutation here rather than in the reducer.
-    // This prevents a difference in local store and backend.
     const newSettings = {
         ...userSiteData,
         settings: {
