@@ -14,7 +14,7 @@ import { muiTheme, styles } from '../Theme';
 import { generateNonce, generateQueryString } from '../utils';
 
 const OIDC_PROVIDER_URL = process.env.REACT_APP_AUTHORIZATION_ENDPOINT;
-const OIDC_PROVIDER_SCOPE = 'openid profile roles';
+const OIDC_PROVIDER_SCOPE = 'openid profile roles site';
 const OIDC_PROVIDER_CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 const OIDC_PROVIDER_REDIRECT_URI =
     process.env.REACT_APP_PORTAL_URL + process.env.REACT_APP_PORTAL_LOGIN_CALLBACK;

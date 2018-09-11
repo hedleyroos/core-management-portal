@@ -14,7 +14,6 @@ import PermissionsStore from './auth/PermissionsStore';
 import restClient from './restClient';
 import { muiTheme } from './Theme';
 import manageRolesReducer from './reducers/manageRolesReducer';
-import userSettingsReducer from './reducers/userSettingsReducer';
 
 import { DomainList, DomainCreate, DomainShow, DomainEdit } from './resources/Domain';
 
@@ -132,8 +131,7 @@ const App = () => (
         loginPage={AuthLoginPage}
         customRoutes={customRoutes}
         customReducers={{
-            manageRoles: manageRolesReducer,
-            userSettings: userSettingsReducer
+            manageRoles: manageRolesReducer
         }}
     >
         {permissions => [

@@ -1,7 +1,6 @@
 import { notification } from 'antd';
-import jwtDecode from 'jwt-decode';
 
-import restClient, { GET_LIST, OPERATIONAL, CREATE, UPDATE } from './restClient';
+import restClient, { GET_LIST, OPERATIONAL } from './restClient';
 import { PLACE_MAPPING } from './constants';
 import { handleAPIError } from './manageUtils';
 
@@ -19,43 +18,16 @@ export const getContextAlphabeticallyFirst = treeData => {
     return first.key;
 };
 
-export const getOrCreateGMPUserSiteData = userSettings => {
-    const idToken = jwtDecode(localStorage.getItem('id_token'));
-    const userID = idToken.sub;
-    const clientTokenID = idToken.aud;
-    if (!notEmptyObject(userSettings)) {
-        return restClient(OPERATIONAL, 'usersitedata', {}).then(async response => {
-            let userSiteData = response.data;
-            // Create user site data if nothing found.
-            if (!userSiteData) {
-                let site = await restClient(OPERATIONAL, 'get_site_from_client_token_id', {
-                    pathParameters: [clientTokenID]
-                });
-                site = site.data;
-                userSiteData = await restClient(CREATE, 'usersitedata', {
-                    data: {
-                        user_id: userID,
-                        site_id: site.id,
-                        data: {}
-                    }
-                });
-            }
-            return userSiteData.data || {};
-        });
-    }
-    return Promise.resolve(userSettings);
-};
-
-export const updateGMPUserSiteData = (props, resource, field) => {
-    const { settingsHiddenFieldsUpdate, userSettings } = props;
+export const updateGMPUserSiteData = (resource, field) => {
     // Generate new settings here so both API call and store can be updated correctly.
-    let settings = userSettings.settings || {};
+    const userSiteData = JSON.parse(localStorage.getItem('userSiteData'));
+    let settings = (userSiteData && userSiteData.settings) || {};
     let hiddenFields = new Set(settings[resource] && settings[resource].hiddenFields);
     hiddenFields.has(field) ? hiddenFields.delete(field) : hiddenFields.add(field);
     // Create the new state mutation here rather than in the reducer.
     // This prevents a difference in local store and backend.
     const newSettings = {
-        ...userSettings.data,
+        ...userSiteData,
         settings: {
             ...settings,
             [resource]: {
@@ -63,18 +35,19 @@ export const updateGMPUserSiteData = (props, resource, field) => {
             }
         }
     };
-    // Update redux store.
-    settingsHiddenFieldsUpdate(newSettings);
+    // Update local storage.
+    localStorage.setItem('userSiteData', JSON.stringify(newSettings));
 
     // Update backend
-    const idToken = jwtDecode(localStorage.getItem('id_token'));
-    const userID = idToken.sub;
     return restClient(OPERATIONAL, 'usersitedata', {
         method: 'PUT',
         data: {
             data: newSettings
         }
-    }).catch(error => handleAPIError(error));
+    }).catch(error => {
+        errorNotificationAnt('Error updating your admin settings. Changes not stored.', 'Oh no', 2);
+        handleAPIError(error);
+    });
 };
 
 export const createTreeFromContexts = contexts => {
