@@ -22,21 +22,25 @@ class UserShowActions extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false
+            open: false,
+            inputValues: {
+                deletionReason: ''
+            }
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleInput = this.handleInput.bind(this);
     }
 
-    handleDelete() {
+    handleDelete(reason=null) {
         const { data } = this.props;
         httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/request_user_deletion`, {
             method: 'POST',
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({
                 user_id: data.id,
-                reason: 'Management Portal' // @TODO Get proper reason from a textbox
+                reason: reason || 'Management Portal'
             })
         })
             .then(response => {
@@ -54,9 +58,15 @@ class UserShowActions extends Component {
     }
 
     handleClose(action) {
-        action === 'submit' && this.handleDelete();
+        action === 'submit' && this.handleDelete(this.state.inputValues.deletionReason);
         this.setState({ open: false });
     }
+    handleInput (event) {
+        let name = event.target.name;
+        let value = event.target.value;
+        this.setState({inputValues:{[name]: value}});
+    }
+
 
     render() {
         const { basePath, data } = this.props;
@@ -80,6 +90,8 @@ class UserShowActions extends Component {
                         <ConfirmDialog
                             open={open}
                             handleClose={this.handleClose}
+                            handleInput={this.handleInput}
+                            inputValues={this.state.inputValues}
                             cancelLabel="No"
                             submitLabel="Delete"
                             title={title}
