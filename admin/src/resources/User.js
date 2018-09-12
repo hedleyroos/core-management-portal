@@ -44,8 +44,6 @@ const validationEditUser = values => {
     return errors;
 };
 
-const hiddenFields = ['created_at', 'updated_at', 'avatar', 'country_code'];
-
 export const UserListNoSites = props => (
     <Card>
         <CardTitle title="User List" />
@@ -65,10 +63,7 @@ export const UserList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid
-                    defaultHiddenFields={hiddenFields}
-                    bodyOptions={{ showRowHover: true }}
-                >
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
                     <IdenticonField source="id" />
                     <TextField source="username" sortable={false} />
                     <TextField source="first_name" sortable={false} />

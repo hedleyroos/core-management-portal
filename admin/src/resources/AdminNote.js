@@ -26,7 +26,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import AdminNoteFilter from '../filters/AdminNoteFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateAdminNote = values => {
     const errors = {};
@@ -49,7 +49,7 @@ export const AdminNoteList = props => (
         <Responsive
             small={<SimpleList primaryText={record => `Note: ${record.note}`} />}
             medium={
-                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
                     <NumberField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('users', 'list') ? (
                         <ReferenceField
@@ -89,7 +89,7 @@ export const AdminNoteList = props => (
                     {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? (
                         <DeleteButton />
                     ) : null}
-                </EditableDatagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

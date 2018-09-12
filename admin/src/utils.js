@@ -1,8 +1,11 @@
 import { notification } from 'antd';
+import { fetchUtils } from 'admin-on-rest';
 
 import restClient, { GET_LIST, OPERATIONAL } from './restClient';
 import { PLACE_MAPPING } from './constants';
+import { handleAPIError } from './manageUtils';
 
+const OIDC_USER_URL = process.env.REACT_APP_AUTHORIZATION_USER_ENDPOINT;
 /**
  * Generated utils.js code. Edit at own risk.
  * When regenerated the changes will be lost.
@@ -15,6 +18,63 @@ export const getContextAlphabeticallyFirst = treeData => {
         return null;
     });
     return first.key;
+};
+
+export const loadGMPUserSettings = access_token => {
+    const options = {
+        headers: new Headers({
+            Accept: 'application/json',
+            Authorization: `Bearer ${access_token}`
+        })
+    };
+    const promises = [restClient(OPERATIONAL, 'usersitedata', {}), fetchUtils.fetchJson(OIDC_USER_URL, options)];
+    // Map all promises catch -> undefined.
+    // This allows the Promise.all to resolve regardless of api failures.
+    return Promise.all(promises.map(p => p.catch(() => undefined))).then(([userSiteData, userInfo]) => {
+        userSiteData = userSiteData ? userSiteData.data.data : {};
+        localStorage.setItem('userSiteData', JSON.stringify(userSiteData));
+        if (!userInfo) {
+            userInfo = {};
+            errorNotificationAnt(
+                'User Info could not be loaded. Changes may not be saved.',
+                'Oh no',
+                2
+            );
+        } else {
+            userInfo = userInfo.json;
+        }
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    });
+};
+
+export const updateGMPUserSiteData = (resource, field) => {
+    // Generate new settings here so both API call and store can be updated correctly.
+    const userSiteData = JSON.parse(localStorage.getItem('userSiteData'));
+    let settings = (userSiteData && userSiteData.settings) || {};
+    let hiddenFields = new Set(settings[resource] && settings[resource].hiddenFields);
+    hiddenFields.has(field) ? hiddenFields.delete(field) : hiddenFields.add(field);
+    const newSettings = {
+        ...userSiteData,
+        settings: {
+            ...settings,
+            [resource]: {
+                hiddenFields: Array.from(hiddenFields)
+            }
+        }
+    };
+    // Update local storage.
+    localStorage.setItem('userSiteData', JSON.stringify(newSettings));
+
+    // Update backend
+    return restClient(OPERATIONAL, 'usersitedata', {
+        method: 'PUT',
+        data: {
+            data: newSettings
+        }
+    }).catch(error => {
+        errorNotificationAnt('Error updating your admin settings. Changes not stored.', 'Oh no', 2);
+        handleAPIError(error);
+    });
 };
 
 export const createTreeFromContexts = contexts => {

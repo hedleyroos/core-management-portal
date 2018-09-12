@@ -13,7 +13,7 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import CountryFilter from '../filters/CountryFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 export const CountryList = props => (
     <List {...props} title="Country List" filters={<CountryFilter />}>
@@ -25,11 +25,11 @@ export const CountryList = props => (
                 />
             }
             medium={
-                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
                     <TextField source="code" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <ShowButton />
-                </EditableDatagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

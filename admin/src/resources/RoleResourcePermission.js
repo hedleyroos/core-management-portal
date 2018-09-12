@@ -20,7 +20,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};
@@ -38,7 +38,7 @@ const validationCreateRoleResourcePermission = values => {
 
 export const RoleResourcePermissionList = props => (
     <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField
                     label="Role"
@@ -87,7 +87,7 @@ export const RoleResourcePermissionList = props => (
             {PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

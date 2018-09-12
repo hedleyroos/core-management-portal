@@ -22,7 +22,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import InvitationDomainRoleFilter from '../filters/InvitationDomainRoleFilter';
 import DomainTreeInput from '../inputs/DomainTreeInput';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateInvitationDomainRole = values => {
     const errors = {};
@@ -40,7 +40,7 @@ const validationCreateInvitationDomainRole = values => {
 
 export const InvitationDomainRoleList = props => (
     <List {...props} title="InvitationDomainRole List" filters={<InvitationDomainRoleFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField
                     label="Invitation"
@@ -89,7 +89,7 @@ export const InvitationDomainRoleList = props => (
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

@@ -26,7 +26,7 @@ import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserSiteData = values => {
     const errors = {};
@@ -49,7 +49,7 @@ const validationEditUserSiteData = values => {
 
 export const UserSiteDataList = props => (
     <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -86,7 +86,7 @@ export const UserSiteDataList = props => (
             {PermissionsStore.getResourcePermission('usersitedata', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

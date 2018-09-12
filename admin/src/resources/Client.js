@@ -14,11 +14,11 @@ import {
     ShowButton
 } from 'admin-on-rest';
 import ClientFilter from '../filters/ClientFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" sortable={false} />
             <TextField source="_post_logout_redirect_uris" sortable={false} />
             <TextField source="_redirect_uris" sortable={false} />
@@ -32,7 +32,7 @@ export const ClientList = props => (
             <UrlField source="terms_url" sortable={false} />
             <UrlField source="website_url" sortable={false} />
             <ShowButton />
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

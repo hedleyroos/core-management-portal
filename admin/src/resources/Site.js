@@ -31,7 +31,7 @@ import InlineTable from '../fields/InlineTable';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import SiteFilter from '../filters/SiteFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSite = values => {
     const errors = {};
@@ -59,7 +59,7 @@ export const SiteList = props => (
                 />
             }
             medium={
-                <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
                     <NumberField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('clients', 'list') ? (
                         <ReferenceField
@@ -101,7 +101,7 @@ export const SiteList = props => (
                     {PermissionsStore.getResourcePermission('sites', 'remove') ? (
                         <DeleteButton />
                     ) : null}
-                </EditableDatagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>
