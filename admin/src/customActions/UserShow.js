@@ -35,7 +35,7 @@ class UserShowActions extends Component {
         this.handleInput = this.handleInput.bind(this);
     }
 
-    handleDelete(reason=null) {
+    handleDelete(reason) {
         const { data } = this.props;
         httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/request_user_deletion`, {
             method: 'POST',
