@@ -3,11 +3,24 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 
 const ConfirmDialog = props => {
-    const { open, handleClose, handleInput, inputValues, closeAction, submitAction, cancelLabel, submitLabel, title, text } = props;
-    const formIsValid = inputValues.deletionReason.length > 0
+    const {
+        open,
+        handleClose,
+        closeAction,
+        submitAction,
+        cancelLabel,
+        submitLabel,
+        title,
+        text
+    } = props;
+
+    // This Dialog has the optional ability to have validateable inputs, assign
+    // defaults if they are not present. At present does not support custom
+    // error messages.
+    const inputValues = typeof props.inputValues !== "undefined" ? props.inputValues : '';
+    const formIsValid = typeof props.formIsValid !== "undefined" ? props.formIsValid : true;
     const actions = [
         <FlatButton
             label={cancelLabel || 'Cancel'}
@@ -31,16 +44,7 @@ const ConfirmDialog = props => {
             >
                 {text}
                 <div>
-                    <TextField
-                        required={!formIsValid}
-                        floatingLabelText='Reason for user deletion*'
-                        placeholder='Reason'
-                        autoFocus='true'
-                        defaultValue='Management Portal'
-                        name='deletionReason'
-                        value={inputValues.deletionReason}
-                        onChange={(event) => handleInput(event)}
-                    />
+                    {inputValues}
                 </div>
             </Dialog>
     );

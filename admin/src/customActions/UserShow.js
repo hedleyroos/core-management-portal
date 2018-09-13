@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { ListButton, RefreshButton, EditButton } from 'admin-on-rest';
 import { CardActions } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 
 import { styles } from '../Theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
@@ -25,7 +26,8 @@ class UserShowActions extends Component {
             open: false,
             inputValues: {
                 deletionReason: ''
-            }
+            },
+            formIsValid: false
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
@@ -61,17 +63,34 @@ class UserShowActions extends Component {
         action === 'submit' && this.handleDelete(this.state.inputValues.deletionReason);
         this.setState({ open: false });
     }
-    handleInput (event) {
-        let name = event.target.name;
-        let value = event.target.value;
-        this.setState({inputValues:{[name]: value}});
+
+    formIsValid(fields) {
+        let returnFields = {}
+        Object.entries(fields).forEach(([name, value]) => {
+            returnFields[name] = value
+        });
+        this.setState({inputValues:returnFields, formIsValid: fields.deletionReason.length > 0});
     }
 
+    handleInput(event) {
+        let name = event.target.name;
+        let value = event.target.value;
+        this.formIsValid({[event.target.name]: event.target.value});
+    }
 
     render() {
         const { basePath, data } = this.props;
         const { open } = this.state;
         const title = data && `Delete User '${data.username}: ${data.id}'`;
+        const inputValues = <TextField
+                    required={!this.state.formIsValid}
+                    floatingLabelText='Reason for user deletion*'
+                    placeholder='Reason'
+                    autoFocus='true'
+                    name='deletionReason'
+                    value={this.state.inputValues.deletionReason}
+                    onChange={(event) => this.handleInput(event)}
+                />;
         return (
             <CardActions style={styles.cardAction}>
                 {PermissionsStore.getResourcePermission('users', 'edit') && (
@@ -90,8 +109,8 @@ class UserShowActions extends Component {
                         <ConfirmDialog
                             open={open}
                             handleClose={this.handleClose}
-                            handleInput={this.handleInput}
-                            inputValues={this.state.inputValues}
+                            inputValues={inputValues}
+                            formIsValid={this.state.formIsValid}
                             cancelLabel="No"
                             submitLabel="Delete"
                             title={title}
