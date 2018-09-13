@@ -12,6 +12,7 @@ const ConfirmDialog = props => {
         closeAction,
         inputValues,
         handleInput,
+        formIsValid,
         submitAction,
         cancelLabel,
         submitLabel,
@@ -19,10 +20,6 @@ const ConfirmDialog = props => {
         text
     } = props;
 
-    // This Dialog has the optional ability to have validateable inputs, assign
-    // defaults if they are not present. At present does not support custom
-    // error messages.
-    const formIsValid = typeof props.formIsValid !== "undefined" ? props.formIsValid : true;
     const actions = [
         <FlatButton
             label={cancelLabel || 'Cancel'}
@@ -65,6 +62,8 @@ const ConfirmDialog = props => {
 ConfirmDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
+    formIsValid: PropTypes.bool,
+    inputValues: PropTypes.array,
     closeAction: PropTypes.string,
     submitAction: PropTypes.string,
     cancelLabel: PropTypes.string,
@@ -72,5 +71,9 @@ ConfirmDialog.propTypes = {
     title: PropTypes.string,
     text: PropTypes.string.isRequired
 }
+
+ConfirmDialog.defaultProps = {
+    formIsValid: true
+};
 
 export default ConfirmDialog;
