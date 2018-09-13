@@ -32,6 +32,7 @@ class UserShowActions extends Component {
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleInput = this.handleInput.bind(this);
+        this.formIsValid = this.formIsValid.bind(this);
     }
 
     handleDelete(reason) {

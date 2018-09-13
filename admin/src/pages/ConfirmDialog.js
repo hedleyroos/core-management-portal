@@ -47,9 +47,9 @@ const ConfirmDialog = props => {
                         <TextField
                             key={index}
                             required={!formIsValid}
-                            floatingLabelText={`${input.floatingLabelText}`}
-                            placeholder={`${input.placeholder}`}
-                            autoFocus={`${input.autoFocus}` || 'false'}
+                            floatingLabelText={input.floatingLabelText}
+                            placeholder={input.placeholder}
+                            autoFocus={input.autoFocus || 'false'}
                             name={`${input.name}`}
                             value={input.value}
                             onChange={handleInput}
