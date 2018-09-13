@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 const ConfirmDialog = props => {
     const {
         open,
         handleClose,
         closeAction,
+        inputValues,
+        handleInput,
         submitAction,
         cancelLabel,
         submitLabel,
@@ -19,7 +22,6 @@ const ConfirmDialog = props => {
     // This Dialog has the optional ability to have validateable inputs, assign
     // defaults if they are not present. At present does not support custom
     // error messages.
-    const inputValues = typeof props.inputValues !== "undefined" ? props.inputValues : '';
     const formIsValid = typeof props.formIsValid !== "undefined" ? props.formIsValid : true;
     const actions = [
         <FlatButton
@@ -43,9 +45,20 @@ const ConfirmDialog = props => {
                 onRequestClose={() => handleClose('no')}
             >
                 {text}
-                <div>
-                    {inputValues}
-                </div>
+                {inputValues && inputValues.map((input, index) =>
+                    <div>
+                        <TextField
+                            key={index}
+                            required={!formIsValid}
+                            floatingLabelText={`${input.floatingLabelText}`}
+                            placeholder={`${input.placeholder}`}
+                            autoFocus={`${input.autoFocus}` || 'false'}
+                            name={`${input.name}`}
+                            value={input.value}
+                            onChange={handleInput}
+                        />;
+                    </div>
+                )}
             </Dialog>
     );
 };

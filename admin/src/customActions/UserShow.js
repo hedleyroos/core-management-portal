@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { ListButton, RefreshButton, EditButton } from 'admin-on-rest';
 import { CardActions } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
 
 import { styles } from '../Theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
@@ -82,15 +81,13 @@ class UserShowActions extends Component {
         const { basePath, data } = this.props;
         const { open } = this.state;
         const title = data && `Delete User '${data.username}: ${data.id}'`;
-        const inputValues = <TextField
-                    required={!this.state.formIsValid}
-                    floatingLabelText='Reason for user deletion*'
-                    placeholder='Reason'
-                    autoFocus='true'
-                    name='deletionReason'
-                    value={this.state.inputValues.deletionReason}
-                    onChange={(event) => this.handleInput(event)}
-                />;
+        const inputValues = [{
+            floatingLabelText: 'Reason for user deletion*',
+            placeholder: 'Reason',
+            autoFocus: 'true',
+            name: 'deletionReason',
+            value: this.state.inputValues.deletionReason,
+        }];
         return (
             <CardActions style={styles.cardAction}>
                 {PermissionsStore.getResourcePermission('users', 'edit') && (
@@ -110,6 +107,7 @@ class UserShowActions extends Component {
                             open={open}
                             handleClose={this.handleClose}
                             inputValues={inputValues}
+                            handleInput={this.handleInput}
                             formIsValid={this.state.formIsValid}
                             cancelLabel="No"
                             submitLabel="Delete"
