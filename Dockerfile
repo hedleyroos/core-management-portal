@@ -16,4 +16,3 @@ RUN yarn build
 FROM nginx:stable-alpine
 COPY nginx/* /etc/nginx/conf.d/
 COPY --from=build-deps /app/admin/build/* /var/static/
-EXPOSE 3000
