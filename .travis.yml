@@ -41,7 +41,8 @@ deploy:
 - provider: script
   script: bash ./scripts/docker_push.sh
   # Build args for docker image based on prod (release branch)
-  <<: *prod-build-args
+  env:
+    *prod-build-args
   on:
     all_branches: true
     condition: "${TRAVIS_BRANCH} =~ ^release.*$"
