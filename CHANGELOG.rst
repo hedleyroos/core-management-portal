@@ -7,6 +7,8 @@ next
 - User Settings are now obtained on login and stored locally.
 - `query-string` npm package version changed to support production build.
 - `ConfirmDialog` now supports optional text inputs with validation.
+- Added `reason` input to deleting a user, saves as an Admin Note.
+- Updated docker files to support production build with build args.
 
 1.2.0
 -----

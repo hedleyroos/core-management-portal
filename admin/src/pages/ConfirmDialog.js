@@ -13,7 +13,6 @@ const ConfirmDialog = props => {
         inputValues,
         handleInput,
         formIsValid,
-        submitAction,
         cancelLabel,
         submitLabel,
         title,

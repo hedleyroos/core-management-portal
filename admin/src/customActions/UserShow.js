@@ -75,7 +75,7 @@ class UserShowActions extends Component {
     handleInput(event) {
         let name = event.target.name;
         let value = event.target.value;
-        this.formIsValid({[event.target.name]: event.target.value});
+        this.formIsValid({[name]: value});
     }
 
     render() {
