@@ -1,0 +1,10 @@
+FROM node:alpine
+
+COPY . /app/
+
+WORKDIR /app/admin/
+
+RUN echo "GMP development image readying..."
+RUN yarn
+
+EXPOSE 3000
