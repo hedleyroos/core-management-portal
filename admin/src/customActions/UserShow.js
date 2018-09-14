@@ -22,21 +22,27 @@ class UserShowActions extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false
+            open: false,
+            inputValues: {
+                deletionReason: ''
+            },
+            formIsValid: false
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleInput = this.handleInput.bind(this);
+        this.formIsValid = this.formIsValid.bind(this);
     }
 
-    handleDelete() {
+    handleDelete(reason) {
         const { data } = this.props;
         httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/request_user_deletion`, {
             method: 'POST',
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({
                 user_id: data.id,
-                reason: 'Management Portal' // @TODO Get proper reason from a textbox
+                reason: reason || 'Management Portal'
             })
         })
             .then(response => {
@@ -54,14 +60,35 @@ class UserShowActions extends Component {
     }
 
     handleClose(action) {
-        action === 'submit' && this.handleDelete();
+        action === 'submit' && this.handleDelete(this.state.inputValues.deletionReason);
         this.setState({ open: false });
+    }
+
+    formIsValid(fields) {
+        let returnFields = {}
+        Object.entries(fields).forEach(([name, value]) => {
+            returnFields[name] = value
+        });
+        this.setState({inputValues:returnFields, formIsValid: fields.deletionReason.length > 0});
+    }
+
+    handleInput(event) {
+        let name = event.target.name;
+        let value = event.target.value;
+        this.formIsValid({[event.target.name]: event.target.value});
     }
 
     render() {
         const { basePath, data } = this.props;
         const { open } = this.state;
         const title = data && `Delete User '${data.username}: ${data.id}'`;
+        const inputValues = [{
+            floatingLabelText: 'Reason for user deletion*',
+            placeholder: 'Reason',
+            autoFocus: 'true',
+            name: 'deletionReason',
+            value: this.state.inputValues.deletionReason,
+        }];
         return (
             <CardActions style={styles.cardAction}>
                 {PermissionsStore.getResourcePermission('users', 'edit') && (
@@ -80,6 +107,9 @@ class UserShowActions extends Component {
                         <ConfirmDialog
                             open={open}
                             handleClose={this.handleClose}
+                            inputValues={inputValues}
+                            handleInput={this.handleInput}
+                            formIsValid={this.state.formIsValid}
                             cancelLabel="No"
                             submitLabel="Delete"
                             title={title}
