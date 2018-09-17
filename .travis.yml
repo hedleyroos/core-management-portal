@@ -46,10 +46,12 @@ deploy:
   on:
     all_branches: true
     condition: "${TRAVIS_BRANCH} =~ ^release.*$"
-- provider: script
-  script: bash ./scripts/test.sh
-  env:
-    *qa-build-args
-  on:
-    all_branches: true
+
+jobs:
+  include:
+    - stage: "Test build"
+      name: "Test build"
+      script: bash ./scripts/test.sh
+      env:
+        *qa-build-args
 
