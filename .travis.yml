@@ -25,7 +25,7 @@ deploy:
     branch: master
 - provider: script
   script: bash ./scripts/docker_push.sh
-  env:
+  env: &qa-build-args
     # Build args for docker image based on QA (develop)
     - >
       BUILD_ARG="
@@ -46,3 +46,10 @@ deploy:
   on:
     all_branches: true
     condition: "${TRAVIS_BRANCH} =~ ^release.*$"
+- provider: script
+  script: bash ./scripts/test.sh
+  env:
+    *qa-build-args
+  on:
+    all_branches: true
+
