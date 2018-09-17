@@ -7,49 +7,40 @@ services:
 - docker
 
 script: true  # Fake build step
-deploy:
-- provider: script
-  script: bash ./scripts/docker_push.sh
-  env: &prod-build-args
-    # Build args for docker image based on master
-    - >
-      BUILD_ARG="
-      --build-arg REACT_APP_AUTHORIZATION_ENDPOINT=https://auth.gehosting.org/openid/authorize/
-      --build-arg REACT_APP_AUTHORIZATION_USER_ENDPOINT=https://auth.gehosting.org/openid/userinfo/
-      --build-arg REACT_APP_CLIENT_ID=109706
-      --build-arg REACT_APP_LOGOUT_URL=https://auth.gehosting.org/openid/end-session/
-      --build-arg REACT_APP_MANAGEMENT_LAYER=https://api.gehosting.org
-      --build-arg REACT_APP_PORTAL_URL=https://portal.gehosting.org/
-      --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"
-  on:
-    branch: master
-- provider: script
-  script: bash ./scripts/docker_push.sh
-  env: &qa-build-args
-    # Build args for docker image based on QA (develop)
-    - >
-      BUILD_ARG="
-      --build-arg REACT_APP_AUTHORIZATION_ENDPOINT=https://authentication-service.qa-hub.ie.gehosting.org/openid/authorize/
-      --build-arg REACT_APP_AUTHORIZATION_USER_ENDPOINT=https://authentication-service.qa-hub.ie.gehosting.org/openid/userinfo/
-      --build-arg REACT_APP_CLIENT_ID=260036
-      --build-arg REACT_APP_LOGOUT_URL=https://authentication-service.qa-hub.ie.gehosting.org/openid/end-session/
-      --build-arg REACT_APP_MANAGEMENT_LAYER=https://management-layer.qa-hub.ie.gehosting.org
-      --build-arg REACT_APP_PORTAL_URL=https://management-portal.qa-hub.ie.gehosting.org/
-      --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"
-  on:
-    branch: develop
-- provider: script
-  script: bash ./scripts/docker_push.sh
-  # Build args for docker image based on prod (release branch)
-  env:
-    *prod-build-args
-  on:
-    all_branches: true
-    condition: "${TRAVIS_BRANCH} =~ ^release.*$"
-- provider: script
-  script: bash ./scripts/test.sh
-  env:
-    *qa-build-args
-  on:
-    all_branches: true
+
+jobs:
+  include:
+    - script: ./scripts/docker_push.sh
+      name: "Production Build"
+      if: branch = master OR ${TRAVIS_BRANCH} =~ ^release.*$
+      env: &prod-build-args
+        # Build args for docker image based on master
+        - >
+          BUILD_ARG="
+          --build-arg REACT_APP_AUTHORIZATION_ENDPOINT=https://auth.gehosting.org/openid/authorize/
+          --build-arg REACT_APP_AUTHORIZATION_USER_ENDPOINT=https://auth.gehosting.org/openid/userinfo/
+          --build-arg REACT_APP_CLIENT_ID=109706
+          --build-arg REACT_APP_LOGOUT_URL=https://auth.gehosting.org/openid/end-session/
+          --build-arg REACT_APP_MANAGEMENT_LAYER=https://api.gehosting.org
+          --build-arg REACT_APP_PORTAL_URL=https://portal.gehosting.org/
+          --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"
+    - script: ./scripts/docker_push.sh
+      name: "QA Build"
+      if: branch = develop
+      env: &qa-build-args
+        # Build args for docker image based on QA (develop)
+        - >
+          BUILD_ARG="
+          --build-arg REACT_APP_AUTHORIZATION_ENDPOINT=https://authentication-service.qa-hub.ie.gehosting.org/openid/authorize/
+          --build-arg REACT_APP_AUTHORIZATION_USER_ENDPOINT=https://authentication-service.qa-hub.ie.gehosting.org/openid/userinfo/
+          --build-arg REACT_APP_CLIENT_ID=260036
+          --build-arg REACT_APP_LOGOUT_URL=https://authentication-service.qa-hub.ie.gehosting.org/openid/end-session/
+          --build-arg REACT_APP_MANAGEMENT_LAYER=https://management-layer.qa-hub.ie.gehosting.org
+          --build-arg REACT_APP_PORTAL_URL=https://management-portal.qa-hub.ie.gehosting.org/
+          --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"
+    - script: ./scripts/test.sh
+      name: "Test"
+      if: branch = test1
+      env:
+        *qa-build-args
 
