@@ -13,7 +13,7 @@ jobs:
     - stage: "Build"
       script: bash ./scripts/docker_push.sh
       name: "Production Build"
-      if: branch = master OR branch =~ ^release.*$
+      if: type = push AND (branch = master OR branch =~ ^release.*$)
       env:
         # Build args for docker image based on master or release branch
         - >
@@ -28,7 +28,7 @@ jobs:
     - stage: "Build"
       script: bash ./scripts/docker_push.sh
       name: "QA Build"
-      if: branch = develop
+      if: type = push AND branch = develop
       env: &qa-build-args
         # Build args for docker image based on QA (develop)
         - >
