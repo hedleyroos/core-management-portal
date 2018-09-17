@@ -62,7 +62,7 @@ class UserShowActions extends Component {
 
     handleClose(action) {
         const loggedInUserID = jwtDecode(localStorage.getItem('id_token')).sub;
-        if(action === 'submit' && loggedInUserID != this.props.data.id) {
+        if(action === 'submit' && loggedInUserID !== this.props.data.id) {
             this.handleDelete(this.state.inputValues.deletionReason);
         }
         this.setState({ open: false });
@@ -103,7 +103,7 @@ class UserShowActions extends Component {
                 <RefreshButton />
                 {PermissionsStore.getResourcePermission('users', 'remove') && (
                     <div>
-                        {data.id != loggedInUserID ?
+                        {data.id !== loggedInUserID ?
                             <FlatButton
                                 primary
                                 icon={<DeleteIcon />}
