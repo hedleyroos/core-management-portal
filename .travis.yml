@@ -10,11 +10,12 @@ script: true  # Fake build step
 
 jobs:
   include:
-    - script: ./scripts/docker_push.sh
+    - stage: "Build"
+      script: bash ./scripts/docker_push.sh
       name: "Production Build"
-      if: branch = master OR ${TRAVIS_BRANCH} =~ ^release.*$
-      env: &prod-build-args
-        # Build args for docker image based on master
+      if: branch = master OR branch =~ ^release.*$
+      env:
+        # Build args for docker image based on master or release branch
         - >
           BUILD_ARG="
           --build-arg REACT_APP_AUTHORIZATION_ENDPOINT=https://auth.gehosting.org/openid/authorize/
@@ -24,7 +25,8 @@ jobs:
           --build-arg REACT_APP_MANAGEMENT_LAYER=https://api.gehosting.org
           --build-arg REACT_APP_PORTAL_URL=https://portal.gehosting.org/
           --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"
-    - script: ./scripts/docker_push.sh
+    - stage: "Build"
+      script: bash ./scripts/docker_push.sh
       name: "QA Build"
       if: branch = develop
       env: &qa-build-args
@@ -38,7 +40,8 @@ jobs:
           --build-arg REACT_APP_MANAGEMENT_LAYER=https://management-layer.qa-hub.ie.gehosting.org
           --build-arg REACT_APP_PORTAL_URL=https://management-portal.qa-hub.ie.gehosting.org/
           --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"
-    - script: ./scripts/test.sh
+    - stage: "Build"
+      script: bash ./scripts/test.sh
       name: "Test"
       if: branch = test1
       env:
