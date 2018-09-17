@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import { push } from 'react-router-redux';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import ManageIcon from 'material-ui/svg-icons/action/build';
-import { connect } from 'react-redux';
-import { ListButton, RefreshButton, EditButton } from 'admin-on-rest';
-import { CardActions } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import ManageIcon from 'material-ui/svg-icons/action/build';
+import React, { Component } from 'react';
+import jwtDecode from 'jwt-decode';
+import { CardActions } from 'material-ui/Card';
+import { ListButton, RefreshButton, EditButton } from 'admin-on-rest';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import { styles } from '../Theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
@@ -60,7 +61,10 @@ class UserShowActions extends Component {
     }
 
     handleClose(action) {
-        action === 'submit' && this.handleDelete(this.state.inputValues.deletionReason);
+        const loggedInUserID = jwtDecode(localStorage.getItem('id_token')).sub;
+        if(action === 'submit' && loggedInUserID != this.props.data.id) {
+            this.handleDelete(this.state.inputValues.deletionReason);
+        }
         this.setState({ open: false });
     }
 
@@ -79,6 +83,7 @@ class UserShowActions extends Component {
     }
 
     render() {
+        const loggedInUserID = jwtDecode(localStorage.getItem('id_token')).sub;
         const { basePath, data } = this.props;
         const { open } = this.state;
         const title = data && `Delete User '${data.username}: ${data.id}'`;
@@ -98,12 +103,14 @@ class UserShowActions extends Component {
                 <RefreshButton />
                 {PermissionsStore.getResourcePermission('users', 'remove') && (
                     <div>
-                        <FlatButton
-                            primary
-                            icon={<DeleteIcon />}
-                            label="Delete User"
-                            onClick={this.handleOpen}
-                        />
+                        {data.id != loggedInUserID ?
+                            <FlatButton
+                                primary
+                                icon={<DeleteIcon />}
+                                label="Delete User"
+                                onClick={this.handleOpen}
+                            /> : ''
+                        }
                         <ConfirmDialog
                             open={open}
                             handleClose={this.handleClose}
