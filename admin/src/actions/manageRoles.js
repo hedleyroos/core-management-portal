@@ -31,10 +31,11 @@ export const deleteRole = key => ({
     payload: key
 });
 
-export const setAssignmentLocation = (managerRoles, key) => ({
+export const setAssignmentLocation = (managerRoles, availableRoles, key) => ({
     type: MANAGE_ROLES_SET_ASSIGNMENT_LOCATION,
     payload: {
         managerRoles,
+        availableRoles,
         key
     }
 });

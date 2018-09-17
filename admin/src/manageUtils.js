@@ -161,6 +161,21 @@ export const deleteRoles = props => {
     });
 };
 
+export const getAvailableRoles = (key, props) => {
+    const [placeType, id] = key.split(':');
+    const place = placeType === 'd' ? 'domain' : 'site';
+    restClient(GET_LIST, `${place}roles`, {
+        filter: {
+            [`${place}_id`]: id
+        }
+    }).then(response => {
+        const availableRoles = response.data.map(placeRole => {
+            return placeRole.role_id;
+        });
+        props.setAssignmentLocation(props.manageRoles.managerRoles, availableRoles, key);
+    });
+};
+
 export const assignRoles = props => {
     const store = props.manageRoles;
     const { resource, idLabel } = MANAGE_MAPPING[store.path];

@@ -44,14 +44,18 @@ export default (state = { validToken: true }, { type, payload }) => {
                 amountSelectedToDelete: state.amountSelectedToDelete - 1
             };
         case MANAGE_ROLES_SET_ASSIGNMENT_LOCATION:
+            const availableRolesSet = new Set(payload.availableRoles);
             return {
                 ...state,
                 assignmentLocation: payload.key,
-                rolesToAssign: payload.managerRoles[payload.key].reduce((accumulator, role) => {
-                    accumulator[role.id] = {
-                        ...role,
-                        checked: false
-                    };
+                availableRoles: payload.availableRoles,
+                rolesToAssign: state.managerRoles[payload.key].reduce((accumulator, role) => {
+                    if (availableRolesSet.has(role.id)) {
+                        accumulator[role.id] = {
+                            ...role,
+                            checked: false
+                        };
+                    }
                     return accumulator;
                 }, {}),
                 amountSelectedToAssign: 0
@@ -94,6 +98,7 @@ export default (state = { validToken: true }, { type, payload }) => {
         case MANAGE_ROLES_ALL_ASSIGNED:
             const {
                 assignmentLocation,
+                availableRoles,
                 rolesToAssign,
                 amountSelectedToAssign,
                 ...nextState
