@@ -56,12 +56,12 @@ const AssignRoleCard = ({
                                 {availableRoles.length
                                     ? `The following roles are available: [${availableRoles.join(
                                           ', '
-                                      )}]\n`
+                                      )}]`
                                     : `No roles to Select on this domain/site.`}
                             </CardText>
-                            <CardText>{`You have the following roles here: [${currentRoles.join(
-                                ', '
-                            )}]`}</CardText>
+                            <CardText>
+                                {`You have the following roles here: [${currentRoles.join(', ')}]`}
+                            </CardText>
                         </React.Fragment>
                     )}
                 </React.Fragment>
