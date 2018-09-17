@@ -9,6 +9,7 @@ next
 - `ConfirmDialog` now supports optional text inputs with validation.
 - Added `reason` input to deleting a user, saves as field in DeletedUser entry.
 - Updated docker files to support production build with build args.
+- Hide delete user button when viewing the currently logged in user.
 
 1.2.0
 -----
