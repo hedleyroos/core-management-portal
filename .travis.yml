@@ -50,4 +50,6 @@ deploy:
   script: bash ./scripts/test.sh
   env:
     *qa-build-args
+  on:
+    all_branches: true
 
