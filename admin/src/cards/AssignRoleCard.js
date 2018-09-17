@@ -15,6 +15,8 @@ const AssignRoleCard = ({
     amountSelectedToAssign,
     assigning,
     assignmentLocation,
+    availableRoles,
+    currentRoles,
     handleAssign,
     handleChange,
     handleSelect,
@@ -36,19 +38,32 @@ const AssignRoleCard = ({
             />
             {assignmentLocation && (
                 <React.Fragment>
-                    <CardHeader subtitle="Please choose the roles to add:" />
-                    <CardText>
-                        {notEmptyObject(rolesToAssign)
-                            ? Object.values(rolesToAssign).map(role => (
-                                  <Checkbox
-                                      key={role.id}
-                                      label={role.label}
-                                      checked={role.checked}
-                                      onCheck={() => handleSelect(role.id)}
-                                  />
-                              ))
-                            : 'No roles to Select on this domain/site.'}
-                    </CardText>
+                    {notEmptyObject(rolesToAssign) ? (
+                        <React.Fragment>
+                            <CardHeader subtitle="Please select roles to assign:" />
+                            {Object.values(rolesToAssign).map(role => (
+                                <Checkbox
+                                    key={role.id}
+                                    label={role.label}
+                                    checked={role.checked}
+                                    onCheck={() => handleSelect(role.id)}
+                                />
+                            ))}
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                            <CardText>
+                                {availableRoles.length
+                                    ? `The following roles are available: [${availableRoles.join(
+                                          ', '
+                                      )}]`
+                                    : `No roles to Select on this domain/site.`}
+                            </CardText>
+                            <CardText>
+                                {`You have the following roles here: [${currentRoles.join(', ')}]`}
+                            </CardText>
+                        </React.Fragment>
+                    )}
                 </React.Fragment>
             )}
             {amountSelectedToAssign > 0 && (

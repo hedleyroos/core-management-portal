@@ -11,7 +11,7 @@ import {
 } from '../../actions/manageRoles';
 import PermissionsStore from '../../auth/PermissionsStore';
 import AssignRoleCard from '../../cards/AssignRoleCard';
-import { assignRoles } from '../../manageUtils';
+import { assignRoles, getAvailableRoles } from '../../manageUtils';
 
 const mapStateToProps = state => ({
     manageRoles: state.manageRoles
@@ -19,8 +19,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     invalidToken: () => dispatch(invalidToken()),
-    setAssignmentLocation: (managerRoles, key) =>
-        dispatch(setAssignmentLocation(managerRoles, key)),
+    setAssignmentLocation: (managerRoles, availableRoles, key) =>
+        dispatch(setAssignmentLocation(managerRoles, availableRoles, key)),
     checkRoleForAssign: key => dispatch(checkRoleForAssign(key)),
     assigningRoles: assigning => dispatch(assigningRoles(assigning)),
     assignRole: (key, objectRole) => dispatch(assignRole(key, objectRole)),
@@ -39,7 +39,7 @@ class AssignUserRoleCard extends Component {
     }
 
     handleChange(key) {
-        this.props.setAssignmentLocation(this.props.manageRoles.managerRoles, key);
+        getAvailableRoles(key, this.props);
     }
 
     handleSelect(key) {
@@ -55,14 +55,25 @@ class AssignUserRoleCard extends Component {
             assigning,
             amountSelectedToAssign,
             assignmentLocation,
+            availableRoles,
+            managerRoles,
+            roleMapping,
             rolesToAssign
         } = this.props.manageRoles;
         const treeData = PermissionsStore.getTreeData();
+        const availableRoleLabels =
+            availableRoles && availableRoles.map(roleID => roleMapping[roleID].label);
+        const currentRoles =
+            assignmentLocation &&
+            managerRoles &&
+            managerRoles[assignmentLocation].map(role => role.label);
         return (
             <AssignRoleCard
                 amountSelectedToAssign={amountSelectedToAssign}
                 assigning={assigning}
                 assignmentLocation={assignmentLocation}
+                availableRoles={availableRoleLabels}
+                currentRoles={currentRoles}
                 handleAssign={this.handleAssign}
                 handleChange={this.handleChange}
                 handleSelect={this.handleSelect}
