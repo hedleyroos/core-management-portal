@@ -68,7 +68,7 @@ export const PermissionList = props => (
 
 export const PermissionCreate = props => (
     <Create {...props} title="Permission Create">
-        <SimpleForm validate={validationCreatePermission}>
+        <SimpleForm validate={validationCreatePermission} redirect="show">
             <TextInput source="name" />
             <TextInput source="description" />
         </SimpleForm>

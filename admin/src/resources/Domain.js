@@ -89,7 +89,7 @@ export const DomainList = props => (
 
 export const DomainCreate = props => (
     <Create {...props} title="Domain Create">
-        <SimpleForm validate={validationCreateDomain}>
+        <SimpleForm validate={validationCreateDomain} redirect="show">
             {PermissionsStore.getResourcePermission('domains', 'list') && (
                 <ReferenceInput
                     label="Parent"

@@ -97,7 +97,7 @@ export const AdminNoteList = props => (
 
 export const AdminNoteCreate = props => (
     <Create {...props} title="AdminNote Create">
-        <SimpleForm validate={validationCreateAdminNote}>
+        <SimpleForm validate={validationCreateAdminNote} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
                 <ReferenceInput
                     label="User"

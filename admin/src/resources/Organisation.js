@@ -68,7 +68,7 @@ export const OrganisationList = props => (
 
 export const OrganisationCreate = props => (
     <Create {...props} title="Organisation Create">
-        <SimpleForm validate={validationCreateOrganisation}>
+        <SimpleForm validate={validationCreateOrganisation} redirect="show">
             <TextInput source="name" />
             <TextInput source="description" />
         </SimpleForm>

@@ -92,7 +92,7 @@ export const UserSiteDataList = props => (
 
 export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
-        <SimpleForm validate={validationCreateUserSiteData}>
+        <SimpleForm validate={validationCreateUserSiteData} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
                 <UnlimitedDropdownInput
                     label="User"

@@ -94,7 +94,7 @@ export const InvitationSiteRoleList = props => (
 
 export const InvitationSiteRoleCreate = props => (
     <Create {...props} title="InvitationSiteRole Create">
-        <SimpleForm validate={validationCreateInvitationSiteRole}>
+        <SimpleForm validate={validationCreateInvitationSiteRole} redirect="show">
             {PermissionsStore.getResourcePermission('invitations', 'list') && (
                 <ReferenceInput
                     label="Invitation"

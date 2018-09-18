@@ -109,7 +109,7 @@ export const SiteList = props => (
 
 export const SiteCreate = props => (
     <Create {...props} title="Site Create">
-        <SimpleForm validate={validationCreateSite}>
+        <SimpleForm validate={validationCreateSite} redirect="show">
             {PermissionsStore.getResourcePermission('clients', 'list') && (
                 <ReferenceInput
                     label="Client"

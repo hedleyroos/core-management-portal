@@ -115,7 +115,7 @@ export const DeletedUserList = props => (
 
 export const DeletedUserCreate = props => (
     <Create {...props} title="DeletedUser Create">
-        <SimpleForm validate={validationCreateDeletedUser}>
+        <SimpleForm validate={validationCreateDeletedUser} redirect="show">
             <TextInput source="id" />
             <TextInput source="username" />
             <TextInput source="email" />

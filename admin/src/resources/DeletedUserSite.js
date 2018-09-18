@@ -112,7 +112,7 @@ export const DeletedUserSiteList = props => (
 
 export const DeletedUserSiteCreate = props => (
     <Create {...props} title="DeletedUserSite Create">
-        <SimpleForm validate={validationCreateDeletedUserSite}>
+        <SimpleForm validate={validationCreateDeletedUserSite} redirect="show">
             {PermissionsStore.getResourcePermission('deletedusers', 'list') && (
                 <ReferenceInput
                     label="Deleted User"

@@ -75,7 +75,7 @@ export const SiteDataSchemaList = props => (
 
 export const SiteDataSchemaCreate = props => (
     <Create {...props} title="SiteDataSchema Create">
-        <SimpleForm validate={validationCreateSiteDataSchema}>
+        <SimpleForm validate={validationCreateSiteDataSchema} redirect="show">
             {PermissionsStore.getResourcePermission('sites', 'list') && (
                 <ReferenceInput
                     label="Site"

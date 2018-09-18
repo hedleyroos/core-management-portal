@@ -70,7 +70,7 @@ export const RoleList = props => (
 
 export const RoleCreate = props => (
     <Create {...props} title="Role Create">
-        <SimpleForm validate={validationCreateRole}>
+        <SimpleForm validate={validationCreateRole} redirect="show">
             <TextInput source="label" />
             <BooleanInput source="requires_2fa" />
             <TextInput source="description" />

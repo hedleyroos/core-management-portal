@@ -69,7 +69,7 @@ export const ResourceList = props => (
 
 export const ResourceCreate = props => (
     <Create {...props} title="Resource Create">
-        <SimpleForm validate={validationCreateResource}>
+        <SimpleForm validate={validationCreateResource} redirect="show">
             <TextInput source="urn" />
             <TextInput source="description" />
         </SimpleForm>

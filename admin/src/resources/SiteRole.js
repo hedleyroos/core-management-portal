@@ -87,7 +87,7 @@ export const SiteRoleList = props => (
 
 export const SiteRoleCreate = props => (
     <Create {...props} title="SiteRole Create">
-        <SimpleForm validate={validationCreateSiteRole}>
+        <SimpleForm validate={validationCreateSiteRole} redirect="show">
             {PermissionsStore.getResourcePermission('sites', 'list') && (
                 <ReferenceInput
                     label="Site"

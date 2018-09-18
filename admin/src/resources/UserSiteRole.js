@@ -95,7 +95,7 @@ export const UserSiteRoleList = props => (
 
 export const UserSiteRoleCreate = props => (
     <Create {...props} title="UserSiteRole Create">
-        <SimpleForm validate={validationCreateUserSiteRole}>
+        <SimpleForm validate={validationCreateUserSiteRole} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
                 <UnlimitedDropdownInput
                     label="User"

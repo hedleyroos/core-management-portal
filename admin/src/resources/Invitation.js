@@ -141,7 +141,7 @@ export const InvitationList = props => (
 
 export const InvitationCreate = props => (
     <Create {...props} title="Invitation Create">
-        <SimpleForm validate={validationCreateInvitation}>
+        <SimpleForm validate={validationCreateInvitation} redirect="show">
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />

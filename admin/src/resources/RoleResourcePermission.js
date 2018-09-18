@@ -93,7 +93,7 @@ export const RoleResourcePermissionList = props => (
 
 export const RoleResourcePermissionCreate = props => (
     <Create {...props} title="RoleResourcePermission Create">
-        <SimpleForm validate={validationCreateRoleResourcePermission}>
+        <SimpleForm validate={validationCreateRoleResourcePermission} redirect="show">
             {PermissionsStore.getResourcePermission('roles', 'list') && (
                 <ReferenceInput
                     label="Role"

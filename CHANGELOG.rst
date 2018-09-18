@@ -11,6 +11,7 @@ next
 - Updated docker files to support production build with build args.
 - Hide delete user button when viewing the currently logged in user.
 - Manage Roles pages only allow assignment of roles that are available on a given domain or site, more info shown if no roles are available.
+- Create action now leads to show view, no longer the edit view.
 
 1.2.0
 -----
