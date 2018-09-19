@@ -32,6 +32,13 @@ import {
 } from './resources/Invitation';
 
 import {
+    InvitationredirecturlList,
+    InvitationredirecturlCreate,
+    InvitationredirecturlShow,
+    InvitationredirecturlEdit
+} from './resources/Invitationredirecturl';
+
+import {
     InvitationDomainRoleList,
     InvitationDomainRoleCreate,
     InvitationDomainRoleShow
@@ -195,6 +202,28 @@ const App = () => (
                     edit={
                         PermissionsStore.getResourcePermission('invitations', 'edit')
                             ? InvitationEdit
+                            : null
+                    }
+                />
+            ) : null,
+            PermissionsStore.getResourcePermission('invitationredirecturls', 'list') ? (
+                <Resource
+                    name="invitationredirecturls"
+                    list={InvitationredirecturlList}
+                    create={
+                        PermissionsStore.getResourcePermission('invitationredirecturls', 'create')
+                            ? InvitationredirecturlCreate
+                            : null
+                    }
+                    remove={
+                        PermissionsStore.getResourcePermission('invitationredirecturls', 'remove')
+                            ? Delete
+                            : null
+                    }
+                    show={InvitationredirecturlShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('invitationredirecturls', 'edit')
+                            ? InvitationredirecturlEdit
                             : null
                     }
                 />

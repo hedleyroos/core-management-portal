@@ -81,6 +81,7 @@ const GET_MANY_FILTER = {
     countries: 'country_codes',
     domains: 'domain_ids',
     invitations: 'invitation_ids',
+    invitationredirecturls: 'invitationredirecturl_ids',
     organisations: 'organisation_ids',
     permissions: 'permission_ids',
     resources: 'resource_ids',

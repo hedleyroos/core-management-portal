@@ -33,6 +33,7 @@ const ICONS = {
     domains: <DomainIcon />,
     domainroles: <AccessibilityIcon />,
     invitations: <InviteIcon />,
+    invitationredirecturls: <ListIcon />,
     invitationdomainroles: <ListIcon />,
     invitationsiteroles: <ListIcon />,
     permissions: <FingerprintIcon />,
