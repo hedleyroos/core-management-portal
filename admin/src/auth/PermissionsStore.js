@@ -28,6 +28,12 @@ class PermissionsStore {
                     remove: ['urn:ge:access_control:invitation:delete'],
                     edit: ['urn:ge:access_control:invitation:update']
                 },
+                invitationredirecturls: {
+                    list: ['urn:ge:access_control:invitationredirecturl:read'],
+                    create: ['urn:ge:access_control:invitationredirecturl:create'],
+                    remove: ['urn:ge:access_control:invitationredirecturl:delete'],
+                    edit: ['urn:ge:access_control:invitationredirecturl:update']
+                },
                 invitationdomainroles: {
                     list: ['urn:ge:access_control:invitationdomainrole:read'],
                     create: ['urn:ge:access_control:invitationdomainrole:create'],

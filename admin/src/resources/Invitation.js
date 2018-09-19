@@ -123,6 +123,20 @@ export const InvitationList = props => (
                     ) : (
                         <EmptyField />
                     )}
+                    {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') ? (
+                        <ReferenceField
+                            label="Invitation Redirect Url"
+                            source="invitation_redirect_url_id"
+                            reference="invitationredirecturls"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="url" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
                     <DateField source="expires_at" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
@@ -157,6 +171,17 @@ export const InvitationCreate = props => (
                 </ReferenceInput>
             )}
             <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
+            {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') && (
+                <ReferenceInput
+                    label="Invitation Redirect Url"
+                    source="invitation_redirect_url_id"
+                    reference="invitationredirecturls"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="url" />
+                </ReferenceInput>
+            )}
         </SimpleForm>
     </Create>
 );
@@ -196,6 +221,19 @@ export const InvitationShow = props => (
             )}
             <DateField source="expires_at" />
             <DateField source="created_at" />
+            {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') ? (
+                <ReferenceField
+                    label="Invitation Redirect Url"
+                    source="invitation_redirect_url_id"
+                    reference="invitationredirecturls"
+                    linkType="show"
+                    allowEmpty
+                >
+                    <NumberField source="url" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField
@@ -299,6 +337,17 @@ export const InvitationEdit = props => (
                 </ReferenceInput>
             )}
             <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
+            {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') && (
+                <ReferenceInput
+                    label="Invitation Redirect Url"
+                    source="invitation_redirect_url_id"
+                    reference="invitationredirecturls"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="url" />
+                </ReferenceInput>
+            )}
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField
                     label="Domain Roles"
