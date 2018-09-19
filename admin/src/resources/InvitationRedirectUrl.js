@@ -1,5 +1,5 @@
 /**
- * Generated Invitationredirecturl.js code. Edit at own risk.
+ * Generated InvitationRedirectUrl.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
@@ -22,9 +22,9 @@ import {
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
-import InvitationredirecturlFilter from '../filters/InvitationredirecturlFilter';
+import InvitationRedirectUrlFilter from '../filters/InvitationRedirectUrlFilter';
 
-const validationCreateInvitationredirecturl = values => {
+const validationCreateInvitationRedirectUrl = values => {
     const errors = {};
     if (!values.url) {
         errors.url = ['url is required'];
@@ -35,13 +35,13 @@ const validationCreateInvitationredirecturl = values => {
     return errors;
 };
 
-const validationEditInvitationredirecturl = values => {
+const validationEditInvitationRedirectUrl = values => {
     const errors = {};
     return errors;
 };
 
-export const InvitationredirecturlList = props => (
-    <List {...props} title="Invitationredirecturl List" filters={<InvitationredirecturlFilter />}>
+export const InvitationRedirectUrlList = props => (
+    <List {...props} title="InvitationRedirectUrl List" filters={<InvitationRedirectUrlFilter />}>
         <Datagrid bodyOptions={{ showRowHover: true }}>
             <NumberField source="id" sortable={false} />
             <UrlField source="url" sortable={false} />
@@ -59,17 +59,17 @@ export const InvitationredirecturlList = props => (
     </List>
 );
 
-export const InvitationredirecturlCreate = props => (
-    <Create {...props} title="Invitationredirecturl Create">
-        <SimpleForm validate={validationCreateInvitationredirecturl}>
+export const InvitationRedirectUrlCreate = props => (
+    <Create {...props} title="InvitationRedirectUrl Create">
+        <SimpleForm validate={validationCreateInvitationRedirectUrl}>
             <TextInput source="url" />
             <TextInput source="description" />
         </SimpleForm>
     </Create>
 );
 
-export const InvitationredirecturlShow = props => (
-    <Show {...props} title="Invitationredirecturl Show">
+export const InvitationRedirectUrlShow = props => (
+    <Show {...props} title="InvitationRedirectUrl Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             <UrlField source="url" />
@@ -80,9 +80,9 @@ export const InvitationredirecturlShow = props => (
     </Show>
 );
 
-export const InvitationredirecturlEdit = props => (
-    <Edit {...props} title="Invitationredirecturl Edit">
-        <SimpleForm validate={validationEditInvitationredirecturl}>
+export const InvitationRedirectUrlEdit = props => (
+    <Edit {...props} title="InvitationRedirectUrl Edit">
+        <SimpleForm validate={validationEditInvitationRedirectUrl}>
             <TextInput source="url" />
             <TextInput source="description" />
         </SimpleForm>

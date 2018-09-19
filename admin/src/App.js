@@ -32,11 +32,11 @@ import {
 } from './resources/Invitation';
 
 import {
-    InvitationredirecturlList,
-    InvitationredirecturlCreate,
-    InvitationredirecturlShow,
-    InvitationredirecturlEdit
-} from './resources/Invitationredirecturl';
+    InvitationRedirectUrlList,
+    InvitationRedirectUrlCreate,
+    InvitationRedirectUrlShow,
+    InvitationRedirectUrlEdit
+} from './resources/InvitationRedirectUrl';
 
 import {
     InvitationDomainRoleList,
@@ -209,10 +209,10 @@ const App = () => (
             PermissionsStore.getResourcePermission('invitationredirecturls', 'list') ? (
                 <Resource
                     name="invitationredirecturls"
-                    list={InvitationredirecturlList}
+                    list={InvitationRedirectUrlList}
                     create={
                         PermissionsStore.getResourcePermission('invitationredirecturls', 'create')
-                            ? InvitationredirecturlCreate
+                            ? InvitationRedirectUrlCreate
                             : null
                     }
                     remove={
@@ -220,10 +220,10 @@ const App = () => (
                             ? Delete
                             : null
                     }
-                    show={InvitationredirecturlShow}
+                    show={InvitationRedirectUrlShow}
                     edit={
                         PermissionsStore.getResourcePermission('invitationredirecturls', 'edit')
-                            ? InvitationredirecturlEdit
+                            ? InvitationRedirectUrlEdit
                             : null
                     }
                 />

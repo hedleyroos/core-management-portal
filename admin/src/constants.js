@@ -1,5 +1,6 @@
 export const TITLES = {
     domainroles: 'Domain Roles',
+    invitationredirecturls: 'Invitation Redirect URLs',
     invitationdomainroles: 'Invitation Domain Roles',
     invitationsiteroles: 'Invitiation Site Roles',
     roleresourcepermissions: 'Role Resource Permissions',

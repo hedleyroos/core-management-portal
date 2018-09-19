@@ -19,7 +19,7 @@ const validateInvitationredirecturlIds = value => {
     }
 };
 
-const InvitationredirecturlFilter = props => (
+const InvitationRedirectUrlFilter = props => (
     <Filter {...props}>
         <TextInput
             label="Invitationredirecturl Ids"
@@ -30,5 +30,5 @@ const InvitationredirecturlFilter = props => (
     </Filter>
 );
 
-export default InvitationredirecturlFilter;
+export default InvitationRedirectUrlFilter;
 /** End of Generated Code **/
