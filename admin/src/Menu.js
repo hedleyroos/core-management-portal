@@ -4,7 +4,7 @@
  **/
 import React from 'react';
 import { connect } from 'react-redux';
-import { MenuItemLink, getResources } from 'admin-on-rest';
+import { MenuItemLink, getResources, Responsive } from 'react-admin';
 import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
 import InviteIcon from 'material-ui/svg-icons/editor/insert-invitation';
 import FingerprintIcon from 'material-ui/svg-icons/action/fingerprint';
@@ -55,7 +55,7 @@ const ICONS = {
     users: <PeopleIcon />
 };
 
-const Menu = ({ resources, onMenuTap }) => {
+const Menu = ({ resources, onMenuClick, logout }) => {
     const contexts = PermissionsStore.getAllContexts();
     const showContextSwitcher = Object.keys(contexts).length > 1;
     return (
@@ -68,7 +68,7 @@ const Menu = ({ resources, onMenuTap }) => {
                             .obj.name.split('_')
                             .join(' ')
                     )}`}
-                    onClick={onMenuTap}
+                    onClick={onMenuClick}
                     leftIcon={<ContextSwitchIcon color={teal500} />}
                 />
             ) : null}
@@ -82,12 +82,12 @@ const Menu = ({ resources, onMenuTap }) => {
                                   ? TITLES[resource.name]
                                   : `${titleCase(resource.name)}`
                           }
-                          onClick={onMenuTap}
+                          onClick={onMenuClick}
                           leftIcon={ICONS[resource.name]}
                       />
                   ))
                 : ''}
-            <Logout />
+            <Responsive small={logout} medium={null} />
         </div>
     );
 };
@@ -95,5 +95,6 @@ const Menu = ({ resources, onMenuTap }) => {
 const mapStateToProps = state => ({
     resources: getResources(state)
 });
+
 export default connect(mapStateToProps)(Menu);
 /** End of Generated Menu.js Code **/

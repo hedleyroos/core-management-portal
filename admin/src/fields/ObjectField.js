@@ -1,9 +1,9 @@
 /**
- * Generic Admin on rest Custom Fields!
+ * Generic React Admin Custom Fields!
  * Change/add at your own risk!
  **/
 import React from 'react';
-import { TextField } from 'admin-on-rest';
+import { TextField } from 'react-admin';
 
 const objectToText = ModifiedComponent => props => {
     let data = props.record[props.source];

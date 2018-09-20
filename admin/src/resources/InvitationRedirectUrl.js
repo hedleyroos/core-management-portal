@@ -4,24 +4,24 @@
  **/
 import React from 'react';
 import {
-    List,
     Datagrid,
-    NumberField,
-    UrlField,
+    Show,
+    List,
     TextField,
     DateField,
-    SimpleForm,
-    Create,
     TextInput,
-    Show,
     SimpleShowLayout,
-    Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
-import EmptyField from '../fields/EmptyField';
+    NumberField,
+    UrlField,
+    Create,
+    SimpleForm,
+    Edit
+} from 'react-admin';
+
+import InvitationRedirectUrlListActions from '../customActions/InvitationRedirectUrlListActions';
+import InvitationRedirectUrlShowActions from '../customActions/InvitationRedirectUrlShowActions';
+import InvitationRedirectUrlEditActions from '../customActions/InvitationRedirectUrlEditActions';
+
 import InvitationRedirectUrlFilter from '../filters/InvitationRedirectUrlFilter';
 
 const validationCreateInvitationRedirectUrl = values => {
@@ -41,20 +41,18 @@ const validationEditInvitationRedirectUrl = values => {
 };
 
 export const InvitationRedirectUrlList = props => (
-    <List {...props} title="InvitationRedirectUrl List" filters={<InvitationRedirectUrlFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="InvitationRedirectUrl List"
+        actions={<InvitationRedirectUrlListActions />}
+        filters={<InvitationRedirectUrlFilter />}
+    >
+        <Datagrid>
             <NumberField source="id" sortable={false} />
             <UrlField source="url" sortable={false} />
             <TextField source="description" sortable={false} />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('invitationredirecturls', 'edit') ? (
-                <EditButton />
-            ) : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('invitationredirecturls', 'remove') ? (
-                <DeleteButton />
-            ) : null}
         </Datagrid>
     </List>
 );
@@ -69,7 +67,11 @@ export const InvitationRedirectUrlCreate = props => (
 );
 
 export const InvitationRedirectUrlShow = props => (
-    <Show {...props} title="InvitationRedirectUrl Show">
+    <Show
+        {...props}
+        title="InvitationRedirectUrl Show"
+        actions={<InvitationRedirectUrlShowActions />}
+    >
         <SimpleShowLayout>
             <NumberField source="id" />
             <UrlField source="url" />
@@ -81,7 +83,11 @@ export const InvitationRedirectUrlShow = props => (
 );
 
 export const InvitationRedirectUrlEdit = props => (
-    <Edit {...props} title="InvitationRedirectUrl Edit">
+    <Edit
+        {...props}
+        title="InvitationRedirectUrl Edit"
+        actions={<InvitationRedirectUrlEditActions />}
+    >
         <SimpleForm validate={validationEditInvitationRedirectUrl}>
             <TextInput source="url" />
             <TextInput source="description" />

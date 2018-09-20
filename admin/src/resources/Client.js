@@ -4,21 +4,26 @@
  **/
 import React from 'react';
 import {
-    List,
-    NumberField,
-    TextField,
-    UrlField,
-    BooleanField,
+    Datagrid,
     Show,
+    BooleanField,
+    List,
+    TextField,
     SimpleShowLayout,
-    ShowButton
-} from 'admin-on-rest';
+    NumberField,
+    UrlField
+} from 'react-admin';
+import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import ClientListActions from '../customActions/ClientListActions';
+import ClientShowActions from '../customActions/ClientShowActions';
+
 import ClientFilter from '../filters/ClientFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 export const ClientList = props => (
-    <List {...props} title="Client List" filters={<ClientFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List {...props} title="Client List" actions={<ClientListActions />} filters={<ClientFilter />}>
+        <Datagrid>
             <NumberField source="id" sortable={false} />
             <TextField source="_post_logout_redirect_uris" sortable={false} />
             <TextField source="_redirect_uris" sortable={false} />
@@ -31,13 +36,12 @@ export const ClientList = props => (
             <BooleanField source="reuse_consent" sortable={false} />
             <UrlField source="terms_url" sortable={false} />
             <UrlField source="website_url" sortable={false} />
-            <ShowButton />
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
 export const ClientShow = props => (
-    <Show {...props} title="Client Show">
+    <Show {...props} title="Client Show" actions={<ClientShowActions />}>
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="_post_logout_redirect_uris" />

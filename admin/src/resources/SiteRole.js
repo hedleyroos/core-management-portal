@@ -4,27 +4,29 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    NumberField,
+    Datagrid,
+    Show,
     BooleanField,
+    List,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    BooleanInput,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    BooleanInput,
-    Show,
-    SimpleShowLayout,
-    Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Create,
+    SimpleForm,
+    Edit
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import SiteRoleListActions from '../customActions/SiteRoleListActions';
+import SiteRoleShowActions from '../customActions/SiteRoleShowActions';
+import SiteRoleEditActions from '../customActions/SiteRoleEditActions';
+
 import SiteRoleFilter from '../filters/SiteRoleFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteRole = values => {
     const errors = {};
@@ -43,8 +45,13 @@ const validationEditSiteRole = values => {
 };
 
 export const SiteRoleList = props => (
-    <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="SiteRole List"
+        actions={<SiteRoleListActions />}
+        filters={<SiteRoleFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -76,12 +83,7 @@ export const SiteRoleList = props => (
             <BooleanField source="grant_implicitly" sortable={false} />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('siteroles', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('siteroles', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
@@ -116,7 +118,7 @@ export const SiteRoleCreate = props => (
 );
 
 export const SiteRoleShow = props => (
-    <Show {...props} title="SiteRole Show">
+    <Show {...props} title="SiteRole Show" actions={<SiteRoleShowActions />}>
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
@@ -152,7 +154,7 @@ export const SiteRoleShow = props => (
 );
 
 export const SiteRoleEdit = props => (
-    <Edit {...props} title="SiteRole Edit">
+    <Edit {...props} title="SiteRole Edit" actions={<SiteRoleEditActions />}>
         <SimpleForm validate={validationEditSiteRole}>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>

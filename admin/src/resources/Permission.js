@@ -4,25 +4,25 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    Show,
     List,
-    NumberField,
     TextField,
     DateField,
-    Responsive,
-    SimpleList,
-    SimpleForm,
-    Create,
     TextInput,
-    Show,
     SimpleShowLayout,
+    NumberField,
+    Create,
+    SimpleForm,
     Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Responsive
+} from 'react-admin';
+
+import PermissionListActions from '../customActions/PermissionListActions';
+import PermissionShowActions from '../customActions/PermissionShowActions';
+import PermissionEditActions from '../customActions/PermissionEditActions';
+
 import PermissionFilter from '../filters/PermissionFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreatePermission = values => {
     const errors = {};
@@ -38,7 +38,12 @@ const validationEditPermission = values => {
 };
 
 export const PermissionList = props => (
-    <List {...props} title="Permission List" filters={<PermissionFilter />}>
+    <List
+        {...props}
+        title="Permission List"
+        actions={<PermissionListActions />}
+        filters={<PermissionFilter />}
+    >
         <Responsive
             small={
                 <SimpleList
@@ -47,20 +52,13 @@ export const PermissionList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <Datagrid>
                     <NumberField source="id" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    {PermissionsStore.getResourcePermission('permissions', 'edit') ? (
-                        <EditButton />
-                    ) : null}
-                    <ShowButton />
-                    {PermissionsStore.getResourcePermission('permissions', 'remove') ? (
-                        <DeleteButton />
-                    ) : null}
-                </FieldSelectDatagrid>
+                </Datagrid>
             }
         />
     </List>
@@ -76,7 +74,7 @@ export const PermissionCreate = props => (
 );
 
 export const PermissionShow = props => (
-    <Show {...props} title="Permission Show">
+    <Show {...props} title="Permission Show" actions={<PermissionShowActions />}>
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="name" />
@@ -88,7 +86,7 @@ export const PermissionShow = props => (
 );
 
 export const PermissionEdit = props => (
-    <Edit {...props} title="Permission Edit">
+    <Edit {...props} title="Permission Edit" actions={<PermissionEditActions />}>
         <SimpleForm validate={validationEditPermission}>
             <TextInput source="name" />
             <TextInput source="description" />

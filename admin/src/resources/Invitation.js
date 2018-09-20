@@ -4,54 +4,32 @@
  **/
 import React from 'react';
 import {
+    Show,
     List,
-    Datagrid,
     TextField,
-    ReferenceField,
-    NumberField,
     DateField,
-    Responsive,
-    SimpleList,
-    SimpleForm,
-    Create,
     TextInput,
+    ReferenceManyField,
+    Create,
+    Edit,
+    Responsive,
+    Datagrid,
+    DateInput,
+    ReferenceField,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    Show,
-    SimpleShowLayout,
-    ReferenceManyField,
-    Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    SimpleForm
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
-import IdenticonField from '../fields/IndeticonField';
-import DateTimeInput from 'aor-datetime-input';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import InvitationListActions from '../customActions/InvitationListActions';
+import InvitationShowActions from '../customActions/InvitationShowActions';
+import InvitationEditActions from '../customActions/InvitationEditActions';
+
 import InvitationFilter from '../filters/InvitationFilter';
-import InvitationListActions from '../customActions/InvitationList'; 
-import InvitationShowActions from '../customActions/InvitationShow';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
-
-const timezoneOffset = new Date().getTimezoneOffset();
-
-const dateTimeFormatter = value => {
-    // Value received is a date object in the DateTimeInput.
-    if (timezoneOffset !== 0 && value) {
-        value = new Date(value);
-        value = new Date(value.valueOf() + timezoneOffset * 60000);
-    }
-    return value;
-};
-
-const dateTimeParser = value => {
-    // Value received is a date object in the DateTimeInput.
-    if (timezoneOffset !== 0 && value) {
-        value = new Date(value.valueOf() - timezoneOffset * 60000);
-    }
-    return value;
-};
 
 const validationCreateInvitation = values => {
     const errors = {};
@@ -90,8 +68,8 @@ export const InvitationList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
-                    <IdenticonField source="id" sortable={false} />
+                <Datagrid>
+                    <TextField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('users', 'list') ? (
                         <ReferenceField
                             label="User"
@@ -123,6 +101,8 @@ export const InvitationList = props => (
                     ) : (
                         <EmptyField />
                     )}
+                    <DateField source="expires_at" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
                     {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') ? (
                         <ReferenceField
                             label="Invitation Redirect Url"
@@ -137,17 +117,8 @@ export const InvitationList = props => (
                     ) : (
                         <EmptyField />
                     )}
-                    <DateField source="expires_at" sortable={false} />
-                    <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    {PermissionsStore.getResourcePermission('invitations', 'edit') ? (
-                        <EditButton />
-                    ) : null}
-                    <ShowButton />
-                    {PermissionsStore.getResourcePermission('invitations', 'remove') ? (
-                        <DeleteButton />
-                    ) : null}
-                </FieldSelectDatagrid>
+                </Datagrid>
             }
         />
     </List>
@@ -170,7 +141,7 @@ export const InvitationCreate = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
+            <DateInput source="expires_at" />
             {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') && (
                 <ReferenceInput
                     label="Invitation Redirect Url"
@@ -187,7 +158,7 @@ export const InvitationCreate = props => (
 );
 
 export const InvitationShow = props => (
-    <Show {...props} actions={<InvitationShowActions />} title="Invitation Show">
+    <Show {...props} title="Invitation Show" actions={<InvitationShowActions />}>
         <SimpleShowLayout>
             <TextField source="id" />
             {PermissionsStore.getResourcePermission('users', 'list') ? (
@@ -320,7 +291,7 @@ export const InvitationShow = props => (
 );
 
 export const InvitationEdit = props => (
-    <Edit {...props} title="Invitation Edit">
+    <Edit {...props} title="Invitation Edit" actions={<InvitationEditActions />}>
         <SimpleForm validate={validationEditInvitation}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
@@ -336,7 +307,7 @@ export const InvitationEdit = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
+            <DateInput source="expires_at" />
             {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') && (
                 <ReferenceInput
                     label="Invitation Redirect Url"
@@ -385,9 +356,7 @@ export const InvitationEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
             {PermissionsStore.getResourcePermission('invitationsiteroles', 'list') ? (
                 <ReferenceManyField
                     label="Site Roles"
@@ -425,9 +394,7 @@ export const InvitationEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
         </SimpleForm>
     </Edit>
 );

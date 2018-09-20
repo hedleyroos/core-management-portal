@@ -4,24 +4,26 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    Show,
     List,
-    ReferenceField,
     TextField,
-    NumberField,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    Show,
-    SimpleShowLayout,
-    DeleteButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Create,
+    SimpleForm
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import InvitationSiteRoleListActions from '../customActions/InvitationSiteRoleListActions';
+import InvitationSiteRoleShowActions from '../customActions/InvitationSiteRoleShowActions';
+
 import InvitationSiteRoleFilter from '../filters/InvitationSiteRoleFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateInvitationSiteRole = values => {
     const errors = {};
@@ -38,8 +40,13 @@ const validationCreateInvitationSiteRole = values => {
 };
 
 export const InvitationSiteRoleList = props => (
-    <List {...props} title="InvitationSiteRole List" filters={<InvitationSiteRoleFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="InvitationSiteRole List"
+        actions={<InvitationSiteRoleListActions />}
+        filters={<InvitationSiteRoleFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField
                     label="Invitation"
@@ -84,11 +91,7 @@ export const InvitationSiteRoleList = props => (
             )}
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
@@ -133,7 +136,7 @@ export const InvitationSiteRoleCreate = props => (
 );
 
 export const InvitationSiteRoleShow = props => (
-    <Show {...props} title="InvitationSiteRole Show">
+    <Show {...props} title="InvitationSiteRole Show" actions={<InvitationSiteRoleShowActions />}>
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField

@@ -4,34 +4,33 @@
  **/
 import React from 'react';
 import {
-    List,
-    Datagrid,
-    NumberField,
-    ReferenceField,
-    TextField,
+    Show,
     BooleanField,
+    List,
+    TextField,
     DateField,
-    Responsive,
-    SimpleList,
-    SimpleForm,
+    TextInput,
+    ReferenceManyField,
     Create,
+    Edit,
+    Responsive,
+    Datagrid,
+    ReferenceField,
+    BooleanInput,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    TextInput,
-    BooleanInput,
-    Show,
-    SimpleShowLayout,
-    ReferenceManyField,
-    Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import InlineTable from '../fields/InlineTable';
-import PermissionsStore from '../auth/PermissionsStore';
+    SimpleForm
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import SiteListActions from '../customActions/SiteListActions';
+import SiteShowActions from '../customActions/SiteShowActions';
+import SiteEditActions from '../customActions/SiteEditActions';
+
 import SiteFilter from '../filters/SiteFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSite = values => {
     const errors = {};
@@ -50,7 +49,7 @@ const validationEditSite = values => {
 };
 
 export const SiteList = props => (
-    <List {...props} title="Site List" filters={<SiteFilter />}>
+    <List {...props} title="Site List" actions={<SiteListActions />} filters={<SiteFilter />}>
         <Responsive
             small={
                 <SimpleList
@@ -59,7 +58,7 @@ export const SiteList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <Datagrid>
                     <NumberField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('clients', 'list') ? (
                         <ReferenceField
@@ -94,14 +93,7 @@ export const SiteList = props => (
                     <BooleanField source="is_active" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    {PermissionsStore.getResourcePermission('sites', 'edit') ? (
-                        <EditButton />
-                    ) : null}
-                    <ShowButton />
-                    {PermissionsStore.getResourcePermission('sites', 'remove') ? (
-                        <DeleteButton />
-                    ) : null}
-                </FieldSelectDatagrid>
+                </Datagrid>
             }
         />
     </List>
@@ -140,7 +132,7 @@ export const SiteCreate = props => (
 );
 
 export const SiteShow = props => (
-    <Show {...props} title="Site Show">
+    <Show {...props} title="Site Show" actions={<SiteShowActions />}>
         <SimpleShowLayout>
             <NumberField source="id" />
             {PermissionsStore.getResourcePermission('clients', 'list') ? (
@@ -174,13 +166,6 @@ export const SiteShow = props => (
             <BooleanField source="is_active" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <InlineTable
-                label="Users"
-                url="users_with_roles_for_site"
-                linkField="username"
-                linkedResource="users"
-                paginate
-            />
             {PermissionsStore.getResourcePermission('siteroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
@@ -209,7 +194,7 @@ export const SiteShow = props => (
 );
 
 export const SiteEdit = props => (
-    <Edit {...props} title="Site Edit">
+    <Edit {...props} title="Site Edit" actions={<SiteEditActions />}>
         <SimpleForm validate={validationEditSite}>
             {PermissionsStore.getResourcePermission('clients', 'list') && (
                 <ReferenceInput
@@ -236,13 +221,6 @@ export const SiteEdit = props => (
             <TextInput source="name" />
             <TextInput source="description" />
             <BooleanInput source="is_active" />
-            <InlineTable
-                label="Users"
-                url="users_with_roles_for_site"
-                linkField="username"
-                linkedResource="users"
-                paginate
-            />
             {PermissionsStore.getResourcePermission('siteroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
@@ -263,9 +241,7 @@ export const SiteEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
         </SimpleForm>
     </Edit>
 );

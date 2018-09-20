@@ -4,7 +4,7 @@
  **/
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import { NotFound } from 'admin-on-rest';
+import { NotFound } from 'react-admin';
 
 import NoPermissions from './pages/NoPermissions';
 

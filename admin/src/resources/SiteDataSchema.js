@@ -4,27 +4,29 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    Show,
     List,
-    ReferenceField,
-    NumberField,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    LongTextInput,
-    Show,
-    SimpleShowLayout,
+    Create,
+    SimpleForm,
     Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
-import EmptyField from '../fields/EmptyField';
+    LongTextInput
+} from 'react-admin';
 import ObjectField from '../fields/ObjectField';
+import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import SiteDataSchemaListActions from '../customActions/SiteDataSchemaListActions';
+import SiteDataSchemaShowActions from '../customActions/SiteDataSchemaShowActions';
+import SiteDataSchemaEditActions from '../customActions/SiteDataSchemaEditActions';
+
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};
@@ -43,8 +45,13 @@ const validationEditSiteDataSchema = values => {
 };
 
 export const SiteDataSchemaList = props => (
-    <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="SiteDataSchema List"
+        actions={<SiteDataSchemaListActions />}
+        filters={<SiteDataSchemaFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -62,14 +69,7 @@ export const SiteDataSchemaList = props => (
             <ObjectField source="schema" sortable={false} addLabel />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('sitedataschemas', 'edit') ? (
-                <EditButton />
-            ) : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('sitedataschemas', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
@@ -103,7 +103,7 @@ export const SiteDataSchemaCreate = props => (
 );
 
 export const SiteDataSchemaShow = props => (
-    <Show {...props} title="SiteDataSchema Show">
+    <Show {...props} title="SiteDataSchema Show" actions={<SiteDataSchemaShowActions />}>
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
@@ -126,7 +126,7 @@ export const SiteDataSchemaShow = props => (
 );
 
 export const SiteDataSchemaEdit = props => (
-    <Edit {...props} title="SiteDataSchema Edit">
+    <Edit {...props} title="SiteDataSchema Edit" actions={<SiteDataSchemaEditActions />}>
         <SimpleForm validate={validationEditSiteDataSchema}>
             <LongTextInput
                 source="schema"

@@ -4,57 +4,43 @@
  **/
 import React from 'react';
 import {
-    List,
     Datagrid,
-    TextField,
-    BooleanField,
-    DateField,
-    UrlField,
-    ReferenceField,
-    NumberField,
-    Responsive,
-    SimpleList,
     Show,
-    SimpleShowLayout,
+    BooleanField,
+    List,
+    TextField,
+    ReferenceField,
+    DateField,
+    DateInput,
     ReferenceManyField,
-    SimpleForm,
-    Edit,
     TextInput,
     BooleanInput,
-    DateInput,
+    SimpleShowLayout,
+    UrlField,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import Card from 'material-ui/Card/Card';
-import CardText from 'material-ui/Card/CardText';
-import CardTitle from 'material-ui/Card/CardTitle';
-
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
-import PermissionsStore from '../auth/PermissionsStore';
-import EmptyField from '../fields/EmptyField';
-import IdenticonField from '../fields/IndeticonField';
+    SimpleForm,
+    Edit,
+    Responsive
+} from 'react-admin';
 import ObjectField from '../fields/ObjectField';
+import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import UserListActions from '../customActions/UserListActions';
+import UserShowActions from '../customActions/UserShowActions';
+import UserEditActions from '../customActions/UserEditActions';
+
 import UserFilter from '../filters/UserFilter';
-import UserShowActions from '../customActions/UserShow';
 
 const validationEditUser = values => {
     const errors = {};
     return errors;
 };
 
-export const UserListNoSites = props => (
-    <Card>
-        <CardTitle title="User List" />
-        <CardText>
-            There are no sites linked to the current context. Users Page not available.
-        </CardText>
-    </Card>
-);
-
 export const UserList = props => (
-    <List {...props} title="User List" filters={<UserFilter />}>
+    <List {...props} title="User List" actions={<UserListActions />} filters={<UserFilter />}>
         <Responsive
             small={
                 <SimpleList
@@ -63,8 +49,8 @@ export const UserList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
-                    <IdenticonField source="id" />
+                <Datagrid>
+                    <TextField source="id" />
                     <TextField source="username" sortable={false} />
                     <TextField source="first_name" sortable={false} />
                     <TextField source="last_name" sortable={false} />
@@ -108,11 +94,7 @@ export const UserList = props => (
                     )}
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    {PermissionsStore.getResourcePermission('users', 'edit') ? (
-                        <EditButton />
-                    ) : null}
-                    <ShowButton />
-                </FieldSelectDatagrid>
+                </Datagrid>
             }
         />
     </List>
@@ -268,7 +250,7 @@ export const UserShow = props => (
 );
 
 export const UserEdit = props => (
-    <Edit {...props} title="User Edit">
+    <Edit {...props} title="User Edit" actions={<UserEditActions />}>
         <SimpleForm validate={validationEditUser}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
@@ -328,9 +310,7 @@ export const UserEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
             {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
                 <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
@@ -364,9 +344,7 @@ export const UserEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
             {PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
                 <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
@@ -388,9 +366,7 @@ export const UserEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
         </SimpleForm>
     </Edit>
 );

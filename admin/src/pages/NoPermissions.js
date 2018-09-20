@@ -1,7 +1,7 @@
 import React from 'react';
 import NotAllowed from 'material-ui/svg-icons/av/not-interested';
 
-import { styles } from '../Theme';
+import { styles } from '../theme';
 
 const NoPermissions = () => (
 	<div style={styles.main}>

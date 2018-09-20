@@ -4,23 +4,25 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    Show,
     List,
-    ReferenceField,
-    NumberField,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    Show,
-    SimpleShowLayout,
-    DeleteButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Create,
+    SimpleForm
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import RoleResourcePermissionListActions from '../customActions/RoleResourcePermissionListActions';
+import RoleResourcePermissionShowActions from '../customActions/RoleResourcePermissionShowActions';
+
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};
@@ -37,8 +39,13 @@ const validationCreateRoleResourcePermission = values => {
 };
 
 export const RoleResourcePermissionList = props => (
-    <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="RoleResourcePermission List"
+        actions={<RoleResourcePermissionListActions />}
+        filters={<RoleResourcePermissionFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField
                     label="Role"
@@ -83,11 +90,7 @@ export const RoleResourcePermissionList = props => (
             )}
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
@@ -132,7 +135,11 @@ export const RoleResourcePermissionCreate = props => (
 );
 
 export const RoleResourcePermissionShow = props => (
-    <Show {...props} title="RoleResourcePermission Show">
+    <Show
+        {...props}
+        title="RoleResourcePermission Show"
+        actions={<RoleResourcePermissionShowActions />}
+    >
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField

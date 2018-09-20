@@ -4,31 +4,30 @@
  **/
 import React from 'react';
 import {
-    List,
     Datagrid,
-    NumberField,
-    TextField,
-    BooleanField,
-    DateField,
-    Responsive,
-    SimpleList,
-    SimpleForm,
-    Create,
-    TextInput,
-    BooleanInput,
     Show,
-    SimpleShowLayout,
+    BooleanField,
+    List,
+    TextField,
+    DateField,
+    TextInput,
     ReferenceManyField,
-    ReferenceField,
+    BooleanInput,
+    SimpleShowLayout,
+    NumberField,
+    Create,
+    SimpleForm,
     Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Responsive
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import RoleListActions from '../customActions/RoleListActions';
+import RoleShowActions from '../customActions/RoleShowActions';
+import RoleEditActions from '../customActions/RoleEditActions';
+
 import RoleFilter from '../filters/RoleFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateRole = values => {
     const errors = {};
@@ -44,25 +43,18 @@ const validationEditRole = values => {
 };
 
 export const RoleList = props => (
-    <List {...props} title="Role List" filters={<RoleFilter />}>
+    <List {...props} title="Role List" actions={<RoleListActions />} filters={<RoleFilter />}>
         <Responsive
             small={<SimpleList primaryText={record => `Label: ${record.label}`} />}
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <Datagrid>
                     <NumberField source="id" sortable={false} />
                     <TextField source="label" sortable={false} />
                     <BooleanField source="requires_2fa" sortable={false} />
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    {PermissionsStore.getResourcePermission('roles', 'edit') ? (
-                        <EditButton />
-                    ) : null}
-                    <ShowButton />
-                    {PermissionsStore.getResourcePermission('roles', 'remove') ? (
-                        <DeleteButton />
-                    ) : null}
-                </FieldSelectDatagrid>
+                </Datagrid>
             }
         />
     </List>
@@ -79,7 +71,7 @@ export const RoleCreate = props => (
 );
 
 export const RoleShow = props => (
-    <Show {...props} title="Role Show">
+    <Show {...props} title="Role Show" actions={<RoleShowActions />}>
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="label" />
@@ -132,7 +124,7 @@ export const RoleShow = props => (
 );
 
 export const RoleEdit = props => (
-    <Edit {...props} title="Role Edit">
+    <Edit {...props} title="Role Edit" actions={<RoleEditActions />}>
         <SimpleForm validate={validationEditRole}>
             <TextInput source="label" />
             <BooleanInput source="requires_2fa" />
@@ -174,9 +166,7 @@ export const RoleEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
         </SimpleForm>
     </Edit>
 );

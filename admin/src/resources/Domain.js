@@ -4,32 +4,31 @@
  **/
 import React from 'react';
 import {
+    Show,
     List,
-    Datagrid,
-    NumberField,
-    ReferenceField,
     TextField,
     DateField,
-    Responsive,
-    SimpleList,
-    SimpleForm,
+    TextInput,
+    ReferenceManyField,
     Create,
+    Edit,
+    Responsive,
+    Datagrid,
+    ReferenceField,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    TextInput,
-    Show,
-    SimpleShowLayout,
-    ReferenceManyField,
-    Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import InlineTable from '../fields/InlineTable';
-import PermissionsStore from '../auth/PermissionsStore';
+    SimpleForm
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import DomainListActions from '../customActions/DomainListActions';
+import DomainShowActions from '../customActions/DomainShowActions';
+import DomainEditActions from '../customActions/DomainEditActions';
+
 import DomainFilter from '../filters/DomainFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateDomain = values => {
     const errors = {};
@@ -45,7 +44,7 @@ const validationEditDomain = values => {
 };
 
 export const DomainList = props => (
-    <List {...props} title="Domain List" filters={<DomainFilter />}>
+    <List {...props} title="Domain List" actions={<DomainListActions />} filters={<DomainFilter />}>
         <Responsive
             small={
                 <SimpleList
@@ -54,7 +53,7 @@ export const DomainList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <Datagrid>
                     <NumberField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('domains', 'list') ? (
                         <ReferenceField
@@ -74,14 +73,7 @@ export const DomainList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    {PermissionsStore.getResourcePermission('domains', 'edit') ? (
-                        <EditButton />
-                    ) : null}
-                    <ShowButton />
-                    {PermissionsStore.getResourcePermission('domains', 'remove') ? (
-                        <DeleteButton />
-                    ) : null}
-                </FieldSelectDatagrid>
+                </Datagrid>
             }
         />
     </List>
@@ -108,7 +100,7 @@ export const DomainCreate = props => (
 );
 
 export const DomainShow = props => (
-    <Show {...props} title="Domain Show">
+    <Show {...props} title="Domain Show" actions={<DomainShowActions />}>
         <SimpleShowLayout>
             <NumberField source="id" />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
@@ -128,13 +120,6 @@ export const DomainShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
-            <InlineTable
-                label="Users"
-                url="users_with_roles_for_domain"
-                linkField="username"
-                linkedResource="users"
-                paginate
-            />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
@@ -175,7 +160,7 @@ export const DomainShow = props => (
 );
 
 export const DomainEdit = props => (
-    <Edit {...props} title="Domain Edit">
+    <Edit {...props} title="Domain Edit" actions={<DomainEditActions />}>
         <SimpleForm validate={validationEditDomain}>
             {PermissionsStore.getResourcePermission('domains', 'list') && (
                 <ReferenceInput
@@ -190,13 +175,6 @@ export const DomainEdit = props => (
             )}
             <TextInput source="name" />
             <TextInput source="description" />
-            <InlineTable
-                label="Users"
-                url="users_with_roles_for_domain"
-                linkField="username"
-                linkedResource="users"
-                paginate
-            />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
@@ -206,9 +184,7 @@ export const DomainEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
             {PermissionsStore.getResourcePermission('domainroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
                     <Datagrid bodyOptions={{ showRowHover: true }}>
@@ -229,9 +205,7 @@ export const DomainEdit = props => (
                         <DateField source="updated_at" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
         </SimpleForm>
     </Edit>
 );

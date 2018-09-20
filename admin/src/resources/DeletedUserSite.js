@@ -4,47 +4,30 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    Show,
     List,
-    ReferenceField,
     TextField,
-    NumberField,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    DateInput,
+    TextInput,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    TextInput,
-    Show,
-    SimpleShowLayout,
-    Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Create,
+    SimpleForm,
+    Edit
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
-import DateTimeInput from 'aor-datetime-input';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import DeletedUserSiteListActions from '../customActions/DeletedUserSiteListActions';
+import DeletedUserSiteShowActions from '../customActions/DeletedUserSiteShowActions';
+import DeletedUserSiteEditActions from '../customActions/DeletedUserSiteEditActions';
+
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
-
-const timezoneOffset = new Date().getTimezoneOffset();
-
-const dateTimeFormatter = value => {
-    // Value received is a date object in the DateTimeInput.
-    if (timezoneOffset !== 0 && value) {
-        value = new Date(value);
-        value = new Date(value.valueOf() + timezoneOffset * 60000);
-    }
-    return value;
-};
-
-const dateTimeParser = value => {
-    // Value received is a date object in the DateTimeInput.
-    if (timezoneOffset !== 0 && value) {
-        value = new Date(value.valueOf() - timezoneOffset * 60000);
-    }
-    return value;
-};
 
 const validationCreateDeletedUserSite = values => {
     const errors = {};
@@ -63,8 +46,13 @@ const validationEditDeletedUserSite = values => {
 };
 
 export const DeletedUserSiteList = props => (
-    <List {...props} title="DeletedUserSite List" filters={<DeletedUserSiteFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="DeletedUserSite List"
+        actions={<DeletedUserSiteListActions />}
+        filters={<DeletedUserSiteFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField
                     label="Deleted User"
@@ -99,14 +87,7 @@ export const DeletedUserSiteList = props => (
             <TextField source="deletion_requested_via" sortable={false} />
             <DateField source="deletion_confirmed_at" sortable={false} />
             <TextField source="deletion_confirmed_via" sortable={false} />
-            {PermissionsStore.getResourcePermission('deletedusersites', 'edit') ? (
-                <EditButton />
-            ) : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('deletedusersites', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
@@ -135,24 +116,16 @@ export const DeletedUserSiteCreate = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <DateTimeInput
-                source="deletion_requested_at"
-                format={dateTimeFormatter}
-                parse={dateTimeParser}
-            />
+            <DateInput source="deletion_requested_at" />
             <TextInput source="deletion_requested_via" />
-            <DateTimeInput
-                source="deletion_confirmed_at"
-                format={dateTimeFormatter}
-                parse={dateTimeParser}
-            />
+            <DateInput source="deletion_confirmed_at" />
             <TextInput source="deletion_confirmed_via" />
         </SimpleForm>
     </Create>
 );
 
 export const DeletedUserSiteShow = props => (
-    <Show {...props} title="DeletedUserSite Show">
+    <Show {...props} title="DeletedUserSite Show" actions={<DeletedUserSiteShowActions />}>
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField
@@ -191,19 +164,11 @@ export const DeletedUserSiteShow = props => (
 );
 
 export const DeletedUserSiteEdit = props => (
-    <Edit {...props} title="DeletedUserSite Edit">
+    <Edit {...props} title="DeletedUserSite Edit" actions={<DeletedUserSiteEditActions />}>
         <SimpleForm validate={validationEditDeletedUserSite}>
-            <DateTimeInput
-                source="deletion_requested_at"
-                format={dateTimeFormatter}
-                parse={dateTimeParser}
-            />
+            <DateInput source="deletion_requested_at" />
             <TextInput source="deletion_requested_via" />
-            <DateTimeInput
-                source="deletion_confirmed_at"
-                format={dateTimeFormatter}
-                parse={dateTimeParser}
-            />
+            <DateInput source="deletion_confirmed_at" />
             <TextInput source="deletion_confirmed_via" />
         </SimpleForm>
     </Edit>

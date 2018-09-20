@@ -4,25 +4,26 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    Show,
     List,
-    ReferenceField,
     TextField,
-    NumberField,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    Show,
-    SimpleShowLayout,
-    DeleteButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Create,
+    SimpleForm
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import UserSiteRoleListActions from '../customActions/UserSiteRoleListActions';
+import UserSiteRoleShowActions from '../customActions/UserSiteRoleShowActions';
+
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
-import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserSiteRole = values => {
     const errors = {};
@@ -39,8 +40,13 @@ const validationCreateUserSiteRole = values => {
 };
 
 export const UserSiteRoleList = props => (
-    <List {...props} title="UserSiteRole List" filters={<UserSiteRoleFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="UserSiteRole List"
+        actions={<UserSiteRoleListActions />}
+        filters={<UserSiteRoleFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -85,11 +91,7 @@ export const UserSiteRoleList = props => (
             )}
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('usersiteroles', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
@@ -97,13 +99,15 @@ export const UserSiteRoleCreate = props => (
     <Create {...props} title="UserSiteRole Create">
         <SimpleForm validate={validationCreateUserSiteRole} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
-                <UnlimitedDropdownInput
+                <ReferenceInput
                     label="User"
                     source="user_id"
                     reference="users"
-                    optionText="username"
-                    filter={{ site_ids: '' }}
-                />
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="username" />
+                </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('sites', 'list') && (
                 <ReferenceInput
@@ -132,7 +136,7 @@ export const UserSiteRoleCreate = props => (
 );
 
 export const UserSiteRoleShow = props => (
-    <Show {...props} title="UserSiteRole Show">
+    <Show {...props} title="UserSiteRole Show" actions={<UserSiteRoleShowActions />}>
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField

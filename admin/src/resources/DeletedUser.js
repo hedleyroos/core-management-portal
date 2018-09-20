@@ -4,49 +4,29 @@
  **/
 import React from 'react';
 import {
-    List,
     Datagrid,
-    TextField,
-    DateField,
-    ReferenceField,
-    Responsive,
-    SimpleList,
-    SimpleForm,
-    Create,
-    TextInput,
     Show,
-    SimpleShowLayout,
+    List,
+    TextField,
+    ReferenceField,
+    DateField,
+    TextInput,
     ReferenceManyField,
-    NumberField,
+    DateInput,
+    SimpleShowLayout,
+    Create,
+    SimpleForm,
     Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Responsive
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
-import DateTimeInput from 'aor-datetime-input';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import DeletedUserListActions from '../customActions/DeletedUserListActions';
+import DeletedUserShowActions from '../customActions/DeletedUserShowActions';
+import DeletedUserEditActions from '../customActions/DeletedUserEditActions';
+
 import DeletedUserFilter from '../filters/DeletedUserFilter';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
-
-const timezoneOffset = new Date().getTimezoneOffset();
-
-const dateTimeFormatter = value => {
-    // Value received is a date object in the DateTimeInput.
-    if (timezoneOffset !== 0 && value) {
-        value = new Date(value);
-        value = new Date(value.valueOf() + timezoneOffset * 60000);
-    }
-    return value;
-};
-
-const dateTimeParser = value => {
-    // Value received is a date object in the DateTimeInput.
-    if (timezoneOffset !== 0 && value) {
-        value = new Date(value.valueOf() - timezoneOffset * 60000);
-    }
-    return value;
-};
 
 const validationCreateDeletedUser = values => {
     const errors = {};
@@ -68,7 +48,12 @@ const validationEditDeletedUser = values => {
 };
 
 export const DeletedUserList = props => (
-    <List {...props} title="DeletedUser List" filters={<DeletedUserFilter />}>
+    <List
+        {...props}
+        title="DeletedUser List"
+        actions={<DeletedUserListActions />}
+        filters={<DeletedUserFilter />}
+    >
         <Responsive
             small={
                 <SimpleList
@@ -77,7 +62,7 @@ export const DeletedUserList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <Datagrid>
                     <TextField source="id" sortable={false} />
                     <TextField source="username" sortable={false} />
                     <TextField source="email" sortable={false} />
@@ -86,28 +71,21 @@ export const DeletedUserList = props => (
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
                     <DateField source="deleted_at" sortable={false} />
-                    {PermissionsStore.getResourcePermission('deleters', 'list') ? (
+                    {PermissionsStore.getResourcePermission('users', 'list') ? (
                         <ReferenceField
-                            label="Deleter"
+                            label="User"
                             source="deleter_id"
-                            reference="deleters"
+                            reference="users"
                             sortable={false}
                             linkType="show"
                             allowEmpty
                         >
-                            <TextField source="" />
+                            <TextField source="username" />
                         </ReferenceField>
                     ) : (
                         <EmptyField />
                     )}
-                    {PermissionsStore.getResourcePermission('deletedusers', 'edit') ? (
-                        <EditButton />
-                    ) : null}
-                    <ShowButton />
-                    {PermissionsStore.getResourcePermission('deletedusers', 'remove') ? (
-                        <DeleteButton />
-                    ) : null}
-                </FieldSelectDatagrid>
+                </Datagrid>
             }
         />
     </List>
@@ -126,7 +104,7 @@ export const DeletedUserCreate = props => (
 );
 
 export const DeletedUserShow = props => (
-    <Show {...props} title="DeletedUser Show">
+    <Show {...props} title="DeletedUser Show" actions={<DeletedUserShowActions />}>
         <SimpleShowLayout>
             <TextField source="id" />
             <TextField source="username" />
@@ -136,15 +114,15 @@ export const DeletedUserShow = props => (
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <DateField source="deleted_at" />
-            {PermissionsStore.getResourcePermission('deleters', 'list') ? (
+            {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
-                    label="Deleter"
+                    label="User"
                     source="deleter_id"
-                    reference="deleters"
+                    reference="users"
                     linkType="show"
                     allowEmpty
                 >
-                    <TextField source="" />
+                    <TextField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
@@ -185,13 +163,13 @@ export const DeletedUserShow = props => (
 );
 
 export const DeletedUserEdit = props => (
-    <Edit {...props} title="DeletedUser Edit">
+    <Edit {...props} title="DeletedUser Edit" actions={<DeletedUserEditActions />}>
         <SimpleForm validate={validationEditDeletedUser}>
             <TextInput source="username" />
             <TextInput source="email" />
             <TextInput source="msisdn" />
             <TextInput source="reason" />
-            <DateTimeInput source="deleted_at" format={dateTimeFormatter} parse={dateTimeParser} />
+            <DateInput source="deleted_at" />
             {PermissionsStore.getResourcePermission('deletedusersites', 'list') ? (
                 <ReferenceManyField
                     label="Sites which the user visited"
@@ -220,9 +198,7 @@ export const DeletedUserEdit = props => (
                         <TextField source="deletion_confirmed_via" />
                     </Datagrid>
                 </ReferenceManyField>
-            ) : (
-                <EmptyField />
-            )}
+            ) : null}
         </SimpleForm>
     </Edit>
 );

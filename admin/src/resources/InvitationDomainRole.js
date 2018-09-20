@@ -4,25 +4,26 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    Show,
     List,
-    ReferenceField,
     TextField,
-    NumberField,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    Show,
-    SimpleShowLayout,
-    DeleteButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Create,
+    SimpleForm
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import InvitationDomainRoleListActions from '../customActions/InvitationDomainRoleListActions';
+import InvitationDomainRoleShowActions from '../customActions/InvitationDomainRoleShowActions';
+
 import InvitationDomainRoleFilter from '../filters/InvitationDomainRoleFilter';
-import DomainTreeInput from '../inputs/DomainTreeInput';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateInvitationDomainRole = values => {
     const errors = {};
@@ -39,8 +40,13 @@ const validationCreateInvitationDomainRole = values => {
 };
 
 export const InvitationDomainRoleList = props => (
-    <List {...props} title="InvitationDomainRole List" filters={<InvitationDomainRoleFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="InvitationDomainRole List"
+        actions={<InvitationDomainRoleListActions />}
+        filters={<InvitationDomainRoleFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField
                     label="Invitation"
@@ -85,11 +91,7 @@ export const InvitationDomainRoleList = props => (
             )}
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('invitationdomainroles', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
@@ -108,7 +110,15 @@ export const InvitationDomainRoleCreate = props => (
                 </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('domains', 'list') && (
-                <DomainTreeInput label="Domain" source="domain_id" />
+                <ReferenceInput
+                    label="Domain"
+                    source="domain_id"
+                    reference="domains"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('roles', 'list') && (
                 <ReferenceInput
@@ -126,7 +136,11 @@ export const InvitationDomainRoleCreate = props => (
 );
 
 export const InvitationDomainRoleShow = props => (
-    <Show {...props} title="InvitationDomainRole Show">
+    <Show
+        {...props}
+        title="InvitationDomainRole Show"
+        actions={<InvitationDomainRoleShowActions />}
+    >
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField

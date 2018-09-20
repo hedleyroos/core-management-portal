@@ -4,28 +4,29 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    NumberField,
+    Datagrid,
+    Show,
     BooleanField,
+    List,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    BooleanInput,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    BooleanInput,
-    Show,
-    SimpleShowLayout,
-    Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    Create,
+    SimpleForm,
+    Edit
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import DomainRoleListActions from '../customActions/DomainRoleListActions';
+import DomainRoleShowActions from '../customActions/DomainRoleShowActions';
+import DomainRoleEditActions from '../customActions/DomainRoleEditActions';
+
 import DomainRoleFilter from '../filters/DomainRoleFilter';
-import DomainTreeInput from '../inputs/DomainTreeInput';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateDomainRole = values => {
     const errors = {};
@@ -44,8 +45,13 @@ const validationEditDomainRole = values => {
 };
 
 export const DomainRoleList = props => (
-    <List {...props} title="DomainRole List" filters={<DomainRoleFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="DomainRole List"
+        actions={<DomainRoleListActions />}
+        filters={<DomainRoleFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField
                     label="Domain"
@@ -77,19 +83,24 @@ export const DomainRoleList = props => (
             <BooleanField source="grant_implicitly" sortable={false} />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('domainroles', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('domainroles', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
 export const DomainRoleCreate = props => (
     <Create {...props} title="DomainRole Create">
         <SimpleForm validate={validationCreateDomainRole} redirect="show">
-            {PermissionsStore.getResourcePermission('domains', 'list') && <DomainTreeInput label="Domain" source="domain_id" />}
+            {PermissionsStore.getResourcePermission('domains', 'list') && (
+                <ReferenceInput
+                    label="Domain"
+                    source="domain_id"
+                    reference="domains"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="name" />
+                </ReferenceInput>
+            )}
             {PermissionsStore.getResourcePermission('roles', 'list') && (
                 <ReferenceInput
                     label="Role"
@@ -107,7 +118,7 @@ export const DomainRoleCreate = props => (
 );
 
 export const DomainRoleShow = props => (
-    <Show {...props} title="DomainRole Show">
+    <Show {...props} title="DomainRole Show" actions={<DomainRoleShowActions />}>
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField
@@ -143,7 +154,7 @@ export const DomainRoleShow = props => (
 );
 
 export const DomainRoleEdit = props => (
-    <Edit {...props} title="DomainRole Edit">
+    <Edit {...props} title="DomainRole Edit" actions={<DomainRoleEditActions />}>
         <SimpleForm validate={validationEditDomainRole}>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>

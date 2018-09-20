@@ -4,29 +4,30 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    Show,
     List,
-    ReferenceField,
     TextField,
-    NumberField,
     DateField,
-    SimpleForm,
-    Create,
+    ReferenceField,
+    SimpleShowLayout,
+    NumberField,
     ReferenceInput,
     SelectInput,
-    LongTextInput,
-    Show,
-    SimpleShowLayout,
+    Create,
+    SimpleForm,
     Edit,
-    DeleteButton,
-    EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
-import EmptyField from '../fields/EmptyField';
+    LongTextInput
+} from 'react-admin';
 import ObjectField from '../fields/ObjectField';
+import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import UserSiteDataListActions from '../customActions/UserSiteDataListActions';
+import UserSiteDataShowActions from '../customActions/UserSiteDataShowActions';
+import UserSiteDataEditActions from '../customActions/UserSiteDataEditActions';
+
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
-import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
-import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserSiteData = values => {
     const errors = {};
@@ -48,8 +49,13 @@ const validationEditUserSiteData = values => {
 };
 
 export const UserSiteDataList = props => (
-    <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="UserSiteData List"
+        actions={<UserSiteDataListActions />}
+        filters={<UserSiteDataFilter />}
+    >
+        <Datagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -81,12 +87,7 @@ export const UserSiteDataList = props => (
             <ObjectField source="data" sortable={false} addLabel />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('usersitedata', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('usersitedata', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </FieldSelectDatagrid>
+        </Datagrid>
     </List>
 );
 
@@ -94,13 +95,15 @@ export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
         <SimpleForm validate={validationCreateUserSiteData} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
-                <UnlimitedDropdownInput
+                <ReferenceInput
                     label="User"
                     source="user_id"
                     reference="users"
-                    optionText="username"
-                    filter={{ site_ids: '' }}
-                />
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="username" />
+                </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('sites', 'list') && (
                 <ReferenceInput
@@ -129,7 +132,7 @@ export const UserSiteDataCreate = props => (
 );
 
 export const UserSiteDataShow = props => (
-    <Show {...props} title="UserSiteData Show">
+    <Show {...props} title="UserSiteData Show" actions={<UserSiteDataShowActions />}>
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
@@ -165,7 +168,7 @@ export const UserSiteDataShow = props => (
 );
 
 export const UserSiteDataEdit = props => (
-    <Edit {...props} title="UserSiteData Edit">
+    <Edit {...props} title="UserSiteData Edit" actions={<UserSiteDataEditActions />}>
         <SimpleForm validate={validationEditUserSiteData}>
             <LongTextInput
                 source="data"
