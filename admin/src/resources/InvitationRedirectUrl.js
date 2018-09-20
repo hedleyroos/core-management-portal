@@ -61,7 +61,7 @@ export const InvitationRedirectUrlList = props => (
 
 export const InvitationRedirectUrlCreate = props => (
     <Create {...props} title="InvitationRedirectUrl Create">
-        <SimpleForm validate={validationCreateInvitationRedirectUrl}>
+        <SimpleForm validate={validationCreateInvitationRedirectUrl} redirect="show">
             <TextInput source="url" />
             <TextInput source="description" />
         </SimpleForm>
