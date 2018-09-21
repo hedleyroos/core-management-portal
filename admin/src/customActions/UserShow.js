@@ -8,9 +8,9 @@ import { ListButton, RefreshButton, EditButton } from 'admin-on-rest';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import { styles } from '../Theme';
+import { styles } from '../theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
-import { httpClient } from '../restClient';
+import { httpClient } from '../dataProvider';
 import PermissionsStore from '../auth/PermissionsStore';
 import ConfirmDialog from '../pages/ConfirmDialog';
 import { PERMISSIONS } from '../constants';

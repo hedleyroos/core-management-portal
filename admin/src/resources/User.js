@@ -4,32 +4,34 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    BooleanField,
-    List,
-    TextField,
-    ReferenceField,
+    Edit,
+    NumberField,
     DateField,
-    DateInput,
+    UrlField,
+    ReferenceInput,
+    Datagrid,
+    BooleanField,
+    ReferenceField,
+    SimpleForm,
+    Responsive,
+    SelectInput,
+    BooleanInput,
+    SimpleList,
+    TextField,
     ReferenceManyField,
     TextInput,
-    BooleanInput,
+    DateInput,
+    List,
     SimpleShowLayout,
-    UrlField,
-    NumberField,
-    ReferenceInput,
-    SelectInput,
-    SimpleForm,
-    Edit,
-    Responsive
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
 import ObjectField from '../fields/ObjectField';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import UserListActions from '../customActions/UserListActions';
-import UserShowActions from '../customActions/UserShowActions';
 import UserEditActions from '../customActions/UserEditActions';
 
 import UserFilter from '../filters/UserFilter';
@@ -40,7 +42,7 @@ const validationEditUser = values => {
 };
 
 export const UserList = props => (
-    <List {...props} title="User List" actions={<UserListActions />} filters={<UserFilter />}>
+    <List {...props} title="User List" filters={<UserFilter />} bulkActionButtons={false}>
         <Responsive
             small={
                 <SimpleList
@@ -94,6 +96,9 @@ export const UserList = props => (
                     )}
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -101,7 +106,7 @@ export const UserList = props => (
 );
 
 export const UserShow = props => (
-    <Show {...props} title="User Show" actions={<UserShowActions />}>
+    <Show {...props} title="User Show">
         <SimpleShowLayout>
             <TextField source="id" />
             <TextField source="username" />

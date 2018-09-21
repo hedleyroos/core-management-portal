@@ -13,7 +13,6 @@ import {
 } from '../utils';
 import WaitingPage from '../pages/WaitingPage';
 
-
 class OIDCCallback extends Component {
     constructor(props) {
         super(props);
@@ -66,7 +65,7 @@ class OIDCCallback extends Component {
                                 .then(() => {
                                     // Load user settings. This may fail and login can continue.
                                     loadGMPUserSettings(parsedQuery.access_token).then(() => {
-                                        this.setState({ loginComplete: true });
+                                        window.location.href = process.env.REACT_APP_PORTAL_URL;
                                     });
                                 })
                                 .catch(error => {
@@ -91,15 +90,7 @@ class OIDCCallback extends Component {
         );
     }
     render() {
-        return !this.state.failure ? (
-            this.state.loginComplete ? (
-                <Redirect push to="/" />
-            ) : (
-                <WaitingPage />
-            )
-        ) : (
-            <Redirect push to="/login" />
-        );
+        return !this.state.failure ? <WaitingPage /> : <Redirect push to="/login" />;
     }
 }
 

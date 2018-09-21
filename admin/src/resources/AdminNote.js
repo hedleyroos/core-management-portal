@@ -4,27 +4,29 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    ReferenceField,
-    TextInput,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
-    SelectInput,
-    Create,
-    SimpleForm,
     Edit,
-    Responsive
+    NumberField,
+    Create,
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    ReferenceField,
+    SimpleForm,
+    Responsive,
+    SelectInput,
+    SimpleList,
+    TextField,
+    TextInput,
+    List,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 
-import AdminNoteListActions from '../customActions/AdminNoteListActions';
-import AdminNoteShowActions from '../customActions/AdminNoteShowActions';
 import AdminNoteEditActions from '../customActions/AdminNoteEditActions';
 
 import AdminNoteFilter from '../filters/AdminNoteFilter';
@@ -46,12 +48,7 @@ const validationEditAdminNote = values => {
 };
 
 export const AdminNoteList = props => (
-    <List
-        {...props}
-        title="AdminNote List"
-        actions={<AdminNoteListActions />}
-        filters={<AdminNoteFilter />}
-    >
+    <List {...props} title="AdminNote List" filters={<AdminNoteFilter />} bulkActionButtons={false}>
         <Responsive
             small={<SimpleList primaryText={record => `Note: ${record.note}`} />}
             medium={
@@ -88,6 +85,9 @@ export const AdminNoteList = props => (
                     <TextField source="note" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -114,7 +114,7 @@ export const AdminNoteCreate = props => (
 );
 
 export const AdminNoteShow = props => (
-    <Show {...props} title="AdminNote Show" actions={<AdminNoteShowActions />}>
+    <Show {...props} title="AdminNote Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             {PermissionsStore.getResourcePermission('users', 'list') ? (

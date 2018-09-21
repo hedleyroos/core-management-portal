@@ -1,9 +1,11 @@
 /**
- * Generated restClient.js code. Edit at own risk.
+ * Generated dataProvider.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
 import { stringify } from 'query-string';
 import { fetchUtils } from 'react-admin';
+
+import PermissionsStore from './auth/PermissionsStore';
 
 export const GET_LIST = 'GET_LIST';
 export const GET_ONE = 'GET_ONE';
@@ -11,12 +13,26 @@ export const GET_MANY = 'GET_MANY';
 export const GET_MANY_REFERENCE = 'GET_MANY_REFERENCE';
 export const CREATE = 'CREATE';
 export const UPDATE = 'UPDATE';
+export const OPERATIONAL = 'OPERATIONAL';
 export const DELETE = 'DELETE';
 
-const COMPOSITE_KEY_RESOURSES = {};
+const COMPOSITE_KEY_RESOURSES = {
+    domainroles: ['domain_id', 'role_id'],
+    deletedusersites: ['deleted_user_id', 'site_id'],
+    invitationdomainroles: ['invitation_id', 'domain_id', 'role_id'],
+    invitationsiteroles: ['invitation_id', 'site_id', 'role_id'],
+    roleresourcepermissions: ['role_id', 'resource_id', 'permission_id'],
+    siteroles: ['site_id', 'role_id'],
+    userdomainroles: ['user_id', 'domain_id', 'role_id'],
+    usersiteroles: ['user_id', 'site_id', 'role_id'],
+    usersitedata: ['user_id', 'site_id']
+};
 
 // For models with different Primary Key fields rather than 'id'.
-const PK_MAPPING = {};
+const PK_MAPPING = {
+    sitedataschemas: 'site_id',
+    countries: 'code'
+};
 
 const FILTER_LENGTHS = {
     users: {
@@ -48,7 +64,31 @@ const FILTER_LENGTHS = {
     }
 };
 
-const GET_MANY_FILTER = {};
+// These are default filters that were required for the
+// context implied filter. Permanent filter props on listings were not
+// used as they could not be overridden. To override the default provide
+// the same filter in your dataProvider call. eg. `{ site_ids: '' }`
+// NOTE: Must be a function as the PermissionsStore can change.
+const DEFAULT_FILTERS = () => ({
+    users: {
+        site_ids: PermissionsStore.getSiteIDs()
+    }
+});
+
+const GET_MANY_FILTER = {
+    adminnotes: 'admin_note_ids',
+    clients: 'client_ids',
+    countries: 'country_codes',
+    domains: 'domain_ids',
+    invitations: 'invitation_ids',
+    invitationredirecturls: 'invitationredirecturl_ids',
+    organisations: 'organisation_ids',
+    permissions: 'permission_ids',
+    resources: 'resource_ids',
+    roles: 'role_ids',
+    sites: 'site_ids',
+    users: 'user_ids'
+};
 
 /**
  * @param {String} apiUrl The base API url
@@ -82,6 +122,13 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
 
             if (params.filter) {
                 let filterLengths = FILTER_LENGTHS[resource];
+                const defaultFilters = DEFAULT_FILTERS()[resource];
+                if (defaultFilters) {
+                    query = {
+                        ...query,
+                        ...defaultFilters
+                    };
+                }
                 Object.keys(params.filter).forEach(key => {
                     let filter =
                         params.filter[key] instanceof Object
@@ -128,6 +175,14 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
             url = `${apiUrl}/${resource}`;
             options.method = 'POST';
             options.body = JSON.stringify(params.data);
+            break;
+        case OPERATIONAL:
+            const pathParameters = params.pathParameters
+                ? params.pathParameters.reduce((pathString, value) => pathString + `/${value}`, '')
+                : '';
+            url = `${apiUrl}/ops/${resource}` + pathParameters;
+            options.method = params.method;
+            options.body = params.data ? JSON.stringify(params.data) : null;
             break;
         case DELETE:
             url = `${apiUrl}/${resource}/${params.id}`;
@@ -244,9 +299,13 @@ export const httpClient = (url, options = {}) => {
         options.headers = new Headers({ Accept: 'application/json' });
     }
     const id_token = localStorage.getItem('id_token');
+    const permissions = JSON.parse(localStorage.getItem('permissions'));
     options.headers.set('Authorization', `Bearer ${id_token}`);
+    if (permissions) {
+        options.headers.set('X-GE-Portal-Context', permissions.currentContext.key);
+    }
     return fetchUtils.fetchJson(url, options);
 };
 
-export default dataProvider;
+export default dataProvider(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
 /** End of Generated Code **/

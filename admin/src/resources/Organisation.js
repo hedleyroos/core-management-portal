@@ -4,22 +4,24 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    TextInput,
-    SimpleShowLayout,
-    NumberField,
-    Create,
-    SimpleForm,
     Edit,
-    Responsive
+    NumberField,
+    SimpleList,
+    TextField,
+    Create,
+    DateField,
+    Datagrid,
+    TextInput,
+    List,
+    SimpleForm,
+    Responsive,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
 
-import OrganisationListActions from '../customActions/OrganisationListActions';
-import OrganisationShowActions from '../customActions/OrganisationShowActions';
 import OrganisationEditActions from '../customActions/OrganisationEditActions';
 
 import OrganisationFilter from '../filters/OrganisationFilter';
@@ -41,8 +43,8 @@ export const OrganisationList = props => (
     <List
         {...props}
         title="Organisation List"
-        actions={<OrganisationListActions />}
         filters={<OrganisationFilter />}
+        bulkActionButtons={false}
     >
         <Responsive
             small={
@@ -58,6 +60,9 @@ export const OrganisationList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -74,7 +79,7 @@ export const OrganisationCreate = props => (
 );
 
 export const OrganisationShow = props => (
-    <Show {...props} title="Organisation Show" actions={<OrganisationShowActions />}>
+    <Show {...props} title="Organisation Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="name" />

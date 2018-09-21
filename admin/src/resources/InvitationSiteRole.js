@@ -4,24 +4,23 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    ReferenceField,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
     SelectInput,
+    NumberField,
+    TextField,
     Create,
-    SimpleForm
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    ReferenceField,
+    List,
+    SimpleForm,
+    SimpleShowLayout,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
-
-import InvitationSiteRoleListActions from '../customActions/InvitationSiteRoleListActions';
-import InvitationSiteRoleShowActions from '../customActions/InvitationSiteRoleShowActions';
+import EmptyField from '../fields/EmptyField';
 
 import InvitationSiteRoleFilter from '../filters/InvitationSiteRoleFilter';
 
@@ -43,8 +42,8 @@ export const InvitationSiteRoleList = props => (
     <List
         {...props}
         title="InvitationSiteRole List"
-        actions={<InvitationSiteRoleListActions />}
         filters={<InvitationSiteRoleFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
@@ -91,6 +90,8 @@ export const InvitationSiteRoleList = props => (
             )}
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -136,7 +137,7 @@ export const InvitationSiteRoleCreate = props => (
 );
 
 export const InvitationSiteRoleShow = props => (
-    <Show {...props} title="InvitationSiteRole Show" actions={<InvitationSiteRoleShowActions />}>
+    <Show {...props} title="InvitationSiteRole Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField

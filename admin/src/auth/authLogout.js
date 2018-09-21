@@ -2,8 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import MenuItem from 'material-ui/MenuItem';
-import ExitIcon from 'material-ui/svg-icons/action/power-settings-new';
+import ExitIcon from '@material-ui/icons/PowerSettingsNew';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import { generateQueryString } from '../utils';
 
@@ -22,11 +24,16 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-const Logout = ({ logout }) => (
-    <MenuItem className="logout" leftIcon={<ExitIcon />} primaryText="Logout" onClick={logout} />
+const AuthLogoutButton = ({ classes, logout }) => (
+    <MenuItem onClick={logout}>
+        <ListItemIcon>
+            <ExitIcon />
+        </ListItemIcon>
+        <ListItemText inset primary="Logout" />
+    </MenuItem>
 );
 
 export default connect(
     null,
     mapDispatchToProps
-)(Logout);
+)(AuthLogoutButton);

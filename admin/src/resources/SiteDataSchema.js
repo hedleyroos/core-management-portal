@@ -4,26 +4,27 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    DateField,
-    ReferenceField,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
-    SelectInput,
-    Create,
-    SimpleForm,
     Edit,
-    LongTextInput
+    SelectInput,
+    NumberField,
+    LongTextInput,
+    Create,
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    ReferenceField,
+    List,
+    SimpleForm,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
 import ObjectField from '../fields/ObjectField';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import SiteDataSchemaListActions from '../customActions/SiteDataSchemaListActions';
-import SiteDataSchemaShowActions from '../customActions/SiteDataSchemaShowActions';
 import SiteDataSchemaEditActions from '../customActions/SiteDataSchemaEditActions';
 
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
@@ -48,8 +49,8 @@ export const SiteDataSchemaList = props => (
     <List
         {...props}
         title="SiteDataSchema List"
-        actions={<SiteDataSchemaListActions />}
         filters={<SiteDataSchemaFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
@@ -69,6 +70,9 @@ export const SiteDataSchemaList = props => (
             <ObjectField source="schema" sortable={false} addLabel />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <EditButton />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -103,7 +107,7 @@ export const SiteDataSchemaCreate = props => (
 );
 
 export const SiteDataSchemaShow = props => (
-    <Show {...props} title="SiteDataSchema Show" actions={<SiteDataSchemaShowActions />}>
+    <Show {...props} title="SiteDataSchema Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField

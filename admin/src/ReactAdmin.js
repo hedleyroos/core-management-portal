@@ -2,17 +2,19 @@
  * Generated ReactAdmin.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
+import 'antd/dist/antd.css';
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
 
+import AuthLoginPage from './auth/authLogin';
+import AuthLogoutButton from './auth/authLogout';
 import authProvider from './auth/authProvider';
 import PermissionsStore from './auth/PermissionsStore';
 import catchAll from './catchAll';
-import dataProvider, { httpClient } from './dataProvider';
+import customRoutes from './customRoutes';
+import dataProvider from './dataProvider';
 import MyLayout from './MyLayout';
-import { muiTheme } from './theme';
-
-import { UserSiteDataShow, UserSiteDataEdit, UserSiteDataCreate } from './resources/UserSiteData';
+import { theme } from './theme';
 
 import { DomainList, DomainCreate, DomainShow, DomainEdit } from './resources/Domain';
 
@@ -131,27 +133,14 @@ const ReactAdmin = () => (
         appLayout={MyLayout}
         authProvider={authProvider}
         catchAll={catchAll}
-        dataProvider={dataProvider('rest_server_url', httpClient)}
+        customRoutes={customRoutes}
+        dataProvider={dataProvider}
+        loginPage={AuthLoginPage}
+        logoutButton={AuthLogoutButton}
         title="Girl Effect Management Portal"
-        theme={muiTheme}
+        theme={theme}
     >
         {permissions => [
-            PermissionsStore.getResourcePermission('ops', 'list') ? (
-                <Resource
-                    name="ops"
-                    show={UserSiteDataShow}
-                    edit={
-                        PermissionsStore.getResourcePermission('ops', 'edit')
-                            ? UserSiteDataEdit
-                            : null
-                    }
-                    create={
-                        PermissionsStore.getResourcePermission('ops', 'create')
-                            ? UserSiteDataCreate
-                            : null
-                    }
-                />
-            ) : null,
             PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <Resource
                     name="domains"
@@ -472,7 +461,8 @@ const ReactAdmin = () => (
                     show={UserShow}
                     edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
                 />
-            ) : null
+            ) : null,
+            <Resource name="catchAll" />
         ]}
     </Admin>
 );

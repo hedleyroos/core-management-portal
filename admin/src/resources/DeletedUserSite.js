@@ -4,27 +4,28 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    ReferenceField,
-    DateInput,
-    TextInput,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
+    Edit,
     SelectInput,
+    NumberField,
+    TextField,
     Create,
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    TextInput,
+    DateInput,
+    ReferenceField,
+    List,
     SimpleForm,
-    Edit
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import DeletedUserSiteListActions from '../customActions/DeletedUserSiteListActions';
-import DeletedUserSiteShowActions from '../customActions/DeletedUserSiteShowActions';
 import DeletedUserSiteEditActions from '../customActions/DeletedUserSiteEditActions';
 
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
@@ -49,8 +50,8 @@ export const DeletedUserSiteList = props => (
     <List
         {...props}
         title="DeletedUserSite List"
-        actions={<DeletedUserSiteListActions />}
         filters={<DeletedUserSiteFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
@@ -87,6 +88,9 @@ export const DeletedUserSiteList = props => (
             <TextField source="deletion_requested_via" sortable={false} />
             <DateField source="deletion_confirmed_at" sortable={false} />
             <TextField source="deletion_confirmed_via" sortable={false} />
+            <EditButton />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -125,7 +129,7 @@ export const DeletedUserSiteCreate = props => (
 );
 
 export const DeletedUserSiteShow = props => (
-    <Show {...props} title="DeletedUserSite Show" actions={<DeletedUserSiteShowActions />}>
+    <Show {...props} title="DeletedUserSite Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField

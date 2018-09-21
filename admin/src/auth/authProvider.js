@@ -1,4 +1,4 @@
-import { AUTH_CHECK, AUTH_ERROR } from 'admin-on-rest';
+import { AUTH_CHECK, AUTH_ERROR } from 'react-admin';
 import { apiErrorHandler } from '../utils';
 
 export default (type, params) => {

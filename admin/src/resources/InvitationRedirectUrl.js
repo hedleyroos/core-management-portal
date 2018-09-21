@@ -4,22 +4,23 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    TextInput,
-    SimpleShowLayout,
+    Edit,
     NumberField,
-    UrlField,
+    TextField,
     Create,
+    DateField,
+    UrlField,
+    Datagrid,
+    TextInput,
+    List,
     SimpleForm,
-    Edit
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
 
-import InvitationRedirectUrlListActions from '../customActions/InvitationRedirectUrlListActions';
-import InvitationRedirectUrlShowActions from '../customActions/InvitationRedirectUrlShowActions';
 import InvitationRedirectUrlEditActions from '../customActions/InvitationRedirectUrlEditActions';
 
 import InvitationRedirectUrlFilter from '../filters/InvitationRedirectUrlFilter';
@@ -44,8 +45,8 @@ export const InvitationRedirectUrlList = props => (
     <List
         {...props}
         title="InvitationRedirectUrl List"
-        actions={<InvitationRedirectUrlListActions />}
         filters={<InvitationRedirectUrlFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             <NumberField source="id" sortable={false} />
@@ -53,6 +54,9 @@ export const InvitationRedirectUrlList = props => (
             <TextField source="description" sortable={false} />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <EditButton />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -67,11 +71,7 @@ export const InvitationRedirectUrlCreate = props => (
 );
 
 export const InvitationRedirectUrlShow = props => (
-    <Show
-        {...props}
-        title="InvitationRedirectUrl Show"
-        actions={<InvitationRedirectUrlShowActions />}
-    >
+    <Show {...props} title="InvitationRedirectUrl Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             <UrlField source="url" />

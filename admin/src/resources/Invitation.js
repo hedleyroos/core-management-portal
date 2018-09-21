@@ -5,28 +5,30 @@
 import React from 'react';
 import {
     Show,
-    List,
-    TextField,
-    DateField,
-    TextInput,
-    ReferenceManyField,
-    Create,
     Edit,
-    Responsive,
-    Datagrid,
-    DateInput,
-    ReferenceField,
-    SimpleShowLayout,
     NumberField,
+    Create,
+    DateField,
     ReferenceInput,
+    Datagrid,
+    ReferenceField,
+    SimpleForm,
+    Responsive,
     SelectInput,
-    SimpleForm
+    SimpleList,
+    TextField,
+    ReferenceManyField,
+    TextInput,
+    DateInput,
+    List,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import InvitationListActions from '../customActions/InvitationListActions';
-import InvitationShowActions from '../customActions/InvitationShowActions';
 import InvitationEditActions from '../customActions/InvitationEditActions';
 
 import InvitationFilter from '../filters/InvitationFilter';
@@ -57,8 +59,8 @@ export const InvitationList = props => (
     <List
         {...props}
         title="Invitation List"
-        actions={<InvitationListActions />}
         filters={<InvitationFilter />}
+        bulkActionButtons={false}
     >
         <Responsive
             small={
@@ -118,6 +120,9 @@ export const InvitationList = props => (
                         <EmptyField />
                     )}
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -158,7 +163,7 @@ export const InvitationCreate = props => (
 );
 
 export const InvitationShow = props => (
-    <Show {...props} title="Invitation Show" actions={<InvitationShowActions />}>
+    <Show {...props} title="Invitation Show">
         <SimpleShowLayout>
             <TextField source="id" />
             {PermissionsStore.getResourcePermission('users', 'list') ? (

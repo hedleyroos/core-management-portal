@@ -4,27 +4,30 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    BooleanField,
-    List,
-    TextField,
-    DateField,
-    TextInput,
-    ReferenceManyField,
-    BooleanInput,
-    SimpleShowLayout,
+    Edit,
     NumberField,
     Create,
+    DateField,
+    Datagrid,
+    ReferenceField,
+    BooleanField,
     SimpleForm,
-    Edit,
-    Responsive
+    Responsive,
+    BooleanInput,
+    SimpleList,
+    TextField,
+    ReferenceManyField,
+    TextInput,
+    List,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import RoleListActions from '../customActions/RoleListActions';
-import RoleShowActions from '../customActions/RoleShowActions';
 import RoleEditActions from '../customActions/RoleEditActions';
 
 import RoleFilter from '../filters/RoleFilter';
@@ -43,7 +46,7 @@ const validationEditRole = values => {
 };
 
 export const RoleList = props => (
-    <List {...props} title="Role List" actions={<RoleListActions />} filters={<RoleFilter />}>
+    <List {...props} title="Role List" filters={<RoleFilter />} bulkActionButtons={false}>
         <Responsive
             small={<SimpleList primaryText={record => `Label: ${record.label}`} />}
             medium={
@@ -54,6 +57,9 @@ export const RoleList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -71,7 +77,7 @@ export const RoleCreate = props => (
 );
 
 export const RoleShow = props => (
-    <Show {...props} title="Role Show" actions={<RoleShowActions />}>
+    <Show {...props} title="Role Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="label" />

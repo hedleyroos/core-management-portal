@@ -4,27 +4,28 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    ReferenceField,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
-    SelectInput,
-    Create,
-    SimpleForm,
     Edit,
-    LongTextInput
+    SelectInput,
+    NumberField,
+    LongTextInput,
+    TextField,
+    Create,
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    ReferenceField,
+    List,
+    SimpleForm,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
 import ObjectField from '../fields/ObjectField';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import UserSiteDataListActions from '../customActions/UserSiteDataListActions';
-import UserSiteDataShowActions from '../customActions/UserSiteDataShowActions';
 import UserSiteDataEditActions from '../customActions/UserSiteDataEditActions';
 
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
@@ -52,8 +53,8 @@ export const UserSiteDataList = props => (
     <List
         {...props}
         title="UserSiteData List"
-        actions={<UserSiteDataListActions />}
         filters={<UserSiteDataFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
@@ -87,6 +88,9 @@ export const UserSiteDataList = props => (
             <ObjectField source="data" sortable={false} addLabel />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <EditButton />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -132,7 +136,7 @@ export const UserSiteDataCreate = props => (
 );
 
 export const UserSiteDataShow = props => (
-    <Show {...props} title="UserSiteData Show" actions={<UserSiteDataShowActions />}>
+    <Show {...props} title="UserSiteData Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField

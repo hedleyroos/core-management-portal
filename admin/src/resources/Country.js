@@ -4,27 +4,20 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
+    SimpleList,
     TextField,
+    Datagrid,
+    List,
     Responsive,
     SimpleShowLayout,
-    SimpleList
+    ShowButton
 } from 'react-admin';
-
-import CountryListActions from '../customActions/CountryListActions';
-import CountryShowActions from '../customActions/CountryShowActions';
 
 import CountryFilter from '../filters/CountryFilter';
 
 export const CountryList = props => (
-    <List
-        {...props}
-        title="Country List"
-        actions={<CountryListActions />}
-        filters={<CountryFilter />}
-    >
+    <List {...props} title="Country List" filters={<CountryFilter />} bulkActionButtons={false}>
         <Responsive
             small={
                 <SimpleList
@@ -36,6 +29,7 @@ export const CountryList = props => (
                 <Datagrid>
                     <TextField source="code" sortable={false} />
                     <TextField source="name" sortable={false} />
+                    <ShowButton />
                 </Datagrid>
             }
         />
@@ -43,7 +37,7 @@ export const CountryList = props => (
 );
 
 export const CountryShow = props => (
-    <Show {...props} title="Country Show" actions={<CountryShowActions />}>
+    <Show {...props} title="Country Show">
         <SimpleShowLayout>
             <TextField source="code" />
             <TextField source="name" />

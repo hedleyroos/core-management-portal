@@ -4,26 +4,27 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    BooleanField,
-    List,
-    DateField,
+    Edit,
+    SelectInput,
     ReferenceField,
     BooleanInput,
-    SimpleShowLayout,
     NumberField,
-    ReferenceInput,
-    SelectInput,
     Create,
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    BooleanField,
+    List,
     SimpleForm,
-    Edit
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import DomainRoleListActions from '../customActions/DomainRoleListActions';
-import DomainRoleShowActions from '../customActions/DomainRoleShowActions';
 import DomainRoleEditActions from '../customActions/DomainRoleEditActions';
 
 import DomainRoleFilter from '../filters/DomainRoleFilter';
@@ -48,8 +49,8 @@ export const DomainRoleList = props => (
     <List
         {...props}
         title="DomainRole List"
-        actions={<DomainRoleListActions />}
         filters={<DomainRoleFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
@@ -83,6 +84,9 @@ export const DomainRoleList = props => (
             <BooleanField source="grant_implicitly" sortable={false} />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <EditButton />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -118,7 +122,7 @@ export const DomainRoleCreate = props => (
 );
 
 export const DomainRoleShow = props => (
-    <Show {...props} title="DomainRole Show" actions={<DomainRoleShowActions />}>
+    <Show {...props} title="DomainRole Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField

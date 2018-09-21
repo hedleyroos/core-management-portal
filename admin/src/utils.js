@@ -1,7 +1,7 @@
 import { notification } from 'antd';
-import { fetchUtils } from 'admin-on-rest';
+import { fetchUtils } from 'react-admin';
 
-import restClient, { GET_LIST, OPERATIONAL } from './restClient';
+import dataProvider, { GET_LIST, OPERATIONAL } from './dataProvider';
 import { PLACE_MAPPING } from './constants';
 import { handleAPIError } from './manageUtils';
 
@@ -27,7 +27,7 @@ export const loadGMPUserSettings = access_token => {
             Authorization: `Bearer ${access_token}`
         })
     };
-    const promises = [restClient(OPERATIONAL, 'usersitedata', {}), fetchUtils.fetchJson(OIDC_USER_URL, options)];
+    const promises = [dataProvider(OPERATIONAL, 'usersitedata', {}), fetchUtils.fetchJson(OIDC_USER_URL, options)];
     // Map all promises catch -> undefined.
     // This allows the Promise.all to resolve regardless of api failures.
     return Promise.all(promises.map(p => p.catch(() => undefined))).then(([userSiteData, userInfo]) => {
@@ -66,7 +66,7 @@ export const updateGMPUserSiteData = (resource, field) => {
     localStorage.setItem('userSiteData', JSON.stringify(newSettings));
 
     // Update backend
-    return restClient(OPERATIONAL, 'usersitedata', {
+    return dataProvider(OPERATIONAL, 'usersitedata', {
         method: 'PUT',
         data: {
             data: newSettings
@@ -259,7 +259,7 @@ export const getSitesForContext = async currentContext => {
         if (contextType === 's') {
             return contextID;
         }
-        let results = await restClient(OPERATIONAL, 'get_sites_under_domain', {
+        let results = await dataProvider(OPERATIONAL, 'get_sites_under_domain', {
             pathParameters: [contextID]
         });
         results = results.data;
@@ -275,7 +275,7 @@ export const getUntilDone = async (resource, filter = {}, perPage, maxAttempts =
     let done = false;
     let page = 1;
     while (!done && page !== maxAttempts) {
-        let response = await restClient(GET_LIST, resource, {
+        let response = await dataProvider(GET_LIST, resource, {
             pagination: {
                 perPage: perPage || 0,
                 page

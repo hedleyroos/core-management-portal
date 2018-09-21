@@ -86,12 +86,15 @@ The reason behind NOT using redux for this was that the AOR resource list in `Ap
 
 There is a context switcher on the site where the user can select the different domain or site context they would like to view the admin in, thus changing the permissions. The context switcher route has a props `noLayout` to unmount the `Admin` in order to refresh the Redux store when the permissions have been changed.
 
+## My Layout
+
+The new React admin way to customise layout is through a `appLayout` props, where a `Mylayout` component is given containing your desired `Menu`, `AppBar` and `Notification` components.
 
 ## Menu
 
-A custom `Menu` component is provided to the AOR `Admin` component. This `Menu` provides a place to have custom labels and material-ui icons for each resource. There are mappings for the icons in the component itself and the custom titles are housed in `constants.js`.
+A custom `Menu` component is provided to a `MyLayout` component which is given to the React Admin `Admin` component. This `Menu` provides a place to have custom labels and material-ui icons for each resource. There are mappings for the icons in the component itself and the custom titles are housed in `constants.js`.
 
-## restClient.js
+## dataProvider.js
 
 This code is provided by the generator but the generator is out of date for this (no time to update it...). Therefore it is quite custom at the moment, DO NOT OVERWRITE WITH THE GENERATION OF NEW CODE.
 

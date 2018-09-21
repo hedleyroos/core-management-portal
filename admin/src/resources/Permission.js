@@ -4,22 +4,24 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    TextInput,
-    SimpleShowLayout,
-    NumberField,
-    Create,
-    SimpleForm,
     Edit,
-    Responsive
+    NumberField,
+    SimpleList,
+    TextField,
+    Create,
+    DateField,
+    Datagrid,
+    TextInput,
+    List,
+    SimpleForm,
+    Responsive,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
 
-import PermissionListActions from '../customActions/PermissionListActions';
-import PermissionShowActions from '../customActions/PermissionShowActions';
 import PermissionEditActions from '../customActions/PermissionEditActions';
 
 import PermissionFilter from '../filters/PermissionFilter';
@@ -41,8 +43,8 @@ export const PermissionList = props => (
     <List
         {...props}
         title="Permission List"
-        actions={<PermissionListActions />}
         filters={<PermissionFilter />}
+        bulkActionButtons={false}
     >
         <Responsive
             small={
@@ -58,6 +60,9 @@ export const PermissionList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -74,7 +79,7 @@ export const PermissionCreate = props => (
 );
 
 export const PermissionShow = props => (
-    <Show {...props} title="Permission Show" actions={<PermissionShowActions />}>
+    <Show {...props} title="Permission Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="name" />

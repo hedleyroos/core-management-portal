@@ -69,7 +69,7 @@ parameters:
     minimum: 1
     maximum: 100
     default: 20
-    x-exclude: true
+    x-admin-exclude: true
 
   optional_offset:
     description: >-
@@ -81,7 +81,7 @@ parameters:
     type: integer
     default: 0
     minimum: 0
-    x-exclude: true
+    x-admin-exclude: true
 
   optional_domain_filter:
     description: An optional query parameter to filter by domain_id
@@ -2247,6 +2247,7 @@ paths:
     get:
       description: Read user site specific data. The user and site are inferred from the token.
       operationId: implicit_usersitedata_read
+      x-admin-exclude: true
       produces:
       - application/json
       responses:
@@ -2259,6 +2260,7 @@ paths:
     put:
       description: Update user site specific data. The user and site are inferred from the token.
       operationId: implicit_usersitedata_update
+      x-admin-exclude: true
       parameters:
       - in: body
         name: data
@@ -2278,6 +2280,7 @@ paths:
     post:
       description: Create user site specific data. The user and site are inferred from the token.
       operationId: implicit_usersitedata_create
+      x-admin-exclude: true
       parameters:
       - in: body
         name: data

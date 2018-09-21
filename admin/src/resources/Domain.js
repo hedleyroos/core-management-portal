@@ -5,27 +5,29 @@
 import React from 'react';
 import {
     Show,
-    List,
-    TextField,
-    DateField,
-    TextInput,
-    ReferenceManyField,
-    Create,
     Edit,
-    Responsive,
+    NumberField,
+    Create,
+    DateField,
+    ReferenceInput,
     Datagrid,
     ReferenceField,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
+    SimpleForm,
+    Responsive,
     SelectInput,
-    SimpleForm
+    SimpleList,
+    TextField,
+    ReferenceManyField,
+    TextInput,
+    List,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import DomainListActions from '../customActions/DomainListActions';
-import DomainShowActions from '../customActions/DomainShowActions';
 import DomainEditActions from '../customActions/DomainEditActions';
 
 import DomainFilter from '../filters/DomainFilter';
@@ -44,7 +46,7 @@ const validationEditDomain = values => {
 };
 
 export const DomainList = props => (
-    <List {...props} title="Domain List" actions={<DomainListActions />} filters={<DomainFilter />}>
+    <List {...props} title="Domain List" filters={<DomainFilter />} bulkActionButtons={false}>
         <Responsive
             small={
                 <SimpleList
@@ -73,6 +75,9 @@ export const DomainList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -100,7 +105,7 @@ export const DomainCreate = props => (
 );
 
 export const DomainShow = props => (
-    <Show {...props} title="Domain Show" actions={<DomainShowActions />}>
+    <Show {...props} title="Domain Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (

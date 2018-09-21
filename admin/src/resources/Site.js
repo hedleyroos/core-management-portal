@@ -5,29 +5,31 @@
 import React from 'react';
 import {
     Show,
-    BooleanField,
-    List,
-    TextField,
-    DateField,
-    TextInput,
-    ReferenceManyField,
-    Create,
     Edit,
-    Responsive,
-    Datagrid,
-    ReferenceField,
-    BooleanInput,
-    SimpleShowLayout,
     NumberField,
+    Create,
+    DateField,
     ReferenceInput,
+    Datagrid,
+    BooleanField,
+    ReferenceField,
+    SimpleForm,
+    Responsive,
     SelectInput,
-    SimpleForm
+    BooleanInput,
+    SimpleList,
+    TextField,
+    ReferenceManyField,
+    TextInput,
+    List,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import SiteListActions from '../customActions/SiteListActions';
-import SiteShowActions from '../customActions/SiteShowActions';
 import SiteEditActions from '../customActions/SiteEditActions';
 
 import SiteFilter from '../filters/SiteFilter';
@@ -49,7 +51,7 @@ const validationEditSite = values => {
 };
 
 export const SiteList = props => (
-    <List {...props} title="Site List" actions={<SiteListActions />} filters={<SiteFilter />}>
+    <List {...props} title="Site List" filters={<SiteFilter />} bulkActionButtons={false}>
         <Responsive
             small={
                 <SimpleList
@@ -93,6 +95,9 @@ export const SiteList = props => (
                     <BooleanField source="is_active" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -132,7 +137,7 @@ export const SiteCreate = props => (
 );
 
 export const SiteShow = props => (
-    <Show {...props} title="Site Show" actions={<SiteShowActions />}>
+    <Show {...props} title="Site Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             {PermissionsStore.getResourcePermission('clients', 'list') ? (

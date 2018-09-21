@@ -4,26 +4,29 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    ReferenceField,
-    DateField,
-    TextInput,
-    ReferenceManyField,
-    DateInput,
-    SimpleShowLayout,
-    Create,
-    SimpleForm,
     Edit,
-    Responsive
+    NumberField,
+    SimpleList,
+    TextField,
+    Create,
+    DateField,
+    ReferenceManyField,
+    Datagrid,
+    TextInput,
+    DateInput,
+    ReferenceField,
+    List,
+    SimpleForm,
+    Responsive,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import DeletedUserListActions from '../customActions/DeletedUserListActions';
-import DeletedUserShowActions from '../customActions/DeletedUserShowActions';
 import DeletedUserEditActions from '../customActions/DeletedUserEditActions';
 
 import DeletedUserFilter from '../filters/DeletedUserFilter';
@@ -51,8 +54,8 @@ export const DeletedUserList = props => (
     <List
         {...props}
         title="DeletedUser List"
-        actions={<DeletedUserListActions />}
         filters={<DeletedUserFilter />}
+        bulkActionButtons={false}
     >
         <Responsive
             small={
@@ -85,6 +88,9 @@ export const DeletedUserList = props => (
                     ) : (
                         <EmptyField />
                     )}
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -104,7 +110,7 @@ export const DeletedUserCreate = props => (
 );
 
 export const DeletedUserShow = props => (
-    <Show {...props} title="DeletedUser Show" actions={<DeletedUserShowActions />}>
+    <Show {...props} title="DeletedUser Show">
         <SimpleShowLayout>
             <TextField source="id" />
             <TextField source="username" />

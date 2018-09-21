@@ -4,23 +4,25 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    TextInput,
-    SimpleShowLayout,
-    NumberField,
-    UrlField,
-    Create,
-    SimpleForm,
     Edit,
-    Responsive
+    NumberField,
+    SimpleList,
+    TextField,
+    Create,
+    DateField,
+    UrlField,
+    Datagrid,
+    TextInput,
+    List,
+    SimpleForm,
+    Responsive,
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
 
-import ResourceListActions from '../customActions/ResourceListActions';
-import ResourceShowActions from '../customActions/ResourceShowActions';
 import ResourceEditActions from '../customActions/ResourceEditActions';
 
 import ResourceFilter from '../filters/ResourceFilter';
@@ -39,12 +41,7 @@ const validationEditResource = values => {
 };
 
 export const ResourceList = props => (
-    <List
-        {...props}
-        title="Resource List"
-        actions={<ResourceListActions />}
-        filters={<ResourceFilter />}
-    >
+    <List {...props} title="Resource List" filters={<ResourceFilter />} bulkActionButtons={false}>
         <Responsive
             small={
                 <SimpleList
@@ -59,6 +56,9 @@ export const ResourceList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
+                    <EditButton />
+                    <ShowButton />
+                    <DeleteButton />
                 </Datagrid>
             }
         />
@@ -75,7 +75,7 @@ export const ResourceCreate = props => (
 );
 
 export const ResourceShow = props => (
-    <Show {...props} title="Resource Show" actions={<ResourceShowActions />}>
+    <Show {...props} title="Resource Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             <UrlField source="urn" />

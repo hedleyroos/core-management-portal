@@ -6,7 +6,7 @@ import { CreateButton, RefreshButton } from 'admin-on-rest';
 
 import { styles } from '../Theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
-import { httpClient } from '../restClient';
+import { httpClient } from '../dataProvider';
 import PermissionsStore from '../auth/PermissionsStore';
 import { PERMISSIONS } from '../constants';
 

@@ -4,23 +4,22 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    DateField,
-    ReferenceField,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
     SelectInput,
+    NumberField,
     Create,
-    SimpleForm
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    ReferenceField,
+    List,
+    SimpleForm,
+    SimpleShowLayout,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
-
-import RoleResourcePermissionListActions from '../customActions/RoleResourcePermissionListActions';
-import RoleResourcePermissionShowActions from '../customActions/RoleResourcePermissionShowActions';
+import EmptyField from '../fields/EmptyField';
 
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
 
@@ -42,8 +41,8 @@ export const RoleResourcePermissionList = props => (
     <List
         {...props}
         title="RoleResourcePermission List"
-        actions={<RoleResourcePermissionListActions />}
         filters={<RoleResourcePermissionFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
@@ -90,6 +89,8 @@ export const RoleResourcePermissionList = props => (
             )}
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -135,11 +136,7 @@ export const RoleResourcePermissionCreate = props => (
 );
 
 export const RoleResourcePermissionShow = props => (
-    <Show
-        {...props}
-        title="RoleResourcePermission Show"
-        actions={<RoleResourcePermissionShowActions />}
-    >
+    <Show {...props} title="RoleResourcePermission Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField

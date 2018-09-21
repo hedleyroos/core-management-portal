@@ -4,25 +4,21 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
+    NumberField,
+    TextField,
+    UrlField,
+    Datagrid,
     BooleanField,
     List,
-    TextField,
     SimpleShowLayout,
-    NumberField,
-    UrlField
+    ShowButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
-import PermissionsStore from '../auth/PermissionsStore';
-
-import ClientListActions from '../customActions/ClientListActions';
-import ClientShowActions from '../customActions/ClientShowActions';
 
 import ClientFilter from '../filters/ClientFilter';
 
 export const ClientList = props => (
-    <List {...props} title="Client List" actions={<ClientListActions />} filters={<ClientFilter />}>
+    <List {...props} title="Client List" filters={<ClientFilter />} bulkActionButtons={false}>
         <Datagrid>
             <NumberField source="id" sortable={false} />
             <TextField source="_post_logout_redirect_uris" sortable={false} />
@@ -36,12 +32,13 @@ export const ClientList = props => (
             <BooleanField source="reuse_consent" sortable={false} />
             <UrlField source="terms_url" sortable={false} />
             <UrlField source="website_url" sortable={false} />
+            <ShowButton />
         </Datagrid>
     </List>
 );
 
 export const ClientShow = props => (
-    <Show {...props} title="Client Show" actions={<ClientShowActions />}>
+    <Show {...props} title="Client Show">
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="_post_logout_redirect_uris" />

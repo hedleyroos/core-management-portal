@@ -16,8 +16,8 @@ import {
     TableRowColumn
 } from 'material-ui/Table';
 
-import restClient, { OPERATIONAL } from '../restClient';
-import { styles } from '../Theme';
+import dataProvider, { OPERATIONAL } from '../dataProvider';
+import { styles } from '../theme';
 
 const CustomTable = ({ data, total, perPage, paginate, props }) => {
     const {
@@ -116,7 +116,7 @@ class InlineTable extends Component {
 
     getRelatedData() {
         const { record, url, customPathParameters } = this.props;
-        restClient(OPERATIONAL, `${url}`, {
+        dataProvider(OPERATIONAL, `${url}`, {
             pathParameters: customPathParameters ? customPathParameters : [record.id],
             method: 'GET'
         })

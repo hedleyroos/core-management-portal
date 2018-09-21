@@ -4,24 +4,23 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    ReferenceField,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
     SelectInput,
+    NumberField,
+    TextField,
     Create,
-    SimpleForm
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    ReferenceField,
+    List,
+    SimpleForm,
+    SimpleShowLayout,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
-
-import UserDomainRoleListActions from '../customActions/UserDomainRoleListActions';
-import UserDomainRoleShowActions from '../customActions/UserDomainRoleShowActions';
+import EmptyField from '../fields/EmptyField';
 
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 
@@ -43,8 +42,8 @@ export const UserDomainRoleList = props => (
     <List
         {...props}
         title="UserDomainRole List"
-        actions={<UserDomainRoleListActions />}
         filters={<UserDomainRoleFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
@@ -91,6 +90,8 @@ export const UserDomainRoleList = props => (
             )}
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -136,7 +137,7 @@ export const UserDomainRoleCreate = props => (
 );
 
 export const UserDomainRoleShow = props => (
-    <Show {...props} title="UserDomainRole Show" actions={<UserDomainRoleShowActions />}>
+    <Show {...props} title="UserDomainRole Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField

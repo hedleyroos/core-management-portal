@@ -4,24 +4,23 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    List,
-    TextField,
-    DateField,
-    ReferenceField,
-    SimpleShowLayout,
-    NumberField,
-    ReferenceInput,
     SelectInput,
+    NumberField,
+    TextField,
     Create,
-    SimpleForm
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    ReferenceField,
+    List,
+    SimpleForm,
+    SimpleShowLayout,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
-
-import UserSiteRoleListActions from '../customActions/UserSiteRoleListActions';
-import UserSiteRoleShowActions from '../customActions/UserSiteRoleShowActions';
+import EmptyField from '../fields/EmptyField';
 
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 
@@ -43,8 +42,8 @@ export const UserSiteRoleList = props => (
     <List
         {...props}
         title="UserSiteRole List"
-        actions={<UserSiteRoleListActions />}
         filters={<UserSiteRoleFilter />}
+        bulkActionButtons={false}
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
@@ -91,6 +90,8 @@ export const UserSiteRoleList = props => (
             )}
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -136,7 +137,7 @@ export const UserSiteRoleCreate = props => (
 );
 
 export const UserSiteRoleShow = props => (
-    <Show {...props} title="UserSiteRole Show" actions={<UserSiteRoleShowActions />}>
+    <Show {...props} title="UserSiteRole Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField

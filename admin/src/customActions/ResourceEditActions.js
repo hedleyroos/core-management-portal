@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { DeleteButton, ListButton, RefreshButton, ShowButton } from 'react-admin';
-import { CardActions } from 'material-ui/Card';
+import CardActions from '@material-ui/core/CardActions';
 
 import PermissionsStore from '../auth/PermissionsStore';
 
@@ -20,4 +20,4 @@ class ResourceEditActions extends Component {
     }
 }
 
-export default ResourceShowActions;
+export default ResourceEditActions;

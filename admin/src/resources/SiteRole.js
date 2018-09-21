@@ -4,26 +4,27 @@
  **/
 import React from 'react';
 import {
-    Datagrid,
     Show,
-    BooleanField,
-    List,
-    DateField,
+    Edit,
+    SelectInput,
     ReferenceField,
     BooleanInput,
-    SimpleShowLayout,
     NumberField,
-    ReferenceInput,
-    SelectInput,
     Create,
+    DateField,
+    ReferenceInput,
+    Datagrid,
+    BooleanField,
+    List,
     SimpleForm,
-    Edit
+    SimpleShowLayout,
+    EditButton,
+    ShowButton,
+    DeleteButton
 } from 'react-admin';
-import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import EmptyField from '../fields/EmptyField';
 
-import SiteRoleListActions from '../customActions/SiteRoleListActions';
-import SiteRoleShowActions from '../customActions/SiteRoleShowActions';
 import SiteRoleEditActions from '../customActions/SiteRoleEditActions';
 
 import SiteRoleFilter from '../filters/SiteRoleFilter';
@@ -45,12 +46,7 @@ const validationEditSiteRole = values => {
 };
 
 export const SiteRoleList = props => (
-    <List
-        {...props}
-        title="SiteRole List"
-        actions={<SiteRoleListActions />}
-        filters={<SiteRoleFilter />}
-    >
+    <List {...props} title="SiteRole List" filters={<SiteRoleFilter />} bulkActionButtons={false}>
         <Datagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
@@ -83,6 +79,9 @@ export const SiteRoleList = props => (
             <BooleanField source="grant_implicitly" sortable={false} />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
+            <EditButton />
+            <ShowButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
@@ -118,7 +117,7 @@ export const SiteRoleCreate = props => (
 );
 
 export const SiteRoleShow = props => (
-    <Show {...props} title="SiteRole Show" actions={<SiteRoleShowActions />}>
+    <Show {...props} title="SiteRole Show">
         <SimpleShowLayout>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField

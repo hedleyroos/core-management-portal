@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Card, CardActions } from 'material-ui/Card';
-import Avatar from 'material-ui/Avatar';
-import RaisedButton from 'material-ui/RaisedButton';
-import LockIcon from 'material-ui/svg-icons/action/lock-outline';
-import { teal500, teal800 } from 'material-ui/styles/colors';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import LockIcon from '@material-ui/icons/LockOutline';
+import teal from '@material-ui/core/colors/teal';
 
-import { userLogin } from 'admin-on-rest';
-
-import { muiTheme, styles } from '../Theme';
+import { styles } from '../theme';
 import { generateNonce, generateQueryString } from '../utils';
 
 const OIDC_PROVIDER_URL = process.env.REACT_APP_AUTHORIZATION_ENDPOINT;
@@ -52,30 +49,23 @@ class AuthLoginPage extends Component {
         const queryString = generateQueryString(queryArguments);
         const loginUrl = `${OIDC_PROVIDER_URL}?${queryString}`;
         return (
-            <MuiThemeProvider muiTheme={muiTheme}>
-                <div style={{ ...styles.main, backgroundColor: teal800 }}>
-                    <Card style={styles.card}>
-                        <div style={styles.avatar}>
-                            <Avatar backgroundColor={teal500} icon={<LockIcon />} size={60} />
-                        </div>
-                        <CardActions>
-                            <p style={styles.avatar}>Login with Girl Effect OIDC Provider</p>
-                            <RaisedButton
-                                type="button"
-                                href={loginUrl}
-                                primary
-                                label="Login"
-                                fullWidth
-                            />
-                        </CardActions>
-                    </Card>
-                </div>
-            </MuiThemeProvider>
+            <div style={styles.main}>
+                <Card style={styles.card}>
+                    <div style={styles.avatarDiv}>
+                        <Avatar style={{ ...styles.avatar, backgroundColor: teal[500] }}>
+                            <LockIcon />
+                        </Avatar>
+                        <p>Login with Girl Effect OIDC Provider</p>
+                    </div>
+                    <CardActions>
+                        <Button variant="contained" href={loginUrl} color="primary" fullWidth>
+                            Login
+                        </Button>
+                    </CardActions>
+                </Card>
+            </div>
         );
     }
 }
 
-export default connect(
-    undefined,
-    { userLogin }
-)(AuthLoginPage);
+export default AuthLoginPage;
