@@ -24,6 +24,8 @@ import EmptyField from '../fields/EmptyField';
 
 import InvitationDomainRoleFilter from '../filters/InvitationDomainRoleFilter';
 
+import DomainTreeInput from '../inputs/DomainTreeInput';
+
 const validationCreateInvitationDomainRole = values => {
     const errors = {};
     if (!values.invitation_id) {
@@ -111,15 +113,7 @@ export const InvitationDomainRoleCreate = props => (
                 </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('domains', 'list') && (
-                <ReferenceInput
-                    label="Domain"
-                    source="domain_id"
-                    reference="domains"
-                    perPage={0}
-                    allowEmpty
-                >
-                    <SelectInput optionText="name" />
-                </ReferenceInput>
+                <DomainTreeInput label="Domain" source="domain_id" />
             )}
             {PermissionsStore.getResourcePermission('roles', 'list') && (
                 <ReferenceInput

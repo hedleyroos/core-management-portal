@@ -4,12 +4,11 @@
  **/
 import React from 'react';
 import { SelectInput, ReferenceInput, Filter } from 'react-admin';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 
 const DomainRoleFilter = props => (
     <Filter {...props}>
-        <ReferenceInput label="Domain" source="domain_id" reference="domains" allowEmpty>
-            <SelectInput optionText="name" />
-        </ReferenceInput>
+        <DomainTreeInput label="Domain" source="domain_id" />
         <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
             <SelectInput optionText="label" />
         </ReferenceInput>

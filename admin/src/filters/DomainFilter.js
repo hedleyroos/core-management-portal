@@ -3,7 +3,8 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { SelectInput, TextInput, ReferenceInput, Filter } from 'react-admin';
+import { TextInput, Filter } from 'react-admin';
+import DomainTreeInput from '../inputs/DomainTreeInput';
 
 const parseDomainIds = value => value.replace(/[^\w]/gi, ',');
 
@@ -21,9 +22,7 @@ const validateDomainIds = value => {
 
 const DomainFilter = props => (
     <Filter {...props}>
-        <ReferenceInput label="Parent Id" source="parent_id" reference="domains" allowEmpty>
-            <SelectInput optionText="name" />
-        </ReferenceInput>
+        <DomainTreeInput label="Parent Domain" source="parent_id" />
         <TextInput
             label="Domain Ids"
             source="domain_ids"

@@ -252,6 +252,9 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                     id: keys ? keys.map(key => json[key]).join('/') : pk ? json[pk] : json.id
                 }
             };
+        case GET_ONE:
+            data = keys ? { ...json, id: keys.map(key => json[key]).join('/') } : json;
+            return { data };
         default:
             return { data: json ? json : {} };
     }
