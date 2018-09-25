@@ -4,25 +4,25 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    SimpleList,
-    TextField,
-    Create,
     DateField,
     Datagrid,
-    TextInput,
-    List,
-    SimpleForm,
-    Responsive,
+    Create,
+    SimpleList,
+    Edit,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    TextInput,
+    TextField,
+    SimpleForm,
+    List,
+    Responsive,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 
-import OrganisationEditActions from '../customActions/OrganisationEditActions';
+import OrganisationEditToolbar from '../customActions/OrganisationEditToolbar';
 
 import OrganisationFilter from '../filters/OrganisationFilter';
 
@@ -91,8 +91,8 @@ export const OrganisationShow = props => (
 );
 
 export const OrganisationEdit = props => (
-    <Edit {...props} title="Organisation Edit" actions={<OrganisationEditActions />}>
-        <SimpleForm validate={validationEditOrganisation}>
+    <Edit {...props} title="Organisation Edit">
+        <SimpleForm validate={validationEditOrganisation} toolbar={<OrganisationEditToolbar />}>
             <TextInput source="name" />
             <TextInput source="description" />
         </SimpleForm>

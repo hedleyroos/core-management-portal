@@ -4,30 +4,30 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    Create,
-    DateField,
-    ReferenceInput,
-    Datagrid,
-    ReferenceField,
-    SimpleForm,
-    Responsive,
     SelectInput,
-    SimpleList,
+    DateField,
+    ReferenceField,
+    Edit,
     TextField,
-    TextInput,
     List,
+    Responsive,
+    Datagrid,
+    Create,
+    SimpleList,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    TextInput,
+    SimpleForm,
+    ReferenceInput,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import AdminNoteEditActions from '../customActions/AdminNoteEditActions';
+import AdminNoteEditToolbar from '../customActions/AdminNoteEditToolbar';
 
 import AdminNoteFilter from '../filters/AdminNoteFilter';
 
@@ -151,8 +151,8 @@ export const AdminNoteShow = props => (
 );
 
 export const AdminNoteEdit = props => (
-    <Edit {...props} title="AdminNote Edit" actions={<AdminNoteEditActions />}>
-        <SimpleForm validate={validationEditAdminNote}>
+    <Edit {...props} title="AdminNote Edit">
+        <SimpleForm validate={validationEditAdminNote} toolbar={<AdminNoteEditToolbar />}>
             <TextInput source="note" />
         </SimpleForm>
     </Edit>

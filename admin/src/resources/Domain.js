@@ -4,31 +4,31 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    Create,
-    DateField,
-    ReferenceInput,
-    Datagrid,
-    ReferenceField,
-    SimpleForm,
-    Responsive,
     SelectInput,
-    SimpleList,
+    DateField,
+    ReferenceField,
+    Edit,
     TextField,
-    ReferenceManyField,
-    TextInput,
     List,
+    Responsive,
+    Datagrid,
+    Create,
+    SimpleList,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    TextInput,
+    SimpleForm,
+    ReferenceInput,
+    ReferenceManyField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import DomainEditActions from '../customActions/DomainEditActions';
+import DomainEditToolbar from '../customActions/DomainEditToolbar';
 
 import DomainFilter from '../filters/DomainFilter';
 
@@ -165,8 +165,8 @@ export const DomainShow = props => (
 );
 
 export const DomainEdit = props => (
-    <Edit {...props} title="Domain Edit" actions={<DomainEditActions />}>
-        <SimpleForm validate={validationEditDomain}>
+    <Edit {...props} title="Domain Edit">
+        <SimpleForm validate={validationEditDomain} toolbar={<DomainEditToolbar />}>
             {PermissionsStore.getResourcePermission('domains', 'list') && (
                 <ReferenceInput
                     label="Domain"

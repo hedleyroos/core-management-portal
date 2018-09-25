@@ -4,32 +4,32 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    Create,
-    DateField,
-    ReferenceInput,
-    Datagrid,
-    ReferenceField,
-    SimpleForm,
-    Responsive,
     SelectInput,
-    SimpleList,
+    DateField,
+    ReferenceField,
+    Edit,
     TextField,
-    ReferenceManyField,
-    TextInput,
-    DateInput,
     List,
+    Responsive,
+    Datagrid,
+    Create,
+    SimpleList,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    DateInput,
+    TextInput,
+    SimpleForm,
+    ReferenceInput,
+    ReferenceManyField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import InvitationEditActions from '../customActions/InvitationEditActions';
+import InvitationEditToolbar from '../customActions/InvitationEditToolbar';
 
 import InvitationFilter from '../filters/InvitationFilter';
 
@@ -296,8 +296,8 @@ export const InvitationShow = props => (
 );
 
 export const InvitationEdit = props => (
-    <Edit {...props} title="Invitation Edit" actions={<InvitationEditActions />}>
-        <SimpleForm validate={validationEditInvitation}>
+    <Edit {...props} title="Invitation Edit">
+        <SimpleForm validate={validationEditInvitation} toolbar={<InvitationEditToolbar />}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />

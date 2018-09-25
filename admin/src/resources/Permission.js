@@ -4,25 +4,25 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    SimpleList,
-    TextField,
-    Create,
     DateField,
     Datagrid,
-    TextInput,
-    List,
-    SimpleForm,
-    Responsive,
+    Create,
+    SimpleList,
+    Edit,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    TextInput,
+    TextField,
+    SimpleForm,
+    List,
+    Responsive,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 
-import PermissionEditActions from '../customActions/PermissionEditActions';
+import PermissionEditToolbar from '../customActions/PermissionEditToolbar';
 
 import PermissionFilter from '../filters/PermissionFilter';
 
@@ -91,8 +91,8 @@ export const PermissionShow = props => (
 );
 
 export const PermissionEdit = props => (
-    <Edit {...props} title="Permission Edit" actions={<PermissionEditActions />}>
-        <SimpleForm validate={validationEditPermission}>
+    <Edit {...props} title="Permission Edit">
+        <SimpleForm validate={validationEditPermission} toolbar={<PermissionEditToolbar />}>
             <TextInput source="name" />
             <TextInput source="description" />
         </SimpleForm>

@@ -4,33 +4,33 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    Create,
-    DateField,
-    ReferenceInput,
-    Datagrid,
-    BooleanField,
-    ReferenceField,
-    SimpleForm,
-    Responsive,
     SelectInput,
-    BooleanInput,
-    SimpleList,
+    DateField,
+    ReferenceField,
+    Edit,
     TextField,
-    ReferenceManyField,
-    TextInput,
     List,
+    Responsive,
+    BooleanInput,
+    Datagrid,
+    Create,
+    SimpleList,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    TextInput,
+    SimpleForm,
+    ReferenceInput,
+    BooleanField,
+    ReferenceManyField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import SiteEditActions from '../customActions/SiteEditActions';
+import SiteEditToolbar from '../customActions/SiteEditToolbar';
 
 import SiteFilter from '../filters/SiteFilter';
 
@@ -199,8 +199,8 @@ export const SiteShow = props => (
 );
 
 export const SiteEdit = props => (
-    <Edit {...props} title="Site Edit" actions={<SiteEditActions />}>
-        <SimpleForm validate={validationEditSite}>
+    <Edit {...props} title="Site Edit">
+        <SimpleForm validate={validationEditSite} toolbar={<SiteEditToolbar />}>
             {PermissionsStore.getResourcePermission('clients', 'list') && (
                 <ReferenceInput
                     label="Client"

@@ -4,26 +4,26 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    SimpleList,
-    TextField,
-    Create,
     DateField,
-    UrlField,
     Datagrid,
-    TextInput,
-    List,
-    SimpleForm,
-    Responsive,
+    Create,
+    SimpleList,
+    Edit,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    UrlField,
+    TextInput,
+    TextField,
+    SimpleForm,
+    List,
+    Responsive,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 
-import ResourceEditActions from '../customActions/ResourceEditActions';
+import ResourceEditToolbar from '../customActions/ResourceEditToolbar';
 
 import ResourceFilter from '../filters/ResourceFilter';
 
@@ -87,8 +87,8 @@ export const ResourceShow = props => (
 );
 
 export const ResourceEdit = props => (
-    <Edit {...props} title="Resource Edit" actions={<ResourceEditActions />}>
-        <SimpleForm validate={validationEditResource}>
+    <Edit {...props} title="Resource Edit">
+        <SimpleForm validate={validationEditResource} toolbar={<ResourceEditToolbar />}>
             <TextInput source="urn" />
             <TextInput source="description" />
         </SimpleForm>

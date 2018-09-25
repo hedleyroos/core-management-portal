@@ -4,23 +4,23 @@
  **/
 import React from 'react';
 import {
-    Show,
     SelectInput,
-    NumberField,
-    TextField,
-    Create,
     DateField,
-    ReferenceInput,
     Datagrid,
     ReferenceField,
-    List,
-    SimpleForm,
+    Create,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    TextField,
+    SimpleForm,
+    List,
+    ReferenceInput,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 

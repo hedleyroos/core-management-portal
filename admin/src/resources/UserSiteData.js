@@ -4,29 +4,29 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
     SelectInput,
-    NumberField,
-    LongTextInput,
-    TextField,
-    Create,
     DateField,
-    ReferenceInput,
     Datagrid,
     ReferenceField,
-    List,
-    SimpleForm,
+    Create,
+    Edit,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    TextField,
+    SimpleForm,
+    LongTextInput,
+    List,
+    ReferenceInput,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 import ObjectField from '../fields/ObjectField';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import UserSiteDataEditActions from '../customActions/UserSiteDataEditActions';
+import UserSiteDataEditToolbar from '../customActions/UserSiteDataEditToolbar';
 
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
 
@@ -172,8 +172,8 @@ export const UserSiteDataShow = props => (
 );
 
 export const UserSiteDataEdit = props => (
-    <Edit {...props} title="UserSiteData Edit" actions={<UserSiteDataEditActions />}>
-        <SimpleForm validate={validationEditUserSiteData}>
+    <Edit {...props} title="UserSiteData Edit">
+        <SimpleForm validate={validationEditUserSiteData} toolbar={<UserSiteDataEditToolbar />}>
             <LongTextInput
                 source="data"
                 format={value => (value instanceof Object ? JSON.stringify(value) : value)}

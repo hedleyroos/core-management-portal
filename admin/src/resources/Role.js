@@ -4,31 +4,31 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    Create,
     DateField,
-    Datagrid,
     ReferenceField,
-    BooleanField,
-    SimpleForm,
+    Edit,
+    TextField,
+    List,
     Responsive,
     BooleanInput,
+    Datagrid,
+    Create,
     SimpleList,
-    TextField,
-    ReferenceManyField,
-    TextInput,
-    List,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    TextInput,
+    SimpleForm,
+    BooleanField,
+    ReferenceManyField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import RoleEditActions from '../customActions/RoleEditActions';
+import RoleEditToolbar from '../customActions/RoleEditToolbar';
 
 import RoleFilter from '../filters/RoleFilter';
 
@@ -130,8 +130,8 @@ export const RoleShow = props => (
 );
 
 export const RoleEdit = props => (
-    <Edit {...props} title="Role Edit" actions={<RoleEditActions />}>
-        <SimpleForm validate={validationEditRole}>
+    <Edit {...props} title="Role Edit">
+        <SimpleForm validate={validationEditRole} toolbar={<RoleEditToolbar />}>
             <TextInput source="label" />
             <BooleanInput source="requires_2fa" />
             <TextInput source="description" />

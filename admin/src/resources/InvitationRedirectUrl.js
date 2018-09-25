@@ -4,24 +4,24 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    TextField,
-    Create,
     DateField,
-    UrlField,
     Datagrid,
-    TextInput,
-    List,
-    SimpleForm,
+    Create,
+    Edit,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    UrlField,
+    TextInput,
+    TextField,
+    SimpleForm,
+    List,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 
-import InvitationRedirectUrlEditActions from '../customActions/InvitationRedirectUrlEditActions';
+import InvitationRedirectUrlEditToolbar from '../customActions/InvitationRedirectUrlEditToolbar';
 
 import InvitationRedirectUrlFilter from '../filters/InvitationRedirectUrlFilter';
 
@@ -83,12 +83,11 @@ export const InvitationRedirectUrlShow = props => (
 );
 
 export const InvitationRedirectUrlEdit = props => (
-    <Edit
-        {...props}
-        title="InvitationRedirectUrl Edit"
-        actions={<InvitationRedirectUrlEditActions />}
-    >
-        <SimpleForm validate={validationEditInvitationRedirectUrl}>
+    <Edit {...props} title="InvitationRedirectUrl Edit">
+        <SimpleForm
+            validate={validationEditInvitationRedirectUrl}
+            toolbar={<InvitationRedirectUrlEditToolbar />}
+        >
             <TextInput source="url" />
             <TextInput source="description" />
         </SimpleForm>

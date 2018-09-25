@@ -4,13 +4,13 @@
  **/
 import React from 'react';
 import {
-    Show,
-    SimpleList,
-    TextField,
     Datagrid,
+    SimpleList,
+    SimpleShowLayout,
+    Show,
+    TextField,
     List,
     Responsive,
-    SimpleShowLayout,
     ShowButton
 } from 'react-admin';
 

@@ -4,28 +4,28 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
     SelectInput,
-    ReferenceField,
-    BooleanInput,
-    NumberField,
-    Create,
     DateField,
-    ReferenceInput,
     Datagrid,
-    BooleanField,
-    List,
-    SimpleForm,
+    ReferenceField,
+    Create,
+    Edit,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    SimpleForm,
+    List,
+    ReferenceInput,
+    BooleanField,
+    BooleanInput,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import SiteRoleEditActions from '../customActions/SiteRoleEditActions';
+import SiteRoleEditToolbar from '../customActions/SiteRoleEditToolbar';
 
 import SiteRoleFilter from '../filters/SiteRoleFilter';
 
@@ -153,8 +153,8 @@ export const SiteRoleShow = props => (
 );
 
 export const SiteRoleEdit = props => (
-    <Edit {...props} title="SiteRole Edit" actions={<SiteRoleEditActions />}>
-        <SimpleForm validate={validationEditSiteRole}>
+    <Edit {...props} title="SiteRole Edit">
+        <SimpleForm validate={validationEditSiteRole} toolbar={<SiteRoleEditToolbar />}>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Edit>

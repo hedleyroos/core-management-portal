@@ -4,14 +4,14 @@
  **/
 import React from 'react';
 import {
+    Datagrid,
+    SimpleShowLayout,
     Show,
     NumberField,
-    TextField,
     UrlField,
-    Datagrid,
-    BooleanField,
+    TextField,
     List,
-    SimpleShowLayout,
+    BooleanField,
     ShowButton
 } from 'react-admin';
 

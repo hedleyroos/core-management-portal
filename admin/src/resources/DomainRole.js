@@ -4,28 +4,28 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
     SelectInput,
-    ReferenceField,
-    BooleanInput,
-    NumberField,
-    Create,
     DateField,
-    ReferenceInput,
     Datagrid,
-    BooleanField,
-    List,
-    SimpleForm,
+    ReferenceField,
+    Create,
+    Edit,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    SimpleForm,
+    List,
+    ReferenceInput,
+    BooleanField,
+    BooleanInput,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import DomainRoleEditActions from '../customActions/DomainRoleEditActions';
+import DomainRoleEditToolbar from '../customActions/DomainRoleEditToolbar';
 
 import DomainRoleFilter from '../filters/DomainRoleFilter';
 
@@ -152,8 +152,8 @@ export const DomainRoleShow = props => (
 );
 
 export const DomainRoleEdit = props => (
-    <Edit {...props} title="DomainRole Edit" actions={<DomainRoleEditActions />}>
-        <SimpleForm validate={validationEditDomainRole}>
+    <Edit {...props} title="DomainRole Edit">
+        <SimpleForm validate={validationEditDomainRole} toolbar={<DomainRoleEditToolbar />}>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Edit>

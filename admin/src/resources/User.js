@@ -4,35 +4,35 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    DateField,
-    UrlField,
-    ReferenceInput,
-    Datagrid,
-    BooleanField,
-    ReferenceField,
-    SimpleForm,
-    Responsive,
     SelectInput,
-    BooleanInput,
-    SimpleList,
+    DateField,
+    ReferenceField,
+    Edit,
+    UrlField,
     TextField,
-    ReferenceManyField,
-    TextInput,
-    DateInput,
     List,
+    Responsive,
+    BooleanInput,
+    Datagrid,
+    SimpleList,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    DateInput,
+    TextInput,
+    SimpleForm,
+    ReferenceInput,
+    BooleanField,
+    ReferenceManyField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 import ObjectField from '../fields/ObjectField';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import UserEditActions from '../customActions/UserEditActions';
+import UserEditToolbar from '../customActions/UserEditToolbar';
 
 import UserFilter from '../filters/UserFilter';
 
@@ -255,8 +255,8 @@ export const UserShow = props => (
 );
 
 export const UserEdit = props => (
-    <Edit {...props} title="User Edit" actions={<UserEditActions />}>
-        <SimpleForm validate={validationEditUser}>
+    <Edit {...props} title="User Edit">
+        <SimpleForm validate={validationEditUser} toolbar={<UserEditToolbar />}>
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />

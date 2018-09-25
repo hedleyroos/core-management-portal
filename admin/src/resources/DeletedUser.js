@@ -4,30 +4,30 @@
  **/
 import React from 'react';
 import {
-    Show,
-    Edit,
-    NumberField,
-    SimpleList,
-    TextField,
-    Create,
     DateField,
-    ReferenceManyField,
     Datagrid,
-    TextInput,
-    DateInput,
     ReferenceField,
-    List,
-    SimpleForm,
-    Responsive,
+    Create,
+    SimpleList,
+    Edit,
     SimpleShowLayout,
+    Show,
+    NumberField,
+    DateInput,
+    TextInput,
+    TextField,
+    SimpleForm,
+    List,
+    Responsive,
+    ReferenceManyField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
 
-import DeletedUserEditActions from '../customActions/DeletedUserEditActions';
+import DeletedUserEditToolbar from '../customActions/DeletedUserEditToolbar';
 
 import DeletedUserFilter from '../filters/DeletedUserFilter';
 
@@ -169,8 +169,8 @@ export const DeletedUserShow = props => (
 );
 
 export const DeletedUserEdit = props => (
-    <Edit {...props} title="DeletedUser Edit" actions={<DeletedUserEditActions />}>
-        <SimpleForm validate={validationEditDeletedUser}>
+    <Edit {...props} title="DeletedUser Edit">
+        <SimpleForm validate={validationEditDeletedUser} toolbar={<DeletedUserEditToolbar />}>
             <TextInput source="username" />
             <TextInput source="email" />
             <TextInput source="msisdn" />
