@@ -24,6 +24,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+
 const validationCreateUserSiteRole = values => {
     const errors = {};
     if (!values.user_id) {
@@ -100,26 +102,21 @@ export const UserSiteRoleCreate = props => (
     <Create {...props} title="UserSiteRole Create">
         <SimpleForm validate={validationCreateUserSiteRole} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
-                <ReferenceInput
+                <UnlimitedDropdownInput
                     label="User"
                     source="user_id"
                     reference="users"
-                    perPage={0}
-                    allowEmpty
-                >
-                    <SelectInput optionText="username" />
-                </ReferenceInput>
+                    optionText="username"
+                    filter={{ site_ids: '' }}
+                />
             )}
             {PermissionsStore.getResourcePermission('sites', 'list') && (
-                <ReferenceInput
+                <UnlimitedDropdownInput
                     label="Site"
                     source="site_id"
                     reference="sites"
-                    perPage={0}
-                    allowEmpty
-                >
-                    <SelectInput optionText="name" />
-                </ReferenceInput>
+                    optionText="name"
+                />
             )}
             {PermissionsStore.getResourcePermission('roles', 'list') && (
                 <ReferenceInput

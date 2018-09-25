@@ -30,6 +30,8 @@ import UserSiteDataEditToolbar from '../customActions/UserSiteDataEditToolbar';
 
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
 
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+
 const validationCreateUserSiteData = values => {
     const errors = {};
     if (!values.user_id) {
@@ -99,15 +101,13 @@ export const UserSiteDataCreate = props => (
     <Create {...props} title="UserSiteData Create">
         <SimpleForm validate={validationCreateUserSiteData} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
-                <ReferenceInput
+                <UnlimitedDropdownInput
                     label="User"
                     source="user_id"
                     reference="users"
-                    perPage={0}
-                    allowEmpty
-                >
-                    <SelectInput optionText="username" />
-                </ReferenceInput>
+                    optionText="username"
+                    filter={{ site_ids: '' }}
+                />
             )}
             {PermissionsStore.getResourcePermission('sites', 'list') && (
                 <ReferenceInput

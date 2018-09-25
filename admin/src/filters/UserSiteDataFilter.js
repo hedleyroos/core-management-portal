@@ -3,14 +3,14 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { SelectInput, TextInput, ReferenceInput, Filter } from 'react-admin';
+import { TextInput, Filter } from 'react-admin';
+
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const UserSiteDataFilter = props => (
     <Filter {...props}>
         <TextInput label="User Id" source="user_id" />
-        <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
-            <SelectInput optionText="name" />
-        </ReferenceInput>
+        <UnlimitedDropdownInput label="Site" source="site_id" reference="sites" optionText="name" />
     </Filter>
 );
 

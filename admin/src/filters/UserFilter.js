@@ -12,12 +12,15 @@ import {
     Filter
 } from 'react-admin';
 
+import PermissionsStore from '../auth/PermissionsStore';
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+import { moreThanOneID } from '../utils';
 
 const parseUserIds = value => value.replace(/[^\w]/gi, ',');
 
 const UserFilter = props => (
     <Filter {...props}>
-	<TextInput label="Search" source="q" alwaysOn />
+        <TextInput label="Search" source="q" alwaysOn />
         <TextInput label="Birth Date" source="birth_date" />
         <ReferenceInput label="Country" source="country" reference="countries" allowEmpty>
             <SelectInput optionText="code" />
@@ -39,9 +42,14 @@ const UserFilter = props => (
         <BooleanInput label="Two factor Auth Enabled" source="tfa_enabled" />
         <BooleanInput label="Has Organisation" source="has_organisation" />
         <TextInput label="User Ids" source="user_ids" parse={parseUserIds} />
-        <ReferenceInput label="Site" source="site_ids" reference="sites" allowEmpty>
-            <SelectInput optionText="name" />
-        </ReferenceInput>
+        {moreThanOneID(PermissionsStore.getSiteIDs()) && (
+            <UnlimitedDropdownInput
+                label="Site"
+                source="site_id"
+                reference="sites"
+                optionText="name"
+            />
+        )}
     </Filter>
 );
 

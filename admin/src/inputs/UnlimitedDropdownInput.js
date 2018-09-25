@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
-import { SelectInput } from 'admin-on-rest';
-import CircularProgress from 'material-ui/CircularProgress';
+import { SelectInput } from 'react-admin';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { getUntilDone } from '../utils';
 import dataProvider, { GET_LIST } from '../dataProvider';
