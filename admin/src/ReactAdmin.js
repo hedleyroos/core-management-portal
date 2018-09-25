@@ -15,6 +15,7 @@ import customRoutes from './customRoutes';
 import dataProvider from './dataProvider';
 import MyLayout from './MyLayout';
 import { theme } from './theme';
+import manageRolesReducer from './reducers/manageRolesReducer';
 
 import { DomainList, DomainCreate, DomainShow, DomainEdit } from './resources/Domain';
 
@@ -133,6 +134,7 @@ const ReactAdmin = () => (
         appLayout={MyLayout}
         authProvider={authProvider}
         catchAll={catchAll}
+        customReducers={{ manageRoles: manageRolesReducer }}
         customRoutes={customRoutes}
         dataProvider={dataProvider}
         loginPage={AuthLoginPage}

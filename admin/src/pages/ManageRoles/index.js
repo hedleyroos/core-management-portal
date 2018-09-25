@@ -1,11 +1,8 @@
-import { Restricted } from 'admin-on-rest';
+import { Authenticated } from 'react-admin';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import Card from 'material-ui/Card/Card';
-import CardText from 'material-ui/Card/CardText';
-import CardTitle from 'material-ui/Card/CardTitle';
-import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
+import { Card, CardContent, CircularProgress, Typography } from '@material-ui/core';
 
 import { invalidToken, reset, setObject, setupResources } from '../../actions/manageRoles';
 import { mountManager } from '../../manageUtils';
@@ -50,15 +47,17 @@ class ManageRoles extends Component {
             selectedObject && managerDomains && managerRoles && managerSites && roleMapping;
         return validToken ? (
             detailsLoaded ? (
-                <Restricted location={this.props.location}>
+                <Authenticated location={this.props.location}>
                     <Card>
-                        <CardTitle title={`Manage ${titleCase(resource)} Roles`} />
-                        <CardText>
+                        <CardContent>
+                            <Typography variant="title" paragraph>
+                                {`Manage ${titleCase(resource)} Roles`}
+                            </Typography>
                             <ObjectCard />
                             <AssignRoleCard />
-                        </CardText>
+                        </CardContent>
                     </Card>
-                </Restricted>
+                </Authenticated>
             ) : (
                 <CircularProgress />
             )

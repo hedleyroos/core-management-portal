@@ -1,15 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from 'material-ui/Card/Card';
-import CardActions from 'material-ui/Card/CardActions';
-import CardHeader from 'material-ui/Card/CardHeader';
-import CardText from 'material-ui/Card/CardText';
-import CardTitle from 'material-ui/Card/CardTitle';
-import Checkbox from 'material-ui/Checkbox';
-import RaisedButton from 'material-ui/RaisedButton';
+import {
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
+    Typography
+} from '@material-ui/core';
+import red from '@material-ui/core/colors/red';
 
 import DomainTreeInput from '../inputs/DomainTreeInput';
 import { notEmptyObject } from '../utils';
+import { styles } from '../theme';
 
 const AssignRoleCard = ({
     amountSelectedToAssign,
@@ -24,9 +31,11 @@ const AssignRoleCard = ({
     treeData
 }) => (
     <Card style={{ marginTop: 20 }}>
-        <CardTitle title="Assign Role" />
-        <CardText>
-            <CardHeader subtitle="Select a Domain or Site:" />
+        <CardContent>
+            <Typography variant="title" paragraph>
+                Assign Role
+            </Typography>
+            <Typography>Select a Domain or Site:</Typography>
             <DomainTreeInput
                 label="Select Domain/Site"
                 source="place"
@@ -37,46 +46,60 @@ const AssignRoleCard = ({
                 useReduxFormField={false}
             />
             {assignmentLocation && (
-                <React.Fragment>
+                <div>
                     {notEmptyObject(rolesToAssign) ? (
                         <React.Fragment>
-                            <CardHeader subtitle="Please select roles to assign:" />
-                            {Object.values(rolesToAssign).map(role => (
-                                <Checkbox
-                                    key={role.id}
-                                    label={role.label}
-                                    checked={role.checked}
-                                    onCheck={() => handleSelect(role.id)}
-                                />
-                            ))}
+                            <FormControl>
+                                <FormLabel component="legend">
+                                    Please select roles to assign:
+                                </FormLabel>
+                                <FormGroup>
+                                    {Object.values(rolesToAssign).map(role => (
+                                        <FormControlLabel
+                                            key={role.id}
+                                            style={styles.checkbox}
+                                            control={
+                                                <Checkbox
+                                                    checked={role.checked}
+                                                    onChange={() => handleSelect(role.id)}
+                                                    value={role.id}
+                                                />
+                                            }
+                                            label={role.label}
+                                        />
+                                    ))}
+                                </FormGroup>
+                            </FormControl>
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <CardText>
+                            <Typography style={{ color: red[500] }} paragraph>
                                 {availableRoles.length
                                     ? `The following roles are available: [${availableRoles.join(
                                           ', '
                                       )}]`
                                     : `No roles to Select on this domain/site.`}
-                            </CardText>
-                            <CardText>
+                            </Typography>
+                            <Typography>
                                 {`You have the following roles here: [${currentRoles.join(', ')}]`}
-                            </CardText>
+                            </Typography>
                         </React.Fragment>
                     )}
-                </React.Fragment>
+                </div>
             )}
             {amountSelectedToAssign > 0 && (
                 <CardActions>
-                    <RaisedButton
-                        label="Assign Roles"
-                        secondary={true}
+                    <Button
+                        variant="contained"
+                        color="secondary"
                         onClick={handleAssign}
                         disabled={assigning}
-                    />
+                    >
+                        Assign Roles
+                    </Button>
                 </CardActions>
             )}
-        </CardText>
+        </CardContent>
     </Card>
 );
 

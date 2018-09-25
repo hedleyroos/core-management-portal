@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, CardActions } from '@material-ui/core';
 import PurgeIcon from '@material-ui/icons/Whatshot';
-import { CreateButton, RefreshButton } from 'react-admin';
+import { CreateButton } from 'react-admin';
 
 import { styles } from '../theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
