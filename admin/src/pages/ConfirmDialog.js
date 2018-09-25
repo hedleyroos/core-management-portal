@@ -33,23 +33,22 @@ const ConfirmDialog = props => {
         >
             <DialogTitle id="confirm-dialog-title">{title}</DialogTitle>
             <DialogContent>
-                <DialogContentText id="confirm-dialog-description">
-                    {text}
-                    {inputValues &&
-                        inputValues.map((input, index) => (
-                            <TextField
-                                key={index}
-                                required={!formIsValid}
-                                label={input.placeholder}
-                                placeholder={input.placeholder}
-                                name={`${input.name}`}
-                                value={input.value}
-                                onChange={handleInput}
-                                multiline
-                                fullWidth
-                            />
-                        ))}
-                </DialogContentText>
+                <DialogContentText id="confirm-dialog-description">{text}</DialogContentText>
+                {inputValues &&
+                    inputValues.map((input, index) => (
+                        <TextField
+                            key={index}
+                            required={!formIsValid}
+                            label={input.placeholder}
+                            placeholder={input.placeholder}
+                            name={`${input.name}`}
+                            value={input.value}
+                            onChange={handleInput}
+                            margin="dense"
+                            multiline
+                            fullWidth
+                        />
+                    ))}
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => handleClose(closeAction || 'cancel')}>
