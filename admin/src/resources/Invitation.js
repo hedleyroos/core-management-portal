@@ -33,6 +33,9 @@ import InvitationEditToolbar from '../customActions/InvitationEditToolbar';
 
 import InvitationFilter from '../filters/InvitationFilter';
 
+import InvitationListActions from '../customActions/InvitationList';
+import InvitationShowActions from '../customActions/InvitationShow';
+
 const validationCreateInvitation = values => {
     const errors = {};
     if (!values.first_name) {
@@ -60,6 +63,7 @@ export const InvitationList = props => (
         {...props}
         title="Invitation List"
         filters={<InvitationFilter />}
+        actions={<InvitationListActions />}
         bulkActionButtons={false}
     >
         <Responsive
@@ -163,7 +167,7 @@ export const InvitationCreate = props => (
 );
 
 export const InvitationShow = props => (
-    <Show {...props} title="Invitation Show">
+    <Show {...props} title="Invitation Show" actions={<InvitationShowActions />}>
         <SimpleShowLayout>
             <TextField source="id" />
             {PermissionsStore.getResourcePermission('users', 'list') ? (

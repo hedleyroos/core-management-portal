@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { CardActions } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import SendIcon from 'material-ui/svg-icons/content/send';
-import ManageIcon from 'material-ui/svg-icons/action/build';
-import { DeleteButton, ListButton, RefreshButton, EditButton } from 'admin-on-rest';
+import { Button, CardActions } from '@material-ui/core';
+import SendIcon from '@material-ui/icons/Send';
+import ManageIcon from '@material-ui/icons/Build';
+import { DeleteButton, ListButton, RefreshButton, EditButton } from 'react-admin';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
-import { styles } from '../Theme';
+import { styles } from '../theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
 import { httpClient } from '../dataProvider';
 import PermissionsStore from '../auth/PermissionsStore';
@@ -61,20 +60,20 @@ class InvitationShowActions extends Component {
                 )}
                 <RefreshButton />
                 {this.inviteNotExpired() && (
-                    <FlatButton
-                        primary
-                        icon={<SendIcon />}
-                        label="Send Invite"
-                        onClick={this.sendInvite}
-                    />
+                    <Button size="small" color="primary" onClick={this.sendInvite}>
+                        <SendIcon />
+                        Send Invite
+                    </Button>
                 )}
                 {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageinvitationroles) && (
-                    <FlatButton
-                        primary
-                        icon={<ManageIcon />}
-                        label="Manage Roles"
+                    <Button
+                        size="small"
+                        color="primary"
                         onClick={() => this.props.push(`/manageinvitationroles/${data.id}`)}
-                    />
+                    >
+                        <ManageIcon />
+                        Manage Roles
+                    </Button>
                 )}
             </CardActions>
         );
