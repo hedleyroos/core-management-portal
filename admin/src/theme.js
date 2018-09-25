@@ -153,5 +153,11 @@ export const styles = {
         textTransform: 'uppercase',
         fontWeight: 500,
         fontSize: 14
+    },
+    treeSelect: {
+        fontSize: 16,
+        height: 40,
+        width: 256,
+        marginTop: 40
     }
 };

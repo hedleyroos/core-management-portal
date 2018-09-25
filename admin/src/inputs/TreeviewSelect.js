@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TreeSelect } from 'antd';
 
+import { styles } from '../theme';
+
 class TreeviewSelect extends Component {
     constructor(props) {
         super(props);
@@ -34,12 +36,7 @@ class TreeviewSelect extends Component {
                 showSearch={showSearch}
                 treeData={treeData}
                 style={
-                    customStyle || {
-                        fontSize: 16,
-                        height: 40,
-                        width: 256,
-                        marginTop: 40
-                    }
+                    customStyle || styles.treeSelect
                 }
                 value={value}
                 dropdownStyle={{
