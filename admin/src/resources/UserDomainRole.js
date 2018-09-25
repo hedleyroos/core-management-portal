@@ -24,6 +24,8 @@ import EmptyField from '../fields/EmptyField';
 
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 
+import DomainTreeInput from '../inputs/DomainTreeInput';
+
 const validationCreateUserDomainRole = values => {
     const errors = {};
     if (!values.user_id) {
@@ -111,15 +113,7 @@ export const UserDomainRoleCreate = props => (
                 </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('domains', 'list') && (
-                <ReferenceInput
-                    label="Domain"
-                    source="domain_id"
-                    reference="domains"
-                    perPage={0}
-                    allowEmpty
-                >
-                    <SelectInput optionText="name" />
-                </ReferenceInput>
+                <DomainTreeInput label="Domain" source="domain_id" />
             )}
             {PermissionsStore.getResourcePermission('roles', 'list') && (
                 <ReferenceInput

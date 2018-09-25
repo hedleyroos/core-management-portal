@@ -29,6 +29,8 @@ import DomainRoleEditActions from '../customActions/DomainRoleEditActions';
 
 import DomainRoleFilter from '../filters/DomainRoleFilter';
 
+import DomainTreeInput from '../inputs/DomainTreeInput';
+
 const validationCreateDomainRole = values => {
     const errors = {};
     if (!values.domain_id) {
@@ -95,15 +97,7 @@ export const DomainRoleCreate = props => (
     <Create {...props} title="DomainRole Create">
         <SimpleForm validate={validationCreateDomainRole} redirect="show">
             {PermissionsStore.getResourcePermission('domains', 'list') && (
-                <ReferenceInput
-                    label="Domain"
-                    source="domain_id"
-                    reference="domains"
-                    perPage={0}
-                    allowEmpty
-                >
-                    <SelectInput optionText="name" />
-                </ReferenceInput>
+                <DomainTreeInput label="Domain" source="domain_id" />
             )}
             {PermissionsStore.getResourcePermission('roles', 'list') && (
                 <ReferenceInput
