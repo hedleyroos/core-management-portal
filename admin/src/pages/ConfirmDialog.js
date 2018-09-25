@@ -37,20 +37,17 @@ const ConfirmDialog = props => {
                     {text}
                     {inputValues &&
                         inputValues.map((input, index) => (
-                            <div>
-                                <TextField
-                                    key={index}
-                                    required={!formIsValid}
-                                    label={input.placeholder}
-                                    placeholder={input.placeholder}
-                                    autoFocus={input.autoFocus || 'false'}
-                                    name={`${input.name}`}
-                                    margin="normal"
-                                    value={input.value}
-                                    onChange={handleInput}
-                                />
-                                ;
-                            </div>
+                            <TextField
+                                key={index}
+                                required={!formIsValid}
+                                label={input.placeholder}
+                                placeholder={input.placeholder}
+                                name={`${input.name}`}
+                                value={input.value}
+                                onChange={handleInput}
+                                multiline
+                                fullWidth
+                            />
                         ))}
                 </DialogContentText>
             </DialogContent>

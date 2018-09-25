@@ -51,7 +51,6 @@ const RoleCard = ({
                                       />
                                   }
                                   label={`${domainRole.domain.name}: ${domainRole.role.label}`}
-                                  style={styles.checkbox}
                               />
                           ))
                         : `${type} currently has no explicit domain roles.`}
@@ -73,7 +72,6 @@ const RoleCard = ({
                                       />
                                   }
                                   label={`${siteRole.site.name}: ${siteRole.role.label}`}
-                                  style={styles.checkbox}
                               />
                           ))
                         : `${type} currently has no explicit site roles.`}

@@ -16,7 +16,6 @@ import red from '@material-ui/core/colors/red';
 
 import DomainTreeInput from '../inputs/DomainTreeInput';
 import { notEmptyObject } from '../utils';
-import { styles } from '../theme';
 
 const AssignRoleCard = ({
     amountSelectedToAssign,
@@ -57,12 +56,11 @@ const AssignRoleCard = ({
                                     {Object.values(rolesToAssign).map(role => (
                                         <FormControlLabel
                                             key={role.id}
-                                            style={styles.checkbox}
                                             control={
                                                 <Checkbox
                                                     checked={role.checked}
                                                     onChange={() => handleSelect(role.id)}
-                                                    value={role.id}
+                                                    value={role.id.toString()}
                                                 />
                                             }
                                             label={role.label}
