@@ -65,6 +65,9 @@ class OIDCCallback extends Component {
                                 .then(() => {
                                     // Load user settings. This may fail and login can continue.
                                     loadGMPUserSettings(parsedQuery.access_token).then(() => {
+                                        // Because of rendering happening before the server returns in React Admin,
+                                        // a simple unmounting of the Admin component will no longer work to reset
+                                        // the permissions. Here we redirect the window now to the portal.
                                         window.location.href = process.env.REACT_APP_PORTAL_URL;
                                     });
                                 })
