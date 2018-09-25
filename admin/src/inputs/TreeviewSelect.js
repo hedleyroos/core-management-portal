@@ -27,18 +27,20 @@ class TreeviewSelect extends Component {
     }
 
     render() {
-        const { label, treeData, showSearch } = this.props;
+        const { label, treeData, showSearch, customStyle } = this.props;
         const { value } = this.state;
         return (
             <TreeSelect
                 showSearch={showSearch}
                 treeData={treeData}
-                style={{
-                    fontSize: 16,
-                    height: 40,
-                    width: 256,
-                    marginTop: 40
-                }}
+                style={
+                    customStyle || {
+                        fontSize: 16,
+                        height: 40,
+                        width: 256,
+                        marginTop: 40
+                    }
+                }
                 value={value}
                 dropdownStyle={{
                     maxHeight: 400,
@@ -53,10 +55,12 @@ class TreeviewSelect extends Component {
 TreeviewSelect.propTypes = {
     onChange: PropTypes.func,
     showSearch: PropTypes.bool,
-    value: PropTypes.string
+    value: PropTypes.string,
+    customStyle: PropTypes.object
 };
 TreeviewSelect.defaultProps = {
-    showSearch: false
+    showSearch: false,
+    customStyle: null
 };
 
 export default TreeviewSelect;

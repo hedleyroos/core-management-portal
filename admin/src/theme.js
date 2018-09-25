@@ -23,7 +23,7 @@ export const styles = {
         height: '1px',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'url(https://ok6static.oktacdn.com/bc/image/fileStoreRecord?id=fs0b4j8f6xdnwtN4B2p6)',
+        background: teal[500],
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover'
     },
@@ -39,7 +39,8 @@ export const styles = {
         margin: '1em',
         textAlign: 'center',
         width: 60,
-        height: 60
+        height: 60,
+        backgroundColor: teal[500]
     },
     avatarDiv: {
         display: 'flex',
