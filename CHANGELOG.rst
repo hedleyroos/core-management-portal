@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.3.0
+-----
 - All resources use `FieldSelectDatagrid`.
 - User Settings are now obtained on login and stored locally.
 - `query-string` npm package version changed to support production build.
