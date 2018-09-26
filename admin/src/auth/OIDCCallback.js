@@ -8,9 +8,11 @@ import {
     base64urlDecode,
     errorNotificationAnt,
     apiErrorHandler,
-    createTreeFromContexts
+    createTreeFromContexts,
+    loadGMPUserSettings
 } from '../utils';
 import WaitingPage from '../pages/WaitingPage';
+
 
 class OIDCCallback extends Component {
     constructor(props) {
@@ -61,8 +63,11 @@ class OIDCCallback extends Component {
                     createTreeFromContexts(contexts)
                         .then(treeData => {
                             PermissionsStore.getAndLoadPermissions({ userID, contexts, treeData })
-                                .then(result => {
-                                    this.setState({ loginComplete: true });
+                                .then(() => {
+                                    // Load user settings. This may fail and login can continue.
+                                    loadGMPUserSettings(parsedQuery.access_token).then(() => {
+                                        this.setState({ loginComplete: true });
+                                    });
                                 })
                                 .catch(error => {
                                     this.handleLoginError(error);

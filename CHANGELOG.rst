@@ -1,6 +1,18 @@
 Changelog
 =========
 
+1.3.0
+-----
+- All resources use `FieldSelectDatagrid`.
+- User Settings are now obtained on login and stored locally.
+- `query-string` npm package version changed to support production build.
+- `ConfirmDialog` now supports optional text inputs with validation.
+- Added `reason` input to deleting a user, saves as field in DeletedUser entry.
+- Updated docker files to support production build with build args.
+- Hide delete user button when viewing the currently logged in user.
+- Manage Roles pages only allow assignment of roles that are available on a given domain or site, more info shown if no roles are available.
+- Create action now leads to show view, no longer the edit view.
+
 1.2.0
 -----
 - React Beautiful DND package added.

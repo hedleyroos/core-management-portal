@@ -10,6 +10,8 @@ import {
     TextField,
     BooleanField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     TextInput,
@@ -26,7 +28,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import RoleFilter from '../filters/RoleFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateRole = values => {
     const errors = {};
@@ -43,23 +45,32 @@ const validationEditRole = values => {
 
 export const RoleList = props => (
     <List {...props} title="Role List" filters={<RoleFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" sortable={false} />
-            <TextField source="label" sortable={false} />
-            <BooleanField source="requires_2fa" sortable={false} />
-            <TextField source="description" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('roles', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('roles', 'remove') ? <DeleteButton /> : null}
-        </EditableDatagrid>
+        <Responsive
+            small={<SimpleList primaryText={record => `Label: ${record.label}`} />}
+            medium={
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                    <NumberField source="id" sortable={false} />
+                    <TextField source="label" sortable={false} />
+                    <BooleanField source="requires_2fa" sortable={false} />
+                    <TextField source="description" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('roles', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('roles', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </FieldSelectDatagrid>
+            }
+        />
     </List>
 );
 
 export const RoleCreate = props => (
     <Create {...props} title="Role Create">
-        <SimpleForm validate={validationCreateRole}>
+        <SimpleForm validate={validationCreateRole} redirect="show">
             <TextInput source="label" />
             <BooleanInput source="requires_2fa" />
             <TextInput source="description" />

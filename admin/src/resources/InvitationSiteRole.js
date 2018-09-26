@@ -21,7 +21,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import InvitationSiteRoleFilter from '../filters/InvitationSiteRoleFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateInvitationSiteRole = values => {
     const errors = {};
@@ -39,7 +39,7 @@ const validationCreateInvitationSiteRole = values => {
 
 export const InvitationSiteRoleList = props => (
     <List {...props} title="InvitationSiteRole List" filters={<InvitationSiteRoleFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField
                     label="Invitation"
@@ -88,13 +88,13 @@ export const InvitationSiteRoleList = props => (
             {PermissionsStore.getResourcePermission('invitationsiteroles', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 
 export const InvitationSiteRoleCreate = props => (
     <Create {...props} title="InvitationSiteRole Create">
-        <SimpleForm validate={validationCreateInvitationSiteRole}>
+        <SimpleForm validate={validationCreateInvitationSiteRole} redirect="show">
             {PermissionsStore.getResourcePermission('invitations', 'list') && (
                 <ReferenceInput
                     label="Invitation"

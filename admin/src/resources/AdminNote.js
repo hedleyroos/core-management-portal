@@ -9,6 +9,8 @@ import {
     ReferenceField,
     TextField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     ReferenceInput,
@@ -24,7 +26,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import AdminNoteFilter from '../filters/AdminNoteFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateAdminNote = values => {
     const errors = {};
@@ -44,51 +46,58 @@ const validationEditAdminNote = values => {
 
 export const AdminNoteList = props => (
     <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" sortable={false} />
-            {PermissionsStore.getResourcePermission('users', 'list') ? (
-                <ReferenceField
-                    label="User"
-                    source="user_id"
-                    reference="users"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="username" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            {PermissionsStore.getResourcePermission('users', 'list') ? (
-                <ReferenceField
-                    label="User"
-                    source="creator_id"
-                    reference="users"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="username" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <TextField source="note" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('adminnotes', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </EditableDatagrid>
+        <Responsive
+            small={<SimpleList primaryText={record => `Note: ${record.note}`} />}
+            medium={
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                    <NumberField source="id" sortable={false} />
+                    {PermissionsStore.getResourcePermission('users', 'list') ? (
+                        <ReferenceField
+                            label="User"
+                            source="user_id"
+                            reference="users"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="username" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    {PermissionsStore.getResourcePermission('users', 'list') ? (
+                        <ReferenceField
+                            label="User"
+                            source="creator_id"
+                            reference="users"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="username" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <TextField source="note" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('adminnotes', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('adminnotes', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </FieldSelectDatagrid>
+            }
+        />
     </List>
 );
 
 export const AdminNoteCreate = props => (
     <Create {...props} title="AdminNote Create">
-        <SimpleForm validate={validationCreateAdminNote}>
+        <SimpleForm validate={validationCreateAdminNote} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
                 <ReferenceInput
                     label="User"

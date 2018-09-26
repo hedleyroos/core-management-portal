@@ -12,6 +12,8 @@ import {
     UrlField,
     ReferenceField,
     NumberField,
+    Responsive,
+    SimpleList,
     Show,
     SimpleShowLayout,
     ReferenceManyField,
@@ -32,6 +34,7 @@ import CardTitle from 'material-ui/Card/CardTitle';
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import IdenticonField from '../fields/IndeticonField';
 import ObjectField from '../fields/ObjectField';
 import UserFilter from '../filters/UserFilter';
 import UserShowActions from '../customActions/UserShow';
@@ -40,8 +43,6 @@ const validationEditUser = values => {
     const errors = {};
     return errors;
 };
-
-const hiddenFields = ['created_at', 'updated_at', 'avatar', 'country_code'];
 
 export const UserListNoSites = props => (
     <Card>
@@ -54,57 +55,66 @@ export const UserListNoSites = props => (
 
 export const UserList = props => (
     <List {...props} title="User List" filters={<UserFilter />}>
-        <FieldSelectDatagrid
-            defaultHiddenFields={hiddenFields}
-            bodyOptions={{ showRowHover: true }}
-        >
-            <TextField source="id" />
-            <TextField source="username" sortable={false} />
-            <TextField source="first_name" sortable={false} />
-            <TextField source="last_name" sortable={false} />
-            <TextField source="email" sortable={false} />
-            <BooleanField source="is_active" sortable={false} />
-            <DateField source="date_joined" sortable={false} />
-            <DateField source="last_login" sortable={false} />
-            <BooleanField source="email_verified" sortable={false} />
-            <BooleanField source="msisdn_verified" sortable={false} />
-            <TextField source="msisdn" sortable={false} />
-            <TextField source="gender" sortable={false} />
-            <DateField source="birth_date" sortable={false} />
-            <UrlField source="avatar" sortable={false} />
-            {PermissionsStore.getResourcePermission('countries', 'list') ? (
-                <ReferenceField
-                    label="Country"
-                    source="country_code"
-                    reference="countries"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="name" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
-                <ReferenceField
-                    label="Organisation"
-                    source="organisation_id"
-                    reference="organisations"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <NumberField source="name" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('users', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-        </FieldSelectDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `Username: ${record.username}`}
+                    secondaryText={record => `Email: ${record.email}`}
+                />
+            }
+            medium={
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                    <IdenticonField source="id" />
+                    <TextField source="username" sortable={false} />
+                    <TextField source="first_name" sortable={false} />
+                    <TextField source="last_name" sortable={false} />
+                    <TextField source="email" sortable={false} />
+                    <BooleanField source="is_active" sortable={false} />
+                    <DateField source="date_joined" sortable={false} />
+                    <DateField source="last_login" sortable={false} />
+                    <BooleanField source="email_verified" sortable={false} />
+                    <BooleanField source="msisdn_verified" sortable={false} />
+                    <TextField source="msisdn" sortable={false} />
+                    <TextField source="gender" sortable={false} />
+                    <DateField source="birth_date" sortable={false} />
+                    <UrlField source="avatar" sortable={false} />
+                    {PermissionsStore.getResourcePermission('countries', 'list') ? (
+                        <ReferenceField
+                            label="Country"
+                            source="country_code"
+                            reference="countries"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="name" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                        <ReferenceField
+                            label="Organisation"
+                            source="organisation_id"
+                            reference="organisations"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('users', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                </FieldSelectDatagrid>
+            }
+        />
     </List>
 );
 

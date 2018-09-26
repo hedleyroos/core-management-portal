@@ -7,17 +7,36 @@ services:
 - docker
 
 script: true  # Fake build step
-deploy:
-- provider: script
-  script: bash ./scripts/docker_push.sh
-  on:
-    branch: master
-- provider: script
-  script: bash ./scripts/docker_push.sh
-  on:
-    branch: develop
-- provider: script
-  script: bash ./scripts/docker_push.sh
-  on:
-    all_branches: true
-    condition: "${TRAVIS_BRANCH} =~ ^release.*$"
+
+jobs:
+  include:
+    - stage: "Build"
+      script: bash ./scripts/docker_push.sh
+      name: "Production Build"
+      if: type = push AND (branch = master OR branch =~ ^release.*$)
+      env:
+        # Build args for docker image based on master or release branch
+        - >
+          BUILD_ARG="
+          --build-arg REACT_APP_AUTHORIZATION_ENDPOINT=https://auth.gehosting.org/openid/authorize/
+          --build-arg REACT_APP_AUTHORIZATION_USER_ENDPOINT=https://auth.gehosting.org/openid/userinfo/
+          --build-arg REACT_APP_CLIENT_ID=109706
+          --build-arg REACT_APP_LOGOUT_URL=https://auth.gehosting.org/openid/end-session/
+          --build-arg REACT_APP_MANAGEMENT_LAYER=https://api.gehosting.org
+          --build-arg REACT_APP_PORTAL_URL=https://portal.gehosting.org/
+          --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"
+    - stage: "Build"
+      script: bash ./scripts/docker_push.sh
+      name: "QA Build"
+      if: type = push AND branch = develop
+      env:
+        # Build args for docker image based on QA (develop)
+        - >
+          BUILD_ARG="
+          --build-arg REACT_APP_AUTHORIZATION_ENDPOINT=https://authentication-service.qa-hub.ie.gehosting.org/openid/authorize/
+          --build-arg REACT_APP_AUTHORIZATION_USER_ENDPOINT=https://authentication-service.qa-hub.ie.gehosting.org/openid/userinfo/
+          --build-arg REACT_APP_CLIENT_ID=260036
+          --build-arg REACT_APP_LOGOUT_URL=https://authentication-service.qa-hub.ie.gehosting.org/openid/end-session/
+          --build-arg REACT_APP_MANAGEMENT_LAYER=https://management-layer.qa-hub.ie.gehosting.org
+          --build-arg REACT_APP_PORTAL_URL=https://management-portal.qa-hub.ie.gehosting.org/
+          --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"

@@ -160,6 +160,13 @@ parameters:
     type: string
     format: uuid
 
+  invitationredirecturl_id:
+    description: A unique integer value identifying the redirect URL.
+    in: path
+    name: invitationredirecturl_id
+    required: true
+    type: integer
+
   permission_id:
     description: A unique integer value identifying the permission.
     in: path
@@ -841,6 +848,11 @@ definitions:
         type: string
         format: 'date-time'
         readOnly: true
+      invitation_redirect_url_id:
+        type: integer
+        x-related-info:
+          model: invitation_redirect_url
+          label: url
       updated_at:
         type: string
         format: 'date-time'
@@ -876,6 +888,11 @@ definitions:
       expires_at:
         type: string
         format: 'date-time'
+      invitation_redirect_url_id:
+        type: integer
+        x-related-info:
+          model: invitation_redirect_url
+          label: url
     required:
       - first_name
       - last_name
@@ -902,6 +919,59 @@ definitions:
       expires_at:
         type: string
         format: 'date-time'
+      invitation_redirect_url_id:
+        type: integer
+        x-related-info:
+          model: invitation_redirect_url
+          label: url
+
+    minProperties: 1
+
+  invitation_redirect_url:
+    type: object
+    properties:
+      id:
+        type: integer
+      url:
+        type: string
+        format: uri
+      description:
+        type: string
+      created_at:
+        type: string
+        format: 'date-time'
+        readOnly: true
+      updated_at:
+        type: string
+        format: 'date-time'
+        readOnly: true
+    required:
+    - id
+    - url
+    - description
+    - created_at
+    - updated_at
+
+  invitation_redirect_url_create:
+    type: object
+    properties:
+      url:
+        type: string
+        format: uri
+      description:
+        type: string
+    required:
+    - url
+    - description
+
+  invitation_redirect_url_update:
+    type: object
+    properties:
+      url:
+        type: string
+        format: uri
+      description:
+        type: string
     minProperties: 1
 
   invitation_domain_role:
@@ -2168,6 +2238,65 @@ paths:
       tags:
         - operational
 
+  /ops/usersitedata:
+    parameters:
+    - $ref: '#/parameters/optional_portal_context_header'
+    get:
+      description: Read user site specific data. The user and site are inferred from the token.
+      operationId: implicit_usersitedata_read
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/user_site_data'
+      tags:
+      - user_data
+    put:
+      description: Update user site specific data. The user and site are inferred from the token.
+      operationId: implicit_usersitedata_update
+      parameters:
+      - in: body
+        name: data
+        schema:
+          $ref: '#/definitions/user_site_data_update'
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/user_site_data'
+      tags:
+      - user_data
+    post:
+      description: Create user site specific data. The user and site are inferred from the token.
+      operationId: implicit_usersitedata_create
+      parameters:
+      - in: body
+        name: data
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+          required:
+            - data
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/user_site_data'
+      tags:
+      - user_data
+
   /domains:
     parameters:
       - $ref: '#/parameters/optional_portal_context_header'
@@ -2477,6 +2606,107 @@ paths:
             $ref: '#/definitions/invitation'
       tags:
         - access_control
+
+  /invitationredirecturls:
+    get:
+      operationId: invitationredirecturl_list
+      x-aor-permissions:
+      - 'urn:ge:access_control:invitationredirecturl:read'
+      parameters:
+      - $ref: '#/parameters/optional_offset'
+      - $ref: '#/parameters/optional_limit'
+      - name: invitationredirecturl_ids
+        description: An optional list of invitationredirecturl ids
+        in: query
+        type: array
+        items:
+          type: integer
+        required: false
+        minItems: 1
+        collectionFormat: csv
+        uniqueItems: true
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Total-Count:
+              type: integer
+              description: The total number of results matching the query
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/invitation_redirect_url'
+      tags:
+      - access_control
+    post:
+      consumes:
+      - application/json
+      operationId: invitationredirecturl_create
+      x-aor-permissions:
+      - 'urn:ge:access_control:invitationredirecturl:create'
+      parameters:
+      - in: body
+        name: data
+        schema:
+          $ref: '#/definitions/invitation_redirect_url_create'
+      produces:
+      - application/json
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/invitation_redirect_url'
+      tags:
+      - access_control
+
+  '/invitationredirecturls/{invitationredirecturl_id}':
+    parameters:
+    - $ref: '#/parameters/invitationredirecturl_id'
+    delete:
+      operationId: invitationredirecturl_delete
+      x-aor-permissions:
+      - 'urn:ge:access_control:invitationredirecturl:delete'
+      responses:
+        '204':
+          description: ''
+      tags:
+      - access_control
+    get:
+      operationId: invitationredirecturl_read
+      x-aor-permissions:
+      - 'urn:ge:access_control:invitationredirecturl:read'
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/invitation_redirect_url'
+      tags:
+      - access_control
+    put:
+      consumes:
+      - application/json
+      operationId: invitationredirecturl_update
+      x-aor-permissions:
+      - 'urn:ge:access_control:invitationredirecturl:update'
+      parameters:
+      - in: body
+        name: data
+        schema:
+          $ref: '#/definitions/invitation_redirect_url_update'
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/invitation_redirect_url'
+      tags:
+      - access_control
+
 
   /invitationdomainroles:
     parameters:
@@ -4417,6 +4647,9 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: name
+      secondary: description
   invitation:
     inlines:
     - model: invitation_domain_role
@@ -4435,6 +4668,17 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: first_name
+      secondary: email
+  permission:
+    responsive_fields:
+      primary: name
+      secondary: description
+  resource:
+    responsive_fields:
+      primary: urn
+      secondary: description
   role:
     inlines:
     - model: role_resource_permission
@@ -4445,6 +4689,8 @@ x-detail-page-definitions:
         - permission_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: label
   site:
     inlines:
     - model: site_role
@@ -4454,6 +4700,20 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: name
+      secondary: description
+  adminnote:
+    responsive_fields:
+      primary: note
+  country:
+    responsive_fields:
+      primary: code
+      secondary: name
+  organisation:
+    responsive_fields:
+      primary: name
+      secondary: description
   user:
     inlines:
     - model: user_domain_role
@@ -4481,6 +4741,9 @@ x-detail-page-definitions:
         - role_id
         - created_at
         - updated_at
+    responsive_fields:
+      primary: username
+      secondary: email
     sortable_fields:
       - id
   deleteduser:
@@ -4496,4 +4759,7 @@ x-detail-page-definitions:
       - deletion_confirmed_via
       - created_at
       - updated_at
+    responsive_fields:
+      primary: username
+      secondary: email
 

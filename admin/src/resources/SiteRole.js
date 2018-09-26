@@ -24,7 +24,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import SiteRoleFilter from '../filters/SiteRoleFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteRole = values => {
     const errors = {};
@@ -44,7 +44,7 @@ const validationEditSiteRole = values => {
 
 export const SiteRoleList = props => (
     <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -81,13 +81,13 @@ export const SiteRoleList = props => (
             {PermissionsStore.getResourcePermission('siteroles', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 
 export const SiteRoleCreate = props => (
     <Create {...props} title="SiteRole Create">
-        <SimpleForm validate={validationCreateSiteRole}>
+        <SimpleForm validate={validationCreateSiteRole} redirect="show">
             {PermissionsStore.getResourcePermission('sites', 'list') && (
                 <ReferenceInput
                     label="Site"

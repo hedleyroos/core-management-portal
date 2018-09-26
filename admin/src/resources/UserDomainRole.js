@@ -23,7 +23,7 @@ import EmptyField from '../fields/EmptyField';
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 import DomainTreeInput from '../inputs/DomainTreeInput';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserDomainRole = values => {
     const errors = {};
@@ -41,7 +41,7 @@ const validationCreateUserDomainRole = values => {
 
 export const UserDomainRoleList = props => (
     <List {...props} title="UserDomainRole List" filters={<UserDomainRoleFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -90,13 +90,13 @@ export const UserDomainRoleList = props => (
             {PermissionsStore.getResourcePermission('userdomainroles', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 
 export const UserDomainRoleCreate = props => (
     <Create {...props} title="UserDomainRole Create">
-        <SimpleForm validate={validationCreateUserDomainRole}>
+        <SimpleForm validate={validationCreateUserDomainRole} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
                 <UnlimitedDropdownInput
                     label="User"

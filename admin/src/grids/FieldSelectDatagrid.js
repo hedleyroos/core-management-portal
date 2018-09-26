@@ -10,6 +10,7 @@ import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 
 import EditableDatagrid from './EditableDatagrid';
 import { styles } from '../Theme';
+import { updateGMPUserSiteData } from '../utils';
 
 class FieldSelectDatagrid extends Component {
     constructor(props) {
@@ -22,9 +23,13 @@ class FieldSelectDatagrid extends Component {
     }
 
     componentDidMount() {
+        const userSiteData = JSON.parse(localStorage.getItem('userSiteData'));
         // Here we setup the state of all checkboxes for showing/hiding each fields.
-        const { children, defaultHiddenFields } = this.props;
-        const hiddenSet = new Set(defaultHiddenFields);
+        const { children, resource } = this.props;
+        const settings = userSiteData && userSiteData.settings;
+        const hiddenSet = new Set(
+            settings && settings[resource] && settings[resource].hiddenFields
+        );
         if (children && !this.state.checkboxes) {
             // Create all checkboxes in state with their default value if given in props.
             let checkboxes = {};
@@ -55,6 +60,8 @@ class FieldSelectDatagrid extends Component {
 
     updateCheckbox(name) {
         // Toggle the given checkbox state value.
+        const { resource } = this.props;
+        updateGMPUserSiteData(resource, name);
         const nextCheckboxState = {
             ...this.state.checkboxes,
             [name]: !this.state.checkboxes[name]

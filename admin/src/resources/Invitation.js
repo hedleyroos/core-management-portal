@@ -10,6 +10,8 @@ import {
     ReferenceField,
     NumberField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     TextInput,
@@ -25,11 +27,12 @@ import {
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+import IdenticonField from '../fields/IndeticonField';
 import DateTimeInput from 'aor-datetime-input';
 import InvitationFilter from '../filters/InvitationFilter';
 import InvitationListActions from '../customActions/InvitationList'; 
 import InvitationShowActions from '../customActions/InvitationShow';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -79,54 +82,80 @@ export const InvitationList = props => (
         actions={<InvitationListActions />}
         filters={<InvitationFilter />}
     >
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <TextField source="id" sortable={false} />
-            {PermissionsStore.getResourcePermission('users', 'list') ? (
-                <ReferenceField
-                    label="User"
-                    source="invitor_id"
-                    reference="users"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="username" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <TextField source="first_name" sortable={false} />
-            <TextField source="last_name" sortable={false} />
-            <TextField source="email" sortable={false} />
-            {PermissionsStore.getResourcePermission('organisations', 'list') ? (
-                <ReferenceField
-                    label="Organisation"
-                    source="organisation_id"
-                    reference="organisations"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <NumberField source="name" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            <DateField source="expires_at" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('invitations', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('invitations', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </EditableDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `First Name: ${record.first_name}`}
+                    secondaryText={record => `Email: ${record.email}`}
+                />
+            }
+            medium={
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                    <IdenticonField source="id" sortable={false} />
+                    {PermissionsStore.getResourcePermission('users', 'list') ? (
+                        <ReferenceField
+                            label="User"
+                            source="invitor_id"
+                            reference="users"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="username" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <TextField source="first_name" sortable={false} />
+                    <TextField source="last_name" sortable={false} />
+                    <TextField source="email" sortable={false} />
+                    {PermissionsStore.getResourcePermission('organisations', 'list') ? (
+                        <ReferenceField
+                            label="Organisation"
+                            source="organisation_id"
+                            reference="organisations"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="name" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') ? (
+                        <ReferenceField
+                            label="Invitation Redirect Url"
+                            source="invitation_redirect_url_id"
+                            reference="invitationredirecturls"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <NumberField source="url" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <DateField source="expires_at" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('invitations', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('invitations', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </FieldSelectDatagrid>
+            }
+        />
     </List>
 );
 
 export const InvitationCreate = props => (
     <Create {...props} title="Invitation Create">
-        <SimpleForm validate={validationCreateInvitation}>
+        <SimpleForm validate={validationCreateInvitation} redirect="show">
             <TextInput source="first_name" />
             <TextInput source="last_name" />
             <TextInput source="email" />
@@ -142,6 +171,17 @@ export const InvitationCreate = props => (
                 </ReferenceInput>
             )}
             <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
+            {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') && (
+                <ReferenceInput
+                    label="Invitation Redirect Url"
+                    source="invitation_redirect_url_id"
+                    reference="invitationredirecturls"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="url" />
+                </ReferenceInput>
+            )}
         </SimpleForm>
     </Create>
 );
@@ -181,6 +221,19 @@ export const InvitationShow = props => (
             )}
             <DateField source="expires_at" />
             <DateField source="created_at" />
+            {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') ? (
+                <ReferenceField
+                    label="Invitation Redirect Url"
+                    source="invitation_redirect_url_id"
+                    reference="invitationredirecturls"
+                    linkType="show"
+                    allowEmpty
+                >
+                    <NumberField source="url" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField
@@ -284,6 +337,17 @@ export const InvitationEdit = props => (
                 </ReferenceInput>
             )}
             <DateTimeInput source="expires_at" format={dateTimeFormatter} parse={dateTimeParser} />
+            {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') && (
+                <ReferenceInput
+                    label="Invitation Redirect Url"
+                    source="invitation_redirect_url_id"
+                    reference="invitationredirecturls"
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="url" />
+                </ReferenceInput>
+            )}
             {PermissionsStore.getResourcePermission('invitationdomainroles', 'list') ? (
                 <ReferenceManyField
                     label="Domain Roles"

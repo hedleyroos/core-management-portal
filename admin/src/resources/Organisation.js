@@ -8,6 +8,8 @@ import {
     NumberField,
     TextField,
     DateField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     TextInput,
@@ -20,7 +22,7 @@ import {
 } from 'admin-on-rest';
 import PermissionsStore from '../auth/PermissionsStore';
 import OrganisationFilter from '../filters/OrganisationFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateOrganisation = values => {
     const errors = {};
@@ -37,26 +39,36 @@ const validationEditOrganisation = values => {
 
 export const OrganisationList = props => (
     <List {...props} title="Organisation List" filters={<OrganisationFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <NumberField source="id" sortable={false} />
-            <TextField source="name" sortable={false} />
-            <TextField source="description" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('organisations', 'edit') ? (
-                <EditButton />
-            ) : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('organisations', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </EditableDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `Name: ${record.name}`}
+                    secondaryText={record => `Description: ${record.description}`}
+                />
+            }
+            medium={
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                    <NumberField source="id" sortable={false} />
+                    <TextField source="name" sortable={false} />
+                    <TextField source="description" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('organisations', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('organisations', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </FieldSelectDatagrid>
+            }
+        />
     </List>
 );
 
 export const OrganisationCreate = props => (
     <Create {...props} title="Organisation Create">
-        <SimpleForm validate={validationCreateOrganisation}>
+        <SimpleForm validate={validationCreateOrganisation} redirect="show">
             <TextInput source="name" />
             <TextInput source="description" />
         </SimpleForm>

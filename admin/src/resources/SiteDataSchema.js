@@ -24,7 +24,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};
@@ -44,7 +44,7 @@ const validationEditSiteDataSchema = values => {
 
 export const SiteDataSchemaList = props => (
     <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -69,13 +69,13 @@ export const SiteDataSchemaList = props => (
             {PermissionsStore.getResourcePermission('sitedataschemas', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 
 export const SiteDataSchemaCreate = props => (
     <Create {...props} title="SiteDataSchema Create">
-        <SimpleForm validate={validationCreateSiteDataSchema}>
+        <SimpleForm validate={validationCreateSiteDataSchema} redirect="show">
             {PermissionsStore.getResourcePermission('sites', 'list') && (
                 <ReferenceInput
                     label="Site"

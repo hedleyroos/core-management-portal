@@ -9,6 +9,8 @@ import {
     TextField,
     DateField,
     ReferenceField,
+    Responsive,
+    SimpleList,
     SimpleForm,
     Create,
     TextInput,
@@ -25,7 +27,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import DeletedUserFilter from '../filters/DeletedUserFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -67,41 +69,53 @@ const validationEditDeletedUser = values => {
 
 export const DeletedUserList = props => (
     <List {...props} title="DeletedUser List" filters={<DeletedUserFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
-            <TextField source="id" sortable={false} />
-            <TextField source="username" sortable={false} />
-            <TextField source="email" sortable={false} />
-            <TextField source="msisdn" sortable={false} />
-            <TextField source="reason" sortable={false} />
-            <DateField source="created_at" sortable={false} />
-            <DateField source="updated_at" sortable={false} />
-            <DateField source="deleted_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('deleters', 'list') ? (
-                <ReferenceField
-                    label="Deleter"
-                    source="deleter_id"
-                    reference="deleters"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="" />
-                </ReferenceField>
-            ) : (
-                <EmptyField />
-            )}
-            {PermissionsStore.getResourcePermission('deletedusers', 'edit') ? <EditButton /> : null}
-            <ShowButton />
-            {PermissionsStore.getResourcePermission('deletedusers', 'remove') ? (
-                <DeleteButton />
-            ) : null}
-        </EditableDatagrid>
+        <Responsive
+            small={
+                <SimpleList
+                    primaryText={record => `Username: ${record.username}`}
+                    secondaryText={record => `Email: ${record.email}`}
+                />
+            }
+            medium={
+                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                    <TextField source="id" sortable={false} />
+                    <TextField source="username" sortable={false} />
+                    <TextField source="email" sortable={false} />
+                    <TextField source="msisdn" sortable={false} />
+                    <TextField source="reason" sortable={false} />
+                    <DateField source="created_at" sortable={false} />
+                    <DateField source="updated_at" sortable={false} />
+                    <DateField source="deleted_at" sortable={false} />
+                    {PermissionsStore.getResourcePermission('deleters', 'list') ? (
+                        <ReferenceField
+                            label="Deleter"
+                            source="deleter_id"
+                            reference="deleters"
+                            sortable={false}
+                            linkType="show"
+                            allowEmpty
+                        >
+                            <TextField source="" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    {PermissionsStore.getResourcePermission('deletedusers', 'edit') ? (
+                        <EditButton />
+                    ) : null}
+                    <ShowButton />
+                    {PermissionsStore.getResourcePermission('deletedusers', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
+                </FieldSelectDatagrid>
+            }
+        />
     </List>
 );
 
 export const DeletedUserCreate = props => (
     <Create {...props} title="DeletedUser Create">
-        <SimpleForm validate={validationCreateDeletedUser}>
+        <SimpleForm validate={validationCreateDeletedUser} redirect="show">
             <TextInput source="id" />
             <TextInput source="username" />
             <TextInput source="email" />

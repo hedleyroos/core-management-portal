@@ -81,6 +81,7 @@ const GET_MANY_FILTER = {
     countries: 'country_codes',
     domains: 'domain_ids',
     invitations: 'invitation_ids',
+    invitationredirecturls: 'invitationredirecturl_ids',
     organisations: 'organisation_ids',
     permissions: 'permission_ids',
     resources: 'resource_ids',
@@ -181,6 +182,7 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
                 : '';
             url = `${apiUrl}/ops/${resource}` + pathParameters;
             options.method = params.method;
+            options.body = params.data ? JSON.stringify(params.data) : null;
             break;
         case DELETE:
             url = `${apiUrl}/${resource}/${params.id}`;

@@ -25,7 +25,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 import DateTimeInput from 'aor-datetime-input';
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
-import EditableDatagrid from '../grids/EditableDatagrid';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -64,7 +64,7 @@ const validationEditDeletedUserSite = values => {
 
 export const DeletedUserSiteList = props => (
     <List {...props} title="DeletedUserSite List" filters={<DeletedUserSiteFilter />}>
-        <EditableDatagrid bodyOptions={{ showRowHover: true }}>
+        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField
                     label="Deleted User"
@@ -106,13 +106,13 @@ export const DeletedUserSiteList = props => (
             {PermissionsStore.getResourcePermission('deletedusersites', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </EditableDatagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 
 export const DeletedUserSiteCreate = props => (
     <Create {...props} title="DeletedUserSite Create">
-        <SimpleForm validate={validationCreateDeletedUserSite}>
+        <SimpleForm validate={validationCreateDeletedUserSite} redirect="show">
             {PermissionsStore.getResourcePermission('deletedusers', 'list') && (
                 <ReferenceInput
                     label="Deleted User"
