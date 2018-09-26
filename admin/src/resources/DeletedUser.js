@@ -4,27 +4,27 @@
  **/
 import React from 'react';
 import {
-    DateField,
-    Datagrid,
-    ReferenceField,
-    Create,
     SimpleList,
-    Edit,
-    SimpleShowLayout,
     Show,
     NumberField,
-    DateInput,
-    TextInput,
-    TextField,
     SimpleForm,
-    List,
+    ReferenceField,
+    DateField,
+    Create,
+    Datagrid,
     Responsive,
+    TextInput,
+    SimpleShowLayout,
+    List,
+    Edit,
     ReferenceManyField,
+    TextField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import DateTimeInput from '../inputs/DateTimeInput';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import DeletedUserEditToolbar from '../customActions/DeletedUserEditToolbar';
@@ -139,7 +139,7 @@ export const DeletedUserShow = props => (
                     reference="deletedusersites"
                     target="deleted_user_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('sites', 'list') ? (
                             <ReferenceField
                                 label="Site"
@@ -175,14 +175,14 @@ export const DeletedUserEdit = props => (
             <TextInput source="email" />
             <TextInput source="msisdn" />
             <TextInput source="reason" />
-            <DateInput source="deleted_at" />
+            <DateTimeInput source="deleted_at" />
             {PermissionsStore.getResourcePermission('deletedusersites', 'list') ? (
                 <ReferenceManyField
                     label="Sites which the user visited"
                     reference="deletedusersites"
                     target="deleted_user_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('sites', 'list') ? (
                             <ReferenceField
                                 label="Site"

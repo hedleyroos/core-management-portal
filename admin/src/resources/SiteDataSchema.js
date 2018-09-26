@@ -5,24 +5,24 @@
 import React from 'react';
 import {
     SelectInput,
-    DateField,
-    Datagrid,
-    ReferenceField,
-    Create,
-    Edit,
-    SimpleShowLayout,
     Show,
-    NumberField,
-    SimpleForm,
     LongTextInput,
-    List,
+    SimpleForm,
+    ReferenceField,
+    DateField,
+    Create,
+    Datagrid,
     ReferenceInput,
+    SimpleShowLayout,
+    List,
+    Edit,
+    NumberField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
-import ObjectField from '../fields/ObjectField';
 import EmptyField from '../fields/EmptyField';
+import ObjectField from '../fields/ObjectField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import SiteDataSchemaEditToolbar from '../customActions/SiteDataSchemaEditToolbar';

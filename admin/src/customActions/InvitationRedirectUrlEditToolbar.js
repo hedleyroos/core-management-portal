@@ -9,7 +9,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 
 const InvitationRedirectUrlEditToolbar = props => (
     <Toolbar {...props}>
-        <SaveButton label="Save" redirect="show" submitOnEnter={true} />
+        <SaveButton label="Save" submitOnEnter={true} />
         <SaveButton
             label="Save and Continue Editing"
             redirect={false}
@@ -17,7 +17,7 @@ const InvitationRedirectUrlEditToolbar = props => (
             variant="flat"
         />
         {PermissionsStore.getResourcePermission('invitationredirecturls', 'remove') && (
-            <DeleteButton />
+            <DeleteButton resource="invitationredirecturls" record={props.record} />
         )}
     </Toolbar>
 );

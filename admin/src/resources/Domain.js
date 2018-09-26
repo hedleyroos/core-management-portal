@@ -4,23 +4,23 @@
  **/
 import React from 'react';
 import {
-    SelectInput,
-    DateField,
-    ReferenceField,
-    Edit,
-    TextField,
-    List,
-    Responsive,
-    Datagrid,
-    Create,
     SimpleList,
-    SimpleShowLayout,
-    Show,
-    NumberField,
-    TextInput,
     SimpleForm,
+    Create,
     ReferenceInput,
     ReferenceManyField,
+    TextField,
+    SelectInput,
+    Show,
+    List,
+    ReferenceField,
+    DateField,
+    Datagrid,
+    Responsive,
+    SimpleShowLayout,
+    TextInput,
+    Edit,
+    NumberField,
     EditButton,
     ShowButton,
     DeleteButton
@@ -127,7 +127,7 @@ export const DomainShow = props => (
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         <NumberField source="id" />
                         <TextField source="name" />
                         <DateField source="created_at" />
@@ -139,7 +139,7 @@ export const DomainShow = props => (
             )}
             {PermissionsStore.getResourcePermission('domainroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('roles', 'list') ? (
                             <ReferenceField
                                 label="Role"
@@ -182,7 +182,7 @@ export const DomainEdit = props => (
             <TextInput source="description" />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         <NumberField source="id" />
                         <TextField source="name" />
                         <DateField source="created_at" />
@@ -192,7 +192,7 @@ export const DomainEdit = props => (
             ) : null}
             {PermissionsStore.getResourcePermission('domainroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="domainroles" target="domain_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('roles', 'list') ? (
                             <ReferenceField
                                 label="Role"

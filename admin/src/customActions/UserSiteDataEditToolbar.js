@@ -9,14 +9,16 @@ import PermissionsStore from '../auth/PermissionsStore';
 
 const UserSiteDataEditToolbar = props => (
     <Toolbar {...props}>
-        <SaveButton label="Save" redirect="show" submitOnEnter={true} />
+        <SaveButton label="Save" submitOnEnter={true} />
         <SaveButton
             label="Save and Continue Editing"
             redirect={false}
             submitOnEnter={false}
             variant="flat"
         />
-        {PermissionsStore.getResourcePermission('usersitedata', 'remove') && <DeleteButton />}
+        {PermissionsStore.getResourcePermission('usersitedata', 'remove') && (
+            <DeleteButton resource="usersitedata" record={props.record} />
+        )}
     </Toolbar>
 );
 

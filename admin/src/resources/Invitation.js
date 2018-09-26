@@ -4,29 +4,29 @@
  **/
 import React from 'react';
 import {
-    SelectInput,
-    DateField,
-    ReferenceField,
-    Edit,
-    TextField,
-    List,
-    Responsive,
-    Datagrid,
-    Create,
     SimpleList,
-    SimpleShowLayout,
-    Show,
-    NumberField,
-    DateInput,
-    TextInput,
     SimpleForm,
+    Create,
     ReferenceInput,
     ReferenceManyField,
+    TextField,
+    SelectInput,
+    Show,
+    List,
+    ReferenceField,
+    DateField,
+    Datagrid,
+    Responsive,
+    SimpleShowLayout,
+    TextInput,
+    Edit,
+    NumberField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import DateTimeInput from '../inputs/DateTimeInput';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import InvitationEditToolbar from '../customActions/InvitationEditToolbar';
@@ -150,7 +150,7 @@ export const InvitationCreate = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <DateInput source="expires_at" />
+            <DateTimeInput source="expires_at" />
             {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') && (
                 <ReferenceInput
                     label="Invitation Redirect Url"
@@ -221,7 +221,7 @@ export const InvitationShow = props => (
                     reference="invitationdomainroles"
                     target="invitation_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('domains', 'list') ? (
                             <ReferenceField
                                 label="Domain"
@@ -261,7 +261,7 @@ export const InvitationShow = props => (
                     reference="invitationsiteroles"
                     target="invitation_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('sites', 'list') ? (
                             <ReferenceField
                                 label="Site"
@@ -316,7 +316,7 @@ export const InvitationEdit = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <DateInput source="expires_at" />
+            <DateTimeInput source="expires_at" />
             {PermissionsStore.getResourcePermission('invitationredirecturls', 'list') && (
                 <ReferenceInput
                     label="Invitation Redirect Url"
@@ -334,7 +334,7 @@ export const InvitationEdit = props => (
                     reference="invitationdomainroles"
                     target="invitation_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('domains', 'list') ? (
                             <ReferenceField
                                 label="Domain"
@@ -372,7 +372,7 @@ export const InvitationEdit = props => (
                     reference="invitationsiteroles"
                     target="invitation_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('sites', 'list') ? (
                             <ReferenceField
                                 label="Site"

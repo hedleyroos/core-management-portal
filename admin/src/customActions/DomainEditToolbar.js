@@ -9,14 +9,16 @@ import PermissionsStore from '../auth/PermissionsStore';
 
 const DomainEditToolbar = props => (
     <Toolbar {...props}>
-        <SaveButton label="Save" redirect="show" submitOnEnter={true} />
+        <SaveButton label="Save" submitOnEnter={true} />
         <SaveButton
             label="Save and Continue Editing"
             redirect={false}
             submitOnEnter={false}
             variant="flat"
         />
-        {PermissionsStore.getResourcePermission('domains', 'remove') && <DeleteButton />}
+        {PermissionsStore.getResourcePermission('domains', 'remove') && (
+            <DeleteButton resource="domains" record={props.record} />
+        )}
     </Toolbar>
 );
 
