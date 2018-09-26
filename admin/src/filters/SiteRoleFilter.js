@@ -5,11 +5,11 @@
 import React from 'react';
 import { SelectInput, ReferenceInput, Filter } from 'react-admin';
 
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+
 const SiteRoleFilter = props => (
     <Filter {...props}>
-        <ReferenceInput label="Site" source="site_id" reference="sites" allowEmpty>
-            <SelectInput optionText="name" />
-        </ReferenceInput>
+        <UnlimitedDropdownInput label="Site" source="site_id" reference="sites" optionText="name" />
         <ReferenceInput label="Role" source="role_id" reference="roles" allowEmpty>
             <SelectInput optionText="label" />
         </ReferenceInput>

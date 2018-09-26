@@ -25,6 +25,7 @@ import EmptyField from '../fields/EmptyField';
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 
 import DomainTreeInput from '../inputs/DomainTreeInput';
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const validationCreateUserDomainRole = values => {
     const errors = {};
@@ -49,16 +50,13 @@ export const UserDomainRoleList = props => (
     >
         <Datagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
-                <ReferenceField
+                <UnlimitedDropdownInput
                     label="User"
                     source="user_id"
                     reference="users"
-                    sortable={false}
-                    linkType="show"
-                    allowEmpty
-                >
-                    <TextField source="username" />
-                </ReferenceField>
+                    optionText="username"
+                    filter={{ site_ids: '' }}
+                />
             ) : (
                 <EmptyField />
             )}

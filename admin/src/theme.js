@@ -159,5 +159,12 @@ export const styles = {
         height: 40,
         width: 256,
         marginTop: 40
+    },
+    divider: {
+        margin: 10
+    },
+    checkbox: {
+        marginTop: -10,
+        marginBottom: -10
     }
 };

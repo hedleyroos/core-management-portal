@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
 
 const ConfirmDialog = props => {
     const {
@@ -19,43 +22,46 @@ const ConfirmDialog = props => {
         text
     } = props;
 
-    const actions = [
-        <FlatButton
-            label={cancelLabel || 'Cancel'}
-            primary={true}
-            onClick={() => handleClose(closeAction || 'cancel')}
-        />,
-        <RaisedButton
-            label={submitLabel || 'Submit'}
-            primary={true}
-            onClick={() => handleClose(closeAction || 'submit')}
-            disabled={!formIsValid}
-        />
-    ];
     return (
-            <Dialog
-                title={title}
-                actions={actions}
-                modal={false}
-                open={open}
-                onRequestClose={() => handleClose('no')}
-            >
-                {text}
-                {inputValues && inputValues.map((input, index) =>
-                    <div>
+        <Dialog
+            open={open}
+            onClose={() => handleClose('no')}
+            aria-labelledby="confirm-dialog-title"
+            aria-describedby="confirm-dialog-description"
+        >
+            <DialogTitle id="confirm-dialog-title">{title}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="confirm-dialog-description">{text}</DialogContentText>
+                {inputValues &&
+                    inputValues.map((input, index) => (
                         <TextField
                             key={index}
                             required={!formIsValid}
-                            floatingLabelText={input.floatingLabelText}
+                            label={input.placeholder}
                             placeholder={input.placeholder}
-                            autoFocus={input.autoFocus || 'false'}
                             name={`${input.name}`}
                             value={input.value}
                             onChange={handleInput}
-                        />;
-                    </div>
-                )}
-            </Dialog>
+                            margin="dense"
+                            multiline
+                            fullWidth
+                        />
+                    ))}
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => handleClose(closeAction || 'cancel')}>
+                    {cancelLabel || 'Cancel'}
+                </Button>
+                <Button
+                    color="primary"
+                    onClick={() => handleClose(closeAction || 'submit')}
+                    disabled={!formIsValid}
+                    autoFocus
+                >
+                    {submitLabel || 'Submit'}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 };
 ConfirmDialog.propTypes = {
@@ -69,7 +75,7 @@ ConfirmDialog.propTypes = {
     submitLabel: PropTypes.string,
     title: PropTypes.string,
     text: PropTypes.string.isRequired
-}
+};
 
 ConfirmDialog.defaultProps = {
     formIsValid: true

@@ -33,6 +33,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import UserEditToolbar from '../customActions/UserEditToolbar';
+import UserShowActions from '../customActions/UserShow';
 
 import UserFilter from '../filters/UserFilter';
 
@@ -106,7 +107,7 @@ export const UserList = props => (
 );
 
 export const UserShow = props => (
-    <Show {...props} title="User Show">
+    <Show {...props} title="User Show" actions={<UserShowActions />}>
         <SimpleShowLayout>
             <TextField source="id" />
             <TextField source="username" />
@@ -156,7 +157,7 @@ export const UserShow = props => (
                     reference="userdomainroles"
                     target="user_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('domains', 'list') ? (
                             <ReferenceField
                                 label="Domain"
@@ -192,7 +193,7 @@ export const UserShow = props => (
             )}
             {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
                 <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('sites', 'list') ? (
                             <ReferenceField
                                 label="Site"
@@ -228,7 +229,7 @@ export const UserShow = props => (
             )}
             {PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
                 <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('sites', 'list') ? (
                             <ReferenceField
                                 label="Site"
@@ -284,7 +285,7 @@ export const UserEdit = props => (
                     reference="userdomainroles"
                     target="user_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('domains', 'list') ? (
                             <ReferenceField
                                 label="Domain"
@@ -318,7 +319,7 @@ export const UserEdit = props => (
             ) : null}
             {PermissionsStore.getResourcePermission('usersiteroles', 'list') ? (
                 <ReferenceManyField label="Site Roles" reference="usersiteroles" target="user_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('sites', 'list') ? (
                             <ReferenceField
                                 label="Site"
@@ -352,7 +353,7 @@ export const UserEdit = props => (
             ) : null}
             {PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
                 <ReferenceManyField label="Site Data" reference="usersitedata" target="user_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('sites', 'list') ? (
                             <ReferenceField
                                 label="Site"
