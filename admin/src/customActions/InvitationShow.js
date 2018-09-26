@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, CardActions } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import CardActions from '@material-ui/core/CardActions';
 import SendIcon from '@material-ui/icons/Send';
 import ManageIcon from '@material-ui/icons/Build';
 import { DeleteButton, ListButton, RefreshButton, EditButton } from 'react-admin';

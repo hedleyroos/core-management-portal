@@ -2,7 +2,10 @@ import { Authenticated } from 'react-admin';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { Card, CardContent, CircularProgress, Typography } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Typography from '@material-ui/core/Typography';
 
 import { invalidToken, reset, setObject, setupResources } from '../../actions/manageRoles';
 import { mountManager } from '../../manageUtils';

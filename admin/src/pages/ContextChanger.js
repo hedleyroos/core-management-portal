@@ -1,15 +1,13 @@
 import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import {
-    Avatar,
-    Card,
-    CardActions,
-    CardContent,
-    CircularProgress,
-    Button,
-    Typography
-} from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import ContextSwitchIcon from '@material-ui/icons/SwapCalls';
 
 import { styles } from '../theme';

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, CardActions } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import CardActions from '@material-ui/core/CardActions';
 import PurgeIcon from '@material-ui/icons/Whatshot';
 import { CreateButton } from 'react-admin';
 

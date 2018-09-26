@@ -3,7 +3,8 @@ import jwtDecode from 'jwt-decode';
 import { ListButton, RefreshButton, EditButton } from 'react-admin';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Button, CardActions } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import CardActions from '@material-ui/core/CardActions';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ManageIcon from '@material-ui/icons/Build';
 
