@@ -37,6 +37,8 @@ import UserShowActions from '../customActions/UserShow';
 
 import UserFilter from '../filters/UserFilter';
 
+import IdenticonField from '../fields/IdenticonField';
+
 const validationEditUser = values => {
     const errors = {};
     return errors;
@@ -53,7 +55,7 @@ export const UserList = props => (
             }
             medium={
                 <Datagrid>
-                    <TextField source="id" />
+                    <IdenticonField source="id" />
                     <TextField source="username" sortable={false} />
                     <TextField source="first_name" sortable={false} />
                     <TextField source="last_name" sortable={false} />
