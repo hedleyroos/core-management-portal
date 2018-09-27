@@ -5,25 +5,25 @@
 import React from 'react';
 import {
     SelectInput,
-    DateField,
-    Datagrid,
-    ReferenceField,
-    Create,
-    Edit,
-    SimpleShowLayout,
     Show,
-    NumberField,
-    DateInput,
-    TextInput,
-    TextField,
     SimpleForm,
-    List,
+    ReferenceField,
+    DateField,
+    Create,
+    Datagrid,
     ReferenceInput,
+    TextInput,
+    SimpleShowLayout,
+    List,
+    TextField,
+    Edit,
+    NumberField,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import DateTimeInput from '../inputs/DateTimeInput';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import DeletedUserSiteEditToolbar from '../customActions/DeletedUserSiteEditToolbar';
@@ -120,9 +120,9 @@ export const DeletedUserSiteCreate = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <DateInput source="deletion_requested_at" />
+            <DateTimeInput source="deletion_requested_at" />
             <TextInput source="deletion_requested_via" />
-            <DateInput source="deletion_confirmed_at" />
+            <DateTimeInput source="deletion_confirmed_at" />
             <TextInput source="deletion_confirmed_via" />
         </SimpleForm>
     </Create>
@@ -173,9 +173,9 @@ export const DeletedUserSiteEdit = props => (
             validate={validationEditDeletedUserSite}
             toolbar={<DeletedUserSiteEditToolbar />}
         >
-            <DateInput source="deletion_requested_at" />
+            <DateTimeInput source="deletion_requested_at" />
             <TextInput source="deletion_requested_via" />
-            <DateInput source="deletion_confirmed_at" />
+            <DateTimeInput source="deletion_confirmed_at" />
             <TextInput source="deletion_confirmed_via" />
         </SimpleForm>
     </Edit>

@@ -5,16 +5,16 @@
 import React from 'react';
 import {
     SelectInput,
-    DateField,
-    Datagrid,
-    ReferenceField,
-    Create,
-    SimpleShowLayout,
     Show,
     NumberField,
     SimpleForm,
-    List,
+    ReferenceField,
+    Create,
+    DateField,
+    Datagrid,
     ReferenceInput,
+    SimpleShowLayout,
+    List,
     ShowButton,
     DeleteButton
 } from 'react-admin';

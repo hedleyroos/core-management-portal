@@ -166,5 +166,9 @@ export const styles = {
     checkbox: {
         marginTop: -10,
         marginBottom: -10
+    },
+    dateTimeInput: {
+        marginTop: 15,
+        marginBottom: 15
     }
 };

@@ -9,14 +9,16 @@ import PermissionsStore from '../auth/PermissionsStore';
 
 const AdminNoteEditToolbar = props => (
     <Toolbar {...props}>
-        <SaveButton label="Save" redirect="show" submitOnEnter={true} />
+        <SaveButton label="Save" submitOnEnter={true} />
         <SaveButton
             label="Save and Continue Editing"
             redirect={false}
             submitOnEnter={false}
             variant="flat"
         />
-        {PermissionsStore.getResourcePermission('adminnotes', 'remove') && <DeleteButton />}
+        {PermissionsStore.getResourcePermission('adminnotes', 'remove') && (
+            <DeleteButton resource="adminnotes" record={props.record} />
+        )}
     </Toolbar>
 );
 

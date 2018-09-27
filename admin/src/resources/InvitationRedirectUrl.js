@@ -4,18 +4,18 @@
  **/
 import React from 'react';
 import {
-    DateField,
-    Datagrid,
-    Create,
-    Edit,
-    SimpleShowLayout,
     Show,
-    NumberField,
-    UrlField,
     TextInput,
-    TextField,
     SimpleForm,
+    DateField,
+    Create,
+    Datagrid,
+    UrlField,
+    SimpleShowLayout,
     List,
+    TextField,
+    Edit,
+    NumberField,
     EditButton,
     ShowButton,
     DeleteButton

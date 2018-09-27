@@ -4,25 +4,25 @@
  **/
 import React from 'react';
 import {
-    SelectInput,
-    DateField,
-    ReferenceField,
-    Edit,
-    TextField,
-    List,
-    Responsive,
-    BooleanInput,
-    Datagrid,
-    Create,
     SimpleList,
-    SimpleShowLayout,
-    Show,
-    NumberField,
-    TextInput,
     SimpleForm,
+    Create,
     ReferenceInput,
-    BooleanField,
     ReferenceManyField,
+    TextField,
+    BooleanField,
+    SelectInput,
+    BooleanInput,
+    Show,
+    List,
+    ReferenceField,
+    DateField,
+    Datagrid,
+    Responsive,
+    SimpleShowLayout,
+    TextInput,
+    Edit,
+    NumberField,
     EditButton,
     ShowButton,
     DeleteButton
@@ -173,7 +173,7 @@ export const SiteShow = props => (
             <DateField source="updated_at" />
             {PermissionsStore.getResourcePermission('siteroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('roles', 'list') ? (
                             <ReferenceField
                                 label="Role"
@@ -228,7 +228,7 @@ export const SiteEdit = props => (
             <BooleanInput source="is_active" />
             {PermissionsStore.getResourcePermission('siteroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('roles', 'list') ? (
                             <ReferenceField
                                 label="Role"

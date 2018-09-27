@@ -4,23 +4,23 @@
  **/
 import React from 'react';
 import {
-    DateField,
-    ReferenceField,
-    Edit,
-    TextField,
-    List,
-    Responsive,
-    BooleanInput,
-    Datagrid,
-    Create,
     SimpleList,
-    SimpleShowLayout,
-    Show,
-    NumberField,
-    TextInput,
     SimpleForm,
-    BooleanField,
+    Create,
     ReferenceManyField,
+    TextField,
+    BooleanField,
+    BooleanInput,
+    Show,
+    List,
+    ReferenceField,
+    DateField,
+    Datagrid,
+    Responsive,
+    SimpleShowLayout,
+    TextInput,
+    Edit,
+    NumberField,
     EditButton,
     ShowButton,
     DeleteButton
@@ -91,7 +91,7 @@ export const RoleShow = props => (
                     reference="roleresourcepermissions"
                     target="role_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('resources', 'list') ? (
                             <ReferenceField
                                 label="Resource"
@@ -141,7 +141,7 @@ export const RoleEdit = props => (
                     reference="roleresourcepermissions"
                     target="role_id"
                 >
-                    <Datagrid bodyOptions={{ showRowHover: true }}>
+                    <Datagrid>
                         {PermissionsStore.getResourcePermission('resources', 'list') ? (
                             <ReferenceField
                                 label="Resource"
