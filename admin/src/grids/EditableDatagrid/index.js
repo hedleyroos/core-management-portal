@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { Table } from 'material-ui/Table';
+import Table from '@material-ui/core/Table';
 
 import DatagridBody from './DatagridBody';
 import { EditableTableHeaders } from './EditableTableHeaders';
-import { muiTheme, styles } from '../../Theme';
+import { styles } from '../../theme';
 
 class EditableDatagrid extends Component {
     constructor(props) {
@@ -64,7 +64,6 @@ class EditableDatagrid extends Component {
                                     resource={resource}
                                     currentSort={currentSort}
                                     updateSort={this.updateSort}
-                                    muiTheme={muiTheme}
                                     headerOptions={headerOptions}
                                     styles={styles}
                                 >

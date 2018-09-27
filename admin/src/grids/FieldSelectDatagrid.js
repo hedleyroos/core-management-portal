@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Card from 'material-ui/Card/Card';
-import CardHeader from 'material-ui/Card/CardHeader';
-import CardText from 'material-ui/Card/CardText';
-import CircularProgress from 'material-ui/CircularProgress';
-import Checkbox from 'material-ui/Checkbox';
-import Visibility from 'material-ui/svg-icons/action/visibility';
-import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Collapse from '@material-ui/core/Collapse';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import Typography from '@material-ui/core/Typography';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 
-import EditableDatagrid from './EditableDatagrid';
-import { styles } from '../Theme';
+// import EditableDatagrid from './EditableDatagrid';
+import { styles } from '../theme';
 import { updateGMPUserSiteData } from '../utils';
 
 class FieldSelectDatagrid extends Component {
@@ -17,9 +24,12 @@ class FieldSelectDatagrid extends Component {
         super(props);
         this.state = {
             children: props.children,
+            expanded: false,
             loading: true
         };
         this.onDragEnd = this.onDragEnd.bind(this);
+        this.handleExpand = this.handleExpand.bind(this);
+        this.updateCheckbox = this.updateCheckbox.bind(this);
     }
 
     componentDidMount() {
@@ -58,6 +68,10 @@ class FieldSelectDatagrid extends Component {
         }
     }
 
+    handleExpand() {
+        this.setState({ expanded: !this.state.expanded });
+    }
+
     updateCheckbox(name) {
         // Toggle the given checkbox state value.
         const { resource } = this.props;
@@ -92,38 +106,71 @@ class FieldSelectDatagrid extends Component {
     }
 
     render() {
+        // Split checkbox rendering into groups of 4.
+        const groupSize = 4;
+        let groups = [];
+        if (this.state.checkboxes) {
+            groups = new Array(Math.ceil(Object.keys(this.state.checkboxes).length / groupSize));
+            groups = Object.entries(this.state.checkboxes).reduce((accumulator, value, index) => {
+                const groupIndex = Math.floor(index / groupSize);
+                accumulator[groupIndex]
+                    ? accumulator[groupIndex].push(value)
+                    : (accumulator[groupIndex] = [value]);
+                return accumulator;
+            }, groups);
+        }
         // Render the Hide/Show field card unless allhidden is true.
         return this.state.loading ? (
             <CircularProgress />
         ) : (
             <div>
                 <Card style={styles.fieldOptionsCard}>
-                    <CardHeader
-                        title="Hide/Show Fields"
-                        actAsExpander={true}
-                        showExpandableButton={true}
-                    />
-                    <CardText expandable={true}>
-                        {Object.entries(this.state.checkboxes).map(([name, value]) => (
-                            <Checkbox
-                                key={name}
-                                label={name}
-                                checked={value}
-                                onCheck={() => this.updateCheckbox(name)}
-                                checkedIcon={<Visibility />}
-                                uncheckedIcon={<VisibilityOff />}
-                            />
-                        ))}
-                    </CardText>
+                    <CardActions>
+                        <Typography />
+                        <Button color="primary" onClick={this.handleExpand} fullWidth>
+                            Hide/Show Fields
+                            <ArrowDownward />
+                        </Button>
+                    </CardActions>
+                    <Collapse in={this.state.expanded} timeout="auto">
+                        <CardContent>
+                            {groups.map((group, index) => (
+                                <FormControl
+                                    component="fieldset"
+                                    key={index}
+                                    style={styles.formControl}
+                                >
+                                    <FormGroup>
+                                        {group.map(([name, value]) => (
+                                            <FormControlLabel
+                                                key={name}
+                                                control={
+                                                    <Checkbox
+                                                        checked={value}
+                                                        onChange={() => this.updateCheckbox(name)}
+                                                        value={name}
+                                                        checkedIcon={<Visibility />}
+                                                        icon={<VisibilityOff />}
+                                                    />
+                                                }
+                                                label={name}
+                                            />
+                                        ))}
+                                    </FormGroup>
+                                </FormControl>
+                            ))}
+                        </CardContent>
+                    </Collapse>
                 </Card>
                 {!this.state.allHidden ? (
-                    <EditableDatagrid
-                        onDragEnd={this.onDragEnd}
-                        managedChildren={this.state.children}
-                        {...this.props}
-                    />
+                    <div>Yas</div>
                 ) : (
-                    <CardText>Please select at least one field to show.</CardText>
+                    // <EditableDatagrid
+                    //     onDragEnd={this.onDragEnd}
+                    //     managedChildren={this.state.children}
+                    //     {...this.props}
+                    // />
+                    <CardContent>Please select at least one field to show.</CardContent>
                 )}
             </div>
         );

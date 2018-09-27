@@ -1,5 +1,6 @@
 import React from 'react';
-import { TableHeader, TableRow } from 'material-ui/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 import DatagridHeaderCell from './DatagridHeaderCell';
 
@@ -8,12 +9,10 @@ export const EditableTableHeaders = ({
     updateSort,
     resource,
     children,
-    headerOptions,
-    muiTheme,
     styles
 }) => (
-    <TableHeader displaySelectAll={false} adjustForCheckbox={false} {...headerOptions}>
-        <TableRow style={muiTheme.tableRow}>
+    <TableHead>
+        <TableRow>
             {React.Children.map(
                 children,
                 (field, index) =>
@@ -33,7 +32,7 @@ export const EditableTableHeaders = ({
                     ) : null
             )}
         </TableRow>
-    </TableHeader>
+    </TableHead>
 );
 
 EditableTableHeaders.muiName = 'TableHeader';
