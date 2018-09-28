@@ -31,6 +31,8 @@ import DeletedUserEditToolbar from '../customActions/DeletedUserEditToolbar';
 
 import DeletedUserFilter from '../filters/DeletedUserFilter';
 
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
+
 const validationCreateDeletedUser = values => {
     const errors = {};
     if (!values.id) {
@@ -65,7 +67,7 @@ export const DeletedUserList = props => (
                 />
             }
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <TextField source="id" sortable={false} />
                     <TextField source="username" sortable={false} />
                     <TextField source="email" sortable={false} />
@@ -91,7 +93,7 @@ export const DeletedUserList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

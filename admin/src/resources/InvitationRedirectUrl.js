@@ -9,7 +9,6 @@ import {
     SimpleForm,
     DateField,
     Create,
-    Datagrid,
     UrlField,
     SimpleShowLayout,
     List,
@@ -24,6 +23,8 @@ import {
 import InvitationRedirectUrlEditToolbar from '../customActions/InvitationRedirectUrlEditToolbar';
 
 import InvitationRedirectUrlFilter from '../filters/InvitationRedirectUrlFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateInvitationRedirectUrl = values => {
     const errors = {};
@@ -48,7 +49,7 @@ export const InvitationRedirectUrlList = props => (
         filters={<InvitationRedirectUrlFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             <NumberField source="id" sortable={false} />
             <UrlField source="url" sortable={false} />
             <TextField source="description" sortable={false} />
@@ -57,7 +58,7 @@ export const InvitationRedirectUrlList = props => (
             <EditButton />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

@@ -12,7 +12,6 @@ import {
     ReferenceField,
     DateField,
     Create,
-    Datagrid,
     ReferenceInput,
     SimpleShowLayout,
     List,
@@ -30,6 +29,8 @@ import DomainRoleEditToolbar from '../customActions/DomainRoleEditToolbar';
 import DomainRoleFilter from '../filters/DomainRoleFilter';
 
 import DomainTreeInput from '../inputs/DomainTreeInput';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateDomainRole = values => {
     const errors = {};
@@ -54,7 +55,7 @@ export const DomainRoleList = props => (
         filters={<DomainRoleFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceField
                     label="Domain"
@@ -89,7 +90,7 @@ export const DomainRoleList = props => (
             <EditButton />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

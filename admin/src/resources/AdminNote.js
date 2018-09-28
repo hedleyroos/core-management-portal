@@ -14,7 +14,6 @@ import {
     List,
     ReferenceField,
     DateField,
-    Datagrid,
     Responsive,
     SimpleShowLayout,
     TextInput,
@@ -30,6 +29,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 import AdminNoteEditToolbar from '../customActions/AdminNoteEditToolbar';
 
 import AdminNoteFilter from '../filters/AdminNoteFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateAdminNote = values => {
     const errors = {};
@@ -52,7 +53,7 @@ export const AdminNoteList = props => (
         <Responsive
             small={<SimpleList primaryText={record => `Note: ${record.note}`} />}
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('users', 'list') ? (
                         <ReferenceField
@@ -88,7 +89,7 @@ export const AdminNoteList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

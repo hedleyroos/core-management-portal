@@ -32,6 +32,8 @@ import RoleEditToolbar from '../customActions/RoleEditToolbar';
 
 import RoleFilter from '../filters/RoleFilter';
 
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
+
 const validationCreateRole = values => {
     const errors = {};
     if (!values.label) {
@@ -50,7 +52,7 @@ export const RoleList = props => (
         <Responsive
             small={<SimpleList primaryText={record => `Label: ${record.label}`} />}
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     <TextField source="label" sortable={false} />
                     <BooleanField source="requires_2fa" sortable={false} />
@@ -60,7 +62,7 @@ export const RoleList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

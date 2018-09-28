@@ -32,6 +32,8 @@ import DomainEditToolbar from '../customActions/DomainEditToolbar';
 
 import DomainFilter from '../filters/DomainFilter';
 
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
+
 const validationCreateDomain = values => {
     const errors = {};
     if (!values.name) {
@@ -55,7 +57,7 @@ export const DomainList = props => (
                 />
             }
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('domains', 'list') ? (
                         <ReferenceField
@@ -78,7 +80,7 @@ export const DomainList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>
