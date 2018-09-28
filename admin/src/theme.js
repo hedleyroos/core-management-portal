@@ -59,13 +59,13 @@ export const styles = {
         cursor: 'auto'
     },
     customTableHeader: {
-        fontSize: '14px',
-        color: 'rgba(0, 0, 0, 1)'
+        fontSize: '12px',
+        color: 'rgba(0, 0, 0, 0.54)'
     },
     customTableLabel: {
         padding: '15px 0 0 0',
         fontSize: '13px',
-        color: 'rgba(0, 0, 0, 0.35)'
+        color: 'rgba(0, 0, 0, 0.54)'
     },
     customTableBottom: {
         backgroundColor: '#e6e6e6'
