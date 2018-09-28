@@ -9,7 +9,6 @@ import {
     SimpleForm,
     DateField,
     Create,
-    Datagrid,
     Responsive,
     TextInput,
     SimpleShowLayout,
@@ -25,6 +24,8 @@ import {
 import OrganisationEditToolbar from '../customActions/OrganisationEditToolbar';
 
 import OrganisationFilter from '../filters/OrganisationFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateOrganisation = values => {
     const errors = {};
@@ -54,7 +55,7 @@ export const OrganisationList = props => (
                 />
             }
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <TextField source="description" sortable={false} />
@@ -63,7 +64,7 @@ export const OrganisationList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

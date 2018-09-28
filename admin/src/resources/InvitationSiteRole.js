@@ -10,7 +10,6 @@ import {
     ReferenceField,
     DateField,
     Create,
-    Datagrid,
     ReferenceInput,
     SimpleShowLayout,
     List,
@@ -23,6 +22,8 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import InvitationSiteRoleFilter from '../filters/InvitationSiteRoleFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateInvitationSiteRole = values => {
     const errors = {};
@@ -45,7 +46,7 @@ export const InvitationSiteRoleList = props => (
         filters={<InvitationSiteRoleFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField
                     label="Invitation"
@@ -92,7 +93,7 @@ export const InvitationSiteRoleList = props => (
             <DateField source="updated_at" sortable={false} />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

@@ -36,6 +36,9 @@ import InvitationFilter from '../filters/InvitationFilter';
 import InvitationListActions from '../customActions/InvitationList';
 import InvitationShowActions from '../customActions/InvitationShow';
 
+import IdenticonField from '../fields/IdenticonField';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
+
 const validationCreateInvitation = values => {
     const errors = {};
     if (!values.first_name) {
@@ -74,8 +77,8 @@ export const InvitationList = props => (
                 />
             }
             medium={
-                <Datagrid>
-                    <TextField source="id" sortable={false} />
+                <FieldSelectDatagrid>
+                    <IdenticonField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('users', 'list') ? (
                         <ReferenceField
                             label="User"
@@ -127,7 +130,7 @@ export const InvitationList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

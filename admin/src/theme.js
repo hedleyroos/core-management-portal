@@ -89,7 +89,7 @@ export const styles = {
     },
     fieldOptionsCard: {
         margin: '20px',
-        width: '30rem'
+        width: '50%'
     },
     wideDropDown: {
         width: '500px'
@@ -170,5 +170,8 @@ export const styles = {
     dateTimeInput: {
         marginTop: 15,
         marginBottom: 15
+    },
+    formControl: {
+        marginRight: 15
     }
 };

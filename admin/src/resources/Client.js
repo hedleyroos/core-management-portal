@@ -6,7 +6,6 @@ import React from 'react';
 import {
     BooleanField,
     Show,
-    Datagrid,
     UrlField,
     SimpleShowLayout,
     List,
@@ -17,9 +16,11 @@ import {
 
 import ClientFilter from '../filters/ClientFilter';
 
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
+
 export const ClientList = props => (
     <List {...props} title="Client List" filters={<ClientFilter />} bulkActionButtons={false}>
-        <Datagrid>
+        <FieldSelectDatagrid>
             <NumberField source="id" sortable={false} />
             <TextField source="_post_logout_redirect_uris" sortable={false} />
             <TextField source="_redirect_uris" sortable={false} />
@@ -33,7 +34,7 @@ export const ClientList = props => (
             <UrlField source="terms_url" sortable={false} />
             <UrlField source="website_url" sortable={false} />
             <ShowButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

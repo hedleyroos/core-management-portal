@@ -6,7 +6,6 @@ import React from 'react';
 import {
     SimpleList,
     Show,
-    Datagrid,
     Responsive,
     SimpleShowLayout,
     List,
@@ -15,6 +14,8 @@ import {
 } from 'react-admin';
 
 import CountryFilter from '../filters/CountryFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 export const CountryList = props => (
     <List {...props} title="Country List" filters={<CountryFilter />} bulkActionButtons={false}>
@@ -26,11 +27,11 @@ export const CountryList = props => (
                 />
             }
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <TextField source="code" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <ShowButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

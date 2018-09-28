@@ -12,7 +12,6 @@ import {
     ReferenceField,
     DateField,
     Create,
-    Datagrid,
     ReferenceInput,
     SimpleShowLayout,
     List,
@@ -28,6 +27,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 import SiteRoleEditToolbar from '../customActions/SiteRoleEditToolbar';
 
 import SiteRoleFilter from '../filters/SiteRoleFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteRole = values => {
     const errors = {};
@@ -47,7 +48,7 @@ const validationEditSiteRole = values => {
 
 export const SiteRoleList = props => (
     <List {...props} title="SiteRole List" filters={<SiteRoleFilter />} bulkActionButtons={false}>
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -82,7 +83,7 @@ export const SiteRoleList = props => (
             <EditButton />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 
