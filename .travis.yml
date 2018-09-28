@@ -53,5 +53,5 @@ jobs:
           --build-arg REACT_APP_CLIENT_ID=260036
           --build-arg REACT_APP_LOGOUT_URL=https://authentication-service.qa-hub.ie.gehosting.org/openid/end-session/
           --build-arg REACT_APP_MANAGEMENT_LAYER=https://management-layer.qa-hub.ie.gehosting.org
-          --build-arg REACT_APP_PORTAL_URL=https://management-portal.react-admin-qa-hub.ie.gehosting.org/
+          --build-arg REACT_APP_PORTAL_URL=https://react-admin-portal.qa-hub.ie.gehosting.org/
           --build-arg REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?"
