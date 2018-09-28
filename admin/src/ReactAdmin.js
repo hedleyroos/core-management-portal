@@ -459,7 +459,7 @@ const ReactAdmin = () => (
             PermissionsStore.getResourcePermission('users', 'list') ? (
                 <Resource
                     name="users"
-                    list={UserListNoSites}
+                    list={PermissionsStore.getSiteIDs() ? UserList : UserListNoSites}
                     show={UserShow}
                     edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
                 />

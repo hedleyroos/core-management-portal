@@ -24,7 +24,6 @@ import EmptyField from '../fields/EmptyField';
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 
 import DomainTreeInput from '../inputs/DomainTreeInput';
-import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
