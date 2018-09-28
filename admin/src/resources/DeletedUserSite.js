@@ -10,7 +10,6 @@ import {
     ReferenceField,
     DateField,
     Create,
-    Datagrid,
     ReferenceInput,
     TextInput,
     SimpleShowLayout,
@@ -29,6 +28,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 import DeletedUserSiteEditToolbar from '../customActions/DeletedUserSiteEditToolbar';
 
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateDeletedUserSite = values => {
     const errors = {};
@@ -53,7 +54,7 @@ export const DeletedUserSiteList = props => (
         filters={<DeletedUserSiteFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField
                     label="Deleted User"
@@ -91,7 +92,7 @@ export const DeletedUserSiteList = props => (
             <EditButton />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

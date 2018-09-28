@@ -6,7 +6,6 @@ import React from 'react';
 import {
     SelectInput,
     DateField,
-    Datagrid,
     ReferenceField,
     Create,
     Edit,
@@ -31,6 +30,7 @@ import UserSiteDataEditToolbar from '../customActions/UserSiteDataEditToolbar';
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
 
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserSiteData = values => {
     const errors = {};
@@ -58,7 +58,7 @@ export const UserSiteDataList = props => (
         filters={<UserSiteDataFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -93,7 +93,7 @@ export const UserSiteDataList = props => (
             <EditButton />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

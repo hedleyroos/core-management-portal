@@ -10,7 +10,6 @@ import {
     SimpleForm,
     DateField,
     Create,
-    Datagrid,
     Responsive,
     UrlField,
     SimpleShowLayout,
@@ -26,6 +25,8 @@ import {
 import ResourceEditToolbar from '../customActions/ResourceEditToolbar';
 
 import ResourceFilter from '../filters/ResourceFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateResource = values => {
     const errors = {};
@@ -50,7 +51,7 @@ export const ResourceList = props => (
                 />
             }
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     <UrlField source="urn" sortable={false} />
                     <TextField source="description" sortable={false} />
@@ -59,7 +60,7 @@ export const ResourceList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

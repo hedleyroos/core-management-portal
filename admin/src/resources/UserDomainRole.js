@@ -11,7 +11,6 @@ import {
     Create,
     DateField,
     ReferenceInput,
-    Datagrid,
     ReferenceField,
     List,
     SimpleForm,
@@ -26,6 +25,8 @@ import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 
 import DomainTreeInput from '../inputs/DomainTreeInput';
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserDomainRole = values => {
     const errors = {};
@@ -48,15 +49,18 @@ export const UserDomainRoleList = props => (
         filters={<UserDomainRoleFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
-                <UnlimitedDropdownInput
+                <ReferenceField
                     label="User"
                     source="user_id"
                     reference="users"
-                    optionText="username"
-                    filter={{ site_ids: '' }}
-                />
+                    sortable={false}
+                    linkType="show"
+                    allowEmpty
+                >
+                    <NumberField source="username" />
+                </ReferenceField>
             ) : (
                 <EmptyField />
             )}
@@ -92,7 +96,7 @@ export const UserDomainRoleList = props => (
             <DateField source="updated_at" sortable={false} />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

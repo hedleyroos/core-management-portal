@@ -11,7 +11,6 @@ import {
     ReferenceField,
     DateField,
     Create,
-    Datagrid,
     ReferenceInput,
     SimpleShowLayout,
     List,
@@ -28,6 +27,8 @@ import PermissionsStore from '../auth/PermissionsStore';
 import SiteDataSchemaEditToolbar from '../customActions/SiteDataSchemaEditToolbar';
 
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteDataSchema = values => {
     const errors = {};
@@ -52,7 +53,7 @@ export const SiteDataSchemaList = props => (
         filters={<SiteDataSchemaFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -73,7 +74,7 @@ export const SiteDataSchemaList = props => (
             <EditButton />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

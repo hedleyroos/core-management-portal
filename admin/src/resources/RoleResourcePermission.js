@@ -11,7 +11,6 @@ import {
     ReferenceField,
     Create,
     DateField,
-    Datagrid,
     ReferenceInput,
     SimpleShowLayout,
     List,
@@ -22,6 +21,8 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateRoleResourcePermission = values => {
     const errors = {};
@@ -44,7 +45,7 @@ export const RoleResourcePermissionList = props => (
         filters={<RoleResourcePermissionFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField
                     label="Role"
@@ -91,7 +92,7 @@ export const RoleResourcePermissionList = props => (
             <DateField source="updated_at" sortable={false} />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

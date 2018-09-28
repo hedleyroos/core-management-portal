@@ -35,6 +35,8 @@ import SiteEditToolbar from '../customActions/SiteEditToolbar';
 import SiteFilter from '../filters/SiteFilter';
 import InlineTable from '../fields/InlineTable';
 
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
+
 const validationCreateSite = values => {
     const errors = {};
     if (!values.domain_id) {
@@ -61,7 +63,7 @@ export const SiteList = props => (
                 />
             }
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('clients', 'list') ? (
                         <ReferenceField
@@ -99,7 +101,7 @@ export const SiteList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>

@@ -6,7 +6,6 @@ import React from 'react';
 import {
     SelectInput,
     DateField,
-    Datagrid,
     ReferenceField,
     Create,
     SimpleShowLayout,
@@ -25,6 +24,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserSiteRole = values => {
     const errors = {};
@@ -47,7 +47,7 @@ export const UserSiteRoleList = props => (
         filters={<UserSiteRoleFilter />}
         bulkActionButtons={false}
     >
-        <Datagrid>
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -94,7 +94,7 @@ export const UserSiteRoleList = props => (
             <DateField source="updated_at" sortable={false} />
             <ShowButton />
             <DeleteButton />
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 

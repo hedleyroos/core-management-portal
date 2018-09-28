@@ -9,7 +9,6 @@ import {
     SimpleForm,
     DateField,
     Create,
-    Datagrid,
     Responsive,
     TextInput,
     SimpleShowLayout,
@@ -25,6 +24,8 @@ import {
 import PermissionEditToolbar from '../customActions/PermissionEditToolbar';
 
 import PermissionFilter from '../filters/PermissionFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreatePermission = values => {
     const errors = {};
@@ -54,7 +55,7 @@ export const PermissionList = props => (
                 />
             }
             medium={
-                <Datagrid>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <TextField source="description" sortable={false} />
@@ -63,7 +64,7 @@ export const PermissionList = props => (
                     <EditButton />
                     <ShowButton />
                     <DeleteButton />
-                </Datagrid>
+                </FieldSelectDatagrid>
             }
         />
     </List>
