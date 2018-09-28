@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import defaultsDeep from 'lodash.defaultsdeep';
 import TableCell from '@material-ui/core/TableCell';
 
 const DatagridCell = ({
@@ -19,15 +18,8 @@ const DatagridCell = ({
     defaultStyle,
     ...rest
 }) => {
-    const computedStyle = defaultsDeep(
-        {},
-        style,
-        field.props.style,
-        field.type.defaultProps ? field.type.defaultProps.style : {},
-        defaultStyle
-    );
     return (
-        <TableCell className={className} style={computedStyle} {...rest}>
+        <TableCell className={className} {...rest}>
             {React.cloneElement(field, { record, basePath, resource })}
         </TableCell>
     );

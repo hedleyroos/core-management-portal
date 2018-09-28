@@ -42,9 +42,7 @@ class EditableDatagrid extends Component {
             data,
             currentSort,
             basePath,
-            options,
             headerOptions,
-            bodyOptions,
             rowOptions,
             rowStyle,
             isLoading,
@@ -55,11 +53,7 @@ class EditableDatagrid extends Component {
                 <Droppable droppableId="droppable-1" type="TABLE" direction="horizontal">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps}>
-                            <Table
-                                style={options && options.fixedHeader ? null : styles.table}
-                                fixedHeader={false}
-                                {...options}
-                            >
+                            <Table>
                                 <EditableTableHeaders
                                     resource={resource}
                                     currentSort={currentSort}
@@ -78,7 +72,6 @@ class EditableDatagrid extends Component {
                                     styles={styles}
                                     rowStyle={rowStyle}
                                     isLoading={isLoading}
-                                    options={bodyOptions}
                                     rowOptions={rowOptions}
                                 >
                                     {this.state.children || managedChildren}

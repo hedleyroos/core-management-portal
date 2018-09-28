@@ -21,9 +21,6 @@ export const EditableTableHeaders = ({
                             key={field.props.source || index}
                             index={index}
                             field={field}
-                            defaultStyle={
-                                index === 0 ? styles.header['th:first-child'] : styles.header.th
-                            }
                             currentSort={currentSort}
                             isSorting={field.props.source === currentSort.field}
                             updateSort={updateSort}
