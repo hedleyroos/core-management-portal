@@ -6,7 +6,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import TableCell from '@material-ui/core/TableCell';
+import defaultsDeep from 'lodash.defaultsdeep';
+import { TableRowColumn } from 'material-ui/Table';
 
 const DatagridCell = ({
     className,
@@ -18,10 +19,17 @@ const DatagridCell = ({
     defaultStyle,
     ...rest
 }) => {
+    const computedStyle = defaultsDeep(
+        {},
+        style,
+        field.props.style,
+        field.type.defaultProps ? field.type.defaultProps.style : {},
+        defaultStyle
+    );
     return (
-        <TableCell className={className} {...rest}>
+        <TableRowColumn className={className} style={computedStyle} {...rest}>
             {React.cloneElement(field, { record, basePath, resource })}
-        </TableCell>
+        </TableRowColumn>
     );
 };
 
@@ -36,7 +44,5 @@ DatagridCell.propTypes = {
         'td:first-child': PropTypes.object,
     }),
 };
-
-DatagridCell.muiName = 'TableCell';
 
 export default DatagridCell;

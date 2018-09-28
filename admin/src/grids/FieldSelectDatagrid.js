@@ -16,7 +16,6 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 
-import EditableDatagrid from './EditableDatagrid';
 import { styles } from '../theme';
 import { updateGMPUserSiteData } from '../utils';
 
@@ -98,8 +97,6 @@ class FieldSelectDatagrid extends Component {
     }
 
     onDragEnd({ destination, source }) {
-        console.log(destination);
-        console.log(source);
         let children = Array.from(this.state.children);
         const [removed] = children.splice(source.index, 1);
         children.splice(destination.index, 0, removed);
@@ -122,6 +119,9 @@ class FieldSelectDatagrid extends Component {
                 return accumulator;
             }, groups);
         }
+        // Remove custom props
+        const { defaultHiddenFields, ...rest } = this.props;
+
         // Render the Hide/Show field card unless allhidden is true.
         return this.state.loading ? (
             <CircularProgress />
@@ -166,12 +166,13 @@ class FieldSelectDatagrid extends Component {
                     </Collapse>
                 </Card>
                 {!this.state.allHidden ? (
-                    <EditableDatagrid
-                        onDragEnd={this.onDragEnd}
-                        managedChildren={this.state.children}
-                        {...this.props}
-                    />
+                    <Datagrid {...rest}>{this.state.children}</Datagrid>
                 ) : (
+                    // <EditableDatagrid
+                    //     onDragEnd={this.onDragEnd}
+                    //     managedChildren={this.state.children}
+                    //     {...this.props}
+                    // />
                     <CardContent>Please select at least one field to show.</CardContent>
                 )}
             </div>

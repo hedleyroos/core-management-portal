@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import Table from '@material-ui/core/Table';
+import { Table } from 'material-ui/Table';
 
 import DatagridBody from './DatagridBody';
 import { EditableTableHeaders } from './EditableTableHeaders';
-import { styles } from '../../theme';
+import { muiTheme, styles } from '../../Theme';
 
 class EditableDatagrid extends Component {
     constructor(props) {
@@ -42,7 +42,9 @@ class EditableDatagrid extends Component {
             data,
             currentSort,
             basePath,
+            options,
             headerOptions,
+            bodyOptions,
             rowOptions,
             rowStyle,
             isLoading,
@@ -53,11 +55,16 @@ class EditableDatagrid extends Component {
                 <Droppable droppableId="droppable-1" type="TABLE" direction="horizontal">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps}>
-                            <Table>
+                            <Table
+                                style={options && options.fixedHeader ? null : styles.table}
+                                fixedHeader={false}
+                                {...options}
+                            >
                                 <EditableTableHeaders
                                     resource={resource}
                                     currentSort={currentSort}
                                     updateSort={this.updateSort}
+                                    muiTheme={muiTheme}
                                     headerOptions={headerOptions}
                                     styles={styles}
                                 >
@@ -72,6 +79,7 @@ class EditableDatagrid extends Component {
                                     styles={styles}
                                     rowStyle={rowStyle}
                                     isLoading={isLoading}
+                                    options={bodyOptions}
                                     rowOptions={rowOptions}
                                 >
                                     {this.state.children || managedChildren}

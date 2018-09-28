@@ -7,8 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import shouldUpdate from 'recompose/shouldUpdate';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
+import { TableBody, TableRow } from 'material-ui/Table';
 
 import DatagridCell from './DatagridCell';
 
@@ -25,11 +24,17 @@ const DatagridBody = ({
     rowOptions,
     ...rest
 }) => (
-    <TableBody>
+    <TableBody
+        displayRowCheckbox={false}
+        className="datagrid-body"
+        {...rest}
+        {...options}
+    >
         {ids.map((id, rowIndex) => (
             <TableRow
                 style={rowStyle ? rowStyle(data[id], rowIndex) : styles.tr}
                 key={id}
+                selectable={false}
                 {...rowOptions}
             >
                 {React.Children.map(
