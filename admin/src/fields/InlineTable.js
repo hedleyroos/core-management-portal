@@ -1,71 +1,63 @@
-import { Pagination } from 'admin-on-rest';
+import { Pagination } from 'react-admin';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Card from 'material-ui/Card/Card';
-import CardHeader from 'material-ui/Card/CardHeader';
-import CardText from 'material-ui/Card/CardText';
-import CardTitle from 'material-ui/Card/CardTitle';
-import Chip from 'material-ui/Chip';
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn
-} from 'material-ui/Table';
+import Card from '@material-ui/core/Card';
+import Chip from '@material-ui/core/Chip';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 
 import dataProvider, { OPERATIONAL } from '../dataProvider';
+import { titleCase, apiErrorHandler } from '../utils';
 import { styles } from '../theme';
 
 const CustomTable = ({ data, total, perPage, paginate, props }) => {
-    const {
-        label,
-        linkField,
-        linkedResource,
-        onRowSelection,
-        selectable,
-        selected,
-        useCard
-    } = props;
+    const { label, linkField, linkedResource, onRowSelection, selected, useCard } = props;
     const headers = Object.keys(data[0]);
     return (
         <React.Fragment>
             {useCard ? (
-                <CardTitle title={label} />
+                <Typography variant="title">{label}</Typography>
             ) : (
-                <CardText style={styles.customTableLabel}>
+                <Typography style={styles.customTableLabel}>
                     <label>
                         <span>{label}</span>
                     </label>
-                </CardText>
+                </Typography>
             )}
-            <Table selectable={selectable} onRowSelection={onRowSelection}>
-                <TableHeader displaySelectAll={false} adjustForCheckbox={selectable}>
+            <Table>
+                <TableHead>
                     <TableRow>
                         {headers.map(header => (
-                            <TableHeaderColumn key={header} style={styles.customTableHeader}>
-                                {header.toUpperCase()}
-                            </TableHeaderColumn>
+                            <TableCell key={header} style={styles.customTableHeader}>
+                                {titleCase(header)}
+                            </TableCell>
                         ))}
                     </TableRow>
-                </TableHeader>
-                <TableBody displayRowCheckbox={selectable} showRowHover>
+                </TableHead>
+                <TableBody>
                     {data.map((entry, index) => {
                         const isSelected = onRowSelection && selected === index;
                         return (
                             <TableRow key={index} selected={isSelected}>
                                 {Object.keys(entry).map((header, index) => (
-                                    <TableRowColumn key={index}>
+                                    <TableCell key={index}>
                                         {Array.isArray(entry[header]) ? (
                                             <div style={styles.wrapper}>
                                                 {entry[header].map(
                                                     (str, index) =>
                                                         str && (
-                                                            <Chip key={index} style={styles.chip}>
-                                                                {str}
-                                                            </Chip>
+                                                            <Chip
+                                                                key={index}
+                                                                label={titleCase(
+                                                                    str.replace('_', ' ')
+                                                                )}
+                                                                style={styles.chip}
+                                                            />
                                                         )
                                                 )}
                                             </div>
@@ -76,7 +68,7 @@ const CustomTable = ({ data, total, perPage, paginate, props }) => {
                                         ) : (
                                             <span>{entry[header]}</span>
                                         )}
-                                    </TableRowColumn>
+                                    </TableCell>
                                 ))}
                             </TableRow>
                         );
@@ -86,10 +78,9 @@ const CustomTable = ({ data, total, perPage, paginate, props }) => {
             {perPage &&
                 !paginate &&
                 total > perPage && (
-                    <CardHeader
-                        style={styles.customTableBottom}
-                        subtitle={`${total - perPage} more found...`}
-                    />
+                    <Typography variant="title" style={styles.customTableBottom}>
+                        {`${total - perPage} more found...`}
+                    </Typography>
                 )}
         </React.Fragment>
     );
@@ -127,7 +118,7 @@ class InlineTable extends Component {
                 }
             })
             .catch(error => {
-                console.error(error);
+                apiErrorHandler(error);
             });
     }
 
@@ -168,6 +159,7 @@ class InlineTable extends Component {
                             page={page + 1}
                             perPage={perPage}
                             setPage={this.handlePageSelect}
+                            rowsPerPageOptions={[]}
                         />
                     )}
                 </Card>
@@ -186,6 +178,7 @@ class InlineTable extends Component {
                             page={page + 1}
                             perPage={perPage}
                             setPage={this.handlePageSelect}
+                            rowsPerPageOptions={[]}
                         />
                     )}
                 </div>

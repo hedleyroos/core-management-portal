@@ -28,6 +28,9 @@ import {
     ShowButton,
     DeleteButton
 } from 'react-admin';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import ObjectField from '../fields/ObjectField';
 import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
@@ -44,6 +47,17 @@ const validationEditUser = values => {
     const errors = {};
     return errors;
 };
+
+export const UserListNoSites = props => (
+    <Card>
+        <CardContent>
+            <Typography variant="title">User List</Typography>
+            <Typography>
+                There are no sites linked to the current context. Users Page not available.
+            </Typography>
+        </CardContent>
+    </Card>
+);
 
 export const UserList = props => (
     <List {...props} title="User List" filters={<UserFilter />} bulkActionButtons={false}>

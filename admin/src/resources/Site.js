@@ -33,6 +33,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import SiteEditToolbar from '../customActions/SiteEditToolbar';
 
 import SiteFilter from '../filters/SiteFilter';
+import InlineTable from '../fields/InlineTable';
 
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
@@ -173,6 +174,13 @@ export const SiteShow = props => (
             <BooleanField source="is_active" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
+            <InlineTable
+                label="Users"
+                url="users_with_roles_for_site"
+                linkField="username"
+                linkedResource="users"
+                paginate
+            />
             {PermissionsStore.getResourcePermission('siteroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
                     <Datagrid>

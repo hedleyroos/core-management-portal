@@ -31,6 +31,7 @@ import PermissionsStore from '../auth/PermissionsStore';
 import DomainEditToolbar from '../customActions/DomainEditToolbar';
 
 import DomainFilter from '../filters/DomainFilter';
+import InlineTable from '../fields/InlineTable';
 
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
@@ -127,6 +128,13 @@ export const DomainShow = props => (
             <TextField source="description" />
             <DateField source="created_at" />
             <DateField source="updated_at" />
+            <InlineTable
+                label="Users"
+                url="users_with_roles_for_domain"
+                linkField="username"
+                linkedResource="users"
+                paginate
+            />
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                     <Datagrid>

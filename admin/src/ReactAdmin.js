@@ -127,7 +127,7 @@ import {
     OrganisationEdit
 } from './resources/Organisation';
 
-import { UserList, UserShow, UserEdit } from './resources/User';
+import { UserListNoSites, UserList, UserShow, UserEdit } from './resources/User';
 
 const ReactAdmin = () => (
     <Admin
@@ -459,7 +459,7 @@ const ReactAdmin = () => (
             PermissionsStore.getResourcePermission('users', 'list') ? (
                 <Resource
                     name="users"
-                    list={UserList}
+                    list={PermissionsStore.getSiteIDs() ? UserList : UserListNoSites}
                     show={UserShow}
                     edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
                 />
