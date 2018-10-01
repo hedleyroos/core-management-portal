@@ -1,1 +1,1 @@
--e git+https://github.com/DavidOberholzer/SwaggerReactAdminGenerator.git@master#egg=SwaggerReactAdminGenerator
+swagger-react-admin-generator==0.0.4
