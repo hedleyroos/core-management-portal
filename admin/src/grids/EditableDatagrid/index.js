@@ -4,8 +4,8 @@ import { sanitizeListRestProps } from 'react-admin';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Table from '@material-ui/core/Table';
 import { withStyles } from '@material-ui/core/styles';
+import DatagridBody from 'ra-ui-materialui/lib/list/DatagridBody';
 
-import DatagridBody from './DatagridBody';
 import { EditableTableHeaders } from './EditableTableHeaders';
 import { datagridStyles } from '../../theme';
 
