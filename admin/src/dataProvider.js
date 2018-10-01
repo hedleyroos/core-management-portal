@@ -90,6 +90,10 @@ const GET_MANY_FILTER = {
     users: 'user_ids'
 };
 
+// Id of object stored for delete response.
+// TODO: Remove this when APIs updated to return object on delete.
+let idToBeDeleted = null;
+
 /**
  * @param {String} apiUrl The base API url
  * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
@@ -185,6 +189,9 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
             options.body = params.data ? JSON.stringify(params.data) : null;
             break;
         case DELETE:
+            // Id of object stored for delete response.
+            // TODO: Remove this when APIs updated to return object on delete.
+            idToBeDeleted = params.id;
             url = `${apiUrl}/${resource}/${params.id}`;
             options.method = 'DELETE';
             break;
@@ -254,6 +261,11 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
             };
         case GET_ONE:
             data = keys ? { ...json, id: keys.map(key => json[key]).join('/') } : json;
+            return { data };
+        case DELETE:
+            // TODO: Remove this when APIs updated to return object on delete.
+            data = { id: idToBeDeleted || 0 };
+            idToBeDeleted = null;
             return { data };
         default:
             return { data: json ? json : {} };
