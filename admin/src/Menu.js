@@ -58,7 +58,7 @@ const Menu = ({ resources, onMenuClick, logout }) => {
     const contexts = PermissionsStore.getAllContexts();
     const showContextSwitcher = Object.keys(contexts).length > 1;
     return (
-        <div style={{width: 500}}>
+        <div>
             {notEmptyObject(contexts) && showContextSwitcher ? (
                 <MenuItemLink
                     to="/contextchanger"

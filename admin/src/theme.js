@@ -147,9 +147,7 @@ export const datagridStyles = {
         padding: '0 12px',
         color: 'rgba(0, 0, 0, 0.54)',
         fontSize: '12px',
-        fontWeight: 'normal',
-        textAlign: 'right',
-        flexDirection: 'row-reverse'
+        fontWeight: 'normal'
     },
     checkbox: {},
     row: {},
