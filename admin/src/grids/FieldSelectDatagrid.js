@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Datagrid } from 'react-admin';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -16,6 +14,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 
+import EditableDatagrid from './EditableDatagrid';
 import { styles } from '../theme';
 import { updateGMPUserSiteData } from '../utils';
 
@@ -119,8 +118,6 @@ class FieldSelectDatagrid extends Component {
                 return accumulator;
             }, groups);
         }
-        // Remove custom props
-        const { defaultHiddenFields, ...rest } = this.props;
 
         // Render the Hide/Show field card unless allhidden is true.
         return this.state.loading ? (
@@ -166,24 +163,17 @@ class FieldSelectDatagrid extends Component {
                     </Collapse>
                 </Card>
                 {!this.state.allHidden ? (
-                    <Datagrid {...rest}>{this.state.children}</Datagrid>
+                    <EditableDatagrid
+                        onDragEnd={this.onDragEnd}
+                        managedChildren={this.state.children}
+                        {...this.props}
+                    />
                 ) : (
-                    // <EditableDatagrid
-                    //     onDragEnd={this.onDragEnd}
-                    //     managedChildren={this.state.children}
-                    //     {...this.props}
-                    // />
                     <CardContent>Please select at least one field to show.</CardContent>
                 )}
             </div>
         );
     }
 }
-FieldSelectDatagrid.propTypes = {
-    defaultHiddenFields: PropTypes.array
-};
-FieldSelectDatagrid.defaultProps = {
-    defaultHiddenFields: []
-};
 
 export default FieldSelectDatagrid;

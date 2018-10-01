@@ -100,47 +100,6 @@ export const styles = {
         opacity: 0.5,
         margin: '0 1em'
     },
-    // Theme styling added for EditableDatagrid AOR copied components.
-    table: {
-        tableLayout: 'auto'
-    },
-    tbody: {
-        height: 'inherit'
-    },
-    header: {
-        th: {
-            fontWeight: 'normal',
-            fontSize: 12,
-            padding: 0,
-            height: 56,
-            textAlign: 'left',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            color: 'rgb(158, 158, 158)',
-            position: 'relative'
-        },
-        'th:first-child': {
-            fontWeight: 'normal',
-            fontSize: 12,
-            padding: '0 0 0 12px',
-            height: 56,
-            textAlign: 'left',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            color: 'rgb(158, 158, 158)',
-            position: 'relative'
-        }
-    },
-    cell: {
-        td: {
-            padding: '0 12px',
-            whiteSpace: 'normal'
-        },
-        'td:first-child': {
-            padding: '0 12px 0 16px',
-            whiteSpace: 'normal'
-        }
-    },
     sortButton: {
         minWidth: 40
     },
@@ -173,5 +132,33 @@ export const styles = {
     },
     formControl: {
         marginRight: 15
+    }
+};
+
+export const datagridStyles = {
+    // Theme styling added for EditableDatagrid React Admin copied components.
+    table: {
+        tableLayout: 'auto'
+    },
+    tbody: {
+        height: 'inherit'
+    },
+    headerCell: {
+        padding: '0 12px',
+        color: 'rgba(0, 0, 0, 0.54)',
+        fontSize: '12px',
+        fontWeight: 'normal',
+        textAlign: 'right',
+        flexDirection: 'row-reverse'
+    },
+    checkbox: {},
+    row: {},
+    rowEven: {},
+    rowOdd: {},
+    rowCell: {
+        padding: '0 12px',
+        '&:last-child': {
+            padding: '0 12px'
+        }
     }
 };

@@ -1,41 +1,58 @@
 import React from 'react';
-import { TableHeader, TableRow } from 'material-ui/Table';
+import Checkbox from '@material-ui/core/Checkbox';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 import DatagridHeaderCell from './DatagridHeaderCell';
 
 export const EditableTableHeaders = ({
-    currentSort,
-    updateSort,
-    resource,
     children,
-    headerOptions,
-    muiTheme,
-    styles
+    classes,
+    currentSort,
+    handleSelectAll,
+    hasBulkActions,
+    ids,
+    resource,
+    selectedIds,
+    updateSort
 }) => (
-    <TableHeader displaySelectAll={false} adjustForCheckbox={false} {...headerOptions}>
-        <TableRow style={muiTheme.tableRow}>
+    <TableHead>
+        <TableRow className={classes.row}>
+            {hasBulkActions && (
+                <TableCell padding="none">
+                    <Checkbox
+                        checked={
+                            selectedIds.length > 0 &&
+                            ids.length > 0 &&
+                            !ids.find(it => selectedIds.indexOf(it) === -1)
+                        }
+                        className="select-all"
+                        color="primary"
+                        onChange={handleSelectAll}
+                    />
+                </TableCell>
+            )}
             {React.Children.map(
                 children,
                 (field, index) =>
                     field ? (
                         <DatagridHeaderCell
-                            key={field.props.source || index}
-                            index={index}
-                            field={field}
-                            defaultStyle={
-                                index === 0 ? styles.header['th:first-child'] : styles.header.th
-                            }
+                            className={classes.headerCell}
                             currentSort={currentSort}
+                            field={field}
+                            index={index}
                             isSorting={field.props.source === currentSort.field}
-                            updateSort={updateSort}
+                            key={field.props.source || index}
                             resource={resource}
+                            updateSort={updateSort}
                         />
                     ) : null
             )}
         </TableRow>
-    </TableHeader>
+    </TableHead>
 );
 
-EditableTableHeaders.muiName = 'TableHeader';
+EditableTableHeaders.muiName = 'TableHead';
 
 export default EditableTableHeaders;

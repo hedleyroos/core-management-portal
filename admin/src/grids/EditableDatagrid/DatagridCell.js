@@ -1,48 +1,54 @@
 /**
- * NOTE! This components is basically a carbon copy of `DatagridCell.js`
- * in Admin on Rest. The `DatagridCell.js` is not exported and
+ * NOTE! This components is an EXACT copy of `DatagridCell.js`
+ * in React Admin. The `DatagridCell.js` is not exported and
  * therefore not accessable.
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import defaultsDeep from 'lodash.defaultsdeep';
-import { TableRowColumn } from 'material-ui/Table';
+import TableCell from '@material-ui/core/TableCell';
+import classnames from 'classnames';
 
-const DatagridCell = ({
+const sanitizeRestProps = ({
+    cellClassName,
+    className,
+    field,
+    formClassName,
+    headerClassName,
+    record,
+    basePath,
+    resource,
+    ...rest
+}) => rest;
+
+export const DatagridCell = ({
     className,
     field,
     record,
     basePath,
     resource,
-    style,
-    defaultStyle,
     ...rest
-}) => {
-    const computedStyle = defaultsDeep(
-        {},
-        style,
-        field.props.style,
-        field.type.defaultProps ? field.type.defaultProps.style : {},
-        defaultStyle
-    );
-    return (
-        <TableRowColumn className={className} style={computedStyle} {...rest}>
-            {React.cloneElement(field, { record, basePath, resource })}
-        </TableRowColumn>
-    );
-};
+}) => (
+    <TableCell
+        className={classnames(className, field.props.cellClassName)}
+        numeric={field.props.textAlign === 'right'}
+        padding="none"
+        {...sanitizeRestProps(rest)}
+    >
+        {React.cloneElement(field, {
+            record,
+            basePath: field.props.basePath || basePath,
+            resource,
+        })}
+    </TableCell>
+);
 
 DatagridCell.propTypes = {
+    className: PropTypes.string,
     field: PropTypes.element,
     record: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     basePath: PropTypes.string,
     resource: PropTypes.string,
-    style: PropTypes.object,
-    defaultStyle: PropTypes.shape({
-        td: PropTypes.object,
-        'td:first-child': PropTypes.object,
-    }),
 };
 
 export default DatagridCell;

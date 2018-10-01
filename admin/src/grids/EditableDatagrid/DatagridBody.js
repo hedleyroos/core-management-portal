@@ -1,85 +1,93 @@
 /**
- * NOTE! This components is basically a carbon copy of `DatagridBody.js`
- * in Admin on Rest. The `DatagridBody.js` is not exported and
+ * NOTE! This components is an EXACT copy of `DatagridBody.js`
+ * in React Admin. The `DatagridBody.js` is not exported and
  * therefore not accessable.
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import shouldUpdate from 'recompose/shouldUpdate';
-import { TableBody, TableRow } from 'material-ui/Table';
+import TableBody from '@material-ui/core/TableBody';
+import classnames from 'classnames';
 
-import DatagridCell from './DatagridCell';
+import DatagridRow from './DatagridRow';
 
 const DatagridBody = ({
+    basePath,
+    classes,
+    className,
     resource,
     children,
+    hasBulkActions,
+    hover,
     ids,
     isLoading,
     data,
-    basePath,
+    selectedIds,
     styles,
     rowStyle,
-    options,
-    rowOptions,
+    onToggleItem,
+    version,
     ...rest
 }) => (
-    <TableBody
-        displayRowCheckbox={false}
-        className="datagrid-body"
-        {...rest}
-        {...options}
-    >
+    <TableBody className={classnames('datagrid-body', className)} {...rest}>
         {ids.map((id, rowIndex) => (
-            <TableRow
-                style={rowStyle ? rowStyle(data[id], rowIndex) : styles.tr}
+            <DatagridRow
+                basePath={basePath}
+                classes={classes}
+                className={classnames(classes.row, {
+                    [classes.rowEven]: rowIndex % 2 === 0,
+                    [classes.rowOdd]: rowIndex % 2 !== 0,
+                })}
+                hasBulkActions={hasBulkActions}
+                id={id}
                 key={id}
-                selectable={false}
-                {...rowOptions}
+                onToggleItem={onToggleItem}
+                record={data[id]}
+                resource={resource}
+                selected={selectedIds.includes(id)}
+                hover={hover}
+                style={rowStyle ? rowStyle(data[id], rowIndex) : null}
             >
-                {React.Children.map(
-                    children,
-                    (field, index) =>
-                        field ? (
-                            <DatagridCell
-                                key={`${id}-${field.props.source || index}`}
-                                className={`column-${field.props.source}`}
-                                record={data[id]}
-                                defaultStyle={
-                                    index === 0 ? (
-                                        styles.cell['td:first-child']
-                                    ) : (
-                                        styles.cell.td
-                                    )
-                                }
-                                {...{ field, basePath, resource }}
-                            />
-                        ) : null
-                )}
-            </TableRow>
+                {children}
+            </DatagridRow>
         ))}
     </TableBody>
 );
 
 DatagridBody.propTypes = {
+    basePath: PropTypes.string,
+    classes: PropTypes.object,
+    className: PropTypes.string,
+    children: PropTypes.node,
+    data: PropTypes.object.isRequired,
+    hasBulkActions: PropTypes.bool.isRequired,
+    hover: PropTypes.bool,
     ids: PropTypes.arrayOf(PropTypes.any).isRequired,
     isLoading: PropTypes.bool,
+    onToggleItem: PropTypes.func,
     resource: PropTypes.string,
-    data: PropTypes.object.isRequired,
-    basePath: PropTypes.string,
-    options: PropTypes.object,
-    rowOptions: PropTypes.object,
-    styles: PropTypes.object,
     rowStyle: PropTypes.func,
+    selectedIds: PropTypes.arrayOf(PropTypes.any).isRequired,
+    styles: PropTypes.object,
+    version: PropTypes.number,
 };
 
 DatagridBody.defaultProps = {
     data: {},
+    hasBulkActions: false,
     ids: [],
 };
 
+const areArraysEqual = (arr1, arr2) =>
+    arr1.length === arr2.length && arr1.every((v, i) => v === arr2[i]);
+
 const PureDatagridBody = shouldUpdate(
-    (props, nextProps) => nextProps.isLoading === false
+    (props, nextProps) =>
+        props.version !== nextProps.version ||
+        nextProps.isLoading === false ||
+        !areArraysEqual(props.ids, nextProps.ids) ||
+        props.data !== nextProps.data
 )(DatagridBody);
 
 // trick material-ui Table into thinking this is one of the child type it supports
