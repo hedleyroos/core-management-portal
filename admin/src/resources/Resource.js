@@ -21,6 +21,7 @@ import {
     ShowButton,
     DeleteButton
 } from 'react-admin';
+import PermissionsStore from '../auth/PermissionsStore';
 
 import ResourceEditToolbar from '../customActions/ResourceEditToolbar';
 

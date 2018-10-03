@@ -20,6 +20,7 @@ import {
     ShowButton,
     DeleteButton
 } from 'react-admin';
+import PermissionsStore from '../auth/PermissionsStore';
 
 import PermissionEditToolbar from '../customActions/PermissionEditToolbar';
 
