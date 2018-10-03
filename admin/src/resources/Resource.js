@@ -24,6 +24,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 
 import ResourceEditToolbar from '../customActions/ResourceEditToolbar';
+import ResourceListActions from '../customActions/ResourceListActions';
 
 import ResourceFilter from '../filters/ResourceFilter';
 
@@ -43,7 +44,13 @@ const validationEditResource = values => {
 };
 
 export const ResourceList = props => (
-    <List {...props} title="Resource List" filters={<ResourceFilter />} bulkActionButtons={false}>
+    <List
+        {...props}
+        title="Resource List"
+        filters={<ResourceFilter />}
+        actions={<ResourceListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList

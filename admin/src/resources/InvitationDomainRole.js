@@ -21,6 +21,8 @@ import {
 import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
+import InvitationDomainRoleListActions from '../customActions/InvitationDomainRoleListActions';
+
 import InvitationDomainRoleFilter from '../filters/InvitationDomainRoleFilter';
 
 import DomainTreeInput from '../inputs/DomainTreeInput';
@@ -45,6 +47,7 @@ export const InvitationDomainRoleList = props => (
         {...props}
         title="InvitationDomainRole List"
         filters={<InvitationDomainRoleFilter />}
+        actions={<InvitationDomainRoleListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

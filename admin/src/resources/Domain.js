@@ -29,6 +29,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import DomainEditToolbar from '../customActions/DomainEditToolbar';
+import DomainListActions from '../customActions/DomainListActions';
 
 import DomainFilter from '../filters/DomainFilter';
 import InlineTable from '../fields/InlineTable';
@@ -49,7 +50,13 @@ const validationEditDomain = values => {
 };
 
 export const DomainList = props => (
-    <List {...props} title="Domain List" filters={<DomainFilter />} bulkActionButtons={false}>
+    <List
+        {...props}
+        title="Domain List"
+        filters={<DomainFilter />}
+        actions={<DomainListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList

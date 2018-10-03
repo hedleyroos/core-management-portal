@@ -20,6 +20,8 @@ import {
 import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
+import RoleResourcePermissionListActions from '../customActions/RoleResourcePermissionListActions';
+
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
 
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
@@ -43,6 +45,7 @@ export const RoleResourcePermissionList = props => (
         {...props}
         title="RoleResourcePermission List"
         filters={<RoleResourcePermissionFilter />}
+        actions={<RoleResourcePermissionListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

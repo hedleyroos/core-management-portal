@@ -36,6 +36,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import UserEditToolbar from '../customActions/UserEditToolbar';
+import UserListActions from '../customActions/UserListActions';
 import UserShowActions from '../customActions/UserShow';
 
 import UserFilter from '../filters/UserFilter';
@@ -60,7 +61,13 @@ export const UserListNoSites = props => (
 );
 
 export const UserList = props => (
-    <List {...props} title="User List" filters={<UserFilter />} bulkActionButtons={false}>
+    <List
+        {...props}
+        title="User List"
+        filters={<UserFilter />}
+        actions={<UserListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList

@@ -23,6 +23,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 
 import OrganisationEditToolbar from '../customActions/OrganisationEditToolbar';
+import OrganisationListActions from '../customActions/OrganisationListActions';
 
 import OrganisationFilter from '../filters/OrganisationFilter';
 
@@ -46,6 +47,7 @@ export const OrganisationList = props => (
         {...props}
         title="Organisation List"
         filters={<OrganisationFilter />}
+        actions={<OrganisationListActions />}
         bulkActionButtons={false}
     >
         <Responsive

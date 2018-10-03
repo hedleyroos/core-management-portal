@@ -26,6 +26,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import UserSiteDataEditToolbar from '../customActions/UserSiteDataEditToolbar';
+import UserSiteDataListActions from '../customActions/UserSiteDataListActions';
 
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
 
@@ -56,6 +57,7 @@ export const UserSiteDataList = props => (
         {...props}
         title="UserSiteData List"
         filters={<UserSiteDataFilter />}
+        actions={<UserSiteDataListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

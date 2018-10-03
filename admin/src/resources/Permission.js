@@ -23,6 +23,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 
 import PermissionEditToolbar from '../customActions/PermissionEditToolbar';
+import PermissionListActions from '../customActions/PermissionListActions';
 
 import PermissionFilter from '../filters/PermissionFilter';
 
@@ -46,6 +47,7 @@ export const PermissionList = props => (
         {...props}
         title="Permission List"
         filters={<PermissionFilter />}
+        actions={<PermissionListActions />}
         bulkActionButtons={false}
     >
         <Responsive

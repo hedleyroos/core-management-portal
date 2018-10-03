@@ -31,6 +31,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import SiteEditToolbar from '../customActions/SiteEditToolbar';
+import SiteListActions from '../customActions/SiteListActions';
 
 import SiteFilter from '../filters/SiteFilter';
 import InlineTable from '../fields/InlineTable';
@@ -54,7 +55,13 @@ const validationEditSite = values => {
 };
 
 export const SiteList = props => (
-    <List {...props} title="Site List" filters={<SiteFilter />} bulkActionButtons={false}>
+    <List
+        {...props}
+        title="Site List"
+        filters={<SiteFilter />}
+        actions={<SiteListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList

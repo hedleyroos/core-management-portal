@@ -25,6 +25,7 @@ import ObjectField from '../fields/ObjectField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import SiteDataSchemaEditToolbar from '../customActions/SiteDataSchemaEditToolbar';
+import SiteDataSchemaListActions from '../customActions/SiteDataSchemaListActions';
 
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
 
@@ -51,6 +52,7 @@ export const SiteDataSchemaList = props => (
         {...props}
         title="SiteDataSchema List"
         filters={<SiteDataSchemaFilter />}
+        actions={<SiteDataSchemaListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

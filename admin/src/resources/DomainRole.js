@@ -25,6 +25,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import DomainRoleEditToolbar from '../customActions/DomainRoleEditToolbar';
+import DomainRoleListActions from '../customActions/DomainRoleListActions';
 
 import DomainRoleFilter from '../filters/DomainRoleFilter';
 
@@ -53,6 +54,7 @@ export const DomainRoleList = props => (
         {...props}
         title="DomainRole List"
         filters={<DomainRoleFilter />}
+        actions={<DomainRoleListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

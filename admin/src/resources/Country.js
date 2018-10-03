@@ -13,12 +13,20 @@ import {
     ShowButton
 } from 'react-admin';
 
+import CountryListActions from '../customActions/CountryListActions';
+
 import CountryFilter from '../filters/CountryFilter';
 
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 export const CountryList = props => (
-    <List {...props} title="Country List" filters={<CountryFilter />} bulkActionButtons={false}>
+    <List
+        {...props}
+        title="Country List"
+        filters={<CountryFilter />}
+        actions={<CountryListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList

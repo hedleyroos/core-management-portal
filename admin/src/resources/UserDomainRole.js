@@ -21,6 +21,8 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
 
+import UserDomainRoleListActions from '../customActions/UserDomainRoleListActions';
+
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
 
 import DomainTreeInput from '../inputs/DomainTreeInput';
@@ -46,6 +48,7 @@ export const UserDomainRoleList = props => (
         {...props}
         title="UserDomainRole List"
         filters={<UserDomainRoleFilter />}
+        actions={<UserDomainRoleListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

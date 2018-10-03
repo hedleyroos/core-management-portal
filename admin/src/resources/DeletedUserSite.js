@@ -26,6 +26,7 @@ import DateTimeInput from '../inputs/DateTimeInput';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import DeletedUserSiteEditToolbar from '../customActions/DeletedUserSiteEditToolbar';
+import DeletedUserSiteListActions from '../customActions/DeletedUserSiteListActions';
 
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
 
@@ -52,6 +53,7 @@ export const DeletedUserSiteList = props => (
         {...props}
         title="DeletedUserSite List"
         filters={<DeletedUserSiteFilter />}
+        actions={<DeletedUserSiteListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

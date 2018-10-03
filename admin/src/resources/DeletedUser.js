@@ -28,6 +28,7 @@ import DateTimeInput from '../inputs/DateTimeInput';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import DeletedUserEditToolbar from '../customActions/DeletedUserEditToolbar';
+import DeletedUserListActions from '../customActions/DeletedUserListActions';
 
 import DeletedUserFilter from '../filters/DeletedUserFilter';
 
@@ -57,6 +58,7 @@ export const DeletedUserList = props => (
         {...props}
         title="DeletedUser List"
         filters={<DeletedUserFilter />}
+        actions={<DeletedUserListActions />}
         bulkActionButtons={false}
     >
         <Responsive

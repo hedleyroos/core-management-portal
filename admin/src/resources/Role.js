@@ -29,6 +29,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import RoleEditToolbar from '../customActions/RoleEditToolbar';
+import RoleListActions from '../customActions/RoleListActions';
 
 import RoleFilter from '../filters/RoleFilter';
 
@@ -48,7 +49,13 @@ const validationEditRole = values => {
 };
 
 export const RoleList = props => (
-    <List {...props} title="Role List" filters={<RoleFilter />} bulkActionButtons={false}>
+    <List
+        {...props}
+        title="Role List"
+        filters={<RoleFilter />}
+        actions={<RoleListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={<SimpleList primaryText={record => `Label: ${record.label}`} />}
             medium={

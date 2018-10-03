@@ -21,6 +21,8 @@ import {
 import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
+import UserSiteRoleListActions from '../customActions/UserSiteRoleListActions';
+
 import UserSiteRoleFilter from '../filters/UserSiteRoleFilter';
 
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
@@ -45,6 +47,7 @@ export const UserSiteRoleList = props => (
         {...props}
         title="UserSiteRole List"
         filters={<UserSiteRoleFilter />}
+        actions={<UserSiteRoleListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

@@ -22,6 +22,7 @@ import {
 import PermissionsStore from '../auth/PermissionsStore';
 
 import InvitationRedirectUrlEditToolbar from '../customActions/InvitationRedirectUrlEditToolbar';
+import InvitationRedirectUrlListActions from '../customActions/InvitationRedirectUrlListActions';
 
 import InvitationRedirectUrlFilter from '../filters/InvitationRedirectUrlFilter';
 
@@ -48,6 +49,7 @@ export const InvitationRedirectUrlList = props => (
         {...props}
         title="InvitationRedirectUrl List"
         filters={<InvitationRedirectUrlFilter />}
+        actions={<InvitationRedirectUrlListActions />}
         bulkActionButtons={false}
     >
         <FieldSelectDatagrid>

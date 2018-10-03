@@ -25,6 +25,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import SiteRoleEditToolbar from '../customActions/SiteRoleEditToolbar';
+import SiteRoleListActions from '../customActions/SiteRoleListActions';
 
 import SiteRoleFilter from '../filters/SiteRoleFilter';
 
@@ -47,7 +48,13 @@ const validationEditSiteRole = values => {
 };
 
 export const SiteRoleList = props => (
-    <List {...props} title="SiteRole List" filters={<SiteRoleFilter />} bulkActionButtons={false}>
+    <List
+        {...props}
+        title="SiteRole List"
+        filters={<SiteRoleFilter />}
+        actions={<SiteRoleListActions />}
+        bulkActionButtons={false}
+    >
         <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField

@@ -27,6 +27,7 @@ import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
 
 import AdminNoteEditToolbar from '../customActions/AdminNoteEditToolbar';
+import AdminNoteListActions from '../customActions/AdminNoteListActions';
 
 import AdminNoteFilter from '../filters/AdminNoteFilter';
 
@@ -49,7 +50,13 @@ const validationEditAdminNote = values => {
 };
 
 export const AdminNoteList = props => (
-    <List {...props} title="AdminNote List" filters={<AdminNoteFilter />} bulkActionButtons={false}>
+    <List
+        {...props}
+        title="AdminNote List"
+        filters={<AdminNoteFilter />}
+        actions={<AdminNoteListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={<SimpleList primaryText={record => `Note: ${record.note}`} />}
             medium={
