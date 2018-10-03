@@ -61,9 +61,13 @@ export const PermissionList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    <EditButton />
+                    {PermissionsStore.getResourcePermission('permissions', 'edit') ? (
+                        <EditButton />
+                    ) : null}
                     <ShowButton />
-                    <DeleteButton />
+                    {PermissionsStore.getResourcePermission('permissions', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
                 </FieldSelectDatagrid>
             }
         />

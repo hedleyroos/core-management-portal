@@ -59,9 +59,13 @@ export const RoleList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    <EditButton />
+                    {PermissionsStore.getResourcePermission('roles', 'edit') ? (
+                        <EditButton />
+                    ) : null}
                     <ShowButton />
-                    <DeleteButton />
+                    {PermissionsStore.getResourcePermission('roles', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
                 </FieldSelectDatagrid>
             }
         />

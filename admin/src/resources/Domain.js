@@ -78,9 +78,13 @@ export const DomainList = props => (
                     <TextField source="description" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    <EditButton />
+                    {PermissionsStore.getResourcePermission('domains', 'edit') ? (
+                        <EditButton />
+                    ) : null}
                     <ShowButton />
-                    <DeleteButton />
+                    {PermissionsStore.getResourcePermission('domains', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
                 </FieldSelectDatagrid>
             }
         />

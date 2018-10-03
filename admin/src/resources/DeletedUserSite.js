@@ -89,9 +89,13 @@ export const DeletedUserSiteList = props => (
             <TextField source="deletion_requested_via" sortable={false} />
             <DateField source="deletion_confirmed_at" sortable={false} />
             <TextField source="deletion_confirmed_via" sortable={false} />
-            <EditButton />
+            {PermissionsStore.getResourcePermission('deletedusersites', 'edit') ? (
+                <EditButton />
+            ) : null}
             <ShowButton />
-            <DeleteButton />
+            {PermissionsStore.getResourcePermission('deletedusersites', 'remove') ? (
+                <DeleteButton />
+            ) : null}
         </FieldSelectDatagrid>
     </List>
 );

@@ -98,9 +98,13 @@ export const SiteList = props => (
                     <BooleanField source="is_active" sortable={false} />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    <EditButton />
+                    {PermissionsStore.getResourcePermission('sites', 'edit') ? (
+                        <EditButton />
+                    ) : null}
                     <ShowButton />
-                    <DeleteButton />
+                    {PermissionsStore.getResourcePermission('sites', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
                 </FieldSelectDatagrid>
             }
         />

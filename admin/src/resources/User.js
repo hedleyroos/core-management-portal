@@ -114,9 +114,13 @@ export const UserList = props => (
                     )}
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
-                    <EditButton />
+                    {PermissionsStore.getResourcePermission('users', 'edit') ? (
+                        <EditButton />
+                    ) : null}
                     <ShowButton />
-                    <DeleteButton />
+                    {PermissionsStore.getResourcePermission('users', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
                 </FieldSelectDatagrid>
             }
         />

@@ -55,9 +55,13 @@ export const InvitationRedirectUrlList = props => (
             <TextField source="description" sortable={false} />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            <EditButton />
+            {PermissionsStore.getResourcePermission('invitationredirecturls', 'edit') ? (
+                <EditButton />
+            ) : null}
             <ShowButton />
-            <DeleteButton />
+            {PermissionsStore.getResourcePermission('invitationredirecturls', 'remove') ? (
+                <DeleteButton />
+            ) : null}
         </FieldSelectDatagrid>
     </List>
 );

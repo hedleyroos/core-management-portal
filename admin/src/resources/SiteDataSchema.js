@@ -71,9 +71,13 @@ export const SiteDataSchemaList = props => (
             <ObjectField source="schema" sortable={false} addLabel />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            <EditButton />
+            {PermissionsStore.getResourcePermission('sitedataschemas', 'edit') ? (
+                <EditButton />
+            ) : null}
             <ShowButton />
-            <DeleteButton />
+            {PermissionsStore.getResourcePermission('sitedataschemas', 'remove') ? (
+                <DeleteButton />
+            ) : null}
         </FieldSelectDatagrid>
     </List>
 );

@@ -87,9 +87,11 @@ export const DomainRoleList = props => (
             <BooleanField source="grant_implicitly" sortable={false} />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            <EditButton />
+            {PermissionsStore.getResourcePermission('domainroles', 'edit') ? <EditButton /> : null}
             <ShowButton />
-            <DeleteButton />
+            {PermissionsStore.getResourcePermission('domainroles', 'remove') ? (
+                <DeleteButton />
+            ) : null}
         </FieldSelectDatagrid>
     </List>
 );

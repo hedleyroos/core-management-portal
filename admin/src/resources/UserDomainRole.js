@@ -94,7 +94,9 @@ export const UserDomainRoleList = props => (
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
             <ShowButton />
-            <DeleteButton />
+            {PermissionsStore.getResourcePermission('userdomainroles', 'remove') ? (
+                <DeleteButton />
+            ) : null}
         </FieldSelectDatagrid>
     </List>
 );

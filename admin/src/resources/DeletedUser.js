@@ -90,9 +90,13 @@ export const DeletedUserList = props => (
                     ) : (
                         <EmptyField />
                     )}
-                    <EditButton />
+                    {PermissionsStore.getResourcePermission('deletedusers', 'edit') ? (
+                        <EditButton />
+                    ) : null}
                     <ShowButton />
-                    <DeleteButton />
+                    {PermissionsStore.getResourcePermission('deletedusers', 'remove') ? (
+                        <DeleteButton />
+                    ) : null}
                 </FieldSelectDatagrid>
             }
         />
