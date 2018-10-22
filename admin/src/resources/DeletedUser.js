@@ -153,6 +153,7 @@ export const DeletedUserShow = props => (
                                 label="Site"
                                 source="site_id"
                                 reference="sites"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -161,12 +162,12 @@ export const DeletedUserShow = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
-                        <DateField source="deletion_requested_at" />
-                        <TextField source="deletion_requested_via" />
-                        <DateField source="deletion_confirmed_at" />
-                        <TextField source="deletion_confirmed_via" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
+                        <DateField source="deletion_requested_at" sortable={false} />
+                        <TextField source="deletion_requested_via" sortable={false} />
+                        <DateField source="deletion_confirmed_at" sortable={false} />
+                        <TextField source="deletion_confirmed_via" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (

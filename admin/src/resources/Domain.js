@@ -149,10 +149,10 @@ export const DomainShow = props => (
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                     <Datagrid>
-                        <NumberField source="id" />
-                        <TextField source="name" />
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <NumberField source="id" sortable={false} />
+                        <TextField source="name" sortable={false} />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (
@@ -166,6 +166,7 @@ export const DomainShow = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -174,8 +175,8 @@ export const DomainShow = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (
@@ -204,10 +205,10 @@ export const DomainEdit = props => (
             {PermissionsStore.getResourcePermission('domains', 'list') ? (
                 <ReferenceManyField label="Child Domains" reference="domains" target="parent_id">
                     <Datagrid>
-                        <NumberField source="id" />
-                        <TextField source="name" />
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <NumberField source="id" sortable={false} />
+                        <TextField source="name" sortable={false} />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : null}
@@ -219,6 +220,7 @@ export const DomainEdit = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -227,8 +229,8 @@ export const DomainEdit = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : null}

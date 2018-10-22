@@ -191,6 +191,7 @@ export const UserShow = props => (
                                 label="Domain"
                                 source="domain_id"
                                 reference="domains"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -204,6 +205,7 @@ export const UserShow = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -212,8 +214,8 @@ export const UserShow = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (
@@ -227,6 +229,7 @@ export const UserShow = props => (
                                 label="Site"
                                 source="site_id"
                                 reference="sites"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -240,6 +243,7 @@ export const UserShow = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+				sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -248,8 +252,8 @@ export const UserShow = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (
@@ -263,6 +267,7 @@ export const UserShow = props => (
                                 label="Site"
                                 source="site_id"
                                 reference="sites"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -271,9 +276,9 @@ export const UserShow = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <ObjectField source="data" addLabel />
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <ObjectField source="data" sortable={false} addLabel />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (
@@ -319,6 +324,7 @@ export const UserEdit = props => (
                                 label="Domain"
                                 source="domain_id"
                                 reference="domains"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -332,6 +338,7 @@ export const UserEdit = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -340,8 +347,8 @@ export const UserEdit = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : null}
@@ -353,6 +360,7 @@ export const UserEdit = props => (
                                 label="Site"
                                 source="site_id"
                                 reference="sites"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -366,6 +374,7 @@ export const UserEdit = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+				sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -374,8 +383,8 @@ export const UserEdit = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : null}
@@ -387,6 +396,7 @@ export const UserEdit = props => (
                                 label="Site"
                                 source="site_id"
                                 reference="sites"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -395,9 +405,9 @@ export const UserEdit = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <ObjectField source="data" addLabel />
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <ObjectField source="data" sortable={false} addLabel />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : null}

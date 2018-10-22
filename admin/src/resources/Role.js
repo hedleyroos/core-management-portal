@@ -110,6 +110,7 @@ export const RoleShow = props => (
                                 label="Resource"
                                 source="resource_id"
                                 reference="resources"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -123,6 +124,7 @@ export const RoleShow = props => (
                                 label="Permission"
                                 source="permission_id"
                                 reference="permissions"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -131,8 +133,8 @@ export const RoleShow = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (
@@ -160,6 +162,7 @@ export const RoleEdit = props => (
                                 label="Resource"
                                 source="resource_id"
                                 reference="resources"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -173,6 +176,7 @@ export const RoleEdit = props => (
                                 label="Permission"
                                 source="permission_id"
                                 reference="permissions"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -181,8 +185,8 @@ export const RoleEdit = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : null}

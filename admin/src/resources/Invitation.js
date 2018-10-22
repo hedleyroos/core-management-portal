@@ -234,6 +234,7 @@ export const InvitationShow = props => (
                                 label="Domain"
                                 source="domain_id"
                                 reference="domains"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -247,6 +248,7 @@ export const InvitationShow = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -255,8 +257,8 @@ export const InvitationShow = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (
@@ -274,6 +276,7 @@ export const InvitationShow = props => (
                                 label="Site"
                                 source="site_id"
                                 reference="sites"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -287,6 +290,7 @@ export const InvitationShow = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -295,8 +299,8 @@ export const InvitationShow = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : (
@@ -347,6 +351,7 @@ export const InvitationEdit = props => (
                                 label="Domain"
                                 source="domain_id"
                                 reference="domains"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -360,6 +365,7 @@ export const InvitationEdit = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -368,8 +374,8 @@ export const InvitationEdit = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : null}
@@ -385,6 +391,7 @@ export const InvitationEdit = props => (
                                 label="Site"
                                 source="site_id"
                                 reference="sites"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -398,6 +405,7 @@ export const InvitationEdit = props => (
                                 label="Role"
                                 source="role_id"
                                 reference="roles"
+                                sortable={false}
                                 linkType="show"
                                 allowEmpty
                             >
@@ -406,8 +414,8 @@ export const InvitationEdit = props => (
                         ) : (
                             <EmptyField />
                         )}
-                        <DateField source="created_at" />
-                        <DateField source="updated_at" />
+                        <DateField source="created_at" sortable={false} />
+                        <DateField source="updated_at" sortable={false} />
                     </Datagrid>
                 </ReferenceManyField>
             ) : null}
