@@ -260,7 +260,10 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                 }
             };
         case GET_ONE:
-            data = keys ? { ...json, id: keys.map(key => json[key]).join('/') } : json;
+            data =
+                keys || pk
+                    ? { ...json, id: keys ? keys.map(key => json[key]).join('/') : json[pk] }
+                    : json;
             return { data };
         case DELETE:
             // TODO: Remove this when APIs updated to return object on delete.
