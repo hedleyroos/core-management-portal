@@ -4,23 +4,27 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    TextField,
-    NumberField,
-    DateField,
-    SimpleForm,
-    Create,
-    ReferenceInput,
     SelectInput,
     Show,
+    SimpleForm,
+    ReferenceField,
+    DateField,
+    Create,
+    ReferenceInput,
     SimpleShowLayout,
-    DeleteButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    List,
+    TextField,
+    NumberField,
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import InvitationDomainRoleListActions from '../customActions/InvitationDomainRoleListActions';
+
 import InvitationDomainRoleFilter from '../filters/InvitationDomainRoleFilter';
+
 import DomainTreeInput from '../inputs/DomainTreeInput';
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
@@ -39,8 +43,14 @@ const validationCreateInvitationDomainRole = values => {
 };
 
 export const InvitationDomainRoleList = props => (
-    <List {...props} title="InvitationDomainRole List" filters={<InvitationDomainRoleFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="InvitationDomainRole List"
+        filters={<InvitationDomainRoleFilter />}
+        actions={<InvitationDomainRoleListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('invitations', 'list') ? (
                 <ReferenceField
                     label="Invitation"

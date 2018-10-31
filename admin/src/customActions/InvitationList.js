@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
-import { CardActions } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import PurgeIcon from 'material-ui/svg-icons/social/whatshot';
-import { CreateButton, RefreshButton } from 'admin-on-rest';
+import Button from '@material-ui/core/Button';
+import CardActions from '@material-ui/core/CardActions';
+import PurgeIcon from '@material-ui/icons/Whatshot';
+import { CreateButton } from 'react-admin';
 
-import { styles } from '../Theme';
+import { styles } from '../theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
-import { httpClient } from '../restClient';
+import { httpClient } from '../dataProvider';
 import PermissionsStore from '../auth/PermissionsStore';
 import { PERMISSIONS } from '../constants';
 
 class InvitationListActions extends Component {
     purgeExpiredInvitations() {
-        httpClient(
-            `${
-                process.env.REACT_APP_MANAGEMENT_LAYER
-            }/invitations/purge/expired`
-        )
+        httpClient(`${process.env.REACT_APP_MANAGEMENT_LAYER}/invitations/purge/expired`)
             .then(response => {
                 successNotificationAnt(
                     'Expired Invitations are being purged. Refresh to see any changes that have occured.'
@@ -50,14 +46,11 @@ class InvitationListActions extends Component {
                 {PermissionsStore.getResourcePermission('invitations', 'create') && (
                     <CreateButton basePath={basePath} />
                 )}
-                <RefreshButton />
                 {PermissionsStore.manyResourcePermissions(PERMISSIONS.purgeexpiredinvitations) && (
-                    <FlatButton
-                        primary
-                        icon={<PurgeIcon />}
-                        label="Purge Expired Invites"
-                        onClick={this.purgeExpiredInvitations}
-                    />
+                    <Button size="small" color="primary" onClick={this.purgeExpiredInvitations}>
+                        <PurgeIcon />
+                        Purge Expired Invites
+                    </Button>
                 )}
             </CardActions>
         );

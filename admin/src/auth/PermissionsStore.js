@@ -2,7 +2,7 @@
  * Generated authPermissions.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
-import restClient, { OPERATIONAL, GET_ONE } from '../restClient';
+import dataProvider, { OPERATIONAL, GET_ONE } from '../dataProvider';
 import { getContextAlphabeticallyFirst, getSitesForContext, notEmptyObject } from '../utils';
 import { PLACE_MAPPING } from '../constants';
 
@@ -153,7 +153,7 @@ class PermissionsStore {
         return PermissionsStore.instance;
     }
     getAllUserRoles(userID) {
-        return restClient(OPERATIONAL, 'all_user_roles', {
+        return dataProvider(OPERATIONAL, 'all_user_roles', {
             pathParameters: [userID]
         }).then(response => {
             return Object.entries(response.data.roles_map).reduce((result, [key, value]) => {
@@ -178,10 +178,10 @@ class PermissionsStore {
 
             // All calls wrapped in a Promise.all() for all to be done before carrying on.
             return Promise.all([
-                restClient(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
+                dataProvider(OPERATIONAL, `user_${PLACE_MAPPING[contextType]}_permissions`, {
                     pathParameters: [userID, contextID]
                 }),
-                restClient(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
+                dataProvider(GET_ONE, `${PLACE_MAPPING[contextType]}s`, { id: contextID }),
                 getSitesForContext(currentContext)
             ]).then(([permissions, currentContextObject, siteIDs]) => {
                 this.loadPermissions(

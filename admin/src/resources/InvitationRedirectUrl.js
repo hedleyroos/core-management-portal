@@ -4,25 +4,29 @@
  **/
 import React from 'react';
 import {
-    List,
-    Datagrid,
-    NumberField,
-    UrlField,
-    TextField,
-    DateField,
-    SimpleForm,
-    Create,
-    TextInput,
     Show,
+    TextInput,
+    SimpleForm,
+    DateField,
+    Create,
+    UrlField,
     SimpleShowLayout,
+    List,
+    TextField,
     Edit,
-    DeleteButton,
+    NumberField,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import PermissionsStore from '../auth/PermissionsStore';
-import EmptyField from '../fields/EmptyField';
+
+import InvitationRedirectUrlEditToolbar from '../customActions/InvitationRedirectUrlEditToolbar';
+import InvitationRedirectUrlListActions from '../customActions/InvitationRedirectUrlListActions';
+
 import InvitationRedirectUrlFilter from '../filters/InvitationRedirectUrlFilter';
+
+import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateInvitationRedirectUrl = values => {
     const errors = {};
@@ -41,8 +45,14 @@ const validationEditInvitationRedirectUrl = values => {
 };
 
 export const InvitationRedirectUrlList = props => (
-    <List {...props} title="InvitationRedirectUrl List" filters={<InvitationRedirectUrlFilter />}>
-        <Datagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="InvitationRedirectUrl List"
+        filters={<InvitationRedirectUrlFilter />}
+        actions={<InvitationRedirectUrlListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             <NumberField source="id" sortable={false} />
             <UrlField source="url" sortable={false} />
             <TextField source="description" sortable={false} />
@@ -55,7 +65,7 @@ export const InvitationRedirectUrlList = props => (
             {PermissionsStore.getResourcePermission('invitationredirecturls', 'remove') ? (
                 <DeleteButton />
             ) : null}
-        </Datagrid>
+        </FieldSelectDatagrid>
     </List>
 );
 
@@ -82,7 +92,10 @@ export const InvitationRedirectUrlShow = props => (
 
 export const InvitationRedirectUrlEdit = props => (
     <Edit {...props} title="InvitationRedirectUrl Edit">
-        <SimpleForm validate={validationEditInvitationRedirectUrl}>
+        <SimpleForm
+            validate={validationEditInvitationRedirectUrl}
+            toolbar={<InvitationRedirectUrlEditToolbar />}
+        >
             <TextInput source="url" />
             <TextInput source="description" />
         </SimpleForm>

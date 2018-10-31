@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { TextInput, NumberInput, Filter } from 'admin-on-rest';
+import { TextInput, NumberInput, Filter } from 'react-admin';
 
 const parseSiteIds = value => value.replace(/[^\w]/gi, ',');
 

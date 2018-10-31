@@ -3,7 +3,8 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { TextInput, Filter } from 'admin-on-rest';
+import { TextInput, Filter } from 'react-admin';
+
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const UserSiteDataFilter = props => (

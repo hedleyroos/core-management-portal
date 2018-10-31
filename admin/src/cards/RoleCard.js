@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from 'material-ui/Card/Card';
-import CardActions from 'material-ui/Card/CardActions';
-import CardHeader from 'material-ui/Card/CardHeader';
-import CardText from 'material-ui/Card/CardText';
-import CardTitle from 'material-ui/Card/CardTitle';
-import Checkbox from 'material-ui/Checkbox';
-import Divider from 'material-ui/Divider';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Checkbox from '@material-ui/core/Checkbox';
+import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
+import Typography from '@material-ui/core/Typography';
 
-import { styles } from '../Theme';
+import { styles } from '../theme';
 import ConfirmDialog from '../pages/ConfirmDialog';
 
 const RoleCard = ({
@@ -25,52 +28,73 @@ const RoleCard = ({
     amountSelectedToDelete
 }) => (
     <Card>
-        <CardTitle title={title} subtitle={`ID: ${object.id}`} />
-        <Divider />
-        <CardHeader title="Domain Roles" />
-        <CardText style={styles.wrapper}>
-            {domainRoles.length > 0
-                ? domainRoles.map(([key, domainRole], index) => (
-                      <Checkbox
-                          key={key}
-                          label={`${domainRole.domain.name}: ${domainRole.role.label}`}
-                          checked={domainRole.checked}
-                          onCheck={() => handleCheck(key)}
-                      />
-                  ))
-                : `${type} currently has no explicit domain roles.`}
-        </CardText>
-        <Divider />
-        <CardHeader title="Site Roles" />
-        <CardText style={styles.wrapper}>
-            {siteRoles.length > 0
-                ? siteRoles.map(([key, siteRole], index) => (
-                      <Checkbox
-                          key={key}
-                          label={`${siteRole.site.name}: ${siteRole.role.label}`}
-                          checked={siteRole.checked}
-                          onCheck={() => handleCheck(key)}
-                      />
-                  ))
-                : `${type} currently has no explicit site roles.`}
-        </CardText>
-        {amountSelectedToDelete > 0 && (
-            <React.Fragment>
-                <Divider />
-                <CardText>
-                    <CardActions>
-                        <RaisedButton label="Remove Roles" secondary={true} onClick={handleOpen} />
-                    </CardActions>
-                </CardText>
-            </React.Fragment>
-        )}
-        <ConfirmDialog
-            open={open}
-            handleClose={handleClose}
-            cancelLabel="No"
-            submitLabel="Delete"
-            text="Are you sure you want to delete the selected roles?"
-        />
+        <CardContent>
+            <Typography variant="title" paragraph>
+                {title}
+            </Typography>
+            <Typography>{`ID: ${object.id}`}</Typography>
+            <Divider style={styles.divider} />
+            <FormControl component="fieldset">
+                <FormLabel component="legend">Domain Roles</FormLabel>
+                <FormGroup>
+                    {domainRoles.length > 0
+                        ? domainRoles.map(([key, domainRole], index) => (
+                              <FormControlLabel
+                                  key={key}
+                                  control={
+                                      <Checkbox
+                                          checked={domainRole.checked}
+                                          onChange={() => handleCheck(key)}
+                                          value={key}
+                                      />
+                                  }
+                                  label={`${domainRole.domain.name}: ${domainRole.role.label}`}
+                              />
+                          ))
+                        : `${type} currently has no explicit domain roles.`}
+                </FormGroup>
+            </FormControl>
+            <Divider style={styles.divider} />
+            <FormControl>
+                <FormLabel component="legend">Site Roles</FormLabel>
+                <FormGroup style={styles.wrapper}>
+                    {siteRoles.length > 0
+                        ? siteRoles.map(([key, siteRole], index) => (
+                              <FormControlLabel
+                                  key={key}
+                                  control={
+                                      <Checkbox
+                                          checked={siteRole.checked}
+                                          onChange={() => handleCheck(key)}
+                                          value={key}
+                                      />
+                                  }
+                                  label={`${siteRole.site.name}: ${siteRole.role.label}`}
+                              />
+                          ))
+                        : `${type} currently has no explicit site roles.`}
+                </FormGroup>
+            </FormControl>
+            {amountSelectedToDelete > 0 && (
+                <React.Fragment>
+                    <Divider style={styles.divider} />
+                    <CardContent>
+                        <CardActions>
+                            <Button variant="contained" color="secondary" onClick={handleOpen}>
+                                Remove Roles
+                            </Button>
+                        </CardActions>
+                    </CardContent>
+                </React.Fragment>
+            )}
+            <ConfirmDialog
+                open={open}
+                handleClose={handleClose}
+                cancelLabel="No"
+                submitLabel="Delete"
+                text="Are you sure you want to delete the selected roles?"
+            />
+        </CardContent>
     </Card>
 );
 

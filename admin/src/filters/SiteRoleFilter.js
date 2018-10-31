@@ -3,7 +3,8 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { SelectInput, ReferenceInput, Filter } from 'admin-on-rest';
+import { SelectInput, ReferenceInput, Filter } from 'react-admin';
+
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const SiteRoleFilter = props => (

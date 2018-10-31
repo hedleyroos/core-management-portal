@@ -4,25 +4,30 @@
  **/
 import React from 'react';
 import {
-    List,
-    NumberField,
-    UrlField,
-    TextField,
-    DateField,
-    Responsive,
     SimpleList,
-    SimpleForm,
-    Create,
-    TextInput,
     Show,
+    NumberField,
+    SimpleForm,
+    DateField,
+    Create,
+    Responsive,
+    UrlField,
     SimpleShowLayout,
+    TextInput,
+    TextField,
     Edit,
-    DeleteButton,
+    List,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import PermissionsStore from '../auth/PermissionsStore';
+
+import ResourceEditToolbar from '../customActions/ResourceEditToolbar';
+import ResourceListActions from '../customActions/ResourceListActions';
+
 import ResourceFilter from '../filters/ResourceFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateResource = values => {
@@ -39,7 +44,13 @@ const validationEditResource = values => {
 };
 
 export const ResourceList = props => (
-    <List {...props} title="Resource List" filters={<ResourceFilter />}>
+    <List
+        {...props}
+        title="Resource List"
+        filters={<ResourceFilter />}
+        actions={<ResourceListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList
@@ -48,7 +59,7 @@ export const ResourceList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     <UrlField source="urn" sortable={false} />
                     <TextField source="description" sortable={false} />
@@ -90,7 +101,7 @@ export const ResourceShow = props => (
 
 export const ResourceEdit = props => (
     <Edit {...props} title="Resource Edit">
-        <SimpleForm validate={validationEditResource}>
+        <SimpleForm validate={validationEditResource} toolbar={<ResourceEditToolbar />}>
             <TextInput source="urn" />
             <TextInput source="description" />
         </SimpleForm>

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+next
+----
+- Upgraded entire Admin from `Admin on Rest` to `React Admin`
+- All components and custom components upgraded to use `Material-UI` > v1.
+- Documentation updated
+
 1.3.0
 -----
 - All resources use `FieldSelectDatagrid`.

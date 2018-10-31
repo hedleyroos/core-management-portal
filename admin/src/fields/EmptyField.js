@@ -1,5 +1,5 @@
 /**
- * Generic Admin on rest Custom Fields!
+ * Generic React Admin Custom Fields!
  * Change/add at your own risk!
  **/
 import React from 'react';

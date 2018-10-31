@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { TextInput, Filter } from 'admin-on-rest';
+import { TextInput, Filter } from 'react-admin';
 
 const parseInvitationredirecturlIds = value => value.replace(/[^\w]/gi, ',');
 

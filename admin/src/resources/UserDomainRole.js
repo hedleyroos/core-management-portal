@@ -4,25 +4,29 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    TextField,
-    NumberField,
-    DateField,
-    SimpleForm,
-    Create,
-    ReferenceInput,
-    SelectInput,
     Show,
+    SelectInput,
+    NumberField,
+    TextField,
+    Create,
+    DateField,
+    ReferenceInput,
+    ReferenceField,
+    List,
+    SimpleForm,
     SimpleShowLayout,
-    DeleteButton,
-    ShowButton
-} from 'admin-on-rest';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import PermissionsStore from '../auth/PermissionsStore';
 import EmptyField from '../fields/EmptyField';
+
+import UserDomainRoleListActions from '../customActions/UserDomainRoleListActions';
+
 import UserDomainRoleFilter from '../filters/UserDomainRoleFilter';
+
 import DomainTreeInput from '../inputs/DomainTreeInput';
-import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateUserDomainRole = values => {
@@ -40,8 +44,14 @@ const validationCreateUserDomainRole = values => {
 };
 
 export const UserDomainRoleList = props => (
-    <List {...props} title="UserDomainRole List" filters={<UserDomainRoleFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="UserDomainRole List"
+        filters={<UserDomainRoleFilter />}
+        actions={<UserDomainRoleListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -51,7 +61,7 @@ export const UserDomainRoleList = props => (
                     linkType="show"
                     allowEmpty
                 >
-                    <TextField source="username" />
+                    <NumberField source="username" />
                 </ReferenceField>
             ) : (
                 <EmptyField />
@@ -98,13 +108,15 @@ export const UserDomainRoleCreate = props => (
     <Create {...props} title="UserDomainRole Create">
         <SimpleForm validate={validationCreateUserDomainRole} redirect="show">
             {PermissionsStore.getResourcePermission('users', 'list') && (
-                <UnlimitedDropdownInput
+                <ReferenceInput
                     label="User"
                     source="user_id"
                     reference="users"
-                    optionText="username"
-                    filter={{ site_ids: '' }}
-                />
+                    perPage={0}
+                    allowEmpty
+                >
+                    <SelectInput optionText="username" />
+                </ReferenceInput>
             )}
             {PermissionsStore.getResourcePermission('domains', 'list') && (
                 <DomainTreeInput label="Domain" source="domain_id" />

@@ -4,27 +4,32 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    TextField,
-    NumberField,
-    DateField,
-    SimpleForm,
-    Create,
-    ReferenceInput,
     SelectInput,
-    LongTextInput,
-    Show,
-    SimpleShowLayout,
+    DateField,
+    ReferenceField,
+    Create,
     Edit,
-    DeleteButton,
+    SimpleShowLayout,
+    Show,
+    NumberField,
+    TextField,
+    SimpleForm,
+    LongTextInput,
+    List,
+    ReferenceInput,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
-import EmptyField from '../fields/EmptyField';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import ObjectField from '../fields/ObjectField';
+import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import UserSiteDataEditToolbar from '../customActions/UserSiteDataEditToolbar';
+import UserSiteDataListActions from '../customActions/UserSiteDataListActions';
+
 import UserSiteDataFilter from '../filters/UserSiteDataFilter';
+
 import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
@@ -48,8 +53,14 @@ const validationEditUserSiteData = values => {
 };
 
 export const UserSiteDataList = props => (
-    <List {...props} title="UserSiteData List" filters={<UserSiteDataFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="UserSiteData List"
+        filters={<UserSiteDataFilter />}
+        actions={<UserSiteDataListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('users', 'list') ? (
                 <ReferenceField
                     label="User"
@@ -81,11 +92,9 @@ export const UserSiteDataList = props => (
             <ObjectField source="data" sortable={false} addLabel />
             <DateField source="created_at" sortable={false} />
             <DateField source="updated_at" sortable={false} />
-            {PermissionsStore.getResourcePermission('usersitedata', 'edit') ? <EditButton /> : null}
+            <EditButton />
             <ShowButton />
-            {PermissionsStore.getResourcePermission('usersitedata', 'remove') ? (
-                <DeleteButton />
-            ) : null}
+            <DeleteButton />
         </FieldSelectDatagrid>
     </List>
 );
@@ -166,7 +175,7 @@ export const UserSiteDataShow = props => (
 
 export const UserSiteDataEdit = props => (
     <Edit {...props} title="UserSiteData Edit">
-        <SimpleForm validate={validationEditUserSiteData}>
+        <SimpleForm validate={validationEditUserSiteData} toolbar={<UserSiteDataEditToolbar />}>
             <LongTextInput
                 source="data"
                 format={value => (value instanceof Object ? JSON.stringify(value) : value)}

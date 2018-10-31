@@ -4,26 +4,31 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    NumberField,
     BooleanField,
-    DateField,
-    SimpleForm,
-    Create,
-    ReferenceInput,
     SelectInput,
     BooleanInput,
     Show,
+    SimpleForm,
+    ReferenceField,
+    DateField,
+    Create,
+    ReferenceInput,
     SimpleShowLayout,
+    List,
     Edit,
-    DeleteButton,
+    NumberField,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import SiteRoleEditToolbar from '../customActions/SiteRoleEditToolbar';
+import SiteRoleListActions from '../customActions/SiteRoleListActions';
+
 import SiteRoleFilter from '../filters/SiteRoleFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteRole = values => {
@@ -43,8 +48,14 @@ const validationEditSiteRole = values => {
 };
 
 export const SiteRoleList = props => (
-    <List {...props} title="SiteRole List" filters={<SiteRoleFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="SiteRole List"
+        filters={<SiteRoleFilter />}
+        actions={<SiteRoleListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -153,7 +164,7 @@ export const SiteRoleShow = props => (
 
 export const SiteRoleEdit = props => (
     <Edit {...props} title="SiteRole Edit">
-        <SimpleForm validate={validationEditSiteRole}>
+        <SimpleForm validate={validationEditSiteRole} toolbar={<SiteRoleEditToolbar />}>
             <BooleanInput source="grant_implicitly" />
         </SimpleForm>
     </Edit>
