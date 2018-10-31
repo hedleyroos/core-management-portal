@@ -1,16 +1,16 @@
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import FlatButton from 'material-ui/FlatButton';
-import ManageIcon from 'material-ui/svg-icons/action/build';
 import React, { Component } from 'react';
 import jwtDecode from 'jwt-decode';
-import { CardActions } from 'material-ui/Card';
-import { ListButton, RefreshButton, EditButton } from 'admin-on-rest';
+import { ListButton, RefreshButton, EditButton } from 'react-admin';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import Button from '@material-ui/core/Button';
+import CardActions from '@material-ui/core/CardActions';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ManageIcon from '@material-ui/icons/Build';
 
-import { styles } from '../Theme';
+import { styles } from '../theme';
 import { successNotificationAnt, errorNotificationAnt, apiErrorHandler } from '../utils';
-import { httpClient } from '../restClient';
+import { httpClient } from '../dataProvider';
 import PermissionsStore from '../auth/PermissionsStore';
 import ConfirmDialog from '../pages/ConfirmDialog';
 import { PERMISSIONS } from '../constants';
@@ -62,24 +62,24 @@ class UserShowActions extends Component {
 
     handleClose(action) {
         const loggedInUserID = jwtDecode(localStorage.getItem('id_token')).sub;
-        if(action === 'submit' && loggedInUserID !== this.props.data.id) {
+        if (action === 'submit' && loggedInUserID !== this.props.data.id) {
             this.handleDelete(this.state.inputValues.deletionReason);
         }
         this.setState({ open: false });
     }
 
     formIsValid(fields) {
-        let returnFields = {}
+        let returnFields = {};
         Object.entries(fields).forEach(([name, value]) => {
-            returnFields[name] = value
+            returnFields[name] = value;
         });
-        this.setState({inputValues:returnFields, formIsValid: fields.deletionReason.length > 0});
+        this.setState({ inputValues: returnFields, formIsValid: fields.deletionReason.length > 0 });
     }
 
     handleInput(event) {
         let name = event.target.name;
         let value = event.target.value;
-        this.formIsValid({[name]: value});
+        this.formIsValid({ [name]: value });
     }
 
     render() {
@@ -87,13 +87,15 @@ class UserShowActions extends Component {
         const { basePath, data } = this.props;
         const { open } = this.state;
         const title = data && `Delete User '${data.username}: ${data.id}'`;
-        const inputValues = [{
-            floatingLabelText: 'Reason for user deletion*',
-            placeholder: 'Reason',
-            autoFocus: 'true',
-            name: 'deletionReason',
-            value: this.state.inputValues.deletionReason,
-        }];
+        const inputValues = [
+            {
+                floatingLabelText: 'Reason for user deletion*',
+                placeholder: 'Reason',
+                autoFocus: 'true',
+                name: 'deletionReason',
+                value: this.state.inputValues.deletionReason
+            }
+        ];
         return (
             <CardActions style={styles.cardAction}>
                 {PermissionsStore.getResourcePermission('users', 'edit') && (
@@ -103,14 +105,13 @@ class UserShowActions extends Component {
                 <RefreshButton />
                 {PermissionsStore.getResourcePermission('users', 'remove') && (
                     <div>
-                        {data.id !== loggedInUserID ?
-                            <FlatButton
-                                primary
-                                icon={<DeleteIcon />}
-                                label="Delete User"
-                                onClick={this.handleOpen}
-                            /> : ''
-                        }
+                        {data &&
+                            data.id !== loggedInUserID && (
+                                <Button size="small" color="primary" onClick={this.handleOpen}>
+                                    <DeleteIcon />
+                                    Delete User
+                                </Button>
+                            )}
                         <ConfirmDialog
                             open={open}
                             handleClose={this.handleClose}
@@ -125,13 +126,16 @@ class UserShowActions extends Component {
                     </div>
                 )}
                 {PermissionsStore.manyResourcePermissions(PERMISSIONS.manageuserroles) &&
+                    data &&
                     data.organisation_id && (
-                        <FlatButton
-                            primary
-                            icon={<ManageIcon />}
-                            label="Manage Roles"
+                        <Button
+                            size="small"
+                            color="primary"
                             onClick={() => this.props.push(`/manageuserroles/${data.id}`)}
-                        />
+                        >
+                            <ManageIcon />
+                            Manage Roles
+                        </Button>
                     )}
             </CardActions>
         );

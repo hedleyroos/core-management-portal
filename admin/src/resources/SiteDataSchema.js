@@ -4,26 +4,32 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    NumberField,
-    DateField,
+    SelectInput,
+    Show,
+    LongTextInput,
     SimpleForm,
+    ReferenceField,
+    DateField,
     Create,
     ReferenceInput,
-    SelectInput,
-    LongTextInput,
-    Show,
     SimpleShowLayout,
+    List,
     Edit,
-    DeleteButton,
+    NumberField,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
 import ObjectField from '../fields/ObjectField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import SiteDataSchemaEditToolbar from '../customActions/SiteDataSchemaEditToolbar';
+import SiteDataSchemaListActions from '../customActions/SiteDataSchemaListActions';
+
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
+
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteDataSchema = values => {
@@ -43,8 +49,14 @@ const validationEditSiteDataSchema = values => {
 };
 
 export const SiteDataSchemaList = props => (
-    <List {...props} title="SiteDataSchema List" filters={<SiteDataSchemaFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="SiteDataSchema List"
+        filters={<SiteDataSchemaFilter />}
+        actions={<SiteDataSchemaListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('sites', 'list') ? (
                 <ReferenceField
                     label="Site"
@@ -77,15 +89,12 @@ export const SiteDataSchemaCreate = props => (
     <Create {...props} title="SiteDataSchema Create">
         <SimpleForm validate={validationCreateSiteDataSchema} redirect="show">
             {PermissionsStore.getResourcePermission('sites', 'list') && (
-                <ReferenceInput
+                <UnlimitedDropdownInput
                     label="Site"
                     source="site_id"
                     reference="sites"
-                    perPage={0}
-                    allowEmpty
-                >
-                    <SelectInput optionText="name" />
-                </ReferenceInput>
+                    optionText="name"
+                />
             )}
             <LongTextInput
                 source="schema"
@@ -127,7 +136,7 @@ export const SiteDataSchemaShow = props => (
 
 export const SiteDataSchemaEdit = props => (
     <Edit {...props} title="SiteDataSchema Edit">
-        <SimpleForm validate={validationEditSiteDataSchema}>
+        <SimpleForm validate={validationEditSiteDataSchema} toolbar={<SiteDataSchemaEditToolbar />}>
             <LongTextInput
                 source="schema"
                 format={value => (value instanceof Object ? JSON.stringify(value) : value)}

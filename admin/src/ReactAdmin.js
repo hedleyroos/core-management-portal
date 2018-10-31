@@ -1,18 +1,20 @@
 /**
- * Generated App.js code. Edit at own risk.
+ * Generated ReactAdmin.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
 import 'antd/dist/antd.css';
 import React from 'react';
-import { Admin, Delete, Resource } from 'admin-on-rest';
-import authClient from './auth/authClient';
+import { Admin, Resource } from 'react-admin';
+
 import AuthLoginPage from './auth/authLogin';
+import AuthLogoutButton from './auth/authLogout';
+import authProvider from './auth/authProvider';
+import PermissionsStore from './auth/PermissionsStore';
 import catchAll from './catchAll';
 import customRoutes from './customRoutes';
-import Menu from './Menu';
-import PermissionsStore from './auth/PermissionsStore';
-import restClient from './restClient';
-import { muiTheme } from './Theme';
+import dataProvider from './dataProvider';
+import MyLayout from './MyLayout';
+import { theme } from './theme';
 import manageRolesReducer from './reducers/manageRolesReducer';
 
 import { DomainList, DomainCreate, DomainShow, DomainEdit } from './resources/Domain';
@@ -127,19 +129,18 @@ import {
 
 import { UserListNoSites, UserList, UserShow, UserEdit } from './resources/User';
 
-const App = () => (
+const ReactAdmin = () => (
     <Admin
-        title="Girl Effect Management Portal"
-        menu={Menu}
-        theme={muiTheme}
-        restClient={restClient}
-        authClient={authClient}
+        appLayout={MyLayout}
+        authProvider={authProvider}
         catchAll={catchAll}
-        loginPage={AuthLoginPage}
+        customReducers={{ manageRoles: manageRolesReducer }}
         customRoutes={customRoutes}
-        customReducers={{
-            manageRoles: manageRolesReducer
-        }}
+        dataProvider={dataProvider}
+        loginPage={AuthLoginPage}
+        logoutButton={AuthLogoutButton}
+        title="Girl Effect Management Portal"
+        theme={theme}
     >
         {permissions => [
             PermissionsStore.getResourcePermission('domains', 'list') ? (
@@ -150,9 +151,6 @@ const App = () => (
                         PermissionsStore.getResourcePermission('domains', 'create')
                             ? DomainCreate
                             : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('domains', 'remove') ? Delete : null
                     }
                     show={DomainShow}
                     edit={
@@ -169,11 +167,6 @@ const App = () => (
                     create={
                         PermissionsStore.getResourcePermission('domainroles', 'create')
                             ? DomainRoleCreate
-                            : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('domainroles', 'remove')
-                            ? Delete
                             : null
                     }
                     show={DomainRoleShow}
@@ -193,11 +186,6 @@ const App = () => (
                             ? InvitationCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('invitations', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={InvitationShow}
                     edit={
                         PermissionsStore.getResourcePermission('invitations', 'edit')
@@ -213,11 +201,6 @@ const App = () => (
                     create={
                         PermissionsStore.getResourcePermission('invitationredirecturls', 'create')
                             ? InvitationRedirectUrlCreate
-                            : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('invitationredirecturls', 'remove')
-                            ? Delete
                             : null
                     }
                     show={InvitationRedirectUrlShow}
@@ -237,11 +220,6 @@ const App = () => (
                             ? InvitationDomainRoleCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('invitationdomainroles', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={InvitationDomainRoleShow}
                 />
             ) : null,
@@ -254,11 +232,6 @@ const App = () => (
                             ? InvitationSiteRoleCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('invitationsiteroles', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={InvitationSiteRoleShow}
                 />
             ) : null,
@@ -269,11 +242,6 @@ const App = () => (
                     create={
                         PermissionsStore.getResourcePermission('permissions', 'create')
                             ? PermissionCreate
-                            : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('permissions', 'remove')
-                            ? Delete
                             : null
                     }
                     show={PermissionShow}
@@ -293,11 +261,6 @@ const App = () => (
                             ? ResourceCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('resources', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={ResourceShow}
                     edit={
                         PermissionsStore.getResourcePermission('resources', 'edit')
@@ -315,9 +278,6 @@ const App = () => (
                             ? RoleCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('roles', 'remove') ? Delete : null
-                    }
                     show={RoleShow}
                     edit={PermissionsStore.getResourcePermission('roles', 'edit') ? RoleEdit : null}
                 />
@@ -329,11 +289,6 @@ const App = () => (
                     create={
                         PermissionsStore.getResourcePermission('roleresourcepermissions', 'create')
                             ? RoleResourcePermissionCreate
-                            : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('roleresourcepermissions', 'remove')
-                            ? Delete
                             : null
                     }
                     show={RoleResourcePermissionShow}
@@ -348,9 +303,6 @@ const App = () => (
                             ? SiteCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('sites', 'remove') ? Delete : null
-                    }
                     show={SiteShow}
                     edit={PermissionsStore.getResourcePermission('sites', 'edit') ? SiteEdit : null}
                 />
@@ -362,11 +314,6 @@ const App = () => (
                     create={
                         PermissionsStore.getResourcePermission('siteroles', 'create')
                             ? SiteRoleCreate
-                            : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('siteroles', 'remove')
-                            ? Delete
                             : null
                     }
                     show={SiteRoleShow}
@@ -386,11 +333,6 @@ const App = () => (
                             ? UserDomainRoleCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('userdomainroles', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={UserDomainRoleShow}
                 />
             ) : null,
@@ -403,11 +345,6 @@ const App = () => (
                             ? UserSiteRoleCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('usersiteroles', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={UserSiteRoleShow}
                 />
             ) : null,
@@ -418,11 +355,6 @@ const App = () => (
                     create={
                         PermissionsStore.getResourcePermission('usersitedata', 'create')
                             ? UserSiteDataCreate
-                            : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('usersitedata', 'remove')
-                            ? Delete
                             : null
                     }
                     show={UserSiteDataShow}
@@ -442,11 +374,6 @@ const App = () => (
                             ? DeletedUserCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('deletedusers', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={DeletedUserShow}
                     edit={
                         PermissionsStore.getResourcePermission('deletedusers', 'edit')
@@ -462,11 +389,6 @@ const App = () => (
                     create={
                         PermissionsStore.getResourcePermission('deletedusersites', 'create')
                             ? DeletedUserSiteCreate
-                            : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('deletedusersites', 'remove')
-                            ? Delete
                             : null
                     }
                     show={DeletedUserSiteShow}
@@ -486,11 +408,6 @@ const App = () => (
                             ? AdminNoteCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('adminnotes', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={AdminNoteShow}
                     edit={
                         PermissionsStore.getResourcePermission('adminnotes', 'edit')
@@ -506,11 +423,6 @@ const App = () => (
                     create={
                         PermissionsStore.getResourcePermission('sitedataschemas', 'create')
                             ? SiteDataSchemaCreate
-                            : null
-                    }
-                    remove={
-                        PermissionsStore.getResourcePermission('sitedataschemas', 'remove')
-                            ? Delete
                             : null
                     }
                     show={SiteDataSchemaShow}
@@ -536,11 +448,6 @@ const App = () => (
                             ? OrganisationCreate
                             : null
                     }
-                    remove={
-                        PermissionsStore.getResourcePermission('organisations', 'remove')
-                            ? Delete
-                            : null
-                    }
                     show={OrganisationShow}
                     edit={
                         PermissionsStore.getResourcePermission('organisations', 'edit')
@@ -556,10 +463,11 @@ const App = () => (
                     show={UserShow}
                     edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
                 />
-            ) : null
+            ) : null,
+            <Resource name="catchAll" />
         ]}
     </Admin>
 );
 
-export default App;
+export default ReactAdmin;
 /** End of Generated Code **/

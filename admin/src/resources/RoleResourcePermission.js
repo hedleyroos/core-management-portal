@@ -4,22 +4,26 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    NumberField,
-    DateField,
-    SimpleForm,
-    Create,
-    ReferenceInput,
     SelectInput,
     Show,
+    NumberField,
+    SimpleForm,
+    ReferenceField,
+    Create,
+    DateField,
+    ReferenceInput,
     SimpleShowLayout,
-    DeleteButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    List,
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import RoleResourcePermissionListActions from '../customActions/RoleResourcePermissionListActions';
+
 import RoleResourcePermissionFilter from '../filters/RoleResourcePermissionFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateRoleResourcePermission = values => {
@@ -37,8 +41,14 @@ const validationCreateRoleResourcePermission = values => {
 };
 
 export const RoleResourcePermissionList = props => (
-    <List {...props} title="RoleResourcePermission List" filters={<RoleResourcePermissionFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="RoleResourcePermission List"
+        filters={<RoleResourcePermissionFilter />}
+        actions={<RoleResourcePermissionListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('roles', 'list') ? (
                 <ReferenceField
                     label="Role"

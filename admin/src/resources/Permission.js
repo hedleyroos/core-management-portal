@@ -4,24 +4,29 @@
  **/
 import React from 'react';
 import {
-    List,
-    NumberField,
-    TextField,
-    DateField,
-    Responsive,
     SimpleList,
-    SimpleForm,
-    Create,
-    TextInput,
     Show,
+    SimpleForm,
+    DateField,
+    Create,
+    Responsive,
+    TextInput,
     SimpleShowLayout,
+    List,
+    TextField,
     Edit,
-    DeleteButton,
+    NumberField,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import PermissionsStore from '../auth/PermissionsStore';
+
+import PermissionEditToolbar from '../customActions/PermissionEditToolbar';
+import PermissionListActions from '../customActions/PermissionListActions';
+
 import PermissionFilter from '../filters/PermissionFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreatePermission = values => {
@@ -38,7 +43,13 @@ const validationEditPermission = values => {
 };
 
 export const PermissionList = props => (
-    <List {...props} title="Permission List" filters={<PermissionFilter />}>
+    <List
+        {...props}
+        title="Permission List"
+        filters={<PermissionFilter />}
+        actions={<PermissionListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList
@@ -47,7 +58,7 @@ export const PermissionList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <TextField source="description" sortable={false} />
@@ -89,7 +100,7 @@ export const PermissionShow = props => (
 
 export const PermissionEdit = props => (
     <Edit {...props} title="Permission Edit">
-        <SimpleForm validate={validationEditPermission}>
+        <SimpleForm validate={validationEditPermission} toolbar={<PermissionEditToolbar />}>
             <TextInput source="name" />
             <TextInput source="description" />
         </SimpleForm>

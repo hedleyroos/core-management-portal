@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
 import { getUntilDone, makeIDMapping, createTreeData } from '../utils';
-import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import TreeviewSelect from './TreeviewSelect';
 
 class DomainTreeInput extends Component {
@@ -63,7 +63,7 @@ class DomainTreeInput extends Component {
     }
 
     render() {
-        const { useReduxFormField, value, source, label, onChange } = this.props;
+        const { useReduxFormField, value, source, label, onChange, customStyle } = this.props;
         const { treeData } = this.state;
         return treeData ? (
             <span>
@@ -72,7 +72,7 @@ class DomainTreeInput extends Component {
                         name={source}
                         component={TreeviewSelect}
                         label={label}
-                        props={{ treeData, label, onChange }}
+                        props={{ treeData, label, onChange, customStyle }}
                         parse={this.parser}
                         format={this.formatter}
                     />
@@ -83,6 +83,7 @@ class DomainTreeInput extends Component {
                         onChange={onChange}
                         value={value}
                         input={{}}
+                        customStyle={customStyle}
                     />
                 )}
             </span>
@@ -96,11 +97,13 @@ DomainTreeInput.propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func,
     onlyDomains: PropTypes.bool,
-    treeData: PropTypes.array
+    treeData: PropTypes.array,
+    customStyle: PropTypes.object
 };
 DomainTreeInput.defaultProps = {
     useReduxFormField: true,
-    onlyDomains: true
+    onlyDomains: true,
+    customStyle: null
 };
 
 export default DomainTreeInput;

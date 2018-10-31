@@ -4,21 +4,31 @@
  **/
 import React from 'react';
 import {
-    List,
-    NumberField,
-    TextField,
-    UrlField,
     BooleanField,
     Show,
+    UrlField,
     SimpleShowLayout,
+    List,
+    TextField,
+    NumberField,
     ShowButton
-} from 'admin-on-rest';
+} from 'react-admin';
+
+import ClientListActions from '../customActions/ClientListActions';
+
 import ClientFilter from '../filters/ClientFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 export const ClientList = props => (
-    <List {...props} title="Client List" filters={<ClientFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="Client List"
+        filters={<ClientFilter />}
+        actions={<ClientListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             <NumberField source="id" sortable={false} />
             <TextField source="_post_logout_redirect_uris" sortable={false} />
             <TextField source="_redirect_uris" sortable={false} />

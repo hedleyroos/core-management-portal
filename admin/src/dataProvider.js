@@ -1,9 +1,9 @@
 /**
- * Generated restClient.js code. Edit at own risk.
+ * Generated dataProvider.js code. Edit at own risk.
  * When regenerated the changes will be lost.
  **/
 import { stringify } from 'query-string';
-import { fetchUtils } from 'admin-on-rest';
+import { fetchUtils } from 'react-admin';
 
 import PermissionsStore from './auth/PermissionsStore';
 
@@ -67,7 +67,7 @@ const FILTER_LENGTHS = {
 // These are default filters that were required for the
 // context implied filter. Permanent filter props on listings were not
 // used as they could not be overridden. To override the default provide
-// the same filter in your restClient call. eg. `{ site_ids: '' }`
+// the same filter in your dataProvider call. eg. `{ site_ids: '' }`
 // NOTE: Must be a function as the PermissionsStore can change.
 const DEFAULT_FILTERS = () => ({
     users: {
@@ -89,6 +89,10 @@ const GET_MANY_FILTER = {
     sites: 'site_ids',
     users: 'user_ids'
 };
+
+// Id of object stored for delete response.
+// TODO: Remove this when APIs updated to return object on delete.
+let idToBeDeleted = null;
 
 /**
  * @param {String} apiUrl The base API url
@@ -185,6 +189,9 @@ export const convertRESTRequestToHTTP = ({ apiUrl, type, resource, params }) => 
             options.body = params.data ? JSON.stringify(params.data) : null;
             break;
         case DELETE:
+            // Id of object stored for delete response.
+            // TODO: Remove this when APIs updated to return object on delete.
+            idToBeDeleted = params.id;
             url = `${apiUrl}/${resource}/${params.id}`;
             options.method = 'DELETE';
             break;
@@ -252,13 +259,24 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
                     id: keys ? keys.map(key => json[key]).join('/') : pk ? json[pk] : json.id
                 }
             };
+        case GET_ONE:
+            data =
+                keys || pk
+                    ? { ...json, id: keys ? keys.map(key => json[key]).join('/') : json[pk] }
+                    : json;
+            return { data };
+        case DELETE:
+            // TODO: Remove this when APIs updated to return object on delete.
+            data = { id: idToBeDeleted || 0 };
+            idToBeDeleted = null;
+            return { data };
         default:
             return { data: json ? json : {} };
     }
 };
 
 /**
- * Maps admin-on-rest queries to a Swagger Spec
+ * Maps React Admin queries to a Swagger Spec
  * @example
  * GET_LIST     => GET http://my.api.url/users?limit=10&offset=30&ordering=-name
  * GET_ONE      => GET http://my.api.url/users/123/ or GET http://my.api.url/users/123/321/ in the case of a composite key
@@ -267,7 +285,7 @@ const convertHTTPResponseToREST = ({ response, type, resource, params }) => {
  * CREATE       => POST http://my.api.url/users/
  * DELETE       => DELETE http://my.api.url/users/123/ or DELETE http://my.api.url/users/123/321/ in the case of a composite key
  */
-const restClient = (apiUrl, httpClient = fetchUtils.fetchJson) => {
+const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => {
     /**
      * @param {string} type Request type, e.g GET_LIST
      * @param {string} resource Resource name, e.g. "users"
@@ -307,5 +325,5 @@ export const httpClient = (url, options = {}) => {
     return fetchUtils.fetchJson(url, options);
 };
 
-export default restClient(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
+export default dataProvider(process.env.REACT_APP_MANAGEMENT_LAYER, httpClient);
 /** End of Generated Code **/

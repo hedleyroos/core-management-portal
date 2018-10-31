@@ -1,7 +1,7 @@
 /** Utils file for all manage pages */
 import { PLACE_MAPPING, TECH_ADMIN, MANAGE_MAPPING } from './constants';
 import PermissionsStore from './auth/PermissionsStore';
-import restClient, { CREATE, DELETE, GET_LIST, GET_ONE } from './restClient';
+import dataProvider, { CREATE, DELETE, GET_LIST, GET_ONE } from './dataProvider';
 import {
     apiErrorHandler,
     makeIDMapping,
@@ -53,7 +53,7 @@ export const loadObject = (props, roleMapping) => {
     path = path.split('/')[1];
     const { resource, idLabel } = MANAGE_MAPPING[path];
     Promise.all([
-        restClient(GET_ONE, `${resource}s`, { id: params[idLabel] }),
+        dataProvider(GET_ONE, `${resource}s`, { id: params[idLabel] }),
         getPlaceRoles(params[idLabel], idLabel, resource, 'domain', roleMapping),
         getPlaceRoles(params[idLabel], idLabel, resource, 'site', roleMapping)
     ])
@@ -75,7 +75,7 @@ export const handleAPIError = (props, error) => {
 
 export const getPlaceRoles = (id, idLabel, resource, place, roleMapping) => {
     let ids = {};
-    return restClient(GET_LIST, `${resource}${place}roles`, {
+    return dataProvider(GET_LIST, `${resource}${place}roles`, {
         filter: { [idLabel]: id }
     }).then(async response => {
         let placeRoles = response.data;
@@ -103,7 +103,7 @@ export const getPlaceRoles = (id, idLabel, resource, place, roleMapping) => {
 export const getManagerSetup = () => {
     const contexts = PermissionsStore.getAllContexts();
     const ids = getDomainAndSiteIds(contexts);
-    return Promise.all([restClient(GET_LIST, 'roles', {}), getDomainsAndSites(ids)]).then(
+    return Promise.all([dataProvider(GET_LIST, 'roles', {}), getDomainsAndSites(ids)]).then(
         ([roles, [domains, sites]]) => {
             // Set the roles on the store
             const roleMapping = makeIDMapping(roles.data);
@@ -139,7 +139,7 @@ export const deleteRoles = props => {
     Object.entries(props.manageRoles.objectRoles).map(([key, role]) => {
         if (!role.checked) return null;
         const place = key.startsWith('d') ? 'domain' : 'site';
-        restClient(DELETE, `${resource}${place}roles`, {
+        dataProvider(DELETE, `${resource}${place}roles`, {
             id: `${object.id}/${role[place].id}/${role.role.id}`
         })
             .then(response => {
@@ -164,7 +164,7 @@ export const deleteRoles = props => {
 export const getAvailableRoles = (key, props) => {
     const [placeType, id] = key.split(':');
     const place = placeType === 'd' ? 'domain' : 'site';
-    restClient(GET_LIST, `${place}roles`, {
+    dataProvider(GET_LIST, `${place}roles`, {
         filter: {
             [`${place}_id`]: id
         }
@@ -192,7 +192,7 @@ export const assignRoles = props => {
     Object.values(store.rolesToAssign).map(role => {
         if (!role.checked) return null;
         count += 1;
-        restClient(CREATE, `${resource}${place}roles`, {
+        dataProvider(CREATE, `${resource}${place}roles`, {
             data: {
                 [idLabel]: store.selectedObject.id,
                 [`${place}_id`]: parseInt(placeID, 10),

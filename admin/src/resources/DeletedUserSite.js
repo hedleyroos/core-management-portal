@@ -4,47 +4,33 @@
  **/
 import React from 'react';
 import {
-    List,
-    ReferenceField,
-    TextField,
-    NumberField,
-    DateField,
+    SelectInput,
+    Show,
     SimpleForm,
+    ReferenceField,
+    DateField,
     Create,
     ReferenceInput,
-    SelectInput,
     TextInput,
-    Show,
     SimpleShowLayout,
+    List,
+    TextField,
     Edit,
-    DeleteButton,
+    NumberField,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
-import DateTimeInput from 'aor-datetime-input';
+import DateTimeInput from '../inputs/DateTimeInput';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import DeletedUserSiteEditToolbar from '../customActions/DeletedUserSiteEditToolbar';
+import DeletedUserSiteListActions from '../customActions/DeletedUserSiteListActions';
+
 import DeletedUserSiteFilter from '../filters/DeletedUserSiteFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
-
-const timezoneOffset = new Date().getTimezoneOffset();
-
-const dateTimeFormatter = value => {
-    // Value received is a date object in the DateTimeInput.
-    if (timezoneOffset !== 0 && value) {
-        value = new Date(value);
-        value = new Date(value.valueOf() + timezoneOffset * 60000);
-    }
-    return value;
-};
-
-const dateTimeParser = value => {
-    // Value received is a date object in the DateTimeInput.
-    if (timezoneOffset !== 0 && value) {
-        value = new Date(value.valueOf() - timezoneOffset * 60000);
-    }
-    return value;
-};
 
 const validationCreateDeletedUserSite = values => {
     const errors = {};
@@ -63,8 +49,14 @@ const validationEditDeletedUserSite = values => {
 };
 
 export const DeletedUserSiteList = props => (
-    <List {...props} title="DeletedUserSite List" filters={<DeletedUserSiteFilter />}>
-        <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+    <List
+        {...props}
+        title="DeletedUserSite List"
+        filters={<DeletedUserSiteFilter />}
+        actions={<DeletedUserSiteListActions />}
+        bulkActionButtons={false}
+    >
+        <FieldSelectDatagrid>
             {PermissionsStore.getResourcePermission('deletedusers', 'list') ? (
                 <ReferenceField
                     label="Deleted User"
@@ -135,17 +127,9 @@ export const DeletedUserSiteCreate = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <DateTimeInput
-                source="deletion_requested_at"
-                format={dateTimeFormatter}
-                parse={dateTimeParser}
-            />
+            <DateTimeInput source="deletion_requested_at" />
             <TextInput source="deletion_requested_via" />
-            <DateTimeInput
-                source="deletion_confirmed_at"
-                format={dateTimeFormatter}
-                parse={dateTimeParser}
-            />
+            <DateTimeInput source="deletion_confirmed_at" />
             <TextInput source="deletion_confirmed_via" />
         </SimpleForm>
     </Create>
@@ -192,18 +176,13 @@ export const DeletedUserSiteShow = props => (
 
 export const DeletedUserSiteEdit = props => (
     <Edit {...props} title="DeletedUserSite Edit">
-        <SimpleForm validate={validationEditDeletedUserSite}>
-            <DateTimeInput
-                source="deletion_requested_at"
-                format={dateTimeFormatter}
-                parse={dateTimeParser}
-            />
+        <SimpleForm
+            validate={validationEditDeletedUserSite}
+            toolbar={<DeletedUserSiteEditToolbar />}
+        >
+            <DateTimeInput source="deletion_requested_at" />
             <TextInput source="deletion_requested_via" />
-            <DateTimeInput
-                source="deletion_confirmed_at"
-                format={dateTimeFormatter}
-                parse={dateTimeParser}
-            />
+            <DateTimeInput source="deletion_confirmed_at" />
             <TextInput source="deletion_confirmed_via" />
         </SimpleForm>
     </Edit>

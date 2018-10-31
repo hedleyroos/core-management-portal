@@ -4,28 +4,33 @@
  **/
 import React from 'react';
 import {
-    List,
-    NumberField,
-    ReferenceField,
-    TextField,
-    DateField,
-    Responsive,
     SimpleList,
     SimpleForm,
     Create,
     ReferenceInput,
+    TextField,
     SelectInput,
-    TextInput,
     Show,
+    List,
+    ReferenceField,
+    DateField,
+    Responsive,
     SimpleShowLayout,
+    TextInput,
     Edit,
-    DeleteButton,
+    NumberField,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
-import PermissionsStore from '../auth/PermissionsStore';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import EmptyField from '../fields/EmptyField';
+import PermissionsStore from '../auth/PermissionsStore';
+
+import AdminNoteEditToolbar from '../customActions/AdminNoteEditToolbar';
+import AdminNoteListActions from '../customActions/AdminNoteListActions';
+
 import AdminNoteFilter from '../filters/AdminNoteFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateAdminNote = values => {
@@ -45,11 +50,17 @@ const validationEditAdminNote = values => {
 };
 
 export const AdminNoteList = props => (
-    <List {...props} title="AdminNote List" filters={<AdminNoteFilter />}>
+    <List
+        {...props}
+        title="AdminNote List"
+        filters={<AdminNoteFilter />}
+        actions={<AdminNoteListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={<SimpleList primaryText={record => `Note: ${record.note}`} />}
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     {PermissionsStore.getResourcePermission('users', 'list') ? (
                         <ReferenceField
@@ -153,7 +164,7 @@ export const AdminNoteShow = props => (
 
 export const AdminNoteEdit = props => (
     <Edit {...props} title="AdminNote Edit">
-        <SimpleForm validate={validationEditAdminNote}>
+        <SimpleForm validate={validationEditAdminNote} toolbar={<AdminNoteEditToolbar />}>
             <TextInput source="note" />
         </SimpleForm>
     </Edit>

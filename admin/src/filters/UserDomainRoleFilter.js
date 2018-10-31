@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { TextInput, SelectInput, ReferenceInput, Filter } from 'admin-on-rest';
+import { SelectInput, TextInput, ReferenceInput, Filter } from 'react-admin';
 import DomainTreeInput from '../inputs/DomainTreeInput';
 
 const UserDomainRoleFilter = props => (

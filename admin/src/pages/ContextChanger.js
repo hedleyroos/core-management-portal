@@ -1,17 +1,16 @@
 import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { ViewTitle } from 'admin-on-rest/lib/mui';
-import Card from 'material-ui/Card/Card';
-import CardActions from 'material-ui/Card/CardActions';
-import CardText from 'material-ui/Card/CardText';
-import CircularProgress from 'material-ui/CircularProgress';
-import FlatButton from 'material-ui/FlatButton';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { teal800 } from 'material-ui/styles/colors';
-import RaisedButton from 'material-ui/RaisedButton';
+import Avatar from '@material-ui/core/Avatar';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import ContextSwitchIcon from '@material-ui/icons/SwapCalls';
 
-import { muiTheme, styles } from '../Theme';
+import { styles } from '../theme';
 import PermissionsStore from '../auth/PermissionsStore';
 import { apiErrorHandler } from '../utils';
 import DomainTreeInput from '../inputs/DomainTreeInput';
@@ -43,7 +42,10 @@ class ContextChanger extends Component {
             const userID = jwtDecode(localStorage.getItem('id_token')).sub;
             PermissionsStore.getAndLoadPermissions({ userID, currentContext: value })
                 .then(result => {
-                    this.setState({ redirect: true });
+                    // Because of rendering happening before the server returns in React Admin,
+                    // a simple unmounting of the Admin component will no longer work to reset
+                    // the permissions. Here we redirect the window now to the portal.
+                    window.location.href = process.env.REACT_APP_PORTAL_URL;
                 })
                 .catch(error => {
                     this.handleAPIError(error);
@@ -64,47 +66,63 @@ class ContextChanger extends Component {
         return redirect ? (
             <Redirect push to="/" />
         ) : (
-            <MuiThemeProvider muiTheme={muiTheme}>
-                <div style={{ ...styles.main, backgroundColor: teal800 }}>
-                    <Card style={styles.cardCentered}>
-                        {changing ? (
-                            <CardText>
-                                <CircularProgress style={{ margin: '7rem' }} />
-                            </CardText>
-                        ) : (
-                            <div>
-                                <ViewTitle title="Context Changer" />
-                                <CardText>Select the Domain or Site.</CardText>
-                                <CardText>
-                                    {treeData ? (
-                                        <DomainTreeInput
-                                            source="context"
-                                            treeData={treeData}
-                                            value={value}
-                                            onChange={this.handleChange}
-                                            onlyDomains={false}
-                                            useReduxFormField={false}
-                                        />
-                                    ) : (
-                                        <CircularProgress />
-                                    )}
-                                </CardText>
-                                <CardActions>
-                                    <FlatButton
-                                        label="Back"
+            <div style={{ ...styles.main }}>
+                <Card style={styles.cardCentered}>
+                    <div style={styles.avatarDiv}>
+                        <Avatar style={{ ...styles.avatar }}>
+                            <ContextSwitchIcon />
+                        </Avatar>
+                    </div>
+                    <Typography variant="title" align="center" paragraph={true}>
+                        Context Changer
+                    </Typography>
+                    {changing ? (
+                        <CardContent>
+                            <CircularProgress style={{ margin: '7rem' }} />
+                        </CardContent>
+                    ) : (
+                        <React.Fragment>
+                            <Typography>Select the Domain or Site.</Typography>
+                            <CardContent>
+                                {treeData ? (
+                                    <DomainTreeInput
+                                        source="context"
+                                        treeData={treeData}
+                                        value={value}
+                                        onChange={this.handleChange}
+                                        onlyDomains={false}
+                                        useReduxFormField={false}
+                                        customStyle={{
+                                            fontSize: 16,
+                                            height: 40,
+                                            width: 256
+                                        }}
+                                    />
+                                ) : (
+                                    <CircularProgress />
+                                )}
+                                <CardActions style={styles.cardCentered}>
+                                    <Button
+                                        variant="contained"
                                         onClick={() => this.handleSelection(true)}
-                                    />
-                                    <RaisedButton
-                                        label="Confirm"
-                                        primary={true}
+                                        fullWidth
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
                                         onClick={() => this.handleSelection()}
-                                    />
+                                        fullWidth
+                                    >
+                                        Confirm
+                                    </Button>
                                 </CardActions>
-                            </div>
-                        )}
-                    </Card>
-                </div>
-            </MuiThemeProvider>
+                            </CardContent>
+                        </React.Fragment>
+                    )}
+                </Card>
+            </div>
         );
     }
 }

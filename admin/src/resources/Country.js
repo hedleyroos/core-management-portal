@@ -4,19 +4,29 @@
  **/
 import React from 'react';
 import {
-    List,
-    TextField,
-    Responsive,
     SimpleList,
     Show,
+    Responsive,
     SimpleShowLayout,
+    List,
+    TextField,
     ShowButton
-} from 'admin-on-rest';
+} from 'react-admin';
+
+import CountryListActions from '../customActions/CountryListActions';
+
 import CountryFilter from '../filters/CountryFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 export const CountryList = props => (
-    <List {...props} title="Country List" filters={<CountryFilter />}>
+    <List
+        {...props}
+        title="Country List"
+        filters={<CountryFilter />}
+        actions={<CountryListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList
@@ -25,7 +35,7 @@ export const CountryList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid>
                     <TextField source="code" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <ShowButton />

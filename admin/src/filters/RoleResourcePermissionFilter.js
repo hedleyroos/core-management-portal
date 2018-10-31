@@ -3,7 +3,7 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { SelectInput, ReferenceInput, NumberInput, Filter } from 'admin-on-rest';
+import { SelectInput, NumberInput, ReferenceInput, Filter } from 'react-admin';
 
 const RoleResourcePermissionFilter = props => (
     <Filter {...props}>

@@ -4,24 +4,29 @@
  **/
 import React from 'react';
 import {
-    List,
-    NumberField,
-    TextField,
-    DateField,
-    Responsive,
     SimpleList,
-    SimpleForm,
-    Create,
-    TextInput,
     Show,
+    SimpleForm,
+    DateField,
+    Create,
+    Responsive,
+    TextInput,
     SimpleShowLayout,
+    List,
+    TextField,
     Edit,
-    DeleteButton,
+    NumberField,
     EditButton,
-    ShowButton
-} from 'admin-on-rest';
+    ShowButton,
+    DeleteButton
+} from 'react-admin';
 import PermissionsStore from '../auth/PermissionsStore';
+
+import OrganisationEditToolbar from '../customActions/OrganisationEditToolbar';
+import OrganisationListActions from '../customActions/OrganisationListActions';
+
 import OrganisationFilter from '../filters/OrganisationFilter';
+
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateOrganisation = values => {
@@ -38,7 +43,13 @@ const validationEditOrganisation = values => {
 };
 
 export const OrganisationList = props => (
-    <List {...props} title="Organisation List" filters={<OrganisationFilter />}>
+    <List
+        {...props}
+        title="Organisation List"
+        filters={<OrganisationFilter />}
+        actions={<OrganisationListActions />}
+        bulkActionButtons={false}
+    >
         <Responsive
             small={
                 <SimpleList
@@ -47,7 +58,7 @@ export const OrganisationList = props => (
                 />
             }
             medium={
-                <FieldSelectDatagrid bodyOptions={{ showRowHover: true }}>
+                <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
                     <TextField source="name" sortable={false} />
                     <TextField source="description" sortable={false} />
@@ -89,7 +100,7 @@ export const OrganisationShow = props => (
 
 export const OrganisationEdit = props => (
     <Edit {...props} title="Organisation Edit">
-        <SimpleForm validate={validationEditOrganisation}>
+        <SimpleForm validate={validationEditOrganisation} toolbar={<OrganisationEditToolbar />}>
             <TextInput source="name" />
             <TextInput source="description" />
         </SimpleForm>

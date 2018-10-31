@@ -1,20 +1,17 @@
 import React from 'react';
-import { teal800 } from 'material-ui/styles/colors';
-import WaitIcon from 'material-ui/svg-icons/action/update';
-import LinearProgress from 'material-ui/LinearProgress';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import teal from '@material-ui/core/colors/teal';
+import WaitIcon from '@material-ui/icons/Update';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { muiTheme, styles } from '../Theme';
+import { styles } from '../theme';
 
 const WaitingPage = ({ icon }) => {
     const PageIcon = icon || WaitIcon;
     return (
-        <MuiThemeProvider muiTheme={muiTheme}>
-            <div style={{ ...styles.main, backgroundColor: teal800 }}>
-                <PageIcon style={styles.waitIcon} />
-                <LinearProgress mode="indeterminate" style={styles.linearProgress} />
-            </div>
-        </MuiThemeProvider>
+        <div style={{ ...styles.main, backgroundColor: teal }}>
+            <PageIcon style={styles.waitIcon} />
+            <LinearProgress mode="indeterminate" style={styles.linearProgress} />
+        </div>
     );
 };
 
