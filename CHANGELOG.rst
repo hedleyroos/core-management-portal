@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.0.0
+-----
 - Upgraded entire Admin from `Admin on Rest` to `React Admin`
 - All components and custom components upgraded to use `Material-UI` > v1.
 - Documentation updated
