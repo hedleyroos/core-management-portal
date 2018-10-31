@@ -29,6 +29,7 @@ import SiteDataSchemaListActions from '../customActions/SiteDataSchemaListAction
 
 import SiteDataSchemaFilter from '../filters/SiteDataSchemaFilter';
 
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSiteDataSchema = values => {
@@ -88,15 +89,12 @@ export const SiteDataSchemaCreate = props => (
     <Create {...props} title="SiteDataSchema Create">
         <SimpleForm validate={validationCreateSiteDataSchema} redirect="show">
             {PermissionsStore.getResourcePermission('sites', 'list') && (
-                <ReferenceInput
+                <UnlimitedDropdownInput
                     label="Site"
                     source="site_id"
                     reference="sites"
-                    perPage={0}
-                    allowEmpty
-                >
-                    <SelectInput optionText="name" />
-                </ReferenceInput>
+                    optionText="name"
+                />
             )}
             <LongTextInput
                 source="schema"
