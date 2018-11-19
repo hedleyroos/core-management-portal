@@ -82,6 +82,13 @@ import {
 import { UserSiteRoleList, UserSiteRoleCreate, UserSiteRoleShow } from './resources/UserSiteRole';
 
 import {
+    CredentialsList,
+    CredentialsCreate,
+    CredentialsShow,
+    CredentialsEdit
+} from './resources/Credentials';
+
+import {
     UserSiteDataList,
     UserSiteDataCreate,
     UserSiteDataShow,
@@ -346,6 +353,23 @@ const ReactAdmin = () => (
                             : null
                     }
                     show={UserSiteRoleShow}
+                />
+            ) : null,
+            PermissionsStore.getResourcePermission('credentials', 'list') ? (
+                <Resource
+                    name="credentials"
+                    list={CredentialsList}
+                    create={
+                        PermissionsStore.getResourcePermission('credentials', 'create')
+                            ? CredentialsCreate
+                            : null
+                    }
+                    show={CredentialsShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('credentials', 'edit')
+                            ? CredentialsEdit
+                            : null
+                    }
                 />
             ) : null,
             PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
