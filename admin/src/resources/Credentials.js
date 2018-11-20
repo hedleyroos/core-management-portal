@@ -20,7 +20,9 @@ import {
     Create,
     EditButton,
     ShowButton,
-    DeleteButton
+    DeleteButton,
+    minLength,
+    maxLength
 } from 'react-admin';
 import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
@@ -90,6 +92,8 @@ export const CredentialsList = props => (
     </List>
 );
 
+const lengthValidators = [minLength(32), maxLength(256)]
+
 export const CredentialsCreate = props => (
     <Create {...props} title="Credentials Create">
         <SimpleForm validate={validationCreateCredentials} redirect="show">
@@ -104,8 +108,8 @@ export const CredentialsCreate = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <TextInput source="account_id" />
-            <TextInput source="account_secret" />
+            <TextInput source="account_id" validate={lengthValidators} />
+            <TextInput source="account_secret" validate={lengthValidators} />
             <TextInput source="description" />
         </SimpleForm>
     </Create>
@@ -151,8 +155,8 @@ export const CredentialsEdit = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <TextInput source="account_id" />
-            <TextInput source="account_secret" />
+            <TextInput source="account_id" validate={lengthValidators} />
+            <TextInput source="account_secret" validate={lengthValidators} />
             <TextInput source="description" />
         </SimpleForm>
     </Edit>
