@@ -27,9 +27,7 @@ const CredentialsFilter = props => (
             parse={parseCredentialsIds}
             validate={validateCredentialsIds}
         />
-        <ReferenceInput label="Site Id" source="site_id" reference="sites" allowEmpty>
-            <SelectInput optionText="name" />
-        </ReferenceInput>
+        <UnlimitedDropdownInput label="Site" source="site_id" reference="sites" optionText="name" />
     </Filter>
 );
 
