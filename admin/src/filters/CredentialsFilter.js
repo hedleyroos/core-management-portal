@@ -3,7 +3,9 @@
  * When regenerated the changes will be lost.
  **/
 import React from 'react';
-import { ReferenceInput, SelectInput, TextInput, Filter } from 'react-admin';
+import { TextInput, Filter } from 'react-admin';
+
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
 const parseCredentialsIds = value => value.replace(/[^\w]/gi, ',');
 
