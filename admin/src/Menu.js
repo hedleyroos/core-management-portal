@@ -43,6 +43,7 @@ const ICONS = {
     siteroles: <ListIcon />,
     userdomainroles: <ListIcon />,
     usersiteroles: <ListIcon />,
+    credentials: <ListIcon />,
     usersitedata: <ListIcon />,
     deletedusers: <DeletedUserIcon />,
     deletedusersites: <DeletedSiteIcon />,

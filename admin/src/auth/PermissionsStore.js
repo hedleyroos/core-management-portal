@@ -89,6 +89,12 @@ class PermissionsStore {
                     create: ['urn:ge:access_control:usersiterole:create'],
                     remove: ['urn:ge:access_control:usersiterole:delete']
                 },
+                credentials: {
+                    list: ['urn:ge:access_control:credentials:read'],
+                    create: ['urn:ge:access_control:credentials:create'],
+                    remove: ['urn:ge:access_control:credentials:delete'],
+                    edit: ['urn:ge:access_control:credentials:update']
+                },
                 usersitedata: {
                     list: ['urn:ge:user_data:usersitedata:read'],
                     create: ['urn:ge:user_data:usersitedata:create'],
