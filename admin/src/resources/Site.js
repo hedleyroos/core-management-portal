@@ -23,12 +23,14 @@ import {
     TextInput,
     Edit,
     NumberField,
+    LongTextInput,
     EditButton,
     ShowButton,
     DeleteButton
 } from 'react-admin';
 import EmptyField from '../fields/EmptyField';
 import PermissionsStore from '../auth/PermissionsStore';
+import ObjectField from '../fields/ObjectField';
 
 import SiteEditToolbar from '../customActions/SiteEditToolbar';
 import SiteListActions from '../customActions/SiteListActions';
@@ -40,11 +42,17 @@ import FieldSelectDatagrid from '../grids/FieldSelectDatagrid';
 
 const validationCreateSite = values => {
     const errors = {};
+    if (!values.name) {
+        errors.name = ['name is required'];
+    }
     if (!values.domain_id) {
         errors.domain_id = ['domain_id is required'];
     }
-    if (!values.name) {
-        errors.name = ['name is required'];
+    if (!values.deletion_method_id) {
+        errors.deletion_method_id = ['deletion_method_id is required'];
+    }
+    if (!values.deletion_method_data) {
+        errors.deletion_method_data = ['deletion_method_data is required'];
     }
     return errors;
 };
@@ -72,6 +80,7 @@ export const SiteList = props => (
             medium={
                 <FieldSelectDatagrid>
                     <NumberField source="id" sortable={false} />
+                    <TextField source="name" sortable={false} />
                     {PermissionsStore.getResourcePermission('clients', 'list') ? (
                         <ReferenceField
                             label="Client"
@@ -100,9 +109,22 @@ export const SiteList = props => (
                     ) : (
                         <EmptyField />
                     )}
-                    <TextField source="name" sortable={false} />
                     <TextField source="description" sortable={false} />
                     <BooleanField source="is_active" sortable={false} />
+                    {PermissionsStore.getResourcePermission('deletionmethods', 'list') ? (
+                        <ReferenceField
+                            label="Deletion Method"
+                            source="deletion_method_id"
+                            reference="deletionmethods"
+                            sortable={false}
+                            linkType="show"
+                        >
+                            <NumberField source="label" />
+                        </ReferenceField>
+                    ) : (
+                        <EmptyField />
+                    )}
+                    <ObjectField source="deletion_method_data" sortable={false} addLabel />
                     <DateField source="created_at" sortable={false} />
                     <DateField source="updated_at" sortable={false} />
                     {PermissionsStore.getResourcePermission('sites', 'edit') ? (
@@ -121,6 +143,7 @@ export const SiteList = props => (
 export const SiteCreate = props => (
     <Create {...props} title="Site Create">
         <SimpleForm validate={validationCreateSite} redirect="show">
+            <TextInput source="name" />
             {PermissionsStore.getResourcePermission('clients', 'list') && (
                 <ReferenceInput
                     label="Client"
@@ -143,9 +166,29 @@ export const SiteCreate = props => (
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             )}
-            <TextInput source="name" />
-            <BooleanInput source="is_active" />
             <TextInput source="description" />
+            <BooleanInput source="is_active" />
+            {PermissionsStore.getResourcePermission('deletionmethods', 'list') && (
+                <ReferenceInput
+                    label="Deletion Method"
+                    source="deletion_method_id"
+                    reference="deletionmethods"
+                    perPage={0}
+                >
+                    <SelectInput optionText="label" />
+                </ReferenceInput>
+            )}
+            <LongTextInput
+                source="deletion_method_data"
+                format={value => (value instanceof Object ? JSON.stringify(value) : value)}
+                parse={value => {
+                    try {
+                        return JSON.parse(value);
+                    } catch (e) {
+                        return value;
+                    }
+                }}
+            />
         </SimpleForm>
     </Create>
 );
@@ -154,6 +197,7 @@ export const SiteShow = props => (
     <Show {...props} title="Site Show">
         <SimpleShowLayout>
             <NumberField source="id" />
+            <TextField source="name" />
             {PermissionsStore.getResourcePermission('clients', 'list') ? (
                 <ReferenceField
                     label="Client"
@@ -180,9 +224,21 @@ export const SiteShow = props => (
             ) : (
                 <EmptyField />
             )}
-            <TextField source="name" />
             <TextField source="description" />
             <BooleanField source="is_active" />
+            {PermissionsStore.getResourcePermission('deletionmethods', 'list') ? (
+                <ReferenceField
+                    label="Deletion Method"
+                    source="deletion_method_id"
+                    reference="deletionmethods"
+                    linkType="show"
+                >
+                    <NumberField source="label" />
+                </ReferenceField>
+            ) : (
+                <EmptyField />
+            )}
+            <ObjectField source="deletion_method_data" addLabel />
             <DateField source="created_at" />
             <DateField source="updated_at" />
             <InlineTable
@@ -248,6 +304,27 @@ export const SiteEdit = props => (
             <TextInput source="name" />
             <TextInput source="description" />
             <BooleanInput source="is_active" />
+            {PermissionsStore.getResourcePermission('deletionmethods', 'list') && (
+                <ReferenceInput
+                    label="Deletion Method"
+                    source="deletion_method_id"
+                    reference="deletionmethods"
+                    perPage={0}
+                >
+                    <SelectInput optionText="label" />
+                </ReferenceInput>
+            )}
+            <LongTextInput
+                source="deletion_method_data"
+                format={value => (value instanceof Object ? JSON.stringify(value) : value)}
+                parse={value => {
+                    try {
+                        return JSON.parse(value);
+                    } catch (e) {
+                        return value;
+                    }
+                }}
+            />
             {PermissionsStore.getResourcePermission('siteroles', 'list') ? (
                 <ReferenceManyField label="Roles" reference="siteroles" target="site_id">
                     <Datagrid>

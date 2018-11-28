@@ -12,7 +12,8 @@ export const TITLES = {
     deletedusersites: 'Deleted User Sites',
     adminnotes: 'Admin Notes',
     sitedataschemas: 'Site Data Schemas',
-    organisationalunits: 'Organisations'
+    organisationalunits: 'Organisations',
+    deletionmethods: 'Deletion Methods'
 };
 
 export const PERMISSIONS = {

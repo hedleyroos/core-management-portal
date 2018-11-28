@@ -8,11 +8,9 @@ import { MenuItemLink, getResources, Responsive } from 'react-admin';
 import AccessibilityIcon from '@material-ui/icons/Accessibility';
 import InviteIcon from '@material-ui/icons/InsertInvitation';
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
-import ListIcon from '@material-ui/icons/ViewList';
 import DeviceIcon from '@material-ui/icons/Devices';
 import DomainIcon from '@material-ui/icons/Language';
 import PeopleIcon from '@material-ui/icons/People';
-import RoleIcon from '@material-ui/icons/Public';
 import SecurityIcon from '@material-ui/icons/Security';
 import SiteIcon from '@material-ui/icons/Explore';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
@@ -21,7 +19,15 @@ import TerrainIcon from '@material-ui/icons/Terrain';
 import CategoryIcon from '@material-ui/icons/AccountBalance';
 import ContextSwitchIcon from '@material-ui/icons/SwapCalls';
 import DeletedUserIcon from '@material-ui/icons/RecentActors';
-import DeletedSiteIcon from '@material-ui/icons/LocationOff';
+import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
+import DnsIcon from '@material-ui/icons/Dns';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import SdStorageIcon from '@material-ui/icons/SdStorage';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ExtensionIcon from '@material-ui/icons/Extension';
+import SignalCellularNoSimIcon from '@material-ui/icons/SignalCellularNoSim';
 import { teal500 } from '@material-ui/core/colors';
 
 import PermissionsStore from './auth/PermissionsStore';
@@ -29,30 +35,38 @@ import { titleCase, notEmptyObject } from './utils';
 import { TITLES } from './constants';
 
 const ICONS = {
+    sites: <SiteIcon />,
+    credentials: <VpnKeyIcon />,
+    siteroles: <AssignmentIcon />,
+    deletionmethods: <DeleteIcon />,
+
     domains: <DomainIcon />,
     domainroles: <AccessibilityIcon />,
+
     invitations: <InviteIcon />,
-    invitationredirecturls: <ListIcon />,
-    invitationdomainroles: <ListIcon />,
-    invitationsiteroles: <ListIcon />,
-    permissions: <FingerprintIcon />,
+    invitationdomainroles: <DnsIcon />,
+    invitationsiteroles: <DnsIcon />,
+    invitationredirecturls: <CompareArrowsIcon />,
+
+    roles: <AssignmentIndIcon />,
     resources: <ShoppingBasketIcon />,
-    roles: <RoleIcon />,
+    permissions: <FingerprintIcon />,
     roleresourcepermissions: <SecurityIcon />,
-    sites: <SiteIcon />,
-    siteroles: <ListIcon />,
-    userdomainroles: <ListIcon />,
-    usersiteroles: <ListIcon />,
-    credentials: <ListIcon />,
-    usersitedata: <ListIcon />,
+
+    users: <PeopleIcon />,
+    userdomainroles: <AssignmentIcon />,
+    usersiteroles: <AssignmentIcon />,
+    usersitedata: <SdStorageIcon />,
+
     deletedusers: <DeletedUserIcon />,
-    deletedusersites: <DeletedSiteIcon />,
+    deletedusersites: <SignalCellularNoSimIcon />,
+
     adminnotes: <SpeakerNoteIcon />,
-    sitedataschemas: <ListIcon />,
+    sitedataschemas: <ExtensionIcon />,
+
     clients: <DeviceIcon />,
     countries: <TerrainIcon />,
-    organisations: <CategoryIcon />,
-    users: <PeopleIcon />
+    organisations: <CategoryIcon />
 };
 
 const Menu = ({ resources, onMenuClick, logout }) => {

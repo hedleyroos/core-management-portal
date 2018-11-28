@@ -136,6 +136,13 @@ import {
 
 import { UserListNoSites, UserList, UserShow, UserEdit } from './resources/User';
 
+import {
+    DeletionMethodList,
+    DeletionMethodCreate,
+    DeletionMethodShow,
+    DeletionMethodEdit
+} from './resources/DeletionMethod';
+
 const ReactAdmin = () => (
     <Admin
         appLayout={MyLayout}
@@ -488,6 +495,24 @@ const ReactAdmin = () => (
                     edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
                 />
             ) : null,
+            PermissionsStore.getResourcePermission('deletionmethods', 'list') ? (
+                <Resource
+                    name="deletionmethods"
+                    list={DeletionMethodList}
+                    create={
+                        PermissionsStore.getResourcePermission('deletionmethods', 'create')
+                            ? DeletionMethodCreate
+                            : null
+                    }
+                    show={DeletionMethodShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('deletionmethods', 'edit')
+                            ? DeletionMethodEdit
+                            : null
+                    }
+                />
+            ) : null,
+            ,
             <Resource name="catchAll" />
         ]}
     </Admin>
