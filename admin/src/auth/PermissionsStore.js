@@ -141,6 +141,12 @@ class PermissionsStore {
                     list: ['urn:ge:identity_provider:user:read'],
                     remove: ['urn:ge:identity_provider:user:delete'],
                     edit: ['urn:ge:identity_provider:user:update']
+                },
+                deletionmethods: {
+                    list: [],
+                    create: [],
+                    remove: [],
+                    edit: []
                 }
             };
             this.permissionFlags = null;
