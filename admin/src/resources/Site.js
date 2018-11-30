@@ -48,7 +48,7 @@ const validationCreateSite = values => {
     if (!values.domain_id) {
         errors.domain_id = ['domain_id is required'];
     }
-    if (!values.deletion_method_id) {
+    if (values.deletion_method_id === null) {
         errors.deletion_method_id = ['deletion_method_id is required'];
     }
     if (!values.deletion_method_data) {
