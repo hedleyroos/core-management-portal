@@ -512,7 +512,6 @@ const ReactAdmin = () => (
                     }
                 />
             ) : null,
-            ,
             <Resource name="catchAll" />
         ]}
     </Admin>
