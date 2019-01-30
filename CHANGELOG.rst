@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.0
+-----
+- Added "deletion_method" management page and related functionality
+- Added "credentials" management page and related functionality
+
 2.0.0
 -----
 - Upgraded entire Admin from `Admin on Rest` to `React Admin`
