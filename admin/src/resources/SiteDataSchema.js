@@ -4,14 +4,12 @@
  **/
 import React from 'react';
 import {
-    SelectInput,
     Show,
     LongTextInput,
     SimpleForm,
     ReferenceField,
     DateField,
     Create,
-    ReferenceInput,
     SimpleShowLayout,
     List,
     Edit,

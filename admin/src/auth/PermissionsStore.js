@@ -89,6 +89,12 @@ class PermissionsStore {
                     create: ['urn:ge:access_control:usersiterole:create'],
                     remove: ['urn:ge:access_control:usersiterole:delete']
                 },
+                credentials: {
+                    list: ['urn:ge:access_control:credentials:read'],
+                    create: ['urn:ge:access_control:credentials:create'],
+                    remove: ['urn:ge:access_control:credentials:delete'],
+                    edit: ['urn:ge:access_control:credentials:update']
+                },
                 usersitedata: {
                     list: ['urn:ge:user_data:usersitedata:read'],
                     create: ['urn:ge:user_data:usersitedata:create'],
@@ -135,6 +141,12 @@ class PermissionsStore {
                     list: ['urn:ge:identity_provider:user:read'],
                     remove: ['urn:ge:identity_provider:user:delete'],
                     edit: ['urn:ge:identity_provider:user:update']
+                },
+                deletionmethods: {
+                    list: ['urn:ge:access_control:deletionmethod:read'],
+                    create: ['urn:ge:access_control:deletionmethod:create'],
+                    remove: ['urn:ge:access_control:deletionmethod:delete'],
+                    edit: ['urn:ge:access_control:deletionmethod:update']
                 }
             };
             this.permissionFlags = null;

@@ -82,6 +82,13 @@ import {
 import { UserSiteRoleList, UserSiteRoleCreate, UserSiteRoleShow } from './resources/UserSiteRole';
 
 import {
+    CredentialsList,
+    CredentialsCreate,
+    CredentialsShow,
+    CredentialsEdit
+} from './resources/Credentials';
+
+import {
     UserSiteDataList,
     UserSiteDataCreate,
     UserSiteDataShow,
@@ -128,6 +135,13 @@ import {
 } from './resources/Organisation';
 
 import { UserListNoSites, UserList, UserShow, UserEdit } from './resources/User';
+
+import {
+    DeletionMethodList,
+    DeletionMethodCreate,
+    DeletionMethodShow,
+    DeletionMethodEdit
+} from './resources/DeletionMethod';
 
 const ReactAdmin = () => (
     <Admin
@@ -348,6 +362,23 @@ const ReactAdmin = () => (
                     show={UserSiteRoleShow}
                 />
             ) : null,
+            PermissionsStore.getResourcePermission('credentials', 'list') ? (
+                <Resource
+                    name="credentials"
+                    list={CredentialsList}
+                    create={
+                        PermissionsStore.getResourcePermission('credentials', 'create')
+                            ? CredentialsCreate
+                            : null
+                    }
+                    show={CredentialsShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('credentials', 'edit')
+                            ? CredentialsEdit
+                            : null
+                    }
+                />
+            ) : null,
             PermissionsStore.getResourcePermission('usersitedata', 'list') ? (
                 <Resource
                     name="usersitedata"
@@ -462,6 +493,23 @@ const ReactAdmin = () => (
                     list={PermissionsStore.getSiteIDs() ? UserList : UserListNoSites}
                     show={UserShow}
                     edit={PermissionsStore.getResourcePermission('users', 'edit') ? UserEdit : null}
+                />
+            ) : null,
+            PermissionsStore.getResourcePermission('deletionmethods', 'list') ? (
+                <Resource
+                    name="deletionmethods"
+                    list={DeletionMethodList}
+                    create={
+                        PermissionsStore.getResourcePermission('deletionmethods', 'create')
+                            ? DeletionMethodCreate
+                            : null
+                    }
+                    show={DeletionMethodShow}
+                    edit={
+                        PermissionsStore.getResourcePermission('deletionmethods', 'edit')
+                            ? DeletionMethodEdit
+                            : null
+                    }
                 />
             ) : null,
             <Resource name="catchAll" />

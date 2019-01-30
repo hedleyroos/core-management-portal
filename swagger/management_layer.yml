@@ -203,6 +203,13 @@ parameters:
     type: string
     format: uuid
 
+  credentials_id:
+    description: A unique integer value identifying the credentials.
+    in: path
+    name: credentials_id
+    required: true
+    type: integer
+
   optional_deleter_id_filter:
     description: An optional query parameter to filter by deleter_id
     in: query
@@ -248,6 +255,13 @@ parameters:
     description: A integer identifying the client
     in: path
     name: client_id
+    required: true
+    type: integer
+
+  deletionmethod_id:
+    description: A unique integer value identifying the credentials.
+    in: path
+    name: deletionmethod_id
     required: true
     type: integer
 
@@ -337,6 +351,9 @@ definitions:
       id:
         type: integer
         readOnly: true
+      name:
+        type: string
+        maxLength: 30
       client_id:
         type: integer
         x-related-info:
@@ -345,13 +362,16 @@ definitions:
         type: integer
         x-related-info:
           label: name
-      name:
-        type: string
-        maxLength: 100
       description:
         type: string
       is_active:
         type: boolean
+      deletion_method_id:
+        type: integer
+        x-related-info:
+          label: label
+      deletion_method_data:
+        type: object
       created_at:
         type: string
         format: 'date-time'
@@ -365,12 +385,17 @@ definitions:
       - domain_id
       - name
       - is_active
+      - deletion_method_id
+      - deletion_method_data
       - created_at
       - updated_at
 
   site_create:
     type: object
     properties:
+      name:
+        type: string
+        maxLength: 30
       client_id:
         type: integer
         x-related-info:
@@ -379,16 +404,21 @@ definitions:
         type: integer
         x-related-info:
           label: name
-      name:
-        type: string
-        maxLength: 100
-      is_active:
-        type: boolean
       description:
         type: string
+      is_active:
+        type: boolean
+      deletion_method_id:
+        type: integer
+        x-related-info:
+          label: label
+      deletion_method_data:
+        type: object
     required:
       - domain_id
       - name
+      - deletion_method_id
+      - deletion_method_data
 
   site_update:
     type: object
@@ -403,11 +433,17 @@ definitions:
           label: name
       name:
         type: string
-        maxLength: 100
+        maxLength: 30
       description:
         type: string
       is_active:
         type: boolean
+      deletion_method_id:
+        type: integer
+        x-related-info:
+          label: label
+      deletion_method_data:
+        type: object
     minProperties: 1
 
   role:
@@ -1077,6 +1113,83 @@ definitions:
       - invitation_id
       - site_id
       - role_id
+
+  credentials:
+    description: 'An object containing account credentials'
+    type: object
+    properties:
+      id:
+        type: integer
+      site_id:
+        type: integer
+        x-related-info:
+          label: name
+      account_id:
+        type: string
+        minLength: 32
+        maxLength: 256
+      account_secret:
+        type: string
+        minLength: 32
+        maxLength: 256
+      description:
+        type: string
+      created_at:
+        type: string
+        format: 'date-time'
+      updated_at:
+        type: string
+        format: 'date-time'
+    required:
+      - id
+      - site_id
+      - account_id
+      - account_secret
+      - description
+      - created_at
+      - updated_at
+
+  credentials_create:
+    type: object
+    properties:
+      site_id:
+        type: integer
+        x-related-info:
+          label: name
+      account_id:
+        type: string
+        minLength: 32
+        maxLength: 256
+      account_secret:
+        type: string
+        minLength: 32
+        maxLength: 256
+      description:
+        type: string
+    required:
+    - site_id
+    - account_id
+    - account_secret
+    - description
+
+  credentials_update:
+    type: object
+    properties:
+      site_id:
+        type: integer
+        x-related-info:
+          label: name
+      account_id:
+        type: string
+        minLength: 32
+        maxLength: 256
+      account_secret:
+        type: string
+        minLength: 32
+        maxLength: 256
+      description:
+        type: string
+    minProperties: 1
 
   site_role_labels_aggregated:
     description: 'An object containing a site ID and an aggregated list of all the role labels supported
@@ -1816,6 +1929,62 @@ definitions:
         type: integer
     required:
       - mode
+
+  deletion_method:
+    type: object
+    properties:
+      id:
+        type: integer
+        readOnly: true
+      label:
+        type: string
+        maxLength: 100
+      data_schema:
+        type: object
+      description:
+        type: string
+      created_at:
+        type: string
+        format: 'date-time'
+        readOnly: true
+      updated_at:
+        type: string
+        format: 'date-time'
+        readOnly: true
+    required:
+      - id
+      - label
+      - data_schema
+      - description
+      - created_at
+      - updated_at
+
+  deletion_method_create:
+    type: object
+    properties:
+      label:
+        type: string
+        maxLength: 100
+      data_schema:
+        type: object
+      description:
+        type: string
+    required:
+      - label
+      - data_schema
+      - description
+
+  deletion_method_update:
+    type: object
+    properties:
+      label:
+        type: string
+        maxLength: 100
+      data_schema:
+        type: object
+      description:
+        type: string
+    minProperties: 1
 
 paths:
   /healthcheck:
@@ -3631,6 +3800,110 @@ paths:
       tags:
         - access_control
 
+  /credentials:
+    parameters:
+      - $ref: '#/parameters/optional_portal_context_header'
+    get:
+      operationId: credentials_list
+      x-permissions:
+        - 'urn:ge:access_control:credentials:read'
+      parameters:
+      - $ref: '#/parameters/optional_offset'
+      - $ref: '#/parameters/optional_limit'
+      - name: credentials_ids
+        description: An optional list of credentials ids
+        in: query
+        type: array
+        items:
+          type: integer
+        required: false
+        minItems: 1
+        collectionFormat: csv
+        uniqueItems: true
+      - $ref: '#/parameters/optional_site_filter'
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Total-Count:
+              type: integer
+              description: The total number of results matching the query
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/credentials'
+      tags:
+      - access_control
+    post:
+      consumes:
+      - application/json
+      operationId: credentials_create
+      x-permissions:
+        - 'urn:ge:access_control:credentials:create'
+      parameters:
+      - in: body
+        name: data
+        schema:
+          $ref: '#/definitions/credentials_create'
+      produces:
+      - application/json
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/credentials'
+      tags:
+      - access_control
+
+  '/credentials/{credentials_id}':
+    parameters:
+    - $ref: '#/parameters/optional_portal_context_header'
+    - $ref: '#/parameters/credentials_id'
+    delete:
+      operationId: credentials_delete
+      x-permissions:
+        - 'urn:ge:access_control:credentials:delete'
+      responses:
+        '204':
+          description: ''
+      tags:
+      - access_control
+    get:
+      operationId: credentials_read
+      x-permissions:
+        - 'urn:ge:access_control:credentials:read'
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/credentials'
+      tags:
+      - access_control
+    put:
+      consumes:
+      - application/json
+      operationId: credentials_update
+      x-permissions:
+        - 'urn:ge:access_control:credentials:update'
+      parameters:
+      - in: body
+        name: data
+        schema:
+          $ref: '#/definitions/credentials_update'
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/credentials'
+      tags:
+      - access_control
+
   /usersitedata:
     parameters:
       - $ref: '#/parameters/optional_portal_context_header'
@@ -4634,6 +4907,96 @@ paths:
             $ref: '#/definitions/user'
       tags:
         - authentication
+
+  /deletionmethods:
+    get:
+      operationId: deletionmethod_list
+      x-permissions:
+        - 'urn:ge:access_control:deletionmethod:read'
+      parameters:
+        - $ref: '#/parameters/optional_offset'
+        - $ref: '#/parameters/optional_limit'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Total-Count:
+                type: integer
+                description: The total number of results matching the query
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/deletion_method'
+      tags:
+        - access_control
+    post:
+      consumes:
+        - application/json
+      operationId: deletionmethod_create
+      x-permissions:
+        - 'urn:ge:access_control:deletionmethod:create'
+      parameters:
+        - in: body
+          name: data
+          schema:
+            $ref: '#/definitions/deletion_method_create'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/deletion_method'
+      tags:
+        - access_control
+
+  '/deletionmethods/{deletionmethod_id}':
+    parameters:
+      - $ref: '#/parameters/deletionmethod_id'
+    delete:
+      operationId: deletionmethod_delete
+      x-permissions:
+        - 'urn:ge:access_control:deletionmethod:delete'
+      responses:
+        '204':
+          description: ''
+      tags:
+        - access_control
+    get:
+      operationId: deletionmethod_read
+      x-permissions:
+        - 'urn:ge:access_control:deletionmethod:read'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/deletion_method'
+      tags:
+        - access_control
+    put:
+      consumes:
+      - application/json
+      operationId: deletionmethod_update
+      x-permissions:
+        - 'urn:ge:access_control:deletionmethod:update'
+      parameters:
+      - in: body
+        name: data
+        schema:
+          $ref: '#/definitions/deletion_method_update'
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/deletion_method'
+      tags:
+      - access_control
 
 x-detail-page-definitions:
   domain:

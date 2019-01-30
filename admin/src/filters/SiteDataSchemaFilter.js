@@ -5,28 +5,12 @@
 import React from 'react';
 import { TextInput, Filter } from 'react-admin';
 
-const parseSiteIds = value => value.replace(/[^\w]/gi, ',');
+import UnlimitedDropdownInput from '../inputs/UnlimitedDropdownInput';
 
-const validateSiteIds = value => {
-    if (value) {
-        const valid = value
-            .replace(/[^\w]/gi, ',')
-            .split(',')
-            .every(item => !isNaN(item));
-        if (!valid) {
-            return 'Site Ids are not all numbers.';
-        }
-    }
-};
 
 const SiteDataSchemaFilter = props => (
     <Filter {...props}>
-        <TextInput
-            label="Site Ids"
-            source="site_ids"
-            parse={parseSiteIds}
-            validate={validateSiteIds}
-        />
+        <UnlimitedDropdownInput label="Site" source="site_id" reference="sites" optionText="name" />
     </Filter>
 );
 
