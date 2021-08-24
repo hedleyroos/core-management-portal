@@ -75,3 +75,11 @@ generate-admin:
 	meld admin/src admin/generated
 	rm -rf admin/generated
 	@echo "$(GREEN)Generated code REMOVED and changes Melded$(CLEAR)"
+
+generate-admin-headless:
+	@echo "$(CYAN)Generating Management Portal code and running manual meld.$(CLEAR)"
+	mkdir -p admin/generated
+	$(PYTHON) $(SITE_PACKAGES)/swagger_react_admin_generator/generator.py swagger/management_layer.yml --output-dir=admin/generated --module-name="Girl Effect Management Portal" --permissions-store --omit-exporter
+	cd admin; ./prettier.sh
+	rm -rf admin/generated
+	@echo "$(GREEN)Generated code REMOVED and changes Melded$(CLEAR)"
